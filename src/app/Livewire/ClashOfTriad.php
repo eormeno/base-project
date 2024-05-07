@@ -47,8 +47,11 @@ class ClashOfTriad extends StateMachine
         parent::boot();
     }
 
-    public function mount()
+    public function mount(string $game_id = null)
     {
+        if ($game_id) {
+            $this->log('mount: ' . $game_id);
+        }
         $this->jugador = auth()->user()->name;
     }
 

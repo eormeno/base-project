@@ -135,9 +135,9 @@ class StateMachine extends Component
 
     public function log(string $message, string $level = 'info')
     {
-        //$this->dispatch('log', [
-        //    'obj' => $message,
-        //    'level' => $level //warn, error, debug, info, etc...
-        //]);
+        $this->dispatch('log', [
+            'obj' => $message,
+            'level' => $level //warn, error, debug, info, etc...
+        ]);
     }
 }

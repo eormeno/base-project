@@ -17,8 +17,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/play', function () {
-        return view('play.board');
+    Route::get('/play/{game_id?}', function () {
+        return view('play.board', ['game_id' => request()->route('game_id')]);
     })->name('play');
 
 });
