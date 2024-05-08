@@ -17,8 +17,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/play/{game_id?}', function () {
-        return view('play.board', ['game_id' => request()->route('game_id')]);
-    })->name('play');
+    Route::get('/guess-the-number', function () {
+        return view('play.guess-the-number');
+    })->name('guess-the-number');
+
+    Route::get('/clash-of-triad/{game_id?}', function () {
+        return view('play.clash-of-triad', ['game_id' => request()->route('game_id')]);
+    })->name('clash-of-triad');
 
 });

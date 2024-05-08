@@ -1,6 +1,3 @@
-Stop-ProcessByPort 5173 "Vite"
-Stop-ProcessByPort 8000 "php artisan serve"
-
 function Stop-ProcessByPort {
     param (
         [int]$PortNumber,
@@ -18,3 +15,6 @@ function Stop-ProcessByPort {
         Write-Host "No process '$ProcessName' found running on port $PortNumber."
     }
 }
+
+Stop-ProcessByPort 5173 "Vite"
+Stop-ProcessByPort 8000 "php artisan serve"
