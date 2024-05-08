@@ -1,5 +1,5 @@
 <div
-    class="p-6 bg-white
+    class="p-4 bg-white
     dark:bg-gray-900
     dark:bg-gradient-to-bl
     dark:from-gray-800/50
@@ -11,22 +11,22 @@
     @switch($ui_state)
         @case('buscando oponente')
             <div class="mt-3 align-middle">
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-                    {{ __('Buscando oponente') }}: {{ $current_state_remaining_time }}
+                <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white text-center">
+                    {{ __('Buscando oponente') }} ({{ $current_state_remaining_time }})
                 </h1>
             </div>
         @break
 
         @case ('oponente encontrado')
             <div class="mt-3 align-middle">
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
+                <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white text-center">
                     {{ __('Oponente encontrado') }}
                 </h1>
             </div>
         @break
 
         @case('pedir jugada')
-            <div class="mt-3 align-middle">
+            <div class="align-middle">
                 <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white">
                     {{ __('Ronda') }} : {{ $ronda }}
                 </h1>
@@ -35,7 +35,7 @@
                     {{ __('Tu puntaje: ') }} {{ $puntaje_jugador }}
                 </h1>
                 <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white">
-                    {{ __('Puntaje oponente: ') }} {{ $puntaje_oponente }}
+                    {{ __('Oponente: ') }} {{ $puntaje_oponente }}
                 </h1>
                 <h1 class="mt-3 mb-2 text-2xl font-medium text-gray-900 dark:text-white">
                     {{ __('Elige tu jugada') }}
@@ -51,7 +51,7 @@
 
         @case('mostrar resultado ronda')
             <div class="mt-3 align middle">
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
+                <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white text-center">
                     {{ __('Resultado') }} : {{ $resultado_ronda }}
                 </h1>
             </div>
@@ -59,21 +59,21 @@
 
         @case('mostrar número ronda')
             <div class="mt-3 align middle">
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
+                <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white text-center">
                     {{ __('Ronda') }} : {{ $ronda }}
                 </h1>
             </div>
         @break
 
         @case('mostrar resultado juego')
-            <div class="mt-3 align middle">
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-                    {{ __('Tu puntaje: ') }} {{ $puntaje_jugador }}
+            <div class="mt-3 text-center">
+                <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white">
+                    {{ __('Tu: ') }} {{ $puntaje_jugador }}
                 </h1>
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
-                    {{ __('Puntaje oponente: ') }} {{ $puntaje_oponente }}
+                <h1 class="mt-3 text-2xl font-medium text-gray-900 dark:text-white">
+                    {{ __('Oponente: ') }} {{ $puntaje_oponente }}
                 </h1>
-                <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
+                <h1 class="mt-3 text-3xl font-semibold text-gray-900 dark:text-white">
                     {{ $resultado_juego }}
                 </h1>
             </div>
@@ -81,7 +81,7 @@
 
         @case ('fin')
             <button wire:click="clear"
-                class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-gray-700 border border-transparent rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                class="inline-flex px-4 py-2 text-sm font-medium text-white bg-gray-700 border border-transparent rounded-md shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                 Jugar de nuevo
             </button>
         @break

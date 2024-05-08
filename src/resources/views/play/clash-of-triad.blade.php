@@ -5,7 +5,11 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <h1 class="mt-6 text-3xl font-medium text-gray-900 dark:text-white text-center">
+        {{ __('welcome_session.clash-of-triad') }}
+    </h1>
+
+    <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
                 <livewire:clash-of-triad game_id="{{ $game_id }}" />
