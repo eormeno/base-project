@@ -1,5 +1,5 @@
-cls
-cd src
+Clear-Host
+Set-Location src
 
 Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "npm run dev" -NoNewWindow
 Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "php artisan serve" -NoNewWindow
