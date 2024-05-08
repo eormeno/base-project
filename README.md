@@ -1,4 +1,11 @@
 # Base Project Guide
+## Table of contents
+- [Configuration](#configuration)
+- [Installing dependencies](#installing-dependencies)
+- [Running the project](#running-the-project)
+- [Scripts](#scripts)
+  - [Windows *PowerShell* scripts](#windows-powershell-scripts)
+  - [Linux docker scripts](#linux-scripts)
 
 ### Configuration
 This project can be configured to run in a local environment or in a production environment. The configuration is done through the `.env` file located in the `src` folder.
@@ -22,7 +29,6 @@ Open a terminal in the `src` folder and run the following commands to install th
 
 ```powershell
 /src> composer install
-...
 /src> php artisan key:generate
 /src> php artisan migrate
 /src> php artisan db:seed
@@ -88,7 +94,7 @@ $ sudo ./cont-list.sh
 ```
 
 #### remove-containers.sh
-This script is used to remove all the containers. PLEASE USE WITH CAUTION, THIS WILL REMOVE ALL THE CONTAINERS.
+This script is used to remove all the containers. **PLEASE USE WITH CAUTION, THIS WILL REMOVE ALL THE CONTAINERS**.
 
 Example usage:
     
@@ -97,7 +103,7 @@ $ sudo ./remove-containers.sh
 ```
 
 #### remove-images.sh
-This script is used to remove all the images. PLEASE USE WITH CAUTION, THIS WILL REMOVE ALL THE IMAGES AND VOLUMES.
+This script is used to remove all the images. **PLEASE USE WITH CAUTION, THIS WILL REMOVE ALL THE IMAGES AND VOLUMES**.
 
 Example usage:
     
