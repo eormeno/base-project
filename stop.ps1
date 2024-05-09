@@ -16,5 +16,24 @@ function Stop-ProcessByPort {
     }
 }
 
-Stop-ProcessByPort 5173 "Vite"
-Stop-ProcessByPort 8000 "php artisan serve"
+# A function that reads the processes.txt file and stops the processes
+function Stop-Processes {
+    if (-not (Test-Path .\processes.txt)) {
+        Write-Host "No processes to stop."
+        return
+    }
+    $processes = Get-Content .\processes.txt
+    $processes | ForEach-Object {
+        $process = Get-Process -Id $_
+        if ($process) {
+            $process | Stop-Process
+            Write-Host "Process with ID $_ has been stopped."
+        }
+        #Stop-Process -Id $_
+    }
+    Remove-Item .\processes.txt
+}
+
+#Stop-ProcessByPort 5173 "Vite"
+#Stop-ProcessByPort 8000 "php artisan serve"
+Stop-Processes

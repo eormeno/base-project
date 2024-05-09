@@ -9,7 +9,10 @@ if ($currentPath -match 'src$' -or $currentPath -match 'src\\$') {
 
 Set-Location src
 
-Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "npm run dev" -NoNewWindow
-Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "php artisan serve" -NoNewWindow
+$vite = Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "npm run dev" -PassThru -NoNewWindow
+$artisan = Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "php artisan serve" -PassThru -NoNewWindow
 
-$host.ui.RawUI.WindowTitle = 'artisan and vite services'
+
+# Save the process IDs to a file
+$processes = @($vite.Id, $artisan.Id)
+$processes | Out-File .\processes.txt
