@@ -18,7 +18,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('guess-the-number', GuessTheNumberController::class)->name('guess-the-number');
+    Route::get('guess-the-number', [GuessTheNumberController::class, 'index'])->name('guess-the-number');
     Route::post('guess-the-number', [GuessTheNumberController::class, 'guess'])->name('guess-the-number.guess');
 
     Route::get('/clash-of-triad/{game_id?}', function () {
