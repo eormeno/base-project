@@ -9,4 +9,5 @@ enum GTNState: int
     case PLAYING = 2;
     case SUCCESS = 3;
     case GAME_OVER = 4;
+    case ASKING_PLAY_AGAIN = 5;
 }
