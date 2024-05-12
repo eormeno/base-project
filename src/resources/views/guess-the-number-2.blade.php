@@ -1,5 +1,15 @@
 <x-app-layout>
 
+    <script type="text/javascript">
+        function disableBack() {
+            window.history.forward();
+        }
+        setTimeout("disableBack()", 0);
+        window.onunload = function() {
+            null
+        };
+    </script>
+
     @php($game_info = session('game_info'))
 
     <x-slot name="header">
@@ -10,17 +20,21 @@
 
     <div class="text-center p-4">
 
-        <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
-            {{ __('guess-the-number.description', [
-                'remaining_attemts' => $game_info['remaining_attempts'],
-                'min_number' => $game_info['min_number'],
-                'max_number' => $game_info['max_number'],
-            ]) }}
-        </p>
+        @if ($game_info['state'] == 2)
+            <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
+                {{ __('guess-the-number.description', [
+                    'remaining_attemts' => $game_info['remaining_attempts'],
+                    'min_number' => $game_info['min_number'],
+                    'max_number' => $game_info['max_number'],
+                ]) }}
+            </p>
+            <!-- A button with link to want-to-play route -->
+            <a href="{{ route('guess-the-number.want-to-play') }}"
+                class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {{ __('guess-the-number.want-to-play') }}
+            </a>
+        @endif
 
-        <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
-            {{ $game_info['random_number'] }}
-        </p>
         @if ($game_info['message'])
             <p class=" inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500 duration-1000"
                 role="alert">
@@ -28,7 +42,7 @@
             </p>
         @endif
 
-        @if ($game_info['state'] == 2)
+        @if ($game_info['state'] == 3)
             <form action="{{ route('guess-the-number.guess') }}" method="POST" class="mt-6">
                 @csrf
                 <input type="number" name="number" id="number"
@@ -39,10 +53,11 @@
                     class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {{ __('guess-the-number.submit') }}
                 </button>
+
             </form>
         @endif
 
-        @if ($game_info['state'] == 5)
+        @if ($game_info['state'] == 6)
             <!-- A button with link to play again -->
             <a href="{{ route('guess-the-number.play-again') }}"
                 class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
@@ -50,9 +65,9 @@
             </a>
         @endif
 
-
         <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
-            {{ $game_info['state'] }}
+            {{ __('State: ') }} {{ $game_info['state'] }}
+            {{ __('Random:') }} {{ $game_info['random_number'] }}
         </p>
 
         <!-- A button with link to reset route -->

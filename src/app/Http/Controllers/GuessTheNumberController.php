@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\GTNEvent;
 use App\GTNState;
-use App\MessageType;
 use Illuminate\Http\Request;
 
 class GuessTheNumberController extends Controller
@@ -12,20 +11,18 @@ class GuessTheNumberController extends Controller
     const MAX_ATTEMPTS = 5;
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 128;
-
-    private $messages = [
-        'message' => '',
-        'attempts' => self::MAX_ATTEMPTS,
-        'mesage_type' => MessageType::INFO
-    ];
-    private int $randomNumber;
     private array $game_info;
 
     public function index(Request $request)
     {
-        //$this->update();
         $this->transition();
         return view('guess-the-number-2')->with($this->game_info);
+    }
+
+    public function wantToPlay(Request $request)
+    {
+        $this->transition(GTNEvent::want_to_play);
+        return redirect()->route('guess-the-number')->with($this->game_info);
     }
 
     public function reset(Request $request)
@@ -38,63 +35,17 @@ class GuessTheNumberController extends Controller
     public function guess(Request $request)
     {
         $number = $request->input('number');
-        $this->transition(GTNEvent::GUESS, $number);
+        $this->transition(GTNEvent::guess, $number);
         return redirect()->back()->with($this->game_info);
     }
 
     public function playAgain(Request $request)
     {
-        $this->transition(GTNEvent::PLAY_AGAIN);
+        $this->transition(GTNEvent::play_again);
         return redirect()->back()->with($this->game_info);
     }
 
-    public function __guess(Request $request)
-    {
-        $number = $request->input('number');
-        $this->update();
-        $attempts = session()->decrement('attempts');
-        $this->messages['attempts'] = $attempts;
-
-        if ($attempts <= 0) {
-            //$this->reset();
-            $this->messages['message'] = __('guess-the-number.game-over');
-            $this->messages['mesage_type'] = MessageType::ERROR;
-            return redirect()->back()->with($this->messages);
-        }
-
-        if ($number < $this->randomNumber) {
-            $this->messages['message'] = __('guess-the-number.greater');
-        }
-
-        if ($number > $this->randomNumber) {
-            $this->messages['message'] = __('guess-the-number.lower');
-        }
-
-        if ($number == $this->randomNumber) {
-            //$this->reset();
-            $this->messages['message'] = __('guess-the-number.success');
-            $this->messages['mesage_type'] = MessageType::SUCCESS;
-        }
-
-        return redirect()->back()->with($this->messages);
-    }
-
-    private function update()
-    {
-        if (!session()->has('randomNumber')) {
-            //$this->reset();
-        }
-        $this->messages['attempts'] = session('attempts');
-        $this->randomNumber = session('randomNumber');
-    }
-
-    private function __reset()
-    {
-        session()->put('randomNumber', rand(1, 100));
-        session()->put('attempts', self::MAX_ATTEMPTS);
-    }
-
-    private function transition(GTNEvent $event = GTNEvent::NONE, $data = null)
+    private function transition(GTNEvent $event = GTNEvent::none, $data = null)
     {
         do {
             $this->game_info = $this->getGameInfo();
@@ -102,6 +53,7 @@ class GuessTheNumberController extends Controller
             $next_state = match ($state) {
                 GTNState::INITIAL => $this->initial($event, $data),
                 GTNState::PREPARING => $this->preparing($event, $data),
+                GTNState::ASKING_PLAY => $this->askingPlay($event, $data),
                 GTNState::PLAYING => $this->playing($event, $data),
                 GTNState::GAME_OVER => $this->gameOver($event, $data),
                 GTNState::SUCCESS => $this->success($event, $data),
@@ -124,12 +76,20 @@ class GuessTheNumberController extends Controller
         $this->game_info['random_number'] = rand(self::MIN_NUMBER, self::MAX_NUMBER);
         $this->game_info['remaining_attempts'] = self::MAX_ATTEMPTS;
         $this->game_info['message'] = '';
-        return GTNState::PLAYING;
+        return GTNState::ASKING_PLAY;
+    }
+
+    private function askingPlay(GTNEvent $event, $data): GTNState
+    {
+        if ($event == GTNEvent::want_to_play) {
+            return GTNState::PLAYING;
+        }
+        return GTNState::ASKING_PLAY;
     }
 
     private function playing(GTNEvent $event, $data): GTNState
     {
-        if ($event == GTNEvent::GUESS) {
+        if ($event == GTNEvent::guess) {
             $this->game_info['remaining_attempts']--;
             if ($data < $this->game_info['random_number']) {
                 $this->game_info['message'] = __('guess-the-number.greater');
@@ -159,7 +119,7 @@ class GuessTheNumberController extends Controller
 
     private function askingPlayAgain(GTNEvent $event, $data): GTNState
     {
-        if ($event == GTNEvent::PLAY_AGAIN) {
+        if ($event == GTNEvent::play_again) {
             return GTNState::PREPARING;
         }
         return GTNState::ASKING_PLAY_AGAIN;
