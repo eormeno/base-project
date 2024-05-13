@@ -4,14 +4,37 @@ namespace App\Http\Controllers;
 
 use App\GTNEvent;
 use App\GTNState;
+use App\FSM\FSMState;
+use App\FSM\FSMContext;
 use Illuminate\Http\Request;
 
-class GuessTheNumberController extends Controller
+class GuessTheNumberController extends Controller implements FSMContext
 {
-    const MAX_ATTEMPTS = 5;
+    const MAX_ATTEMPTS = 7;
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 128;
     private array $game_info;
+    private FSMState $state;
+
+    public function setState(FSMState $state)
+    {
+        $this->state = $state;
+    }
+
+    public function setValue(string $key, $value)
+    {
+        $this->game_info[$key] = $value;
+    }
+
+    public function getValue(string $key)
+    {
+        return $this->game_info[$key];
+    }
+
+    public function request($event = null, $data = null)
+    {
+        $this->state->handleRequest($this, $event, $data);
+    }
 
     public function index(Request $request)
     {
@@ -129,10 +152,11 @@ class GuessTheNumberController extends Controller
     {
         if (!session()->has('game_info')) {
             session()->put('game_info', [
-                'state' => GTNState::INITIAL->value,
+                'state' => 'initial',
                 'message' => '',
             ]);
         }
+        $this->setState(GTNStates\GTNState::fromName(session('game_info')['state']));
         return session('game_info');
     }
 

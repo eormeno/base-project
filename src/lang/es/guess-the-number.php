@@ -3,7 +3,7 @@
 return [
 
     'title' => '¡Adivina el número!',
-    'description' => 'He pensado un número entre :min_number y :max_number. Tienes :remaining_attemts intentos para adivinarlo. ¿Quieres adivinarlo?',
+    'description' => 'He pensado un número entre :min_number y :max_number. Tienes :remaining_attemts intentos para adivinarlo. ¿Aceptas el reto?',
     'enter_number' => 'Adivina el número',
     'submit' => 'Enviar',
     'message' => 'Mensaje',

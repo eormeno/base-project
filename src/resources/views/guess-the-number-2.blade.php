@@ -53,7 +53,6 @@
                     class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {{ __('guess-the-number.submit') }}
                 </button>
-
             </form>
         @endif
 
@@ -65,16 +64,16 @@
             </a>
         @endif
 
+        <!-- Debugging information
         <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
             {{ __('State: ') }} {{ $game_info['state'] }}
             {{ __('Random:') }} {{ $game_info['random_number'] }}
         </p>
+        -->
 
-        <!-- A button with link to reset route -->
         <a href="{{ route('guess-the-number.reset') }}"
-            class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            class="mt-4 w-min flex justify-center py-2 px-4 border border-transparent rounded-md text-xs font-extralight text-slate-8 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
             {{ __('guess-the-number.reset') }}
         </a>
-
     </div>
 </x-app-layout>
