@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\FSM\FSMContext;
-use App\Http\Controllers\GTNStates\GTNState;
+use App\FSM\StateInterface;
+use App\FSM\StateAbstractImpl;
+use App\FSM\StateContextInterface;
 
-abstract class Controller implements FSMContext
+abstract class Controller implements StateContextInterface
 {
+    protected string $initialStateName;
     protected array $game_info;
-    protected GTNState $state;
+    protected StateInterface $state;
 
-    public function setState(GTNState $state)
+    public function setState(StateInterface $state)
     {
         $this->state = $state;
     }
@@ -41,11 +43,12 @@ abstract class Controller implements FSMContext
     {
         if (!session()->has('game_info')) {
             session()->put('game_info', [
-                'state' => 'initial',
+                'state' => $this->initialStateName,
                 'message' => '',
             ]);
         }
-        $this->setState(GTNState::fromName(session('game_info')['state']));
+        $caller_namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\') + 1);
+        $this->setState(StateAbstractImpl::fromName($caller_namespace, session('game_info')['state']));
         return session('game_info');
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\GuessTheNumberController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GuessTheNumber\GuessTheNumberController;
 
 Route::get('/', function () {
     return view('welcome');

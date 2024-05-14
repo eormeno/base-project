@@ -74,8 +74,10 @@
 
         <!-- Debugging information-->
         <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
-            {{ __('State: ') }} {{ $game_info['state'] }}
-            {{ __('Random:') }} {{ $game_info['random_number'] }}
+            {{ __('State: ') }} <span class="font-extrabold">{{ $game_info['state'] }}</span>
+            @if ($game_info['random_number'])
+                {{ __('Random:') }} {{ $game_info['random_number'] }}
+            @endif
         </p>
 
         <a href="{{ route('guess-the-number.reset') }}"

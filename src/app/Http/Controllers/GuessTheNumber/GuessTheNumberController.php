@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\GuessTheNumber;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class GuessTheNumberController extends Controller
 {
+    protected string $initialStateName = 'asking_to_play';
 
     public function index(Request $request)
     {

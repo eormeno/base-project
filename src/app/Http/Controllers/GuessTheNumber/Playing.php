@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\GTNStates;
+namespace App\Http\Controllers\GuessTheNumber;
 
-use App\FSM\FSMContext;
-use App\Http\Controllers\GTNStates\GTNState;
+use App\FSM\StateAbstractImpl;
+use App\FSM\StateContextInterface;
 
-class Playing extends GTNState
+class Playing extends StateAbstractImpl
 {
-    public function handleRequest(FSMContext $context, $event = null, $data = null)
+    public function handleRequest(StateContextInterface $context, $event = null, $data = null)
     {
         if ($event == 'guess') {
             $random_number = $context->getValue('random_number');

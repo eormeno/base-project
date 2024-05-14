@@ -2,11 +2,9 @@
 
 namespace App\FSM;
 
-use App\Http\Controllers\GTNStates\GTNState;
-
-interface FSMContext
+interface StateContextInterface
 {
-    public function setState(GTNState $state);
+    public function setState(StateInterface $state);
 
     public function request($event = null, $data = null);
 
