@@ -10,12 +10,12 @@ class Playing extends StateAbstractImpl
     public function handleRequest(StateContextInterface $context, $event = null, $data = null)
     {
         if ($event == 'guess') {
-            $random_number = $context->getValue('random_number');
-            $remaining_attempts = $context->getValue('remaining_attempts');
+            $random_number = $context->random_number;
+            $remaining_attempts = $context->remaining_attempts;
             if ($data < $random_number) {
-                $context->setValue('message', __('guess-the-number.greater'));
+                $context->message = __('guess-the-number.greater', ['number' => $data]);
             } elseif ($data > $random_number) {
-                $context->setValue('message', __('guess-the-number.lower'));
+                $context->message = __('guess-the-number.lower', ['number' => $data]);
             } else {
                 $context->setState(new Success());
             }
@@ -23,7 +23,7 @@ class Playing extends StateAbstractImpl
                 $context->setState(new GameOver());
             }
             $remaining_attempts--;
-            $context->setValue('remaining_attempts', $remaining_attempts);
+            $context->remaining_attempts = $remaining_attempts;
         }
     }
 }

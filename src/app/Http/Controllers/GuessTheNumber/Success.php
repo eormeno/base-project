@@ -9,7 +9,7 @@ class Success extends StateAbstractImpl
 {
     public function handleRequest(StateContextInterface $context, $event = null, $data = null)
     {
-        $context->setValue('message', __('guess-the-number.success'));
+        $context->message = __('guess-the-number.success');
         $context->setState(new AskingForPlayAgain());
     }
 }

@@ -9,31 +9,34 @@ use App\FSM\StateContextInterface;
 abstract class Controller implements StateContextInterface
 {
     protected array $game_info;
-    protected StateInterface $state;
+    protected StateInterface $__state;
 
     public function setState(StateInterface $state)
     {
-        $this->state = $state;
+        $this->__state = $state;
     }
 
-    public function setValue(string $key, $value)
+    public function __get($name)
     {
-        $this->game_info[$key] = $value;
+        if (array_key_exists($name, $this->game_info)) {
+            return $this->game_info[$name];
+        }
+        return null;
     }
 
-    public function getValue(string $key)
+    public function __set($name, $value)
     {
-        return $this->game_info[$key];
+        $this->game_info[$name] = $value;
     }
 
     public function request($event = null, $data = null)
     {
         do {
             $this->game_info = $this->getGameInfo();
-            $current_state = $this->state;
-            $this->state->handleRequest($this, $event, $data);
-            $changed_state = $this->state;
-            $this->setValue('state', $changed_state->name());
+            $current_state = $this->__state;
+            $this->__state->handleRequest($this, $event, $data);
+            $changed_state = $this->__state;
+            $this->state = $changed_state->name();
             session()->put('game_info', $this->game_info);
         } while ($current_state != $changed_state);
     }

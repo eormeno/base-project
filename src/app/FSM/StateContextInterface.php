@@ -8,8 +8,8 @@ interface StateContextInterface
 
     public function request($event = null, $data = null);
 
-    public function setValue(string $key, $value);
+    public function __get($name);
 
-    public function getValue(string $key);
+    public function __set($name, $value);
 
 }
