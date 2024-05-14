@@ -12,5 +12,6 @@ class Initial extends GTNState
     {
         $context->setValue('min_number', GTNGlobals::MIN_NUMBER);
         $context->setValue('max_number', GTNGlobals::MAX_NUMBER);
+        $context->setState(new Preparing());
     }
 }
