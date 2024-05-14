@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 
 class GuessTheNumberController extends Controller
 {
-    protected string $initialStateName = 'asking_to_play';
-
     public function index(Request $request)
     {
         $this->request();

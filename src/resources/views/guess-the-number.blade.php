@@ -28,10 +28,11 @@
                     'max_number' => $game_info['max_number'],
                 ]) }}
             </p>
-            <a href="{{ route('guess-the-number.want-to-play') }}"
-                class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+
+            <x-button class="mt-4" type="button"
+                onclick="window.location='{{ route('guess-the-number.want-to-play') }}'">
                 {{ __('guess-the-number.want-to-play') }}
-            </a>
+            </x-button>
         @endif
 
         @if ($game_info['message'])
@@ -53,14 +54,19 @@
             </p>
             <form action="{{ route('guess-the-number.guess') }}" method="POST" class="mt-6">
                 @csrf
+                <div>
+                    <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
+                    <x-input id="number" class="block mt-1 w-full" type="number" name="number" :value="old('number')" required autofocus />
+                </div>
+                <!--
                 <input type="number" name="number" id="number"
                     placeholder="{{ __('guess-the-number.enter_number') }}"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required>
-                <button type="submit"
-                    class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                -->
+                <x-button class="mt-4">
                     {{ __('guess-the-number.submit') }}
-                </button>
+                </x-button>
             </form>
         @endif
 

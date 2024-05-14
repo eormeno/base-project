@@ -8,7 +8,6 @@ use App\FSM\StateContextInterface;
 
 abstract class Controller implements StateContextInterface
 {
-    protected string $initialStateName;
     protected array $game_info;
     protected StateInterface $state;
 
@@ -43,7 +42,7 @@ abstract class Controller implements StateContextInterface
     {
         if (!session()->has('game_info')) {
             session()->put('game_info', [
-                'state' => $this->initialStateName,
+                'state' => 'initial',
                 'message' => '',
             ]);
         }
