@@ -8,7 +8,7 @@ use App\FSM\StateContextInterface;
 
 abstract class Controller implements StateContextInterface
 {
-    protected array $game_info;
+    protected array $info;
     protected StateInterface $__state;
 
     public function setState(StateInterface $state)
@@ -18,39 +18,39 @@ abstract class Controller implements StateContextInterface
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->game_info)) {
-            return $this->game_info[$name];
+        if (array_key_exists($name, $this->info)) {
+            return $this->info[$name];
         }
         return null;
     }
 
     public function __set($name, $value)
     {
-        $this->game_info[$name] = $value;
+        $this->info[$name] = $value;
     }
 
     public function request($event = null, $data = null)
     {
         do {
-            $this->game_info = $this->getGameInfo();
+            $this->info = $this->getGameInfo();
             $current_state = $this->__state;
             $this->__state->handleRequest($this, $event, $data);
             $changed_state = $this->__state;
             $this->state = $changed_state->name();
-            session()->put('game_info', $this->game_info);
+            session()->put('info', $this->info);
         } while ($current_state != $changed_state);
     }
 
     private function getGameInfo(): array
     {
-        if (!session()->has('game_info')) {
-            session()->put('game_info', [
+        if (!session()->has('info')) {
+            session()->put('info', [
                 'state' => 'initial',
                 'message' => '',
             ]);
         }
         $caller_namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\') + 1);
-        $this->setState(StateAbstractImpl::fromName($caller_namespace, session('game_info')['state']));
-        return session('game_info');
+        $this->setState(StateAbstractImpl::fromName($caller_namespace, session('info')['state']));
+        return session('info');
     }
 }
