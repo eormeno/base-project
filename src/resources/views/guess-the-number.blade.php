@@ -58,12 +58,6 @@
                     <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
                     <x-input id="number" class="block mt-1 w-full" type="number" name="number" :value="old('number')" required autofocus />
                 </div>
-                <!--
-                <input type="number" name="number" id="number"
-                    placeholder="{{ __('guess-the-number.enter_number') }}"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    required>
-                -->
                 <x-button class="mt-4">
                     {{ __('guess-the-number.submit') }}
                 </x-button>
@@ -71,23 +65,25 @@
         @endif
 
         @if ($game_info['state'] == 'asking_for_play_again')
-            <!-- A button with link to play again -->
-            <a href="{{ route('guess-the-number.play-again') }}"
-                class="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <div class="mt-6">
+            <x-button class="mt-4" type="button"
+                onclick="window.location='{{ route('guess-the-number.play-again') }}'">
                 {{ __('guess-the-number.play-again') }}
-            </a>
+            </x-button>
+        </div>
         @endif
 
-        <!-- Debugging information-->
+        <!-- Debugging information
         <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
             {{ __('State: ') }} <span class="font-extrabold">{{ $game_info['state'] }}</span>
             @if ($game_info['random_number'])
                 {{ __('Random:') }} {{ $game_info['random_number'] }}
             @endif
         </p>
+        -->
 
         <a href="{{ route('guess-the-number.reset') }}"
-            class="mt-4 w-min flex justify-center py-2 px-4 border border-transparent rounded-md text-xs font-extralight text-slate-8 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            class="mt-4 w-min flex justify-center py-2 px-4 border border-transparent rounded-md text-xs font-extralight text-slate-8 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 opacity-15">
             {{ __('guess-the-number.reset') }}
         </a>
     </div>

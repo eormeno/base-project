@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\GuessTheNumber;
 
-class GTNGlobals
+class Globals
 {
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 128;
