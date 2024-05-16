@@ -12,13 +12,16 @@
                     </span>
 
                     <p class="ml-2 font-mono text-sm text-white">
-                        <span class="bg-green-900 text-white rounded-lg p-2">{{ $current_state_name }} {{ $current_state_remaining_time }}</span>
-                        <span>{{ __('Ping: ') }} {{ $delta_time }}</span>
-                        <span>{{ __('Player: ') }} {{ $player_name }}</span>
-                        <button wire:click="$parent.clear"
+                        @foreach ($info as $key => $value)
+                            <span>{{ $key }}={{ $value }};</span>
+                        @endforeach
+
+                        @if ($reset_route)
+                        <a href="{{ route($reset_route) }}"
                             class="inline-flex items-center justify-center px-2 py-1 font-medium text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             Reset
-                        </button>
+                        </a>
+                        @endif
                     </p>
                 </div>
             </div>

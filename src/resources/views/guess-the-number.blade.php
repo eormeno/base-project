@@ -21,6 +21,8 @@
             </x-button>
         @endif
 
+        @livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
+
         @if ($info['message'])
             <p class=" inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500 duration-1000"
                 role="alert">
@@ -59,23 +61,5 @@
                 </x-button>
             </div>
         @endif
-    </div>
-
-    <div class="p-1 text-xs border rounded-sm border-gray-600 m-3">
-        <a href="{{ route('guess-the-number.reset') }}"
-            class="mt-2 w-min flex justify-center py-2 px-4 border border-transparent rounded-md text-xs font-extralight text-slate-8 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 opacity-15">
-            {{ __('guess-the-number.reset') }}
-        </a>
-        <!-- Debugging information-->
-        <div class="mt-2 text-gray-500">
-            <div>
-                {{ __('state = ') }} "{{ $info['state'] }}"
-            </div>
-            @if ($info['random_number'])
-                <div>
-                    {{ __('random_number = ') }} {{ $info['random_number'] }}
-                </div>
-            @endif
-        </div>
     </div>
 </x-app-layout>
