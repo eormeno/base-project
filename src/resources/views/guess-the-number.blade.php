@@ -23,6 +23,10 @@
 
         @livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
 
+        <x-toast :show="$info['message']" :duration="5000">
+            {{ $info['message'] }}
+        </x-toast>
+
         @if ($info['message'])
             <p class=" inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500 duration-1000"
                 role="alert">
