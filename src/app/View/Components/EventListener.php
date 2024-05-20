@@ -8,17 +8,13 @@ use Illuminate\View\Component;
 
 class EventListener extends Component
 {
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
+    public string $event;
+
+    public function __construct(string $event = 'event')
     {
-        //
+        $this->event = $event;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     */
     public function render(): View|Closure|string
     {
         return view('components.event-listener');

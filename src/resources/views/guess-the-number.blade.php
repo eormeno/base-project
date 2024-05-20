@@ -8,7 +8,9 @@
         </h2>
     </x-slot>
 
-    <x-event-listener />
+    <x-event-listener event="state_changed">
+        <x-button class="mt-4" type="button">{{ __('guess-the-number.reset') }}</x-button>
+    </x-event-listener>
 
     <div x-data="invokeRoute()">
         <button @click="invokeRoute">Invoke Route</button>
@@ -19,24 +21,24 @@
             return {
                 invokeRoute() {
                     fetch('{{ route('guess-the-number.event') }}', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel CSRF token
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // if data is empty, do nothing
-                        if (Object.keys(data).length === 0) {
-                            return;
-                        }
-                        console.log('Success:', data);
-                        // handle the response data here
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel CSRF token
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // if data is empty, do nothing
+                            if (Object.keys(data).length === 0) {
+                                return;
+                            }
+                            console.log('Success:', data);
+                            // handle the response data here
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
                 }
             }
         }

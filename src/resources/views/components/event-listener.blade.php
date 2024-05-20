@@ -1,31 +1,29 @@
-<!-- resources/views/components/event-listener.blade.php -->
+<div x-data="eventListener('{{ $event }}')" x-init="startPolling()">
 
-<div x-data="eventListener()" x-init="startPolling()">
-    <div id="event-container">
-        <!-- Events will be appended here -->
-    </div>
+    <div id="{{ $event }}-event-container"></div>
 
     <script>
-        function eventListener() {
+        function eventListener(event_name) {
             return {
-                events: [],
-
                 async fetchEvents() {
                     try {
-                        let response = await fetch('{{ route("poll-events") }}');
+                        let response = await fetch('{{ route('poll-events') }}');
                         if (response.ok) {
-                            let data = await response.json();
-                            if (data.length > 0) {
-                                this.events.push(...data);
-                                // Append the events to the event container
-                                let eventContainer = document.getElementById('event-container');
-                                // remove all child nodes
-                                eventContainer.innerHTML = '';
-                                this.events.forEach(event => {
-                                    let eventElement = document.createElement('div');
-                                    eventElement.textContent = event;
-                                    eventContainer.appendChild(eventElement);
-                                });
+                            let event_data = await response.json();
+                            if (event_data.length > 0) {
+                                // iterate through the events
+                                for (let event of event_data) {
+                                    // check if the event data is the same as the data passed to the event listener
+                                    if (event.name === event_name) {
+                                        let eventContainer = document.getElementById("{{ $event }}-event-container");
+                                        eventContainer.innerHTML = `
+                                            <div>
+                                                {{ $slot }}
+                                            </div>
+                                        `;
+                                        return;
+                                    }
+                                }
                             }
                         }
                     } catch (error) {
@@ -37,7 +35,7 @@
                     this.fetchEvents();
                     setInterval(() => {
                         this.fetchEvents();
-                    }, 1000);
+                    }, 100);
                 }
             }
         }
