@@ -7,6 +7,15 @@ use App\Http\Controllers\Controller;
 
 class GuessTheNumberController extends Controller
 {
+    public function triggerEvent()
+    {
+        $events = session('events', []);
+        $events[] = 'New Event Data';
+        session(['events' => $events]);
+        // returns an empty json response
+        return response()->json();
+    }
+
     public function index(Request $request)
     {
         $this->request();
