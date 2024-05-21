@@ -8,9 +8,7 @@
         </h2>
     </x-slot>
 
-    <x-event-listener event="state_changed">
-        <x-button class="mt-4" type="button">{{ __('guess-the-number.reset') }}</x-button>
-    </x-event-listener>
+    <x-event-listener />
 
     <div x-data="invokeRoute()">
         <button @click="invokeRoute">Invoke Route</button>
@@ -45,6 +43,12 @@
     </script>
 
     <div class="text-center p-4">
+
+        <x-event-renderer event="state_changed">
+            <x-button class="mt-4" type="button">
+                {{ __('guess-the-number.reset') }}
+            </x-button>
+        </x-event-renderer>
 
         @if ($info['state'] == 'asking_to_play')
             <div class="mt-6 text-lg text-gray-900 dark:text-white text-center">

@@ -12,7 +12,7 @@ class GuessTheNumberController extends Controller
 
     public function triggerEvent()
     {
-        $this->trigger('state_changed', ['new_state' => 'playing']);
+        $this->trigger('state_changed', 'playing');
         return response()->json(); // returns an empty json response
     }
 

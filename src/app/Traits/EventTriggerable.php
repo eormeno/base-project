@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait EventTriggerable
 {
-    public function trigger(string $event_name, array $event_data = [])
+    public function trigger(string $event_name, string $event_data)
     {
         $events = session('events', []);
         $events[] = [
