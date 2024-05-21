@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\GuessTheNumber;
 
-use App\EventTriggerable;
+use App\Traits\EventTriggerable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
