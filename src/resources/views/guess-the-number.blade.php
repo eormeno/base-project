@@ -10,45 +10,45 @@
 
     <x-event-listener />
 
-    <div x-data="invokeRoute()">
-        <button @click="invokeRoute">Invoke Route</button>
-    </div>
+    <div style="display: none">
+        <div x-data="invokeRoute()">
+            <button @click="invokeRoute">Invoke Route</button>
+        </div>
 
-    <script>
-        function invokeRoute() {
-            return {
-                invokeRoute() {
-                    fetch('{{ route('guess-the-number.event') }}', {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel CSRF token
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            // if data is empty, do nothing
-                            if (Object.keys(data).length === 0) {
-                                return;
-                            }
-                            console.log('Success:', data);
-                            // handle the response data here
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
+        <script>
+            function invokeRoute() {
+                return {
+                    invokeRoute() {
+                        fetch('{{ route('guess-the-number.event') }}', {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel CSRF token
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // if data is empty, do nothing
+                                if (Object.keys(data).length === 0) {
+                                    return;
+                                }
+                                console.log('Success:', data);
+                                // handle the response data here
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                            });
+                    }
                 }
             }
-        }
-    </script>
+        </script>
+    </div>
 
     <div class="text-center p-4">
 
-        <x-event-renderer event="state_changed">
-            <x-button class="mt-4" type="button">
-                {{ __('guess-the-number.reset') }}
-            </x-button>
-        </x-event-renderer>
+        <x-button class="mt-4" type="button">
+            <x-event-renderer event="server_time_changed" />
+        </x-button>
 
         @if ($info['state'] == 'asking_to_play')
             <div class="mt-6 text-lg text-gray-900 dark:text-white text-center">

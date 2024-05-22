@@ -1,6 +1,6 @@
 <div x-data="eventListener()" x-init="startPolling()">
     <script>
-        function eventListener(event_name) {
+        function eventListener() {
             return {
                 async fetchEvents() {
                     try {
@@ -9,13 +9,9 @@
                             let event_data = await response.json();
                             if (event_data.length > 0) {
                                 for (let event of event_data) {
-                                    let elementName = event.name + "-event-render";
-                                    let eventRenderer = document.getElementById(elementName);
-                                    if (eventRenderer == null) {
-                                        console.warn('Event renderer not found:', elementName);
-                                        continue;
-                                    }
-                                    eventRenderer.style.display = 'block';
+                                    document.dispatchEvent(new CustomEvent(event.name, {
+                                        detail: event.data
+                                    }));
                                 }
                             }
                         }

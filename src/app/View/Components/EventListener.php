@@ -8,13 +8,8 @@ use Illuminate\View\Component;
 
 class EventListener extends Component
 {
-    public string $event;
-    public array $data;
-
-    public function __construct(string $event = 'event', array $data = [])
+    public function __construct()
     {
-        $this->event = $event;
-        $this->data = $data;
     }
 
     public function render(): View|Closure|string
