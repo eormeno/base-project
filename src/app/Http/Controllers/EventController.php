@@ -13,7 +13,9 @@ class EventController extends Controller
 
     public function triggerEvent()
     {
-        $this->toast('¡Game Over!', 5000,"error");
+        $this->toast('¡Game Over!', 5000, 'error');
+        $this->toast('You won!');
+        $this->toast('Better luck next time!', 10000, 'warning');
         return response()->json();
     }
 

@@ -65,13 +65,19 @@
 
         <x-toast>
             <div class="mt-4 inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 duration-5000">
-                <x-event-renderer event="toast-toast" />
+                <x-toast-message />
             </div>
         </x-toast>
 
         <x-toast name="error">
             <div class="mt-4 inline-block items-center justify-center p-2 text-xl font-bold text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-600 duration-5000">
-                <x-event-renderer event="toast-error" />
+                <x-toast-message />
+            </div>
+        </x-toast>
+
+        <x-toast name="warning">
+            <div class="mt-4 inline-block items-center justify-center p-2 text-xl font-bold text-white bg-yellow-700 border border-transparent rounded-md shadow-sm hover:bg-yellow-600 duration-5000">
+                <x-toast-message />
             </div>
         </x-toast>
 
