@@ -1,18 +1,26 @@
-@if ($show)
-    <div id="toast"
-        class="inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500 duration-1000"
-        role="alert">
-        {{ $slot }}
-    </div>
+<div id="toast-{{ $name }}">
+    {{ $slot }}
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            setTimeout(() => {
-                var toast = document.getElementById('toast');
-                if (toast) {
-                    toast.style.display = 'none';
-                }
-            }, {{ $duration }});
-        });
-    </script>
-@endif
+<script>
+    var toast = document.getElementById('toast-{{ $name }}');
+    toast.style.display = 'none';
+    document.addEventListener('toast', (event) => {
+        var toast_name = event.detail.toast_name;
+        var toast_duration = event.detail.duration;
+        var toast_message = event.detail.message;
+        var toast_element = document.getElementById('toast-' + toast_name);
+        if (!toast_element) {
+            return;
+        }
+        //var toast_render = toast_element.querySelector('.toast-render');
+        var toast_render = document.getElementById('toast-' + toast_name + '-event-render');
+        if (toast_render) {
+            toast_render.innerHTML = toast_message;
+        }
+        toast_element.style.display = 'block';
+        setTimeout(() => {
+            toast_element.style.display = 'none';
+        }, toast_duration);
+    });
+</script>

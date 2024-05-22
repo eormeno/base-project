@@ -39,13 +39,12 @@ Route::middleware([
         [GuessTheNumberController::class, 'playAgain']
     )->name('guess-the-number.play-again');
 
-    Route::get('guess-the-number/event', [GuessTheNumberController::class, 'triggerEvent'])->name('guess-the-number.event');
 
     Route::get('/clash-of-triad/{game_id?}', function () {
         return view('play.clash-of-triad', ['game_id' => request()->route('game_id')]);
     })->name('clash-of-triad');
 
     Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
-
+    Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
 
 });

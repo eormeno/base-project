@@ -4,9 +4,12 @@ namespace App\Http\Controllers\GuessTheNumber;
 
 use App\FSM\StateAbstractImpl;
 use App\FSM\StateContextInterface;
+use App\Traits\ToastTrigger;
 
 class Playing extends StateAbstractImpl
 {
+    use ToastTrigger;
+
     public function handleRequest(StateContextInterface $context, $event = null, $data = null)
     {
         if ($event == 'guess') {
@@ -16,10 +19,14 @@ class Playing extends StateAbstractImpl
             }
             $random_number = $context->random_number;
             $remaining_attempts = $context->remaining_attempts;
+            $grather_message = __('guess-the-number.greater', ['number' => $data]);
+            $lower_message = __('guess-the-number.lower', ['number' => $data]);
             if ($data < $random_number) {
-                $context->message = __('guess-the-number.greater', ['number' => $data]);
+                //$context->message = __('guess-the-number.greater', ['number' => $data]);
+                $this->toast($grather_message);
             } elseif ($data > $random_number) {
-                $context->message = __('guess-the-number.lower', ['number' => $data]);
+                //$context->message = __('guess-the-number.lower', ['number' => $data]);
+                $this->toast($lower_message);
             } else {
                 $context->setState(new Success());
             }

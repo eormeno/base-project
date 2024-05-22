@@ -2,20 +2,11 @@
 
 namespace App\Http\Controllers\GuessTheNumber;
 
-use App\Traits\EventTriggerable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class GuessTheNumberController extends Controller
 {
-    use EventTriggerable;
-
-    public function triggerEvent()
-    {
-        $this->trigger('state_changed', 'playing');
-        return response()->json();
-    }
-
     public function index(Request $request)
     {
         $this->request();

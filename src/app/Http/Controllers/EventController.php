@@ -3,21 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Traits\EventTriggerable;
+use App\Traits\ToastTrigger;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
     use EventTriggerable;
+    use ToastTrigger;
+
+    public function triggerEvent()
+    {
+        $this->toast('¡Game Over!', 5000,"error");
+        return response()->json();
+    }
 
     public function pollEvents(Request $request)
     {
         $this->trigger('server_time_changed', now()->toDateTimeString());
-        // Retrieve events from the session
         $events = session('events', []);
-
-        // Clear events from session after retrieving them
         session()->forget('events');
-
         return response()->json($events);
     }
 }

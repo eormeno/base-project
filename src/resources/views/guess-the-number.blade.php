@@ -10,7 +10,7 @@
 
     <x-event-listener />
 
-    <div style="display: none">
+    <div style="display: block">
         <div x-data="invokeRoute()">
             <button @click="invokeRoute">Invoke Route</button>
         </div>
@@ -19,7 +19,7 @@
             function invokeRoute() {
                 return {
                     invokeRoute() {
-                        fetch('{{ route('guess-the-number.event') }}', {
+                        fetch('{{ route('trigger-event-test') }}', {
                                 method: 'GET',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -63,8 +63,16 @@
 
         @livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
 
-        <x-toast :show="$info['message']" :duration="5000">
-            {{ $info['message'] }}
+        <x-toast>
+            <div class="mt-4 inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 duration-5000">
+                <x-event-renderer event="toast-toast" />
+            </div>
+        </x-toast>
+
+        <x-toast name="error">
+            <div class="mt-4 inline-block items-center justify-center p-2 text-xl font-bold text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-600 duration-5000">
+                <x-event-renderer event="toast-error" />
+            </div>
         </x-toast>
 
         @if ($info['message'])
