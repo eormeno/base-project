@@ -63,7 +63,7 @@
 
         @livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
 
-        <x-toast>
+        <x-toast name="success">
             <div class="mt-4 inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 duration-5000">
                 <x-toast-message />
             </div>
@@ -80,13 +80,6 @@
                 <x-toast-message />
             </div>
         </x-toast>
-
-        @if ($info['message'])
-            <p class=" inline-block items-center justify-center p-2 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500 duration-1000"
-                role="alert">
-                {{ $info['message'] }}
-            </p>
-        @endif
 
         @if ($info['state'] == 'playing')
             <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">

@@ -9,10 +9,8 @@ class Success extends StateAbstractImpl
 {
     public function handleRequest(StateContextInterface $context, $event = null, $data = null)
     {
-        $context->message = __(
-            'guess-the-number.success',
-            ['user_name' => auth()->user()->name]
-        );
+        $success_message = __('guess-the-number.success', ['user_name' => auth()->user()->name]);
+        $this->delayedToast($success_message, 5000, 'success');
         $context->setState(new AskingForPlayAgain());
     }
 }

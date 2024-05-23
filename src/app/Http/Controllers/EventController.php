@@ -13,17 +13,20 @@ class EventController extends Controller
 
     public function triggerEvent()
     {
-        $this->toast('¡Game Over!', 5000, 'error');
+        $this->delayedToast('¡Game Over!', 5000, 'error');
         $this->toast('You won!');
-        $this->toast('Better luck next time!', 10000, 'warning');
+        $this->delayedToast('Better luck next time!', 10000, 'warning');
         return response()->json();
     }
 
     public function pollEvents(Request $request)
     {
+        $reloaded = $request->input('reloaded', false);
+        $session_storage = $reloaded ? 'delayed_events' : 'events';
+
         $this->trigger('server_time_changed', now()->toDateTimeString());
-        $events = session('events', []);
-        session()->forget('events');
+        $events = session($session_storage, []);
+        session()->forget($session_storage);
         return response()->json($events);
     }
 }

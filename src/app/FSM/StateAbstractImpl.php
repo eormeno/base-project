@@ -2,8 +2,11 @@
 
 namespace App\FSM;
 
+use App\Traits\ToastTrigger;
+
 abstract class StateAbstractImpl implements StateInterface
 {
+    use ToastTrigger;
 
     /**
      * Returns the name of the class in snake_case

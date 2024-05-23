@@ -2,9 +2,9 @@
     <script>
         function eventListener() {
             return {
-                async fetchEvents() {
+                async fetchEvents(reloaded = 0) {
                     try {
-                        let response = await fetch('{{ route('poll-events') }}');
+                        let response = await fetch('{{ route('poll-events') }}' + '?reloaded='+ reloaded);
                         if (response.ok) {
                             let event_data = await response.json();
                             if (event_data.length > 0) {
@@ -21,7 +21,7 @@
                 },
 
                 startPolling() {
-                    this.fetchEvents();
+                    this.fetchEvents(1);
                     setInterval(() => {
                         this.fetchEvents();
                     }, 1000);
