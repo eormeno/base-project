@@ -30,7 +30,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: aurora
+      MYSQL_DATABASE: games
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
