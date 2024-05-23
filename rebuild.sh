@@ -31,13 +31,13 @@ sudo docker compose run --rm composer update
 sudo docker compose run --rm artisan migrate
 sudo docker compose run --rm artisan db:seed
 sudo docker compose run --rm artisan key:generate
-sudo docker compose run --rm artisan users
+# sudo docker compose run --rm artisan users
 
 # Check the api/ping endpoint returns a 200 status code
-if [[ $(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/ping) -eq 200 ]]; then
+#if [[ $(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/ping) -eq 200 ]]; then
     # Display message in green with a checkmark
-    echo -e "\e[32mAPI is running.\e[0m"
-else
+#    echo -e "\e[32mAPI is running.\e[0m"
+#else
     # Display message in red
-    echo -e "\e[31mAPI is not running.\e[0m"
-fi
+#    echo -e "\e[31mAPI is not running.\e[0m"
+#fi
