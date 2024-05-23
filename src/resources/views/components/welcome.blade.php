@@ -15,10 +15,12 @@
             class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500">
             {{ __('welcome_session.guess-the-number') }}
         </a>
+        <!--
         <a href="{{ route('clash-of-triad') }}"
             class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500">
             {{ __('welcome_session.clash-of-triad') }}
         </a>
+        -->
     </div>
 
 </div>
