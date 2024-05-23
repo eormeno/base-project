@@ -14,7 +14,7 @@ class EventController extends Controller
     public function triggerEvent()
     {
         $this->delayedToast('¡Game Over!', 5000, 'error');
-        $this->toast('You won!');
+        $this->toast('You won!', 3000, 'success');
         $this->delayedToast('Better luck next time!', 10000, 'warning');
         return response()->json();
     }
