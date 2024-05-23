@@ -31,6 +31,8 @@ sudo docker compose run --rm composer update
 sudo docker compose run --rm artisan migrate
 sudo docker compose run --rm artisan db:seed
 sudo docker compose run --rm artisan key:generate
+sudo docker compose run --rm npm install
+sudo docker compose run --rm npm run build
 # sudo docker compose run --rm artisan users
 
 # Check the api/ping endpoint returns a 200 status code
