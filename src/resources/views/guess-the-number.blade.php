@@ -10,7 +10,7 @@
 
     <x-event-listener />
 
-    <div style="display: block">
+    <div style="display: none">
         <div x-data="invokeRoute()">
             <button @click="invokeRoute">Invoke Route</button>
         </div>
@@ -67,21 +67,21 @@
 
         <x-toast name="success">
             <div
-                class="fixed w-1/2 inset-x-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-lg">
+                class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-lg">
                 <x-toast-message />
             </div>
         </x-toast>
 
         <x-toast name="error">
             <div
-                class="fixed w-1/2 inset-x-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-red-700 border border-transparent rounded-md shadow-lg">
+                class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-red-700 border border-transparent rounded-md shadow-lg">
                 <x-toast-message />
             </div>
         </x-toast>
 
         <x-toast name="warning">
             <div
-                class="fixed w-1/2 inset-x-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-yellow-700 border border-transparent rounded-md shadow-lg">
+                class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-yellow-600 border border-transparent rounded-md shadow-lg">
                 <x-toast-message />
             </div>
         </x-toast>
@@ -89,26 +89,22 @@
         @if ($info['state'] == 'playing')
             <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
                 {{ $info['notification'] }}
-                @if ($info['remaining_attempts'] == 1)
-                    {{ __('guess-the-number.last_attempt') }}
-                @else
-                    {{ __('guess-the-number.remaining', [
-                        'remaining_attemts' => $info['remaining_attempts'],
-                    ]) }}
-                @endif
             </p>
 
-            <form class="w-1/2 mt-4 border p-2 mx-auto" action="{{ route('guess-the-number.guess') }}" method="POST" class="mt-6">
+            <form class="w-3/4 mt-4 border border-transparent rouded-md shadow-lg p-4 mx-auto"
+                action="{{ route('guess-the-number.guess') }}" method="POST" novalidate>
                 @csrf
                 <div>
-                    <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
-                    <x-input id="number" class="block mt-1 w-full" type="number" name="number" :value="old('number')"
-                        required autofocus />
-                    <x-input-error for="number" class="mt-2" />
+                    <div>
+                        <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
+                        <x-input id="number" class="block mt-1 w-full" type="number" name="number"
+                            :value="old('number')" autofocus />
+                        <x-input-error for="number" class="mt-2" />
+                    </div>
+                    <x-button class="mt-4">
+                        {{ __('guess-the-number.submit') }}
+                    </x-button>
                 </div>
-                <x-button class="mt-4">
-                    {{ __('guess-the-number.submit') }}
-                </x-button>
             </form>
         @endif
 

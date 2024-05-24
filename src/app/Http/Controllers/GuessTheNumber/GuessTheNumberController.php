@@ -21,7 +21,12 @@ class GuessTheNumberController extends Controller
 
     public function guess(Request $request)
     {
+        $request->validate([
+            'number' => 'required|numeric|between:' . Globals::MIN_NUMBER . ',' . Globals::MAX_NUMBER
+        ]);
+
         $number = $request->input('number');
+
         $this->request("guess", $number);
         return redirect()->back()->with($this->info);
     }

@@ -9,13 +9,14 @@ class Playing extends StateAbstractImpl
 {
     public function handleRequest(StateContextInterface $context, $event = null, $data = null)
     {
+        $remaining_attempts = $context->remaining_attempts;
+        $context->notification = $this->remainingAttemptsMessage($remaining_attempts);
         if ($event == 'guess') {
-            if ($context->remaining_attempts <= 1) {
+            if ($remaining_attempts <= 1) {
                 $context->setState(new GameOver());
                 return;
             }
             $random_number = $context->random_number;
-            $remaining_attempts = $context->remaining_attempts;
             $grather_message = __('guess-the-number.greater', ['number' => $data]);
             $lower_message = __('guess-the-number.lower', ['number' => $data]);
             if ($data < $random_number) {
@@ -27,10 +28,20 @@ class Playing extends StateAbstractImpl
             }
             $remaining_attempts--;
             $context->remaining_attempts = $remaining_attempts;
-            $context->notification = __('guess-the-number.remaining', ['remaining_attempts' => $remaining_attempts]);
-            if ($remaining_attempts == 1) {
-                $context->notification .= " " . __('guess-the-number.last_attempt');
-            }
         }
+    }
+
+    private function remainingAttemptsMessage($remaining_attempts)
+    {
+        if ($remaining_attempts == 1) {
+            return __('guess-the-number.last_attempt');
+        }
+        if ($remaining_attempts == Globals::maxAttempts()) {
+            return __('guess-the-number.starting_attempts', ['remaining_attemts' => $remaining_attempts]);
+        }
+        if ($remaining_attempts <= Globals::halfAttempts()) {
+            return __('guess-the-number.remaining_half', ['remaining_attemts' => $remaining_attempts]);
+        }
+        return __('guess-the-number.remaining', ['remaining_attemts' => $remaining_attempts]);
     }
 }
