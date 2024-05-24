@@ -20,6 +20,15 @@ class UserFactory extends Factory
     protected static ?string $password;
 
     /**
+     * Create a user if email not already exists.
+     */
+    public function createIfNotExists(array $attributes = []): User
+    {
+        return User::firstWhere('email', $attributes['email']) ?? $this->create($attributes);
+    }
+
+
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>

@@ -23,7 +23,7 @@
                                 method: 'GET',
                                 headers: {
                                     'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Laravel CSRF token
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                                 }
                             })
                             .then(response => response.json())
