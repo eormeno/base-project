@@ -10,7 +10,7 @@ class GuessTheNumberController extends Controller
     public function index(Request $request)
     {
         $this->request();
-        return view('guess-the-number')->with($this->info);
+        return view('guess-the-number.index')->with($this->info);
     }
 
     public function wantToPlay(Request $request)
