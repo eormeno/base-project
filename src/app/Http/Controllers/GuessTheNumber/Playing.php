@@ -19,16 +19,18 @@ class Playing extends StateAbstractImpl
             $grather_message = __('guess-the-number.greater', ['number' => $data]);
             $lower_message = __('guess-the-number.lower', ['number' => $data]);
             if ($data < $random_number) {
-                //$context->message = __('guess-the-number.greater', ['number' => $data]);
                 $this->delayedToast($grather_message, 4000, "warning");
             } elseif ($data > $random_number) {
-                //$context->message = __('guess-the-number.lower', ['number' => $data]);
                 $this->delayedToast($lower_message, 4000, "warning");
             } else {
                 $context->setState(new Success());
             }
             $remaining_attempts--;
             $context->remaining_attempts = $remaining_attempts;
+            $context->notification = __('guess-the-number.remaining', ['remaining_attempts' => $remaining_attempts]);
+            if ($remaining_attempts == 1) {
+                $context->notification .= " " . __('guess-the-number.last_attempt');
+            }
         }
     }
 }

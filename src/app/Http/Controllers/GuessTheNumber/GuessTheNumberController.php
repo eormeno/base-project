@@ -19,13 +19,6 @@ class GuessTheNumberController extends Controller
         return redirect()->route('guess-the-number')->with($this->info);
     }
 
-    public function reset(Request $request)
-    {
-        session()->forget('info');
-        $this->request();
-        return redirect()->route('guess-the-number')->with($this->info);
-    }
-
     public function guess(Request $request)
     {
         $number = $request->input('number');
@@ -38,5 +31,4 @@ class GuessTheNumberController extends Controller
         $this->request("play_again");
         return redirect()->back()->with($this->info);
     }
-
 }

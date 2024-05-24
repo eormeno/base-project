@@ -12,7 +12,6 @@ class Preparing extends StateAbstractImpl
         $context->random_number = rand(Globals::MIN_NUMBER, Globals::MAX_NUMBER);
         // calculate the remaining attempts based on the log in 2 base of the difference between max and min
         $context->remaining_attempts = ceil(log($context->max_number - $context->min_number, 2));
-        $context->message = '';
         $context->setState(new Playing());
     }
 }

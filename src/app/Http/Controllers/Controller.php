@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\FSM\StateInterface;
 use App\FSM\StateAbstractImpl;
 use App\FSM\StateContextInterface;
@@ -52,5 +53,12 @@ abstract class Controller implements StateContextInterface
         $caller_namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\') + 1);
         $this->setState(StateAbstractImpl::fromName($caller_namespace, session('info')['state']));
         return session('info');
+    }
+
+    public function reset(Request $request)
+    {
+        session()->forget('info');
+        $this->request();
+        return redirect()->back()->with($this->info);
     }
 }
