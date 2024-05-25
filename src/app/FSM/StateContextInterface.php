@@ -6,7 +6,7 @@ interface StateContextInterface
 {
     public function setState(StateInterface $state);
 
-    public function request($event = null, $data = null);
+    public function request($event = null, $data = null): string;
 
     public function __get($name);
 

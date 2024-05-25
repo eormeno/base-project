@@ -30,7 +30,7 @@ abstract class Controller implements StateContextInterface
         $this->info[$name] = $value;
     }
 
-    public function request($event = null, $data = null)
+    public function request($event = null, $data = null): string
     {
         do {
             $this->info = $this->getGameInfo();
@@ -40,6 +40,7 @@ abstract class Controller implements StateContextInterface
             $this->state = $changed_state->name();
             session()->put('info', $this->info);
         } while ($current_state != $changed_state);
+        return $changed_state->name();
     }
 
     private function getGameInfo(): array
@@ -58,7 +59,7 @@ abstract class Controller implements StateContextInterface
     public function reset(Request $request)
     {
         session()->forget('info');
-        $this->request();
-        return redirect()->back()->with($this->info);
+        $view_name = $this->request();
+        return redirect()->route("guess-the-number");
     }
 }

@@ -9,14 +9,14 @@ class GuessTheNumberController extends Controller
 {
     public function index(Request $request)
     {
-        $this->request();
-        return view('guess-the-number.index')->with($this->info);
+        $view_name = $this->request();
+        return view("guess-the-number.$view_name")->with($this->info);
     }
 
     public function wantToPlay(Request $request)
     {
-        $this->request("want_to_play");
-        return redirect()->route('guess-the-number')->with($this->info);
+        $view_name = $this->request("want_to_play");
+        return view("guess-the-number.$view_name")->with($this->info);
     }
 
     public function guess(Request $request)
@@ -27,13 +27,13 @@ class GuessTheNumberController extends Controller
 
         $number = $request->input('number');
 
-        $this->request("guess", $number);
-        return redirect()->back()->with($this->info);
+        $view_name = $this->request("guess", $number);
+        return view("guess-the-number.$view_name")->with($this->info);
     }
 
     public function playAgain(Request $request)
     {
-        $this->request("play_again");
-        return redirect()->back()->with($this->info);
+        $view_name = $this->request("play_again");
+        return view("guess-the-number.$view_name")->with($this->info);
     }
 }

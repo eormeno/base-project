@@ -9,13 +9,13 @@ abstract class StateAbstractImpl implements StateInterface
     use ToastTrigger;
 
     /**
-     * Returns the name of the class in snake_case
+     * Returns the name of the class in dash-case
      */
     public function name(): string
     {
         $class = get_class($this);
         $class = substr($class, strrpos($class, '\\') + 1);
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $class));
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $class));
     }
 
     public static function getName(): string
@@ -26,13 +26,13 @@ abstract class StateAbstractImpl implements StateInterface
     abstract public function handleRequest(StateContextInterface $context, $event = null, $data = null);
 
     /**
-     * returns an instance given the class name in snake_case
+     * returns an instance given the class name in dash-case
      * @param $name
      * @return StateAbstractImpl
      */
     public static function fromName($namespace, $name): StateAbstractImpl
     {
-        $class = $namespace . str_replace('_', '', ucwords($name, '_'));
+        $class = $namespace . str_replace('-', '', ucwords($name, '-'));
         return new $class;
     }
 }
