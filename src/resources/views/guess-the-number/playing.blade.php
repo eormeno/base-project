@@ -1,4 +1,5 @@
 <x-guess-the-number-layout>
+
     <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
         {{ $notification }}
     </p>
@@ -18,4 +19,5 @@
             </x-button>
         </div>
     </form>
+
 </x-guess-the-number-layout>
