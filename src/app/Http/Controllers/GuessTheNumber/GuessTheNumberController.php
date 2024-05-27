@@ -14,18 +14,12 @@ class GuessTheNumberController extends Controller
 
     public function index(Request $request)
     {
-        $state = $this->request();
-        $view_name = $state::dashCaseName();
-        $view_attr = $state->toArray();
-        return view("guess-the-number.$view_name", $view_attr);
+        return $this->request()->view();
     }
 
     public function wantToPlay(Request $request)
     {
-        $state = $this->request("want_to_play");
-        $view_name = $state::dashCaseName();
-        $view_attr = $state->toArray();
-        return view("guess-the-number.$view_name", $view_attr);
+        return $this->request("want_to_play")->view();
     }
 
     public function guess(Request $request)
@@ -34,17 +28,11 @@ class GuessTheNumberController extends Controller
             'number' => 'required|numeric|between:' . Globals::MIN_NUMBER . ',' . Globals::MAX_NUMBER
         ]);
         $number = $request->input('number');
-        $state = $this->request("guess", $number);
-        $view_name = $state::dashCaseName();
-        $view_attr = $state->toArray();
-        return view("guess-the-number.$view_name", $view_attr);
+        return $this->request("guess", $number)->view();
     }
 
     public function playAgain(Request $request)
     {
-        $state = $this->request("play_again");
-        $view_name = $state::dashCaseName();
-        $view_attr = $state->toArray();
-        return view("guess-the-number.$view_name", $view_attr);
+        return $this->request("play_again")->view();
     }
 }

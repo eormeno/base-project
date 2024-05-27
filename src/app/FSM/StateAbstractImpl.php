@@ -33,6 +33,14 @@ abstract class StateAbstractImpl implements StateInterface
 
     abstract public function handleRequest(?string $event = null, $data = null);
 
+    public function view()
+    {
+        $view_name = self::dashCaseName();
+        $view_attr = $this->toArray();
+        $view = view("guess-the-number.$view_name", $view_attr);
+        return $view;
+    }
+
     public function toArray(): array
     {
         $properties = get_object_vars($this);
