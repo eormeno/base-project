@@ -8,14 +8,19 @@ class AskingToPlay extends StateAbstractImpl
 {
     private int $times_played = 0;
 
-    public function handleRequest(?string $event = null, $data = null)
+    public function start()
     {
-        $this->times_played++;
+        $this->times_played = 0;
         $this->context->min_number = Globals::MIN_NUMBER;
         $this->context->max_number = Globals::MAX_NUMBER;
         $this->context->random_number = 0; // 0 means not set yet
         $this->context->notification = "";
         $this->context->remaining_attempts = Globals::maxAttempts();
+    }
+
+    public function handleRequest(?string $event = null, $data = null)
+    {
+        $this->times_played++;
         $this->context->description = __('guess-the-number.description', [
             'user_name' => auth()->user()->name,
             'remaining_attemts' => $this->context->remaining_attempts,
