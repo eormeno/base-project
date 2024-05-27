@@ -11,10 +11,7 @@ abstract class StateAbstractImpl implements StateInterface
     protected StateContextInterface $context;
     private static string $_dashed_name;
 
-    /**
-     * Returns the name of the class in dash-case
-     */
-    public static function name(): string
+    public static function dashCaseName(): string
     {
         $class = get_called_class();
         $class = substr($class, strrpos($class, '\\') + 1);
@@ -26,7 +23,11 @@ abstract class StateAbstractImpl implements StateInterface
         $this->context = $content;
     }
 
-    public function start()
+    public function onEnter(): void
+    {
+    }
+
+    public function onExit(): void
     {
     }
 

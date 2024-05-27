@@ -8,7 +8,7 @@ class AskingToPlay extends StateAbstractImpl
 {
     private int $times_played = 0;
 
-    public function start()
+    public function onEnter(): void
     {
         $this->times_played = 0;
         $this->context->min_number = Globals::MIN_NUMBER;

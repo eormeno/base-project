@@ -4,8 +4,9 @@ namespace App\FSM;
 
 interface StateInterface
 {
-    public static function name();
+    public static function dashCaseName();
     public function setContext(StateContextInterface $content);
-    public function start();
+    public function onEnter(): void;
+    public function onExit(): void;
     public function handleRequest(?string $event = null, $data = null);
 }
