@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\EventTriggerable;
 use App\Traits\ToastTrigger;
 use Illuminate\Http\Request;
+use App\Traits\EventTriggerable;
 
 class EventController extends Controller
 {
     use EventTriggerable;
     use ToastTrigger;
+
+
+    //todo: remove this method!!!
+    public function getInitialStateClass()
+    {
+        return null;
+    }
 
     public function triggerEvent()
     {

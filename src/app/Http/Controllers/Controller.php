@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\FSM\StateInterface;
-use App\FSM\StateAbstractImpl;
 use App\FSM\StateContextInterface;
 
 abstract class Controller implements StateContextInterface
@@ -12,9 +11,26 @@ abstract class Controller implements StateContextInterface
     protected array $info;
     protected StateInterface $__state;
 
-    public function setState(StateInterface $state)
+    /**
+     * A method that receives a class and instantiates it
+     */
+    public function setState($state_class): void
     {
-        $this->__state = $state;
+        $new_instance = $this->getStateInstance($state_class);
+        $new_instance->setContent($this);
+        $this->__state = $new_instance;
+    }
+
+    private function getStateInstance($state_class): StateInterface
+    {
+        if (!in_array(StateInterface::class, class_implements($state_class))) {
+            throw new \Exception("Class $state_class does not implement StateInterface");
+        }
+        $state_dashed_name = $state_class::name();
+        if (!session()->has($state_dashed_name)) {
+            session()->put($state_dashed_name, new $state_class());
+        }
+        return session($state_dashed_name);
     }
 
     public function __get($name)
@@ -30,29 +46,32 @@ abstract class Controller implements StateContextInterface
         $this->info[$name] = $value;
     }
 
-    public function request($event = null, $data = null): string
+    public function request(?string $event = null, $data = null): StateInterface
     {
         do {
             $this->info = $this->getGameInfo();
             $current_state = $this->__state;
-            $this->__state->handleRequest($this, $event, $data);
+            $this->__state->handleRequest($event, $data);
             $changed_state = $this->__state;
-            $this->state = $changed_state->name();
+            $this->state = $changed_state::name();
             session()->put('info', $this->info);
         } while ($current_state != $changed_state);
-        return $changed_state->name();
+        return $changed_state;
     }
 
     private function getGameInfo(): array
     {
         if (!session()->has('info')) {
+            $initial_state = $this->getInitialStateClass();
             session()->put('info', [
-                'state' => 'initial',
-                'message' => '',
+                'state' => $initial_state::name()
             ]);
+            $this->setState($initial_state);
+            return session('info');
         }
-        $caller_namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\') + 1);
-        $this->setState(StateAbstractImpl::fromName($caller_namespace, session('info')['state']));
+        $state_dashed_name = session('info')['state'];
+        $stored_state_class = session($state_dashed_name)::class;
+        $this->setState($stored_state_class);
         return session('info');
     }
 

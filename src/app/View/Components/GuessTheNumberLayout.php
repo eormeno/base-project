@@ -13,8 +13,8 @@ class GuessTheNumberLayout extends Component
     public function __construct($info = null)
     {
         $this->info = session('info');
-        $this->description = $this->info['description'];
-        $this->notification = $this->info['notification'];
+        $this->description = $this->info['description'] ?? '';
+        $this->notification = $this->info['notification'] ?? '';
     }
 
     public function render(): View|Closure|string

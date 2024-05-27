@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\GuessTheNumber;
 
 use App\FSM\StateAbstractImpl;
-use App\FSM\StateContextInterface;
 
 class Playing extends StateAbstractImpl
 {
-    public function handleRequest(StateContextInterface $context, $event = null, $data = null)
+    public function handleRequest(?string $event = null, $data = null)
     {
-        $remaining_attempts = $context->remaining_attempts;
-        $context->notification = $this->remainingAttemptsMessage($remaining_attempts);
+        $remaining_attempts = $this->context->remaining_attempts;
+        $this->context->notification = $this->remainingAttemptsMessage($remaining_attempts);
         if ($event == 'guess') {
             if ($remaining_attempts <= 1) {
-                $context->setState(new GameOver());
+                $this->context->setState(GameOver::class);
                 return;
             }
-            $random_number = $context->random_number;
+            $random_number = $this->context->random_number;
             $grather_message = __('guess-the-number.greater', ['number' => $data]);
             $lower_message = __('guess-the-number.lower', ['number' => $data]);
             if ($data < $random_number) {
@@ -24,11 +23,11 @@ class Playing extends StateAbstractImpl
             } elseif ($data > $random_number) {
                 $this->delayedToast($lower_message, 4000, "warning");
             } else {
-                $context->setState(new Success());
+                $this->context->setState(Success::class);
             }
             $remaining_attempts--;
-            $context->remaining_attempts = $remaining_attempts;
-            $context->notification = $this->remainingAttemptsMessage($remaining_attempts);
+            $this->context->remaining_attempts = $remaining_attempts;
+            $this->context->notification = $this->remainingAttemptsMessage($remaining_attempts);
         }
     }
 

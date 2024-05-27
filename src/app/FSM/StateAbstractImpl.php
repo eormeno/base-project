@@ -8,22 +8,24 @@ abstract class StateAbstractImpl implements StateInterface
 {
     use ToastTrigger;
 
+    protected StateContextInterface $context;
+
     /**
      * Returns the name of the class in dash-case
      */
-    public function name(): string
+    public static function name(): string
     {
-        $class = get_class($this);
+        $class = get_called_class();
         $class = substr($class, strrpos($class, '\\') + 1);
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $class));
     }
 
-    public static function getName(): string
+    public function setContent(StateContextInterface $content)
     {
-        return (new static)->name();
+        $this->context = $content;
     }
 
-    abstract public function handleRequest(StateContextInterface $context, $event = null, $data = null);
+    abstract public function handleRequest(?string $event = null, $data = null);
 
     /**
      * returns an instance given the class name in dash-case

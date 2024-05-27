@@ -4,7 +4,8 @@ namespace App\FSM;
 
 interface StateInterface
 {
-    public function name();
-    public function handleRequest(StateContextInterface $context, $event = null, $data = null);
+    public static function name();
+    public function setContent(StateContextInterface $content);
+    public function handleRequest(?string $event = null, $data = null);
     public static function fromName($namespace, $name);
 }
