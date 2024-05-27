@@ -7,20 +7,25 @@ use App\Http\Controllers\Controller;
 
 class GuessTheNumberController extends Controller
 {
-    public function getInitialStateClass() {
+    public function getInitialStateClass()
+    {
         return Initial::class;
     }
 
     public function index(Request $request)
     {
-        $view_name = $this->request()::dashCaseName();
-        return view("guess-the-number.$view_name")->with($this->info);
+        $state = $this->request();
+        $view_name = $state::dashCaseName();
+        $view_attr = $state->toArray();
+        return view("guess-the-number.$view_name", $view_attr);
     }
 
     public function wantToPlay(Request $request)
     {
-        $view_name = $this->request("want_to_play")::dashCaseName();
-        return view("guess-the-number.$view_name")->with($this->info);
+        $state = $this->request("want_to_play");
+        $view_name = $state::dashCaseName();
+        $view_attr = $state->toArray();
+        return view("guess-the-number.$view_name", $view_attr);
     }
 
     public function guess(Request $request)
@@ -29,13 +34,17 @@ class GuessTheNumberController extends Controller
             'number' => 'required|numeric|between:' . Globals::MIN_NUMBER . ',' . Globals::MAX_NUMBER
         ]);
         $number = $request->input('number');
-        $view_name = $this->request("guess", $number)::dashCaseName();
-        return view("guess-the-number.$view_name")->with($this->info);
+        $state = $this->request("guess", $number);
+        $view_name = $state::dashCaseName();
+        $view_attr = $state->toArray();
+        return view("guess-the-number.$view_name", $view_attr);
     }
 
     public function playAgain(Request $request)
     {
-        $view_name = $this->request("play_again")::dashCaseName();
-        return view("guess-the-number.$view_name")->with($this->info);
+        $state = $this->request("play_again");
+        $view_name = $state::dashCaseName();
+        $view_attr = $state->toArray();
+        return view("guess-the-number.$view_name", $view_attr);
     }
 }

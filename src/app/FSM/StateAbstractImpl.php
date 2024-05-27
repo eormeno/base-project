@@ -33,4 +33,16 @@ abstract class StateAbstractImpl implements StateInterface
 
     abstract public function handleRequest(?string $event = null, $data = null);
 
+    public function toArray(): array
+    {
+        $properties = get_object_vars($this);
+        $array = [];
+        foreach ($properties as $key => $value) {
+            if ($key[0] != '_') {
+                $array[$key] = $value;
+            }
+        }
+        return $array;
+    }
+
 }

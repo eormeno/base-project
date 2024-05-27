@@ -6,7 +6,7 @@ use App\FSM\StateAbstractImpl;
 
 class AskingToPlay extends StateAbstractImpl
 {
-    private int $times_played = 0;
+    public string $description = "";
 
     public function onEnter(): void
     {
@@ -20,13 +20,12 @@ class AskingToPlay extends StateAbstractImpl
 
     public function handleRequest(?string $event = null, $data = null)
     {
-        $this->times_played++;
-        $this->context->description = __('guess-the-number.description', [
+        $this->description = __('guess-the-number.description', [
             'user_name' => auth()->user()->name,
             'remaining_attemts' => $this->context->remaining_attempts,
             'min_number' => $this->context->min_number,
             'max_number' => $this->context->max_number,
-        ]) . " $this->times_played";
+        ]);
         if ($event == 'want_to_play') {
             $this->context->setState(Preparing::class);
         }

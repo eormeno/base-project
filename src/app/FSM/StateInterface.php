@@ -9,4 +9,5 @@ interface StateInterface
     public function onEnter(): void;
     public function onExit(): void;
     public function handleRequest(?string $event = null, $data = null);
+    public function toArray(): array;
 }

@@ -8,13 +8,8 @@ use Illuminate\View\Component;
 
 class GuessTheNumberLayout extends Component
 {
-    public $info;
-
-    public function __construct($info = null)
+    public function __construct()
     {
-        $this->info = session('info');
-        $this->description = $this->info['description'] ?? '';
-        $this->notification = $this->info['notification'] ?? '';
     }
 
     public function render(): View|Closure|string

@@ -6,10 +6,11 @@ use App\FSM\StateAbstractImpl;
 
 class Playing extends StateAbstractImpl
 {
+    public string $notification = "dddd";
     public function handleRequest(?string $event = null, $data = null)
     {
         $remaining_attempts = $this->context->remaining_attempts;
-        $this->context->notification = $this->remainingAttemptsMessage($remaining_attempts);
+        $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         if ($event == 'guess') {
             if ($remaining_attempts <= 1) {
                 $this->context->setState(GameOver::class);
@@ -27,7 +28,7 @@ class Playing extends StateAbstractImpl
             }
             $remaining_attempts--;
             $this->context->remaining_attempts = $remaining_attempts;
-            $this->context->notification = $this->remainingAttemptsMessage($remaining_attempts);
+            $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         }
     }
 
