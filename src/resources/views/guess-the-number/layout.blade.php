@@ -74,6 +74,8 @@
         {{ $slot }}
     </div>
 
-    @livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
+    <!--
+    livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
+    -->
 
 </x-app-layout>
