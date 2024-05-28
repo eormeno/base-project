@@ -1,10 +1,13 @@
 <x-guess-the-number-layout>
 
     <div class="mt-6">
-        <x-button class="mt-4" type="button"
-            onclick="window.location='{{ route('guess-the-number.play-again') }}'">
-            {{ __('guess-the-number.play-again') }}
-        </x-button>
+        <form method="POST" action="{{ route('guess-the-number') }}">
+            @csrf
+            <input type="hidden" name="event" value="play_again">
+            <x-button class="mt-4" type="submit">
+                {{ __('guess-the-number.want-to-play') }}
+            </x-button>
+        </form>
     </div>
 
 </x-guess-the-number-layout>

@@ -4,8 +4,13 @@
         {{ $description }}
     </div>
 
-    <x-button class="mt-4" type="button" onclick="window.location='{{ route('guess-the-number.want-to-play') }}'">
-        {{ __('guess-the-number.want-to-play') }}
-    </x-button>
+    <!-- A button that sends a POST request to the route guess-the-number with a parameter of 'want_to_play' -->
+    <form method="POST" action="{{ route('guess-the-number') }}">
+        @csrf
+        <input type="hidden" name="event" value="want_to_play">
+        <x-button class="mt-4" type="submit">
+            {{ __('guess-the-number.want-to-play') }}
+        </x-button>
+    </form>
 
 </x-guess-the-number-layout>

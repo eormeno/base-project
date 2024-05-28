@@ -18,4 +18,5 @@ return [
     'play-again' => '¡Quiero jugar de nuevo!',
     'reset' => 'Reiniciar',
     'want-to-play' => '¡Si, acepto el reto!',
+    'invalid_number' => 'Número inválido. Por favor, introduce un número entre :min_number y :max_number.',
 ];

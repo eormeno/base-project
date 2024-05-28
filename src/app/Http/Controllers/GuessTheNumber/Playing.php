@@ -6,19 +6,24 @@ use App\FSM\StateAbstractImpl;
 
 class Playing extends StateAbstractImpl
 {
-    public string $notification = "dddd";
+    public string $notification = "";
     public function handleRequest(?string $event = null, $data = null)
     {
         $remaining_attempts = $this->context->remaining_attempts;
         $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         if ($event == 'guess') {
+            $number = $data['number'] ?? -1;
+            if ($number < Globals::MIN_NUMBER || $number > Globals::MAX_NUMBER) {
+                $this->delayedToast($this->invalidNumberMessage(), 4000, "error");
+                return;
+            }
             if ($remaining_attempts <= 1) {
                 $this->context->setState(GameOver::class);
                 return;
             }
             $random_number = $this->context->random_number;
-            $grather_message = __('guess-the-number.greater', ['number' => $data]);
-            $lower_message = __('guess-the-number.lower', ['number' => $data]);
+            $grather_message = __('guess-the-number.greater', ['number' => $number]);
+            $lower_message = __('guess-the-number.lower', ['number' => $number]);
             if ($data < $random_number) {
                 $this->delayedToast($grather_message, 4000, "warning");
             } elseif ($data > $random_number) {
@@ -30,6 +35,14 @@ class Playing extends StateAbstractImpl
             $this->context->remaining_attempts = $remaining_attempts;
             $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         }
+    }
+
+    private function invalidNumberMessage()
+    {
+        return __('guess-the-number.invalid_number', [
+            'min_number' => Globals::MIN_NUMBER,
+            'max_number' => Globals::MAX_NUMBER
+        ]);
     }
 
     private function remainingAttemptsMessage($remaining_attempts)

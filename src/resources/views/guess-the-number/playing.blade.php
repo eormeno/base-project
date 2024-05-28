@@ -5,8 +5,9 @@
     </p>
 
     <form class="w-3/4 mt-4 border border-transparent rouded-md shadow-lg p-4 mx-auto"
-        action="{{ route('guess-the-number.guess') }}" method="POST" novalidate>
+        action="{{ route('guess-the-number') }}" method="POST" novalidate>
         @csrf
+        <input type="hidden" name="event" value="guess">
         <div>
             <div>
                 <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
