@@ -15,7 +15,6 @@ class GuessTheNumberController extends Controller
 
     public function index(Request $request)
     {
-        //return $this->request()->view();
         return view('guess-the-number.index');
     }
 

@@ -6,7 +6,7 @@
             class="inline-flex text-xs items-center justify-center p-1 m-2 font-thin text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-blue-500">Send
             event</button>
 
-        <a href="{{ route('guess-the-number.reset') }}"
+        <a href="{ route('guess-the-number.reset') }}"
             class="inline-flex text-xs items-center justify-center p-1 m-2 font-thin text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500">
             Reset
         </a>
@@ -14,9 +14,10 @@
 
         <script>
             // on page load run the sendEvent function
-            window.onload = function () {
+            window.onload = function() {
                 sendEvent();
             }
+
             function sendEvent(event, formData = {}) {
                 event = event || '';
                 //document.getElementById('main').innerHTML = 'Loading...';
@@ -39,31 +40,41 @@
         </script>
     </div>
 
-    <div class="border mx-auto border-gray-600 rounded-md p-5 w-3/4">
-        <div>
-            <x-toast name="success">
-                <div
-                    class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-lg">
-                    <x-toast-message />
-                </div>
-            </x-toast>
+    <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 min-w-md max-w-md">
+        <div class="relative">
+            <div
+                class="absolute top-2 w-3/4 left-1/2 transform -translate-x-1/2 z-50 items-center justify-center text-lg font-light text-white">
 
-            <x-toast name="error">
-                <div
-                    class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-red-700 border border-transparent rounded-md shadow-lg">
-                    <x-toast-message />
-                </div>
-            </x-toast>
+                <x-toast name="info">
+                    <div class="bg-cyan-500 text-slate-800 shadow-lg p-6 border border-transparent rounded-md">
+                        <x-toast-message />
+                    </div>
+                </x-toast>
 
-            <x-toast name="warning">
-                <div
-                    class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-yellow-600 border border-transparent rounded-md shadow-lg">
-                    <x-toast-message />
-                </div>
-            </x-toast>
+                <x-toast name="success">
+                    <div class="bg-green-700 shadow-lg p-6 border border-transparent rounded-md">
+                        <x-toast-message />
+                    </div>
+                </x-toast>
+
+                <x-toast name="error">
+                    <div class="bg-red-700 shadow-lg p-6 border border-transparent rounded-md">
+                        <x-toast-message />
+                    </div>
+                </x-toast>
+
+                <x-toast name="warning">
+                    <div class="bg-yellow-600 shadow-lg p-6 border border-transparent rounded-md">
+                        <x-toast-message />
+                    </div>
+                </x-toast>
+            </div>
         </div>
 
-        <div id="main" >
+        <div id="main">
         </div>
+
+        @livewire('debug-bar', ['include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
+
     </div>
 </x-guess-the-number-layout>

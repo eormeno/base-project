@@ -1,4 +1,6 @@
 <div class="fixed inset-x-0 bottom-0">
+    <div x-init="setInterval(() => { $wire.updateInfo(); }, 2000)" />
+
     <div class="bg-gray-800">
         <div class="max-w-7xl mx-auto py-2 px-3 sm:px-3 lg:px-4">
             <div class="flex items-center justify-between flex-wrap">

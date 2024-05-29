@@ -1,7 +1,5 @@
 <x-app-layout>
 
-    @php($info = session('info'))
-
     <x-slot name="header">
         <h2 class="font-extrabold text-xl text-gray-800 dark:text-gray-200 leading-tight text-center">
             {{ __('guess-the-number.title') }}
@@ -49,12 +47,8 @@
         </script>
     </div>
 
-    <div class="text-center p-4">
+    <div class="text-center p-4 relative">
         {{ $slot }}
     </div>
-
-    <!--
-    livewire('debug-bar', ['info' => $info, 'include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
-    -->
 
 </x-app-layout>

@@ -3,7 +3,7 @@
         {{ $notification }}
     </p>
 
-    <div class="mt-4 w-5/6 border border-transparent rouded-md shadow-lg p-3 mx-auto">
+    <div class="mt-4 w-5/6 p-3 mx-auto">
         <div>
             <div>
                 <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
