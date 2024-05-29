@@ -15,7 +15,9 @@ class GuessTheNumberController extends Controller
 
     public function index(Request $request)
     {
-        return view('guess-the-number.index');
+        $debug = env('APP_DEBUG', false);
+        $local_debug = $debug && true;
+        return view('guess-the-number.index', ['debug' => $local_debug]);
     }
 
     public function event(EventRequestFilter $request)
@@ -24,5 +26,4 @@ class GuessTheNumberController extends Controller
         $data = $request->eventInfo()['data'];
         return $this->request($event, $data)->view();
     }
-
 }
