@@ -14,7 +14,7 @@ class Playing extends StateAbstractImpl
         if ($event == 'guess') {
             $number = $data['number'] ?? -1;
             $random_number = $this->context->random_number;
-            if ($number == -32) {
+            if ($number == 55555) {
                 $this->toast("The secret number is $random_number", 4000, "success");
                 return;
             }
