@@ -26,7 +26,7 @@ class EventRequestFilter extends FormRequest
         unset($validated['submit']);
         $event = [
             'event' => $event_name,
-            'data' => $validated
+            'data' => $validated['data']
         ];
         return $event;
     }

@@ -1,4 +1,4 @@
-<x-guess-the-number-layout>
+<div>
 
     <div class="mt-6">
         <form method="POST" action="{{ route('guess-the-number') }}">
@@ -10,4 +10,4 @@
         </form>
     </div>
 
-</x-guess-the-number-layout>
+</div>

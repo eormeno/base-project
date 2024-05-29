@@ -49,27 +49,6 @@
         </script>
     </div>
 
-    <x-toast name="success">
-        <div
-            class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-green-700 border border-transparent rounded-md shadow-lg">
-            <x-toast-message />
-        </div>
-    </x-toast>
-
-    <x-toast name="error">
-        <div
-            class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-red-700 border border-transparent rounded-md shadow-lg">
-            <x-toast-message />
-        </div>
-    </x-toast>
-
-    <x-toast name="warning">
-        <div
-            class="fixed w-1/2 inset-x-0 top-1/4 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center p-6 text-xl font-bold text-white bg-yellow-600 border border-transparent rounded-md shadow-lg">
-            <x-toast-message />
-        </div>
-    </x-toast>
-
     <div class="text-center p-4">
         {{ $slot }}
     </div>

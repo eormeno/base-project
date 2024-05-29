@@ -1,24 +1,21 @@
-<x-guess-the-number-layout>
-
-    <p class="mt-6 text-lg text-gray-900 dark:text-white text-center">
+<div>
+    <p class="mt-3 text-lg text-gray-900 dark:text-white text-center">
         {{ $notification }}
     </p>
 
-    <form class="w-3/4 mt-4 border border-transparent rouded-md shadow-lg p-4 mx-auto"
-        action="{{ route('guess-the-number') }}" method="POST" novalidate>
-        @csrf
-        <input type="hidden" name="event" value="guess">
+    <div class="mt-4 w-5/6 border border-transparent rouded-md shadow-lg p-3 mx-auto">
         <div>
             <div>
                 <x-label for="number" value="{{ __('guess-the-number.enter_number') }}" />
-                <x-input id="number" class="block mt-1 w-full" type="number" name="number"
-                    :value="old('number')" autofocus />
-                <x-input-error for="number" class="mt-2" />
+                <x-input id="number" class="block mt-1 w-full" type="number" name="number" :value="old('number')"
+                    autofocus />
             </div>
-            <x-button class="mt-4">
+            <x-button class="mt-4" type="button"
+                onclick="sendEvent('guess', {
+                number: document.getElementById('number').value
+                })">
                 {{ __('guess-the-number.submit') }}
             </x-button>
         </div>
-    </form>
-
-</x-guess-the-number-layout>
+    </div>
+</div>

@@ -13,21 +13,25 @@ class Playing extends StateAbstractImpl
         $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         if ($event == 'guess') {
             $number = $data['number'] ?? -1;
+            $random_number = $this->context->random_number;
+            if ($number == -32) {
+                $this->toast("The secret number is $random_number", 4000, "success");
+                return;
+            }
             if ($number < Globals::MIN_NUMBER || $number > Globals::MAX_NUMBER) {
-                $this->delayedToast($this->invalidNumberMessage(), 4000, "error");
+                $this->toast($this->invalidNumberMessage(), 4000, "error");
                 return;
             }
             if ($remaining_attempts <= 1) {
                 $this->context->setState(GameOver::class);
                 return;
             }
-            $random_number = $this->context->random_number;
             $grather_message = __('guess-the-number.greater', ['number' => $number]);
             $lower_message = __('guess-the-number.lower', ['number' => $number]);
-            if ($data < $random_number) {
-                $this->delayedToast($grather_message, 4000, "warning");
-            } elseif ($data > $random_number) {
-                $this->delayedToast($lower_message, 4000, "warning");
+            if ($number < $random_number) {
+                $this->toast($grather_message, 4000, "warning");
+            } elseif ($number > $random_number) {
+                $this->toast($lower_message, 4000, "warning");
             } else {
                 $this->context->setState(Success::class);
             }
