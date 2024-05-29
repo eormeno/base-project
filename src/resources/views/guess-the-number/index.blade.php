@@ -19,7 +19,7 @@
             }
             function sendEvent(event, formData = {}) {
                 event = event || '';
-                //document.getElementById('main').innerHTML = 'Loading...';
+                document.getElementById('main').innerHTML = 'Loading...';
                 fetch('{{ route('guess-the-number') }}', {
                         method: 'POST',
                         headers: {
