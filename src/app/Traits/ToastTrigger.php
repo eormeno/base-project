@@ -4,8 +4,14 @@ namespace App\Traits;
 
 trait ToastTrigger
 {
-    private function _toast(string $message, int $duration = 3000, string $name = 'toast', bool $delayed = false)
-    {
+    const DEFAULT_TOAST_DURATION = 4000;
+
+    private function _toast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION,
+        string $name = 'toast',
+        bool $delayed = false
+    ) {
         $session_storage = $delayed ? 'delayed_events' : 'events';
         $name = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $name));
         $duration = $duration < 1000 ? 3000 : $duration;
@@ -21,13 +27,47 @@ trait ToastTrigger
         session([$session_storage => $events]);
     }
 
-    public function toast(string $message, int $duration = 3000, string $name = 'toast')
-    {
+    public function toast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION,
+        string $name = 'toast'
+    ) {
         $this->_toast($message, $duration, $name);
     }
 
-    public function delayedToast(string $message, int $duration = 3000, string $name = 'toast')
-    {
+    public function warningToast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION
+    ) {
+        $this->_toast($message, $duration, "warning");
+    }
+
+    public function errorToast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION
+    ) {
+        $this->_toast($message, $duration, "error");
+    }
+
+    public function successToast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION
+    ) {
+        $this->_toast($message, $duration, "success");
+    }
+
+    public function infoToast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION
+    ) {
+        $this->_toast($message, $duration, "info");
+    }
+
+    public function delayedToast(
+        string $message,
+        int $duration = self::DEFAULT_TOAST_DURATION,
+        string $name = 'toast'
+    ) {
         $this->_toast($message, $duration, $name, true);
     }
 }

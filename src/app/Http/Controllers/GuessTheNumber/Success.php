@@ -6,11 +6,16 @@ use App\FSM\StateAbstractImpl;
 
 class Success extends StateAbstractImpl
 {
+    use Messages\SuccessMessages;
     public string $notification = "";
+
+    public function onEnter(): void
+    {
+        $this->notification = $this->successMessage();
+    }
+
     public function handleRequest(?string $event = null, $data = null)
     {
-        $success_message = __('guess-the-number.success', ['user_name' => auth()->user()->name]);
-        $this->notification = $success_message;
         if ($event == 'play_again') {
             $this->context->setState(Preparing::class);
         }
