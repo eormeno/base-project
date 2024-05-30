@@ -6,6 +6,8 @@ trait SuccessMessages
 {
     public function successMessage(): string
     {
-        return __('guess-the-number.success', ['user_name' => auth()->user()->name]);
+        return __('guess-the-number.success', [
+            'user_name' => $this->context->user_name
+        ]);
     }
 }

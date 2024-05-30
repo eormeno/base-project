@@ -13,9 +13,22 @@
         -->
 
         <script>
+            window.addEventListener('DOMContentLoaded', (event) => {
+                previousData();
+            });
             // on page load run the sendEvent function
             window.onload = function() {
                 sendEvent();
+            }
+
+            function previousData() {
+                // get data from local storage
+                let data = localStorage.getItem('guess-the-number');
+                // if data is not null
+                if (data) {
+                    // set the innerHTML of the main div to the data
+                    document.getElementById('main').innerHTML = data;
+                }
             }
 
             function sendEvent(event, formData = {}) {
@@ -34,7 +47,13 @@
                     })
                     .then(response => response.text())
                     .then(data => {
-                        document.getElementById('main').innerHTML = data;
+                        // if the data starts with a <!DOCTYPE html> tag, is an error page
+                        if (data.startsWith('<!DOCTYPE html>')) {
+                            document.write(data);
+                        } else {
+                            document.getElementById('main').innerHTML = data;
+                            localStorage.setItem('guess-the-number', data);
+                        }
                     });
             }
         </script>

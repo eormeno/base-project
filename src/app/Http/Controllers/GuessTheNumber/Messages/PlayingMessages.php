@@ -8,17 +8,23 @@ trait PlayingMessages
 {
     private function greaterMessage($number)
     {
-        return __('guess-the-number.greater', ['number' => $number]);
+        return __('guess-the-number.greater', [
+            'number' => $number
+        ]);
     }
 
     private function lowerMessage($number)
     {
-        return __('guess-the-number.lower', ['number' => $number]);
+        return __('guess-the-number.lower', [
+            'number' => $number
+        ]);
     }
 
     private function cheatMessage($random_number)
     {
-        return __('guess-the-number.cheat', ['random_number' => $random_number]);
+        return __('guess-the-number.cheat', [
+            'random_number' => $random_number
+        ]);
     }
 
     private function invalidNumberMessage()
@@ -35,12 +41,18 @@ trait PlayingMessages
             return __('guess-the-number.last_attempt');
         }
         if ($remaining_attempts == Globals::maxAttempts()) {
-            return __('guess-the-number.starting_attempts', ['remaining_attemts' => $remaining_attempts]);
+            return __('guess-the-number.starting_attempts', [
+                'remaining_attemts' => $remaining_attempts
+            ]);
         }
         if ($remaining_attempts <= Globals::halfAttempts()) {
-            return __('guess-the-number.remaining_half', ['remaining_attemts' => $remaining_attempts]);
+            return __('guess-the-number.remaining_half', [
+                'remaining_attemts' => $remaining_attempts
+            ]);
         }
-        return __('guess-the-number.remaining', ['remaining_attemts' => $remaining_attempts]);
+        return __('guess-the-number.remaining', [
+            'remaining_attemts' => $remaining_attempts
+        ]);
     }
 
 }

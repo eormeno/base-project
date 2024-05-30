@@ -49,6 +49,9 @@ abstract class Controller implements StateContextInterface
 
     public function __get($attributeName)
     {
+        if (property_exists($this, $attributeName)) {
+            return $this->$attributeName;
+        }
         if (array_key_exists($attributeName, $this->info)) {
             return $this->info[$attributeName];
         }
@@ -57,6 +60,10 @@ abstract class Controller implements StateContextInterface
 
     public function __set($attributeName, $value)
     {
+        if (property_exists($this, $attributeName)) {
+            $this->$attributeName = $value;
+            return;
+        }
         $this->info[$attributeName] = $value;
     }
 
@@ -77,9 +84,8 @@ abstract class Controller implements StateContextInterface
     {
         if (!session()->has(self::INFO_KEY)) {
             $initial_state = $this->getInitialStateClass();
-            session()->put(self::INFO_KEY, [
-                'state' => $initial_state::dashCaseName()
-            ]);
+            $this->info['state'] = $initial_state::dashCaseName();
+            session()->put(self::INFO_KEY, $this->info);
             $this->registerStateInstance($initial_state);
         }
         $state_dashed_name = session(self::INFO_KEY)['state'];

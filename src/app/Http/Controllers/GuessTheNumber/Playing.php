@@ -33,4 +33,5 @@ class Playing extends StateAbstractImpl
             $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         }
     }
+
 }
