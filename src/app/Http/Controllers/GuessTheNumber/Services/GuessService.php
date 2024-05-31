@@ -22,16 +22,16 @@ class GuessService
     {
         $this->checkNumberIsCheat($number);
         $this->checkNumberIsNotBetween($number);
+        $this->checkNumberIsGuessed($number);
         $this->checkNoEnoughAttempts();
         $this->checkNumberIsLowerThanRandomNumber($number);
         $this->checkNumberIsGreaterThanRandomNumber($number);
-        $this->checkNumberIsGuessed($number);
     }
 
     private function checkNumberIsCheat($number)
     {
         if ($number == $this->gameConfigService->getCheatNumber()) {
-            $this->gameRepository->setRemainingAttempts(2);
+            $this->gameRepository->setRemainingAttempts(1);
             throw new InfoException($this->messageService->cheatMessage());
         }
     }
