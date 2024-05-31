@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers\GuessTheNumber;
 
+use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
+use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use App\Http\Requests\EventRequestFilter;
-use App\Repositories\CurrentUserRepository;
 use App\Http\Controllers\GuessTheNumber\Services\GuessService;
 
 class GuessTheNumberController extends Controller
 {
-    protected $guessService;
-
-    public function __construct(CurrentUserRepository $currentUserRepository, GuessService $guessService)
-    {
-        $this->user_name = $currentUserRepository->name();
-        $this->guessService = $guessService;
+    public function __construct(
+        protected Initial $initial,
+        protected UserRepository $userRepository,
+        protected GuessService $guessService,
+        protected GameConfigService $gameConfigService
+    ) {
     }
 
     public function getInitialStateClass()
     {
-        return Initial::class;
+        return $this->initial::class;
     }
 
     public function index(Request $request)

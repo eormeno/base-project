@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-class CurrentUserRepository
+class UserRepository
 {
     public function name()
     {

@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
-use App\Http\Controllers\GuessTheNumber\Globals;
+use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
 
 class GuessService
 {
-    private $random_number;
-    private $remaining_attempts;
-
-    public function setRandomNumber($random_number)
-    {
-        $this->random_number = $random_number;
-    }
-
-    public function setRemainingAttempts($remaining_attempts)
-    {
-        $this->remaining_attempts = $remaining_attempts;
+    public function __construct(
+        protected GuessTheNumberGameRepository $gameRepository,
+        protected GameConfigService $gameConfigService
+    ) {
     }
 
     public function guess($number)
     {
         $this->checkNumberIsCheat($number);
-        $this->checkNumberIsNotBetween($number, Globals::MIN_NUMBER, Globals::MAX_NUMBER);
+        $this->checkNumberIsNotBetween($number);
         $this->checkNoEnoughAttempts();
         $this->checkNumberIsLowerThanRandomNumber($number);
         $this->checkNumberIsGreaterThanRandomNumber($number);
@@ -31,13 +24,15 @@ class GuessService
 
     private function checkNumberIsCheat($number)
     {
-        if ($number == Globals::CHEAT_NUMBER) {
+        if ($number == $this->gameConfigService->getCheatNumber()) {
             throw new CheatException();
         }
     }
 
-    private function checkNumberIsNotBetween($number, $min, $max)
+    private function checkNumberIsNotBetween($number)
     {
+        $min = $this->gameConfigService->getMinNumber();
+        $max = $this->gameConfigService->getMaxNumber();
         if ($number < $min || $number > $max) {
             return new NotInRangeException($number, $min, $max);
         }
@@ -45,27 +40,32 @@ class GuessService
 
     private function checkNoEnoughAttempts()
     {
-        if ($this->remaining_attempts <= 1) {
+        if ($this->gameRepository->getRemainingAttempts() <= 1) {
+            $this->gameRepository->setGameOver();
             return new NoEnoughAttemtsException();
         }
     }
 
     private function checkNumberIsLowerThanRandomNumber($number)
     {
-        if ($number < $this->random_number) {
+        if ($number < $this->gameRepository->getRandomNumber()) {
+            $this->gameRepository->decreaseRemainingAttempts();
             return new LowerThanRandomException($number);
         }
     }
 
     private function checkNumberIsGreaterThanRandomNumber($number)
     {
-        if ($number > $this->random_number) {
+        if ($number > $this->gameRepository->getRandomNumber()) {
+            $this->gameRepository->decreaseRemainingAttempts();
             return new GratherThanRandomException($number);
         }
     }
 
     private function checkNumberIsGuessed($number)
     {
-        return $number == $this->random_number;
+        if ($number == $this->gameRepository->getRandomNumber()) {
+            $this->gameRepository->setGameSuccess();
+        }
     }
 }

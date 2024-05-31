@@ -7,10 +7,10 @@ trait AskingToPlayMessages
     public function welcomeMessage()
     {
         return __('guess-the-number.description', [
-            'user_name' => $this->context->user_name,
-            'remaining_attemts' => $this->context->remaining_attempts,
-            'min_number' => $this->context->min_number,
-            'max_number' => $this->context->max_number,
+            'user_name' => $this->context->userRepository->name(),
+            'remaining_attemts' => $this->context->gameConfigService->maxAttempts(),
+            'min_number' => $this->context->gameConfigService->getMinNumber(),
+            'max_number' => $this->context->gameConfigService->getMaxNumber()
         ]);
     }
 }
