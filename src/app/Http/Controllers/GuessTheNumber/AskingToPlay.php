@@ -10,9 +10,6 @@ class AskingToPlay extends StateAbstractImpl
 
     public function onEnter(): void
     {
-        $this->context->min_number = $this->context->gameConfigService->getMinNumber();
-        $this->context->max_number = $this->context->gameConfigService->getMaxNumber();
-        $this->context->remaining_attempts = $this->context->gameConfigService->getMaxAttempts();
         $this->description = $this->context->messageService->welcomeMessage();
     }
 

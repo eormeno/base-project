@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
+use App\Http\Controllers\GuessTheNumber\Exceptions\FailException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\InfoException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\SuccessException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\GameOverException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\NotInRangeException;
 use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
 
 class GuessService
@@ -26,6 +31,7 @@ class GuessService
     private function checkNumberIsCheat($number)
     {
         if ($number == $this->gameConfigService->getCheatNumber()) {
+            $this->gameRepository->setRemainingAttempts(2);
             throw new InfoException($this->messageService->cheatMessage());
         }
     }

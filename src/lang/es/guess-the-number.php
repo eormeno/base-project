@@ -19,5 +19,7 @@ return [
     'reset' => 'Reiniciar',
     'want-to-play' => '¡Si, acepto el reto!',
     'invalid_number' => 'Número inválido. Por favor, introduce un número entre :min_number y :max_number.',
-    'cheat' => '¡Has hecho trampa! El número era :random_number'
+    'cheat' => '¡Has hecho trampa! El número era :random_number',
+    'game-over-subtitle' => 'El número secreto era :random_number',
+    'success-subtitle' => 'Lo adivinaste en :attempts intentos.',
 ];

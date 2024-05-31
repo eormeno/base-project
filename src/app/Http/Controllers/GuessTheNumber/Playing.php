@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\GuessTheNumber;
 
 use App\FSM\StateAbstractImpl;
-use App\Http\Controllers\GuessTheNumber\Services\FailException;
-use App\Http\Controllers\GuessTheNumber\Services\InfoException;
-use App\Http\Controllers\GuessTheNumber\Services\SuccessException;
-use App\Http\Controllers\GuessTheNumber\Services\GameOverException;
-use App\Http\Controllers\GuessTheNumber\Services\NotInRangeException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\FailException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\InfoException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\SuccessException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\GameOverException;
+use App\Http\Controllers\GuessTheNumber\Exceptions\NotInRangeException;
 
 class Playing extends StateAbstractImpl
 {

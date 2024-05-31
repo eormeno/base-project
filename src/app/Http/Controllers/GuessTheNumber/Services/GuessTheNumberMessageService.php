@@ -32,10 +32,24 @@ class GuessTheNumberMessageService
         ]);
     }
 
+    public function successSubtitleMessage(): string
+    {
+        return __('guess-the-number.success-subtitle', [
+            'attempts' => $this->gameConfigService->getMaxAttempts() - $this->gameRepository->getRemainingAttempts()
+        ]);
+    }
+
     public function gameOverMessage()
     {
         return __('guess-the-number.game-over', [
             'user_name' => $this->userRepository->name()
+        ]);
+    }
+
+    public function gameOverSubtitle()
+    {
+        return __('guess-the-number.game-over-subtitle', [
+            'random_number' => $this->gameRepository->getRandomNumber()
         ]);
     }
 
