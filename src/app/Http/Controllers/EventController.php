@@ -11,13 +11,6 @@ class EventController extends Controller
     use EventTriggerable;
     use ToastTrigger;
 
-
-    //todo: remove this method!!!
-    public function getInitialStateClass()
-    {
-        return null;
-    }
-
     public function triggerEvent()
     {
         $this->delayedToast('¡Game Over!', 5000, 'error');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\GuessTheNumber;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\StateContextController;
 use App\Repositories\UserRepository;
 use App\Http\Requests\EventRequestFilter;
 use App\Http\Controllers\GuessTheNumber\States\Initial;
@@ -12,7 +12,7 @@ use App\Http\Controllers\GuessTheNumber\Services\GuessService;
 use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
 use App\Http\Controllers\GuessTheNumber\Services\GuessTheNumberMessageService;
 
-class GuessTheNumberController extends Controller
+class GuessTheNumberController extends StateContextController
 {
     public function __construct(
         protected Initial $initial,
