@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\GuessTheNumber;
+namespace App\Http\Controllers\GuessTheNumber\States;
 
 use App\FSM\StateAbstractImpl;
 
-class GameOver extends StateAbstractImpl
+class Success extends StateAbstractImpl
 {
     public string $notification = "";
     public string $subtitle = "";
 
     public function onEnter(): void
     {
-        $this->notification = $this->context->messageService->gameOverMessage();
-        $this->subtitle = $this->context->messageService->gameOverSubtitle();
+        $this->notification = $this->context->messageService->successMessage();
+        $this->subtitle = $this->context->messageService->successSubtitleMessage();
     }
 
     public function handleRequest(?string $event = null, $data = null)

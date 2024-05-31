@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\GuessTheNumber;
 
-use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
-use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
-use App\Http\Controllers\GuessTheNumber\Services\GameService;
-use App\Http\Controllers\GuessTheNumber\Services\GuessTheNumberMessageService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use App\Http\Requests\EventRequestFilter;
+use App\Http\Controllers\GuessTheNumber\States\Initial;
+use App\Http\Controllers\GuessTheNumber\Services\GameService;
 use App\Http\Controllers\GuessTheNumber\Services\GuessService;
+use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
+use App\Http\Controllers\GuessTheNumber\Services\GuessTheNumberMessageService;
 
 class GuessTheNumberController extends Controller
 {
