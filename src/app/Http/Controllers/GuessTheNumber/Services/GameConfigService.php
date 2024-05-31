@@ -24,14 +24,14 @@ class GameConfigService
      *
      * @return int
      */
-    public function maxAttempts(): int
+    public function getMaxAttempts(): int
     {
         return ceil(log($this->getMaxNumber() - $this->getMinNumber(), 2));
     }
 
-    public function halfAttempts(): int
+    public function getHalfAttempts(): int
     {
-        return ceil($this->maxAttempts() * 0.5);
+        return ceil($this->getMaxAttempts() * 0.5);
     }
 
     public function getCheatNumber(): int

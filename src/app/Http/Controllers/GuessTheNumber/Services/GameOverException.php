@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
-class NoEnoughAttemtsException extends \Exception
+class GameOverException extends \Exception
 {
     public function __construct()
     {

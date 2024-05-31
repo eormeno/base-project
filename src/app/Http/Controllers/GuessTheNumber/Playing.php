@@ -3,34 +3,39 @@
 namespace App\Http\Controllers\GuessTheNumber;
 
 use App\FSM\StateAbstractImpl;
+use App\Http\Controllers\GuessTheNumber\Services\FailException;
+use App\Http\Controllers\GuessTheNumber\Services\InfoException;
+use App\Http\Controllers\GuessTheNumber\Services\SuccessException;
+use App\Http\Controllers\GuessTheNumber\Services\GameOverException;
+use App\Http\Controllers\GuessTheNumber\Services\NotInRangeException;
 
 class Playing extends StateAbstractImpl
 {
-    use Messages\PlayingMessages;
-    use Logics\PlayingLogics;
-
     public string $notification = "";
+
+    public function onEnter(): void
+    {
+        $this->notification = $this->context->messageService->remainingAttemptsMessage();
+    }
 
     public function handleRequest(?string $event = null, $data = null)
     {
-        $remaining_attempts = $this->context->remaining_attempts;
-        $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
         if ($event == 'guess') {
             $number = $data['number'] ?? -1;
-            $random_number = $this->context->random_number;
-            if ($this->isNumberCheat($number, $random_number))
-                return;
-            if ($this->isNumberNotBetween($number))
-                return;
-            if ($this->noEnoughAttempts($remaining_attempts, GameOver::class))
-                return;
-            if ($this->isNumberGuessed($number, $random_number, Success::class))
-                return;
-            $this->isNumberLowerThanRandomNumber($number, $random_number);
-            $this->isNumberGreaterThanRandomNumber($number, $random_number);
-            $remaining_attempts--;
-            $this->context->remaining_attempts = $remaining_attempts;
-            $this->notification = $this->remainingAttemptsMessage($remaining_attempts);
+            try {
+                $this->context->gameService->guess($number);
+            } catch (SuccessException $e) {
+                $this->context->setState(Success::class);
+            } catch (GameOverException $e) {
+                $this->context->setState(GameOver::class);
+            } catch (InfoException $e) {
+                $this->infoToast($e->getMessage());
+            } catch (NotInRangeException $e) {
+                $this->errorToast($e->getMessage());
+            } catch (FailException $e) {
+                $this->warningToast($e->getMessage());
+            }
+            $this->notification = $this->context->messageService->remainingAttemptsMessage();
         }
     }
 

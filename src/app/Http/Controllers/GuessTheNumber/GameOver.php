@@ -6,12 +6,11 @@ use App\FSM\StateAbstractImpl;
 
 class GameOver extends StateAbstractImpl
 {
-    use Messages\GameOverMessages;
     public string $notification = "";
 
     public function onEnter(): void
     {
-        $this->notification = $this->gameOverMessage();
+        $this->notification = $this->context->messageService->gameOverMessage();
     }
 
     public function handleRequest(?string $event = null, $data = null)

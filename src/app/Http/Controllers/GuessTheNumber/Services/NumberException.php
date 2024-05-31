@@ -4,14 +4,15 @@ namespace App\Http\Controllers\GuessTheNumber\Services;
 
 abstract class NumberException extends \Exception
 {
-    private $number;
-    public function __construct($number)
+    private ?int $number;
+
+    public function __construct(string $message, ?int $number = null)
     {
-        parent::__construct();
+        parent::__construct($message);
         $this->number = $number;
     }
 
-    public function getNumber()
+    public function getNumber(): ?int
     {
         return $this->number;
     }

@@ -14,16 +14,16 @@ class GuessTheNumberGameRepository
     ) {
     }
 
-    public function createNewGame(): array
+    public function createNewGame(int $random_number): array
     {
         $new_game = [
             'state' => 'initial',
             'min_number' => $this->gameConfigService->getMinNumber(),
             'max_number' => $this->gameConfigService->getMaxNumber(),
-            'max_attemts' => $this->gameConfigService->maxAttempts(),
-            'half_attempts' => $this->gameConfigService->halfAttempts(),
-            'remaining_attempts' => $this->gameConfigService->maxAttempts(),
-            'random_number' => $this->calculateRandomNumber(),
+            'max_attemts' => $this->gameConfigService->getMaxAttempts(),
+            'half_attempts' => $this->gameConfigService->getHalfAttempts(),
+            'remaining_attempts' => $this->gameConfigService->getMaxAttempts(),
+            'random_number' => $random_number,
             'finished' => false,
         ];
         session()->put(self::GAME_SESSION_KEY, $new_game);
@@ -33,13 +33,6 @@ class GuessTheNumberGameRepository
     public function getGame(): array
     {
         return session()->get(self::GAME_SESSION_KEY);
-    }
-
-    private function calculateRandomNumber(): int
-    {
-        $min = $this->gameConfigService->getMinNumber();
-        $max = $this->gameConfigService->getMaxNumber();
-        return rand($min, $max);
     }
 
     public function getRandomNumber(): int

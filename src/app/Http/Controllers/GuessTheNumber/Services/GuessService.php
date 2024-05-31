@@ -8,7 +8,8 @@ class GuessService
 {
     public function __construct(
         protected GuessTheNumberGameRepository $gameRepository,
-        protected GameConfigService $gameConfigService
+        protected GameConfigService $gameConfigService,
+        protected GuessTheNumberMessageService $messageService
     ) {
     }
 
@@ -25,7 +26,7 @@ class GuessService
     private function checkNumberIsCheat($number)
     {
         if ($number == $this->gameConfigService->getCheatNumber()) {
-            throw new CheatException();
+            throw new InfoException($this->messageService->cheatMessage());
         }
     }
 
@@ -34,7 +35,8 @@ class GuessService
         $min = $this->gameConfigService->getMinNumber();
         $max = $this->gameConfigService->getMaxNumber();
         if ($number < $min || $number > $max) {
-            return new NotInRangeException($number, $min, $max);
+            $message = $this->messageService->invalidNumberMessage();
+            throw new NotInRangeException($message, $number, $min, $max);
         }
     }
 
@@ -42,7 +44,7 @@ class GuessService
     {
         if ($this->gameRepository->getRemainingAttempts() <= 1) {
             $this->gameRepository->setGameOver();
-            return new NoEnoughAttemtsException();
+            throw new GameOverException();
         }
     }
 
@@ -50,7 +52,7 @@ class GuessService
     {
         if ($number < $this->gameRepository->getRandomNumber()) {
             $this->gameRepository->decreaseRemainingAttempts();
-            return new LowerThanRandomException($number);
+            throw new FailException($this->messageService->greaterMessage($number));
         }
     }
 
@@ -58,7 +60,7 @@ class GuessService
     {
         if ($number > $this->gameRepository->getRandomNumber()) {
             $this->gameRepository->decreaseRemainingAttempts();
-            return new GratherThanRandomException($number);
+            throw new FailException($this->messageService->lowerMessage($number));
         }
     }
 
@@ -66,6 +68,7 @@ class GuessService
     {
         if ($number == $this->gameRepository->getRandomNumber()) {
             $this->gameRepository->setGameSuccess();
+            throw new SuccessException();
         }
     }
 }

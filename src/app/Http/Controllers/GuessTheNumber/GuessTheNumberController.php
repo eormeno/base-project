@@ -4,6 +4,8 @@ namespace App\Http\Controllers\GuessTheNumber;
 
 use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
 use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
+use App\Http\Controllers\GuessTheNumber\Services\GameService;
+use App\Http\Controllers\GuessTheNumber\Services\GuessTheNumberMessageService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
@@ -16,7 +18,9 @@ class GuessTheNumberController extends Controller
         protected Initial $initial,
         protected UserRepository $userRepository,
         protected GuessService $guessService,
-        protected GameConfigService $gameConfigService
+        protected GameConfigService $gameConfigService,
+        protected GameService $gameService,
+        protected GuessTheNumberMessageService $messageService,
     ) {
     }
 

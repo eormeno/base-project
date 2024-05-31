@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
-class CheatException extends \Exception
+class SuccessException extends \Exception
 {
     public function __construct()
     {
