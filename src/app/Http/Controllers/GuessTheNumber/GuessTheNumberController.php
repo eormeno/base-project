@@ -15,18 +15,13 @@ use App\Http\Controllers\GuessTheNumber\Services\GuessTheNumberMessageService;
 class GuessTheNumberController extends StateContextController
 {
     public function __construct(
-        protected Initial $initial,
+        protected Initial $initial_state,
         protected UserRepository $userRepository,
         protected GuessService $guessService,
         protected GameConfigService $gameConfigService,
         protected GameService $gameService,
         protected GuessTheNumberMessageService $messageService,
     ) {
-    }
-
-    public function getInitialStateClass()
-    {
-        return $this->initial::class;
     }
 
     public function index(Request $request)

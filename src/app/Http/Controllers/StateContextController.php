@@ -101,4 +101,12 @@ abstract class StateContextController implements StateContextInterface
         session()->forget(self::INSTANCED_STATES_KEY);
         return redirect()->route("guess-the-number");
     }
+
+    private function getInitialStateClass()
+    {
+        if (property_exists($this, 'initial_state')) {
+            return $this->initial_state::class;
+        }
+        throw new \Exception('Attribute $initial with the Initial state class, must be defined in the controller');
+    }
 }

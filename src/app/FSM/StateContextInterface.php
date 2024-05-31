@@ -13,6 +13,4 @@ interface StateContextInterface
 
     public function __set($name, $value);
 
-    public function getInitialStateClass();
-
 }
