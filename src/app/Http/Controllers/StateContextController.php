@@ -80,7 +80,7 @@ abstract class StateContextController implements StateContextInterface
         return $changed_state;
     }
 
-    private function restoreState(): void
+    protected function restoreState(): void
     {
         if (!session()->has(self::INFO_KEY)) {
             $initial_state = $this->getInitialStateClass();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Repositories;
 
-use App\Http\Controllers\GuessTheNumber\Globals;
 use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
 
 class GuessTheNumberGameRepository
@@ -14,7 +13,7 @@ class GuessTheNumberGameRepository
     ) {
     }
 
-    public function createNewGame(int $random_number): array
+    public function createNewGame(int $random_number = 0): array
     {
         $new_game = [
             'state' => 'initial',
@@ -32,6 +31,9 @@ class GuessTheNumberGameRepository
 
     public function getGame(): array
     {
+        if (!session()->has(self::GAME_SESSION_KEY)) {
+            return $this->createNewGame();
+        }
         return session()->get(self::GAME_SESSION_KEY);
     }
 
