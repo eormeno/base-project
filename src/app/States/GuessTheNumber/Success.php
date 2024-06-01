@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\GuessTheNumber\States;
+namespace App\States\GuessTheNumber;
 
 use App\FSM\StateAbstractImpl;
 

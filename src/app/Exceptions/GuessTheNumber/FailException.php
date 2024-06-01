@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\GuessTheNumber\Exceptions;
+namespace App\Exceptions\GuessTheNumber;
 
 class FailException extends NumberException
 {

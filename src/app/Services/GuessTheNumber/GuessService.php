@@ -2,12 +2,12 @@
 
 namespace App\Services\GuessTheNumber;
 
+use App\Exceptions\GuessTheNumber\FailException;
+use App\Exceptions\GuessTheNumber\InfoException;
+use App\Exceptions\GuessTheNumber\SuccessException;
 use App\Repositories\GuessTheNumber\GameRepository;
-use App\Http\Controllers\GuessTheNumber\Exceptions\FailException;
-use App\Http\Controllers\GuessTheNumber\Exceptions\InfoException;
-use App\Http\Controllers\GuessTheNumber\Exceptions\SuccessException;
-use App\Http\Controllers\GuessTheNumber\Exceptions\GameOverException;
-use App\Http\Controllers\GuessTheNumber\Exceptions\NotInRangeException;
+use App\Exceptions\GuessTheNumber\GameOverException;
+use App\Exceptions\GuessTheNumber\NotInRangeException;
 
 class GuessService
 {
