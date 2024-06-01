@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\GuessTheNumber\Services;
+namespace App\Services\GuessTheNumber;
 
 class GameConfigService
 {

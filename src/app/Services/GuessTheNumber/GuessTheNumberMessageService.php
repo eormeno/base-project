@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\GuessTheNumber\Services;
+namespace App\Services\GuessTheNumber;
 
 use App\Repositories\Globals\UserRepository;
 use App\Repositories\GuessTheNumber\GameRepository;

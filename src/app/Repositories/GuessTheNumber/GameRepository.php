@@ -2,7 +2,7 @@
 
 namespace App\Repositories\GuessTheNumber;
 
-use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
+use App\Services\GuessTheNumber\GameConfigService;
 
 class GameRepository
 {

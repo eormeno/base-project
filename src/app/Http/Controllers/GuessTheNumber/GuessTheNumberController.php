@@ -5,12 +5,12 @@ namespace App\Http\Controllers\GuessTheNumber;
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequestFilter;
 use App\Repositories\Globals\UserRepository;
+use App\Services\GuessTheNumber\GameService;
+use App\Services\GuessTheNumber\GuessService;
 use App\Http\Controllers\StateContextController;
+use App\Services\GuessTheNumber\GameConfigService;
 use App\Http\Controllers\GuessTheNumber\States\Initial;
-use App\Http\Controllers\GuessTheNumber\Services\GameService;
-use App\Http\Controllers\GuessTheNumber\Services\GuessService;
-use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
-use App\Http\Controllers\GuessTheNumber\Services\GuessTheNumberMessageService;
+use App\Services\GuessTheNumber\GuessTheNumberMessageService;
 
 class GuessTheNumberController extends StateContextController
 {
