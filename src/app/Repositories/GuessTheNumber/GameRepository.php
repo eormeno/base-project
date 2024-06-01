@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\GuessTheNumber\Repositories;
+namespace App\Repositories\GuessTheNumber;
 
 use App\Http\Controllers\GuessTheNumber\Services\GameConfigService;
 
-class GuessTheNumberGameRepository
+class GameRepository
 {
     private const GAME_SESSION_KEY = 'guess_the_number_game';
 

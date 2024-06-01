@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
 use App\Repositories\Globals\UserRepository;
-use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
+use App\Repositories\GuessTheNumber\GameRepository;
 
 class GuessTheNumberMessageService
 {
 
     public function __construct(
         protected UserRepository $userRepository,
-        protected GuessTheNumberGameRepository $gameRepository,
+        protected GameRepository $gameRepository,
         protected GameConfigService $gameConfigService,
     ) {
     }

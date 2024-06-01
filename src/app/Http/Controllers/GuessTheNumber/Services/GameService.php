@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
 use App\FSM\StateStorageInterface;
-use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
+use App\Repositories\GuessTheNumber\GameRepository;
 
 class GameService implements StateStorageInterface
 {
     public function __construct(
         protected GuessService $guessService,
         protected GameConfigService $gameConfigService,
-        protected GuessTheNumberGameRepository $gameRepository
+        protected GameRepository $gameRepository
     ) {
     }
 

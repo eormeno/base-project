@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
+use App\Repositories\GuessTheNumber\GameRepository;
 use App\Http\Controllers\GuessTheNumber\Exceptions\FailException;
 use App\Http\Controllers\GuessTheNumber\Exceptions\InfoException;
 use App\Http\Controllers\GuessTheNumber\Exceptions\SuccessException;
 use App\Http\Controllers\GuessTheNumber\Exceptions\GameOverException;
 use App\Http\Controllers\GuessTheNumber\Exceptions\NotInRangeException;
-use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
 
 class GuessService
 {
     public function __construct(
-        protected GuessTheNumberGameRepository $gameRepository,
+        protected GameRepository $gameRepository,
         protected GameConfigService $gameConfigService,
         protected GuessTheNumberMessageService $messageService
     ) {
