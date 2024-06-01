@@ -34,8 +34,9 @@ class MessageService
     public function successSubtitleMessage(): string
     {
         $game = $this->gameRepository->getGame();
+        $number = ($this->gameConfigService->getMaxAttempts() - $game->remaining_attempts) + 1;
         return __('guess-the-number.success-subtitle', [
-            'attempts' => $this->gameConfigService->getMaxAttempts() - $game->remaining_attempts,
+            'attempts' => $number,
         ]);
     }
 
