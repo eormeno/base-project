@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\GuessTheNumber\Services;
 
+use App\Repositories\Globals\UserRepository;
 use App\Http\Controllers\GuessTheNumber\Repositories\GuessTheNumberGameRepository;
-use App\Repositories\UserRepository;
 
 class GuessTheNumberMessageService
 {

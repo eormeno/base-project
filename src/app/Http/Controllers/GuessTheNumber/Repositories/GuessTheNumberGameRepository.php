@@ -37,6 +37,9 @@ class GuessTheNumberGameRepository
 
     public function getGame(): array
     {
+        if (!$this->existsGame()) {
+            return $this->createNewGame();
+        }
         return session()->get(self::GAME_SESSION_KEY);
     }
 

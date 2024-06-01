@@ -25,6 +25,7 @@ class GameService implements StateStorageInterface
     public function startGame()
     {
         $random_number = $this->calculateRandomNumber();
+        $this->gameRepository->setRemainingAttempts($this->gameConfigService->getMaxAttempts());
         $this->gameRepository->setRandomNumber($random_number);
     }
 

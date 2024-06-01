@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\GuessTheNumber;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\StateContextController;
-use App\Repositories\UserRepository;
 use App\Http\Requests\EventRequestFilter;
+use App\Repositories\Globals\UserRepository;
+use App\Http\Controllers\StateContextController;
 use App\Http\Controllers\GuessTheNumber\States\Initial;
 use App\Http\Controllers\GuessTheNumber\Services\GameService;
 use App\Http\Controllers\GuessTheNumber\Services\GuessService;
