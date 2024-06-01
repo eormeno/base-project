@@ -3,6 +3,7 @@
 namespace App\Services\GuessTheNumber;
 
 use App\FSM\StateStorageInterface;
+use App\Models\GuessTheNumberGame;
 use App\Repositories\GuessTheNumber\GameRepository;
 
 class GameService implements StateStorageInterface
@@ -14,29 +15,23 @@ class GameService implements StateStorageInterface
     ) {
     }
 
-    public function getGame(): array
+    public function getGame(): GuessTheNumberGame
     {
-        if (!$this->gameRepository->existsGame()) {
-            $this->gameRepository->createNewGame();
-        }
         return $this->gameRepository->getGame();
     }
 
     public function startGame()
     {
+        $game = $this->getGame();
         $random_number = $this->calculateRandomNumber();
-        $this->gameRepository->setRemainingAttempts($this->gameConfigService->getMaxAttempts());
-        $this->gameRepository->setRandomNumber($random_number);
+        $game->remaining_attempts = $this->gameConfigService->getMaxAttempts();
+        $game->random_number = $random_number;
+        $game->save();
     }
 
     public function guess($number)
     {
         $this->guessService->guess($number);
-    }
-
-    public function getRemainingAttempts(): int
-    {
-        return $this->gameRepository->getRemainingAttempts();
     }
 
     private function calculateRandomNumber(): int
@@ -53,11 +48,13 @@ class GameService implements StateStorageInterface
 
     public function getState(): string
     {
-        return $this->gameRepository->getGameState();
+        return $this->getGame()->state;
     }
 
     public function setState(string $state): void
     {
-        $this->gameRepository->setGameState($state);
+        $game = $this->getGame();
+        $game->state = $state;
+        $game->save();
     }
 }

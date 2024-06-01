@@ -5,9 +5,8 @@ namespace App\Services\GuessTheNumber;
 use App\Repositories\Globals\UserRepository;
 use App\Repositories\GuessTheNumber\GameRepository;
 
-class GuessTheNumberMessageService
+class MessageService
 {
-
     public function __construct(
         protected UserRepository $userRepository,
         protected GameRepository $gameRepository,
@@ -34,8 +33,9 @@ class GuessTheNumberMessageService
 
     public function successSubtitleMessage(): string
     {
+        $game = $this->gameRepository->getGame();
         return __('guess-the-number.success-subtitle', [
-            'attempts' => $this->gameConfigService->getMaxAttempts() - $this->gameRepository->getRemainingAttempts()
+            'attempts' => $this->gameConfigService->getMaxAttempts() - $game->remaining_attempts,
         ]);
     }
 
@@ -48,8 +48,9 @@ class GuessTheNumberMessageService
 
     public function gameOverSubtitle()
     {
+        $game = $this->gameRepository->getGame();
         return __('guess-the-number.game-over-subtitle', [
-            'random_number' => $this->gameRepository->getRandomNumber()
+            'random_number' => $game->random_number
         ]);
     }
 
@@ -69,8 +70,9 @@ class GuessTheNumberMessageService
 
     public function cheatMessage()
     {
+        $game = $this->gameRepository->getGame();
         return __('guess-the-number.cheat', [
-            'random_number' => $this->gameRepository->getRandomNumber()
+            'random_number' => $game->random_number
         ]);
     }
 
@@ -84,7 +86,8 @@ class GuessTheNumberMessageService
 
     public function remainingAttemptsMessage()
     {
-        $remaining_attempts = $this->gameRepository->getRemainingAttempts();
+        $game = $this->gameRepository->getGame();
+        $remaining_attempts = $game->remaining_attempts;
 
         if ($remaining_attempts == 1) {
             return __('guess-the-number.last_attempt');

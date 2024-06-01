@@ -8,9 +8,9 @@ use App\Http\Requests\EventRequestFilter;
 use App\Repositories\Globals\UserRepository;
 use App\Services\GuessTheNumber\GameService;
 use App\Services\GuessTheNumber\GuessService;
+use App\Services\GuessTheNumber\MessageService;
 use App\Http\Controllers\StateContextController;
 use App\Services\GuessTheNumber\GameConfigService;
-use App\Services\GuessTheNumber\GuessTheNumberMessageService;
 
 class GuessTheNumberController extends StateContextController
 {
@@ -20,7 +20,7 @@ class GuessTheNumberController extends StateContextController
         protected GuessService $guessService,
         protected GameConfigService $gameConfigService,
         protected GameService $gameService,
-        protected GuessTheNumberMessageService $messageService,
+        protected MessageService $messageService,
     ) {
         $this->stateStorage = $gameService;
     }

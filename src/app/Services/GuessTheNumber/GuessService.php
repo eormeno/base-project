@@ -14,7 +14,7 @@ class GuessService
     public function __construct(
         protected GameRepository $gameRepository,
         protected GameConfigService $gameConfigService,
-        protected GuessTheNumberMessageService $messageService
+        protected MessageService $messageService,
     ) {
     }
 
@@ -28,10 +28,24 @@ class GuessService
         $this->checkNumberIsGreaterThanRandomNumber($number);
     }
 
+    public function updateRemainingAttempts(int $remainingAttempts): void
+    {
+        $game = $this->gameRepository->getGame();
+        $game->remaining_attempts = $remainingAttempts;
+        $game->save();
+    }
+
+    public function decreaseRemainingAttempts(): void
+    {
+        $game = $this->gameRepository->getGame();
+        $game->remaining_attempts--;
+        $game->save();
+    }
+
     private function checkNumberIsCheat($number)
     {
         if ($number == $this->gameConfigService->getCheatNumber()) {
-            $this->gameRepository->setRemainingAttempts(1);
+            $this->updateRemainingAttempts(1);
             throw new InfoException($this->messageService->cheatMessage());
         }
     }
@@ -48,32 +62,35 @@ class GuessService
 
     private function checkNoEnoughAttempts()
     {
-        if ($this->gameRepository->getRemainingAttempts() <= 1) {
-            $this->gameRepository->setGameOver();
+        $game = $this->gameRepository->getGame();
+        if ($game->remaining_attempts <= 1) {
             throw new GameOverException();
         }
     }
 
     private function checkNumberIsLowerThanRandomNumber($number)
     {
-        if ($number < $this->gameRepository->getRandomNumber()) {
-            $this->gameRepository->decreaseRemainingAttempts();
+        $game = $this->gameRepository->getGame();
+
+        if ($number < $game->random_number) {
+            $this->decreaseRemainingAttempts();
             throw new FailException($this->messageService->greaterMessage($number));
         }
     }
 
     private function checkNumberIsGreaterThanRandomNumber($number)
     {
-        if ($number > $this->gameRepository->getRandomNumber()) {
-            $this->gameRepository->decreaseRemainingAttempts();
+        $game = $this->gameRepository->getGame();
+        if ($number > $game->random_number) {
+            $this->decreaseRemainingAttempts();
             throw new FailException($this->messageService->lowerMessage($number));
         }
     }
 
     private function checkNumberIsGuessed($number)
     {
-        if ($number == $this->gameRepository->getRandomNumber()) {
-            $this->gameRepository->setGameSuccess();
+        $game = $this->gameRepository->getGame();
+        if ($number == $game->random_number) {
             throw new SuccessException();
         }
     }
