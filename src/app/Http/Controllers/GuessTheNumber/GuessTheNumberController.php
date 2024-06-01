@@ -22,6 +22,7 @@ class GuessTheNumberController extends StateContextController
         protected GameService $gameService,
         protected GuessTheNumberMessageService $messageService,
     ) {
+        $this->stateStorage = $gameService;
     }
 
     public function index(Request $request)

@@ -13,7 +13,7 @@ class GuessTheNumberGameRepository
     ) {
     }
 
-    public function createNewGame(int $random_number = 0): array
+    public function createNewGame(): array
     {
         $new_game = [
             'state' => 'initial',
@@ -22,24 +22,34 @@ class GuessTheNumberGameRepository
             'max_attemts' => $this->gameConfigService->getMaxAttempts(),
             'half_attempts' => $this->gameConfigService->getHalfAttempts(),
             'remaining_attempts' => $this->gameConfigService->getMaxAttempts(),
-            'random_number' => $random_number,
+            'random_number' => 0,
+            'score' => 0,
             'finished' => false,
         ];
         session()->put(self::GAME_SESSION_KEY, $new_game);
         return $new_game;
     }
 
+    public function existsGame(): bool
+    {
+        return session()->has(self::GAME_SESSION_KEY);
+    }
+
     public function getGame(): array
     {
-        if (!session()->has(self::GAME_SESSION_KEY)) {
-            return $this->createNewGame();
-        }
         return session()->get(self::GAME_SESSION_KEY);
     }
 
     public function getRandomNumber(): int
     {
         return $this->getGame()['random_number'];
+    }
+
+    public function setRandomNumber($random_number): void
+    {
+        $game = $this->getGame();
+        $game['random_number'] = $random_number;
+        session()->put(self::GAME_SESSION_KEY, $game);
     }
 
     public function getRemainingAttempts(): int

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\FSM\StateInterface;
+use Illuminate\Http\Request;
 use App\FSM\StateContextInterface;
+use App\FSM\StateStorageInterface;
 
 abstract class StateContextController implements StateContextInterface
 {
@@ -12,6 +13,7 @@ abstract class StateContextController implements StateContextInterface
     private const INSTANCED_STATES_KEY = 'instanced_states';
     protected array $info;
     protected ?StateInterface $__state = null;
+    protected StateStorageInterface $stateStorage;
 
     public function setState($state_class): void
     {
