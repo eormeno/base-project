@@ -12,18 +12,22 @@ class GameRepository
     ) {
     }
 
-    public function createNewGame() : void
+    public function createEmptyNewGame() : void
     {
         $game = new GuessTheNumberGame();
         $game->user_id = auth()->id();
-        $game->state = 'initial';
         $game->min_number = $this->gameConfigService->getMinNumber();
         $game->max_number = $this->gameConfigService->getMaxNumber();
         $game->max_attempts = $this->gameConfigService->getMaxAttempts();
         $game->half_attempts = $this->gameConfigService->getHalfAttempts();
         $game->remaining_attempts = $this->gameConfigService->getMaxAttempts();
-        $game->random_number = 0;
-        $game->score = 0;
+        $game->save();
+    }
+
+    public function restartExistingGame($game) : void
+    {
+        $game->remaining_attempts = $this->gameConfigService->getMaxAttempts();
+        $game->half_attempts = $this->gameConfigService->getHalfAttempts();
         $game->finished = false;
         $game->save();
     }
@@ -36,7 +40,7 @@ class GameRepository
     public function getGame(): GuessTheNumberGame
     {
         if (!$this->existsGame()) {
-            $this->createNewGame();
+            $this->createEmptyNewGame();
         }
         return auth()->user()->guessTheNumberGame;
     }

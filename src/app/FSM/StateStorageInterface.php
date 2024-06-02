@@ -4,7 +4,7 @@ namespace App\FSM;
 
 interface StateStorageInterface
 {
-    public function getInitialStateDashedName(): string;
-    public function getState(): string;
-    public function setState(string $state): void;
+    public function getInitialStateClass(): string;
+    public function readState(): string | null;
+    public function saveState(string $state): void;
 }

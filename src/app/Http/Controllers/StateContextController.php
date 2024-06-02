@@ -9,9 +9,7 @@ use App\FSM\StateStorageInterface;
 
 abstract class StateContextController implements StateContextInterface
 {
-    private const INFO_KEY = 'info';
     private const INSTANCED_STATES_KEY = 'instanced_states';
-    protected array $info;
     protected ?StateInterface $__state = null;
     protected StateStorageInterface $stateStorage;
 
@@ -60,14 +58,14 @@ abstract class StateContextController implements StateContextInterface
         return null;
     }
 
-    public function __set($attributeName, $value)
-    {
-        if (property_exists($this, $attributeName)) {
-            $this->$attributeName = $value;
-            return;
-        }
-        $this->info[$attributeName] = $value;
-    }
+    // public function __set($attributeName, $value)
+    // {
+    //     if (property_exists($this, $attributeName)) {
+    //         $this->$attributeName = $value;
+    //         return;
+    //     }
+    //     $this->info[$attributeName] = $value;
+    // }
 
     public function request(?string $event = null, $data = null): StateInterface
     {
@@ -76,39 +74,47 @@ abstract class StateContextController implements StateContextInterface
             $current_state = $this->__state;
             $current_state->handleRequest($event, $data);
             $changed_state = $this->__state;
-            $this->state = $changed_state::dashCaseName();
-            session()->put(self::INFO_KEY, $this->info);
+            //$this->state = $changed_state::dashCaseName();
+            //session()->put(self::INFO_KEY, $this->info);
+            $this->stateStorage->saveState($changed_state::dashCaseName());
         } while ($current_state != $changed_state);
         return $changed_state;
     }
 
+    // protected function restoreState(): void
+    // {
+    //     if (!session()->has(self::INFO_KEY)) {
+    //         $initial_state = $this->getInitialStateClass();
+    //         $this->info['state'] = $initial_state::dashCaseName();
+    //         session()->put(self::INFO_KEY, $this->info);
+    //         $this->registerStateInstance($initial_state);
+    //     }
+    //     $state_dashed_name = session(self::INFO_KEY)['state'];
+    //     $instanced_states = session(self::INSTANCED_STATES_KEY);
+    //     $stored_state_class = $instanced_states[$state_dashed_name]::class;
+    //     $this->setState($stored_state_class);
+    //     $this->info = session(self::INFO_KEY);
+    // }
+
     protected function restoreState(): void
     {
-        if (!session()->has(self::INFO_KEY)) {
-            $initial_state = $this->getInitialStateClass();
-            $this->info['state'] = $initial_state::dashCaseName();
-            session()->put(self::INFO_KEY, $this->info);
+        $state_dashed_name = $this->stateStorage->readState();
+        if (!$state_dashed_name) {
+            $initial_state = $this->stateStorage->getInitialStateClass();
+            $this->stateStorage->saveState($initial_state::dashCaseName());
             $this->registerStateInstance($initial_state);
+            $state_dashed_name = $initial_state::dashCaseName();
         }
-        $state_dashed_name = session(self::INFO_KEY)['state'];
         $instanced_states = session(self::INSTANCED_STATES_KEY);
         $stored_state_class = $instanced_states[$state_dashed_name]::class;
         $this->setState($stored_state_class);
-        $this->info = session(self::INFO_KEY);
     }
+
 
     public function reset(Request $request)
     {
-        session()->forget(self::INFO_KEY);
+        //session()->forget(self::INFO_KEY);
         session()->forget(self::INSTANCED_STATES_KEY);
         return redirect()->route("guess-the-number");
-    }
-
-    private function getInitialStateClass()
-    {
-        if (property_exists($this, 'initial_state')) {
-            return $this->initial_state::class;
-        }
-        throw new \Exception('Attribute $initial with the Initial state class, must be defined in the controller');
     }
 }
