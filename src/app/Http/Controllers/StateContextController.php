@@ -59,10 +59,7 @@ abstract class StateContextController implements StateContextInterface
         if (property_exists($this, $attributeName)) {
             return $this->$attributeName;
         }
-        if (property_exists($this->serviceManager, $attributeName)) {
-            return $this->serviceManager->$attributeName;
-        }
-        throw new \Exception("Attribute $attributeName not found");
+        return $this->serviceManager->$attributeName;
     }
 
     public function request(?string $event = null, $data = null): StateInterface

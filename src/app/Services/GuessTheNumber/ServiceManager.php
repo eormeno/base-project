@@ -3,18 +3,18 @@
 namespace App\Services\GuessTheNumber;
 
 use App\Services\AbstractServiceManager;
+use App\Repositories\Globals\UserRepository;
 use App\Repositories\GuessTheNumber\GameRepository;
 
 class ServiceManager extends AbstractServiceManager
 {
     public function __construct()
     {
-        $this->services = [
-            'configService' => new GameConfigService($this),
-            'messageService' => new MessageService($this),
-            'gameService' => new GameService($this),
-            'guessService' => new GuessService($this),
-            'gameRepository' => new GameRepository($this),
-        ];
+        $this->addService('gameConfigService', new GameConfigService($this));
+        $this->addService('messageService', new MessageService($this));
+        $this->addService('gameService', new GameService($this));
+        $this->addService('guessService', new GuessService($this));
+        $this->addService('gameRepository', new GameRepository($this));
+        $this->addService('userRepository', new UserRepository($this));
     }
 }

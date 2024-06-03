@@ -4,7 +4,6 @@ namespace App\Repositories\GuessTheNumber;
 
 use App\Models\GuessTheNumberGame;
 use App\Services\AbstractServiceComponent;
-use App\Services\GuessTheNumber\GameConfigService;
 
 class GameRepository extends AbstractServiceComponent
 {

@@ -6,11 +6,31 @@ abstract class AbstractServiceManager
 {
     protected $services = [];
 
+    protected function addService($name, $service)
+    {
+        $this->services[$name] = $service;
+    }
+
+    protected function hasService($name)
+    {
+        return isset($this->services[$name]);
+    }
+
+    protected function getService($name)
+    {
+        return $this->services[$name];
+    }
+
     public function __get($name)
     {
-        if (!isset($this->services[$name])) {
-            throw new \Exception("Service $name not found");
+        if (property_exists($this, $name)) {
+            return $this->$name;
         }
-        return $this->services[$name];
+
+        if ($this->hasService($name)) {
+            return $this->getService($name);
+        }
+
+        throw new \Exception("Property $name does not exist");
     }
 }

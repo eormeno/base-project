@@ -11,9 +11,10 @@ abstract class AbstractServiceComponent
 
     public function __get($name)
     {
-        if (!isset($this->serviceManager->$name)) {
-            throw new \Exception("Service $name not found");
+        if (property_exists($this, $name)) {
+            return $this->$name;
         }
+
         return $this->serviceManager->$name;
     }
 }
