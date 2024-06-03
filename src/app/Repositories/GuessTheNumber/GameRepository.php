@@ -3,15 +3,11 @@
 namespace App\Repositories\GuessTheNumber;
 
 use App\Models\GuessTheNumberGame;
+use App\Services\AbstractServiceComponent;
 use App\Services\GuessTheNumber\GameConfigService;
 
-class GameRepository
+class GameRepository extends AbstractServiceComponent
 {
-    public function __construct(
-        protected GameConfigService $gameConfigService
-    ) {
-    }
-
     public function createEmptyNewGame() : void
     {
         $game = new GuessTheNumberGame();

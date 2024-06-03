@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FSM\StateInterface;
+use App\Services\AbstractServiceManager;
 use Illuminate\Http\Request;
 use App\FSM\StateContextInterface;
 use App\FSM\StateStorageInterface;
@@ -12,6 +13,12 @@ abstract class StateContextController implements StateContextInterface
     private const INSTANCED_STATES_KEY = 'instanced_states';
     protected ?StateInterface $__state = null;
     protected StateStorageInterface $stateStorage;
+    protected AbstractServiceManager $serviceManager;
+
+    public function __construct(AbstractServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
 
     public function setState($state_class): void
     {
@@ -52,10 +59,10 @@ abstract class StateContextController implements StateContextInterface
         if (property_exists($this, $attributeName)) {
             return $this->$attributeName;
         }
-        if (array_key_exists($attributeName, $this->info)) {
-            return $this->info[$attributeName];
+        if (property_exists($this->serviceManager, $attributeName)) {
+            return $this->serviceManager->$attributeName;
         }
-        return null;
+        throw new \Exception("Attribute $attributeName not found");
     }
 
     public function request(?string $event = null, $data = null): StateInterface

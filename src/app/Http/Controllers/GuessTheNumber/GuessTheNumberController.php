@@ -4,44 +4,28 @@ namespace App\Http\Controllers\GuessTheNumber;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\EventRequestFilter;
-use App\Repositories\Globals\UserRepository;
-use App\Services\GuessTheNumber\GameService;
-use App\Services\GuessTheNumber\GuessService;
-use App\Services\GuessTheNumber\MessageService;
+use App\Services\GuessTheNumber\ServiceManager;
 use App\Http\Controllers\StateContextController;
-use App\Services\GuessTheNumber\GameConfigService;
 
 class GuessTheNumberController extends StateContextController
 {
-    public function __construct(
-        protected UserRepository $userRepository,
-        protected GuessService $guessService,
-        protected GameConfigService $gameConfigService,
-        protected GameService $gameService,
-        public MessageService $messageService,
-    ) {
-        $this->stateStorage = $gameService;
+    public function __construct(ServiceManager $serviceManager)
+    {
+        parent::__construct($serviceManager);
+        $this->stateStorage = $serviceManager->gameService;
     }
 
     public function index(Request $request)
     {
-//        try {
-            $debug = env('APP_DEBUG', false);
-            $local_debug = $debug && false;
-            return view('guess-the-number.index', ['debug' => $local_debug]);
-//        } catch (\Exception $e) {
-//            return response()->json(['error' => $e->getMessage()]);
-//        }
+        $debug = env('APP_DEBUG', false);
+        $local_debug = $debug && false;
+        return view('guess-the-number.index', ['debug' => $local_debug]);
     }
 
     public function event(EventRequestFilter $request)
     {
-//        try {
-            $event = $request->eventInfo()['event'];
-            $data = $request->eventInfo()['data'];
-            return $this->request($event, $data)->view();
-//        } catch (\Exception $e) {
-//            return response()->json(['error' => $e->getMessage()]);
-//        }
+        $event = $request->eventInfo()['event'];
+        $data = $request->eventInfo()['data'];
+        return $this->request($event, $data)->view();
     }
 }

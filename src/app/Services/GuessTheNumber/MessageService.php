@@ -2,27 +2,25 @@
 
 namespace App\Services\GuessTheNumber;
 
-use App\Repositories\Globals\UserRepository;
-use App\Repositories\GuessTheNumber\GameRepository;
+use App\Services\AbstractServiceComponent;
+use App\Services\AbstractServiceManager;
 use App\Services\GuessTheNumber\MessageComponents\PlayingMessages;
 use App\Services\GuessTheNumber\MessageComponents\SuccessMessages;
 use App\Services\GuessTheNumber\MessageComponents\GameOverMessages;
 use App\Services\GuessTheNumber\MessageComponents\AskingToPlayMessages;
 
-class MessageService
+class MessageService extends AbstractServiceComponent
 {
     private $messageComponents = [];
 
     public function __construct(
-        protected UserRepository $userRepository,
-        protected GameRepository $gameRepository,
-        protected GameConfigService $gameConfigService
+        AbstractServiceManager $serviceManager
     ) {
         $this->messageComponents = [
-            new AskingToPlayMessages($userRepository, $gameRepository, $gameConfigService),
-            new PlayingMessages($userRepository, $gameRepository, $gameConfigService),
-            new SuccessMessages($userRepository, $gameRepository, $gameConfigService),
-            new GameOverMessages($userRepository, $gameRepository, $gameConfigService),
+            new AskingToPlayMessages($serviceManager),
+            new PlayingMessages($serviceManager),
+            new SuccessMessages($serviceManager),
+            new GameOverMessages($serviceManager),
         ];
     }
 

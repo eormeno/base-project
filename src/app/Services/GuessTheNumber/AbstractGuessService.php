@@ -2,6 +2,7 @@
 
 namespace App\Services\GuessTheNumber;
 
+use App\Services\AbstractServiceComponent;
 use App\Exceptions\GuessTheNumber\FailException;
 use App\Exceptions\GuessTheNumber\InfoException;
 use App\Exceptions\GuessTheNumber\SuccessException;
@@ -9,15 +10,8 @@ use App\Repositories\GuessTheNumber\GameRepository;
 use App\Exceptions\GuessTheNumber\GameOverException;
 use App\Exceptions\GuessTheNumber\NotInRangeException;
 
-abstract class AbstractGuessService
+abstract class AbstractGuessService extends AbstractServiceComponent
 {
-    public function __construct(
-        protected GameRepository $gameRepository,
-        protected GameConfigService $gameConfigService,
-        protected MessageService $messageService,
-    ) {
-    }
-
     public function updateRemainingAttempts(int $remainingAttempts): void
     {
         $game = $this->gameRepository->getGame();

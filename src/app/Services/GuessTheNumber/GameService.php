@@ -4,18 +4,11 @@ namespace App\Services\GuessTheNumber;
 
 use App\FSM\StateStorageInterface;
 use App\Models\GuessTheNumberGame;
-use App\Repositories\GuessTheNumber\GameRepository;
+use App\Services\AbstractServiceComponent;
 use App\States\GuessTheNumber\Initial;
 
-class GameService implements StateStorageInterface
+class GameService extends AbstractServiceComponent implements StateStorageInterface
 {
-    public function __construct(
-        protected GuessService $guessService,
-        protected GameConfigService $gameConfigService,
-        protected GameRepository $gameRepository
-    ) {
-    }
-
     public function getGame(): GuessTheNumberGame
     {
         return $this->gameRepository->getGame();

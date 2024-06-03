@@ -2,7 +2,9 @@
 
 namespace App\Services\GuessTheNumber;
 
-class GameConfigService
+use App\Services\AbstractServiceComponent;
+
+class GameConfigService extends AbstractServiceComponent
 {
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 1024;

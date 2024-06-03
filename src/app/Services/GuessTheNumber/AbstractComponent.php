@@ -2,15 +2,8 @@
 
 namespace App\Services\GuessTheNumber;
 
-use App\Repositories\Globals\UserRepository;
-use App\Repositories\GuessTheNumber\GameRepository;
+use App\Services\AbstractServiceComponent;
 
-abstract class AbstractComponent
+abstract class AbstractComponent extends AbstractServiceComponent
 {
-    public function __construct(
-        protected UserRepository $userRepository,
-        protected GameRepository $gameRepository,
-        protected GameConfigService $gameConfigService,
-    ) {
-    }
 }

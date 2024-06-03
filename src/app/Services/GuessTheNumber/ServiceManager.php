@@ -2,22 +2,19 @@
 
 namespace App\Services\GuessTheNumber;
 
-class ServiceManager
-{
-    private $services = [];
+use App\Services\AbstractServiceManager;
+use App\Repositories\GuessTheNumber\GameRepository;
 
+class ServiceManager extends AbstractServiceManager
+{
     public function __construct()
     {
-        // $game = new GameService($this);
-
-        // $this->services = [
-        //     'game' => new GameService($this),
-        //     'message' => new MessageService(),
-        // ];
-    }
-
-    public function __get($name)
-    {
-        return $this->services[$name];
+        $this->services = [
+            'configService' => new GameConfigService($this),
+            'messageService' => new MessageService($this),
+            'gameService' => new GameService($this),
+            'guessService' => new GuessService($this),
+            'gameRepository' => new GameRepository($this),
+        ];
     }
 }
