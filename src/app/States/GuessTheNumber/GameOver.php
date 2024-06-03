@@ -21,5 +21,8 @@ class GameOver extends StateAbstractImpl
         if ($event == 'play_again') {
             $this->context->setState(Preparing::class);
         }
+        if ($event == 'exit') {
+            $this->context->setState(AskingToPlay::class);
+        }
     }
 }
