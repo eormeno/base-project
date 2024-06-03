@@ -77,7 +77,7 @@ class GameService implements StateStorageInterface
         return $this->getGame()->state;
     }
 
-    public function saveState(string $state): void
+    public function saveState(string | null $state): void
     {
         $game = $this->getGame();
         $game->state = $state;

@@ -58,15 +58,6 @@ abstract class StateContextController implements StateContextInterface
         return null;
     }
 
-    // public function __set($attributeName, $value)
-    // {
-    //     if (property_exists($this, $attributeName)) {
-    //         $this->$attributeName = $value;
-    //         return;
-    //     }
-    //     $this->info[$attributeName] = $value;
-    // }
-
     public function request(?string $event = null, $data = null): StateInterface
     {
         do {
@@ -74,27 +65,10 @@ abstract class StateContextController implements StateContextInterface
             $current_state = $this->__state;
             $current_state->handleRequest($event, $data);
             $changed_state = $this->__state;
-            //$this->state = $changed_state::dashCaseName();
-            //session()->put(self::INFO_KEY, $this->info);
             $this->stateStorage->saveState($changed_state::dashCaseName());
         } while ($current_state != $changed_state);
         return $changed_state;
     }
-
-    // protected function restoreState(): void
-    // {
-    //     if (!session()->has(self::INFO_KEY)) {
-    //         $initial_state = $this->getInitialStateClass();
-    //         $this->info['state'] = $initial_state::dashCaseName();
-    //         session()->put(self::INFO_KEY, $this->info);
-    //         $this->registerStateInstance($initial_state);
-    //     }
-    //     $state_dashed_name = session(self::INFO_KEY)['state'];
-    //     $instanced_states = session(self::INSTANCED_STATES_KEY);
-    //     $stored_state_class = $instanced_states[$state_dashed_name]::class;
-    //     $this->setState($stored_state_class);
-    //     $this->info = session(self::INFO_KEY);
-    // }
 
     protected function restoreState(): void
     {
@@ -110,11 +84,10 @@ abstract class StateContextController implements StateContextInterface
         $this->setState($stored_state_class);
     }
 
-
     public function reset(Request $request)
     {
-        //session()->forget(self::INFO_KEY);
         session()->forget(self::INSTANCED_STATES_KEY);
+        $this->stateStorage->saveState(null);
         return redirect()->route("guess-the-number");
     }
 }

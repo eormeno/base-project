@@ -6,5 +6,5 @@ interface StateStorageInterface
 {
     public function getInitialStateClass(): string;
     public function readState(): string | null;
-    public function saveState(string $state): void;
+    public function saveState(string | null $state): void;
 }
