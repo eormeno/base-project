@@ -2,12 +2,10 @@
 
 namespace App\Services\GuessTheNumber;
 
-use App\FSM\StateStorageInterface;
 use App\Models\GuessTheNumberGame;
 use App\Services\AbstractServiceComponent;
-use App\States\GuessTheNumber\Initial;
 
-class GameService extends AbstractServiceComponent implements StateStorageInterface
+class GameService extends AbstractServiceComponent
 {
     public function getGame(): GuessTheNumberGame
     {
@@ -58,22 +56,5 @@ class GameService extends AbstractServiceComponent implements StateStorageInterf
         $min = $this->gameConfigService->getMinNumber();
         $max = $this->gameConfigService->getMaxNumber();
         return rand($min, $max);
-    }
-
-    public function getInitialStateClass(): string
-    {
-        return Initial::class;
-    }
-
-    public function readState(): string|null
-    {
-        return $this->getGame()->state;
-    }
-
-    public function saveState(string | null $state): void
-    {
-        $game = $this->getGame();
-        $game->state = $state;
-        $game->save();
     }
 }

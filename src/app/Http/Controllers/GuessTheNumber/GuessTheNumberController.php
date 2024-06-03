@@ -12,7 +12,7 @@ class GuessTheNumberController extends StateContextController
     public function __construct(ServiceManager $serviceManager)
     {
         parent::__construct($serviceManager);
-        $this->stateStorage = $serviceManager->gameService;
+        $this->stateStorage = $serviceManager->gameStateStorageService;
     }
 
     public function index(Request $request)

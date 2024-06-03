@@ -16,5 +16,6 @@ class ServiceManager extends AbstractServiceManager
         $this->addService('guessService', new GuessService($this));
         $this->addService('gameRepository', new GameRepository($this));
         $this->addService('userRepository', new UserRepository($this));
+        $this->addService('gameStateStorageService', new GameStateStorageService($this));
     }
 }
