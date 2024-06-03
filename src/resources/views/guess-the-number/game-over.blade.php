@@ -9,9 +9,12 @@
         {{ $subtitle }}
     </div>
 
-    <div class="mt-6">
-        <x-button class="mt-2" type="button" onclick="sendEvent('play_again')">
+    <div class="mt-6 flex">
+        <x-button class="m-2 flex" type="button" onclick="sendEvent('play_again')">
             {{ __('guess-the-number.play-again') }}
+        </x-button>
+        <x-button class="m-2 flex" type="button" onclick="sendEvent('exit')">
+            {{ __('guess-the-number.exit') }}
         </x-button>
     </div>
 </div>

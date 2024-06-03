@@ -22,4 +22,7 @@ return [
     'cheat' => '¡Has hecho trampa! El número era :random_number',
     'game-over-subtitle' => 'El número secreto era :random_number',
     'success-subtitle' => 'Lo adivinaste en :attempts intentos.',
+    'current-score' => 'Tu puntuación actual es :score',
+    'historic-score' => 'Tu puntuación histórica es :score',
+    'exit' => 'Salir al menú principal',
 ];

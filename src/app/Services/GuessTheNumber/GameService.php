@@ -28,14 +28,14 @@ class GameService extends AbstractServiceComponent
         if ($game->remaining_attempts == 0) {
             return 0;
         }
-        $remaining_attempts = $game->max_attempts - $game->remaining_attempts;
+        $remaining_attempts = $game->remaining_attempts;
         return $remaining_attempts * 100;
     }
 
     public function totalScore(): int
     {
         $game = $this->getGame();
-        return $game->score + $this->calculateScore();
+        return $game->score;
     }
 
     public function endGame()

@@ -23,4 +23,18 @@ class SuccessMessages extends AbstractComponent
         ]);
     }
 
+    public function currentScoreMessage(): string
+    {
+        return __('guess-the-number.current-score', [
+            'score' => $this->gameService->calculateScore()
+        ]);
+    }
+
+    public function historicScoreMessage(): string
+    {
+        return __('guess-the-number.historic-score', [
+            'score' => $this->gameService->totalScore()
+        ]);
+    }
+
 }
