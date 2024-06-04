@@ -6,7 +6,7 @@ use App\Services\AbstractServiceManager;
 use App\Repositories\Globals\UserRepository;
 use App\Repositories\GuessTheNumber\GameRepository;
 
-class ServiceManager extends AbstractServiceManager
+class GuessTheNumberGameServiceManager extends AbstractServiceManager
 {
     public function __construct()
     {

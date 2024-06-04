@@ -4,18 +4,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 
 Artisan::command('fresh', function () {
-    if (config('database.default') === 'sqlite') {
-        if (file_exists(database_path('database.sqlite'))) {
-            if (is_writable(database_path('database.sqlite'))) {
-                unlink(database_path('database.sqlite'));
-            } else {
-                $this->error('File database.sqlite is not writable');
-                return;
-            }
-        }
-        $this->call('migrate', ['--force' => true]);
-        $this->call('db:seed');
-    }
+    $this->call('migrate:refresh', ['--seed' => true]);
 })->describe('Fresh database');
 
 Artisan::command('users', function () {

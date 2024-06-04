@@ -3,41 +3,59 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Services\GuessTheNumber\GameConfigService;
-use App\Services\GuessTheNumber\ServiceManager;
+use App\Models\GuessTheNumberGame;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Services\GuessTheNumber\GuessTheNumberGameServiceManager;
 
 class GuessTheNumberGameFactory extends Factory
 {
+    protected $model = GuessTheNumberGame::class;
+    protected int $minNumber;
+    protected int $maxNumber;
+    protected int $maxAttempts;
+    protected int $halfAttempts;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $gameConfigService = resolve(GuessTheNumberGameServiceManager::class)->gameConfigService;
+        $this->minNumber = $gameConfigService->getMinNumber();
+        $this->maxNumber = $gameConfigService->getMaxNumber();
+        $this->maxAttempts = $gameConfigService->getMaxAttempts();
+        $this->halfAttempts = $gameConfigService->getHalfAttempts();
+    }
 
     /**
      * Define the model's default state.
      *
      * @return array
      */
-    public function definition(): array
+    public function definition()
     {
-        $gameConfigService = resolve(ServiceManager::class)->gameConfigService;
-
         return [
-            'user_id' => User::factory(),
-            'min_number' => $gameConfigService->gameConfigService->getMinNumber(),
-            'max_number' => $gameConfigService->gameConfigService->getMaxNumber(),
-            'max_attempts' => $gameConfigService->gameConfigService->getMaxAttempts(),
-            'half_attempts' => $gameConfigService->gameConfigService->getHalfAttempts(),
-            'remaining_attempts' => $gameConfigService->gameConfigService->getMaxAttempts(),
-            'finished' => true,
-            'score' => rand(1, 100) * 100,
-            'times_played' => rand(1, 100),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'min_number' => $this->minNumber,
+            'max_number' => $this->maxNumber,
+            'max_attempts' => $this->maxAttempts,
+            'half_attempts' => $this->halfAttempts,
+            'remaining_attempts' => $this->maxAttempts,
         ];
     }
 
-    public function forUser(User $user)
+    public function configure() : Factory
     {
+        return $this->afterMaking(function (GuessTheNumberGame $game) {
+            $game->number_to_guess = rand($game->min_number, $game->max_number);
+        });
+    }
+
+    public function withFakeData() : Factory
+    {
+        $randonRemainingAttempts = rand(1, $this->maxAttempts);
         return $this->state(fn(array $attributes) => [
-            'user_id' => $user->id,
+            'finished' => true,
+            'remaining_attempts' => $randonRemainingAttempts,
+            'score' => rand(1, 100) * 100,
+            'times_played' => rand(1, 100),
         ]);
     }
 

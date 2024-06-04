@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('guess_the_number_games', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('state')->nullable()->default(null);
             $table->integer('times_played')->default(0);
             $table->integer('max_attempts');
