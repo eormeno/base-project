@@ -27,8 +27,11 @@ class GameStateStorageService extends AbstractServiceComponent implements StateS
         $game->save();
     }
 
-    private function stateNameToClass(string $dashed_state_name): string
+    private function stateNameToClass(string | null $dashed_state_name): string
     {
+        if (!$dashed_state_name) {
+            return $this->getInitialStateClass();
+        }
         $namespace = substr($this->getInitialStateClass(), 0, strrpos($this->getInitialStateClass(), '\\'));
         $pascal_state_name = str_replace(' ', '', ucwords(str_replace('-', ' ', $dashed_state_name)));
         return $namespace . '\\' . $pascal_state_name;

@@ -77,9 +77,6 @@ abstract class StateContextController implements StateContextInterface
     protected function restoreState(): void
     {
         $state_class = $this->stateStorage->readState();
-        if (!$state_class) {
-            $state_class = $this->stateStorage->getInitialStateClass();
-        }
         $state_dashed_name = $state_class::dashCaseName();
         $this->registerStateInstance($state_class);
         $this->stateStorage->saveState($state_dashed_name);
