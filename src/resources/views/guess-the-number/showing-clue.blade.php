@@ -5,9 +5,9 @@
     </div>
 
     <!-- Clue -->
-    <div class="mt-4 text-xl text-gray-900 dark:text-white text-left">
+    <div class="mt-4 text-lg text-gray-900 dark:text-white text-left">
         <div class="text-left items-start">
-            <ul>
+            <ul class="list-disc list-inside">
                 @foreach ($clues as $clue)
                     <li>{{ $clue }}</li>
                 @endforeach

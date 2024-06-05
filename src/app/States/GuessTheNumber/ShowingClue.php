@@ -10,7 +10,7 @@ class ShowingClue extends StateAbstractImpl
     public string $goodLuck = "";
     public array $clues = [];
 
-    public function __onEnter(): void
+    public function onEnter(): void
     {
         $this->title = $this->context->messageService->title();
         $this->goodLuck = $this->context->messageService->goodLuck();
@@ -19,7 +19,6 @@ class ShowingClue extends StateAbstractImpl
 
     public function handleRequest(?string $event = null, $data = null)
     {
-        $this->__onEnter();
         if ($event == 'want_to_play') {
             $this->context->setState(Playing::class);
         }
