@@ -5,17 +5,14 @@
     </div>
 
     <!-- Clue -->
-    <div class="mt-4 text-4xl text-gray-900 dark:text-white text-left">
+    <div class="mt-4 text-xl text-gray-900 dark:text-white text-left">
         <div class="text-left items-start">
-
-            <!-- The clues listed with a bullet point and left aligned -->
             <ul>
                 @foreach ($clues as $clue)
                     <li>{{ $clue }}</li>
                 @endforeach
             </ul>
         </div>
-
     </div>
 
     <!-- Good luck -->
