@@ -51,10 +51,14 @@ class GameService extends AbstractServiceComponent
         $this->guessService->guess($number);
     }
 
+    public function getRandomNumber(): int
+    {
+        $game = $this->getGame();
+        return $game->random_number;
+    }
+
     private function calculateRandomNumber(): int
     {
-        $min = $this->gameConfigService->getMinNumber();
-        $max = $this->gameConfigService->getMaxNumber();
-        return rand($min, $max);
+        return $this->clueService->findRandomNumber();
     }
 }

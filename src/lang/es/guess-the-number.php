@@ -26,4 +26,11 @@ return [
     'historic-score' => 'Tu puntuación histórica es :score',
     'exit' => 'Salir al menú principal',
     'best-scores' => 'Mejores puntuaciones',
+    'showing-clue' => 'Las pistas son:',
+    'good-luck' => '¡Buena suerte!',
+    'clue-iterations' => 'Puedes resolverlo en :data intentos',
+    'clue-prime' => '¡El número es primo!',
+    'clue-multiples' => 'Es múltiplo de: :data',
+    'clue-even' => 'Es un número par',
+    'clue-odd' => 'Es un número impar',
 ];

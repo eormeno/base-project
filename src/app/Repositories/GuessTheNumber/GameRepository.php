@@ -49,7 +49,7 @@ class GameRepository extends AbstractServiceComponent
             ->orderBy('score', 'desc')
             ->with('user')
             ->where('score', '>', 0)
-            ->limit(10)
+            ->limit(5)
             ->get()
             ->toArray();
         // convert the ranking to an array of the form ['user' => 'score']

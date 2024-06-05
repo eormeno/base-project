@@ -70,6 +70,7 @@ abstract class StateContextController implements StateContextInterface
             $current_state->handleRequest($event, $data);
             $changed_state = $this->__state;
             $this->stateStorage->saveState($changed_state::dashCaseName());
+            $event = null;
         } while ($current_state != $changed_state);
         return $changed_state;
     }

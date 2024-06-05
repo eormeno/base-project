@@ -21,4 +21,10 @@
         </ul>
     </div>
 
+    <div class="mt-4 flex justify-center bg-white p-3 items-center">
+        <img src="{{ asset('images/logo-leyenda.png') }}" alt="Laravel Logo" class="w-14 h-full mr-3 object-cover">
+        <img src="{{ asset('images/fcefn.jpg') }}" alt="Laravel Logo" class="w-12 h-full mr-3 object-scale-down">
+        <img src="{{ asset('images/unsj.jpg') }}" alt="Alpine.js Logo" class="w-12 h-full object-scale-down">
+    </div>
+
 </div>
