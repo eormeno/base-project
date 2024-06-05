@@ -34,7 +34,7 @@ abstract class AbstractGuessService extends AbstractServiceComponent
         }
     }
 
-    protected function checkNumberIsNotBetween($number)
+    protected function checkNumberOutOfRange($number)
     {
         $min = $this->gameConfigService->getMinNumber();
         $max = $this->gameConfigService->getMaxNumber();
@@ -47,7 +47,7 @@ abstract class AbstractGuessService extends AbstractServiceComponent
     protected function checkNoEnoughAttempts()
     {
         $game = $this->gameRepository->getGame();
-        if ($game->remaining_attempts <= 1) {
+        if ($game->remaining_attempts == 0) {
             throw new GameOverException();
         }
     }
@@ -58,6 +58,7 @@ abstract class AbstractGuessService extends AbstractServiceComponent
 
         if ($number < $game->random_number) {
             $this->decreaseRemainingAttempts();
+            $this->checkNoEnoughAttempts();
             throw new FailException($this->messageService->greaterMessage($number));
         }
     }
@@ -67,6 +68,7 @@ abstract class AbstractGuessService extends AbstractServiceComponent
         $game = $this->gameRepository->getGame();
         if ($number > $game->random_number) {
             $this->decreaseRemainingAttempts();
+            $this->checkNoEnoughAttempts();
             throw new FailException($this->messageService->lowerMessage($number));
         }
     }

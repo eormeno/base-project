@@ -7,9 +7,8 @@ class GuessService extends AbstractGuessService
     public function guess($number)
     {
         $this->checkNumberIsCheat($number);
-        $this->checkNumberIsNotBetween($number);
+        $this->checkNumberOutOfRange($number);
         $this->checkNumberIsGuessed($number);
-        $this->checkNoEnoughAttempts();
         $this->checkNumberIsLowerThanRandomNumber($number);
         $this->checkNumberIsGreaterThanRandomNumber($number);
     }
