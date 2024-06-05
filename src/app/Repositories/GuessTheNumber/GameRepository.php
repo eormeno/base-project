@@ -29,7 +29,7 @@ class GameRepository extends AbstractServiceComponent
 
     private function existsGame(): bool
     {
-        return auth()->user()->guessTheNumberGame()->exists();
+        return auth()->user()->guessTheNumberGames()->exists();
     }
 
     public function getGame(): GuessTheNumberGame
@@ -37,6 +37,6 @@ class GameRepository extends AbstractServiceComponent
         if (!$this->existsGame()) {
             $this->createEmptyNewGame();
         }
-        return auth()->user()->guessTheNumberGame;
+        return auth()->user()->guessTheNumberGames;
     }
 }
