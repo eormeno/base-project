@@ -32,12 +32,17 @@ class UserFactory extends Factory
         ];
     }
 
-    public function configure(): static
+    public function ___configure(): static
     {
         return $this->afterCreating(
-            fn(User $user) => GuessTheNumberGame::factory([
-                'user_id' => $user->id,
-            ])->create()
+            fn(User $user) => $user->guessTheNumberGames()->save(GuessTheNumberGame::factory()->make())
+        );
+    }
+
+    public function withFakeGuessTheNumberGame(): static
+    {
+        return $this->afterCreating(
+            fn(User $user) => $user->guessTheNumberGames()->save(GuessTheNumberGame::factory()->make())
         );
     }
 
@@ -66,8 +71,7 @@ class UserFactory extends Factory
                     'name' => $user->name . '\'s Team',
                     'user_id' => $user->id,
                     'personal_team' => true,
-                ])
-                ->when(is_callable($callback), $callback),
+                ])->when(is_callable($callback), $callback),
             'ownedTeams'
         );
     }

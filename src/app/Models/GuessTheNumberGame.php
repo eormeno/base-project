@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GuessTheNumberGame extends Model
@@ -11,6 +12,7 @@ class GuessTheNumberGame extends Model
 
     protected $fillable = [
         'user_id',
+        'state',
         'min_number',
         'max_number',
         'max_attempts',
@@ -18,11 +20,7 @@ class GuessTheNumberGame extends Model
         'remaining_attempts',
     ];
 
-    protected $casts = [
-        'finished' => 'boolean',
-    ];
-
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
