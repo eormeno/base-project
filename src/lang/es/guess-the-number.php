@@ -25,4 +25,5 @@ return [
     'current-score' => 'Tu puntuación actual es :score',
     'historic-score' => 'Tu puntuación histórica es :score',
     'exit' => 'Salir al menú principal',
+    'best-scores' => 'Mejores puntuaciones',
 ];

@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             function (array $attributes) use ($min_number, $max_number, $max_attempts, $half_attempts) {
                 $fake_random_number = random_int($min_number, $max_number);
                 $fake_attempts = random_int(1, $max_attempts);
+                $fake_score = random_int(1, 100) * 100;
                 return [
                     'min_number' => $min_number,
                     'max_number' => $max_number,
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
                     'half_attempts' => $half_attempts,
                     'remaining_attempts' => $fake_attempts,
                     'random_number' => $fake_random_number,
+                    'score' => $fake_score,
                 ];
             }
         )->sequence(
