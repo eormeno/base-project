@@ -3,6 +3,8 @@
 namespace App\FSM;
 
 use App\Traits\ToastTrigger;
+use App\Utils\CaseConverters;
+use App\Utils\ReflectionUtils;
 
 abstract class StateAbstractImpl implements StateInterface
 {
@@ -31,7 +33,22 @@ abstract class StateAbstractImpl implements StateInterface
     {
     }
 
-    abstract public function handleRequest(?string $event = null, $data = null);
+    public function passTo(): void
+    {
+    }
+
+    public function handleRequest(?string $event = null, $data = null) {
+        if ($event === null) {
+            $this->passTo();
+            return;
+        }
+        $method = 'on' . CaseConverters::snakeToCamel($event) . 'Event';
+        if (method_exists($this, $method)) {
+            ReflectionUtils::invokeMethod($this, $method, $data);
+        } else {
+            throw new \Exception("Invalid event: $event");
+        }
+    }
 
     public function view()
     {

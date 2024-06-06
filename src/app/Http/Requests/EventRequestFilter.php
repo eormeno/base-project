@@ -16,7 +16,7 @@ class EventRequestFilter extends FormRequest
         return [];
     }
 
-    public function eventInfo() : array
+    public function eventInfo(): array
     {
         $validated = $this->all();
         $event_name = $validated['event'] ?? null;

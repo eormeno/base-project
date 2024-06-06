@@ -16,13 +16,13 @@ class GameOver extends StateAbstractImpl
         $this->context->gameService->endGame();
     }
 
-    public function handleRequest(?string $event = null, $data = null)
+    public function onPlayAgainEvent()
     {
-        if ($event == 'play_again') {
-            $this->context->setState(Preparing::class);
-        }
-        if ($event == 'exit') {
-            $this->context->setState(AskingToPlay::class);
-        }
+        $this->context->setState(Preparing::class);
+    }
+
+    public function onExitEvent()
+    {
+        $this->context->setState(AskingToPlay::class);
     }
 }

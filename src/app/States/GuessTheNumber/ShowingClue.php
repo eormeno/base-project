@@ -17,10 +17,8 @@ class ShowingClue extends StateAbstractImpl
         $this->clues = $this->context->messageService->clues();
     }
 
-    public function handleRequest(?string $event = null, $data = null)
+    public function onWantToPlayEvent()
     {
-        if ($event == 'want_to_play') {
-            $this->context->setState(Playing::class);
-        }
+        $this->context->setState(Playing::class);
     }
 }

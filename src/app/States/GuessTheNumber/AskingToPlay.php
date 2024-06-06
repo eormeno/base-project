@@ -15,10 +15,8 @@ class AskingToPlay extends StateAbstractImpl
         $this->ranking = $this->context->gameRepository->getRanking();
     }
 
-    public function handleRequest(?string $event = null, $data = null)
+    public function onWantToPlayEvent()
     {
-        if ($event == 'want_to_play') {
-            $this->context->setState(Preparing::class);
-        }
+        $this->context->setState(Preparing::class);
     }
 }

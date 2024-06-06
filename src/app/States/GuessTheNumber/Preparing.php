@@ -11,7 +11,7 @@ class Preparing extends StateAbstractImpl
         $this->context->gameService->startGame();
     }
 
-    public function handleRequest(?string $event = null, $data = null)
+    public function passTo(): void
     {
         $this->context->setState(ShowingClue::class);
     }
