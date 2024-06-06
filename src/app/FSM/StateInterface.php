@@ -4,6 +4,8 @@ namespace App\FSM;
 
 interface StateInterface
 {
+    public function isNeedRestoring(): bool;
+    public function setNeedRestoring(bool $value): void;
     public static function dashCaseName();
     public function setContext(StateContextInterface $content);
     public function onEnter(): void;

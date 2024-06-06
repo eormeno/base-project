@@ -25,11 +25,14 @@ abstract class StateContextController implements StateContextInterface
         //$debug_msg = "";
         $new_instance = $this->getStateInstance($state_class);
         $new_instance->setContext($this);
+        if ($new_instance->isNeedRestoring()) {
+            //$debug_msg = "Restoring: <b>" . $new_instance::dashCaseName() . "</b><br>";
+            $new_instance->onEnter();
+            $new_instance->setNeedRestoring(false);
+        }
         if ($this->__state && $this->__state != $new_instance) {
-            //if ($this->__state) {
-                //$debug_msg = "Exiting: <b>" . $this->__state::dashCaseName() . "</b><br>";
-                $this->__state->onExit();
-            //}
+            //$debug_msg = "Exiting: <b>" . $this->__state::dashCaseName() . "</b><br>";
+            $this->__state->onExit();
             //$debug_msg .= "Entering: <b>" . $new_instance::dashCaseName() . "</b><br>";
             $new_instance->onEnter();
         }
@@ -50,13 +53,17 @@ abstract class StateContextController implements StateContextInterface
         if (!in_array(StateInterface::class, class_implements($state_class))) {
             throw new \Exception("Class $state_class does not implement StateInterface");
         }
+        $need_restoring = false;
         if (!session()->has(self::INSTANCED_STATES_KEY)) {
             session()->put(self::INSTANCED_STATES_KEY, []);
+            $need_restoring = true;
         }
         $state_dashed_name = $state_class::dashCaseName();
         $instanced_states = session(self::INSTANCED_STATES_KEY);
         if (!array_key_exists($state_dashed_name, $instanced_states)) {
-            $instanced_states[$state_dashed_name] = new $state_class();
+            $new_instance = new $state_class();
+            $new_instance->setNeedRestoring($need_restoring);
+            $instanced_states[$state_dashed_name] = $new_instance;
             session()->put(self::INSTANCED_STATES_KEY, $instanced_states);
         }
     }

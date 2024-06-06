@@ -12,12 +12,23 @@ abstract class StateAbstractImpl implements StateInterface
 
     protected StateContextInterface $context;
     private static string $_dashed_name;
+    public bool $need_restoring = false;
 
     public static function dashCaseName(): string
     {
         $class = get_called_class();
         $class = substr($class, strrpos($class, '\\') + 1);
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $class));
+    }
+
+    public function isNeedRestoring(): bool
+    {
+        return $this->need_restoring;
+    }
+
+    public function setNeedRestoring(bool $value): void
+    {
+        $this->need_restoring = $value;
     }
 
     public function setContext(StateContextInterface $content)

@@ -64,7 +64,7 @@ abstract class AbstractGuessService extends AbstractServiceComponent
             if ($callback) {
                 $callback();
             }
-            $this->decreaseRemainingAttempts();
+            //$this->decreaseRemainingAttempts();
             $this->checkNoEnoughAttempts($noEnoughAttemptsCallback);
             throw new FailException($this->messageService->greaterMessage($number));
         }
@@ -77,7 +77,7 @@ abstract class AbstractGuessService extends AbstractServiceComponent
             if ($callback) {
                 $callback();
             }
-            $this->decreaseRemainingAttempts();
+            //$this->decreaseRemainingAttempts();
             $this->checkNoEnoughAttempts($noEnoughAttemptsCallback);
             throw new FailException($this->messageService->lowerMessage($number));
         }
