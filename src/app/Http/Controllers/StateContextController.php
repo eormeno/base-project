@@ -24,8 +24,10 @@ abstract class StateContextController implements StateContextInterface
     {
         $new_instance = $this->getStateInstance($state_class);
         $new_instance->setContext($this);
-        if ($this->__state && $this->__state != $new_instance) {
-            $this->__state->onExit();
+        if ($this->__state != $new_instance) {
+            if ($this->__state) {
+                $this->__state->onExit();
+            }
             $new_instance->onEnter();
         }
         $this->__state = $new_instance;
