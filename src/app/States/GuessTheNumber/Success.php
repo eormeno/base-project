@@ -13,7 +13,7 @@ class Success extends StateAbstractImpl
 
     public function onEnter(): void
     {
-        $this->context->gameService->endGame();
+        //$this->context->gameService->endGame();
         $this->notification = $this->context->messageService->successMessage();
         $this->subtitle = $this->context->messageService->successSubtitleMessage();
         $this->current_score = $this->context->messageService->currentScoreMessage();

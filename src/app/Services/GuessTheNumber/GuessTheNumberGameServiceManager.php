@@ -13,7 +13,6 @@ class GuessTheNumberGameServiceManager extends AbstractServiceManager
         $this->addService('gameConfigService', new GameConfigService($this));
         $this->addService('messageService', new MessageService($this));
         $this->addService('gameService', new GameService($this));
-        $this->addService('guessService', new GuessService($this));
         $this->addService('gameRepository', new GameRepository($this));
         $this->addService('userRepository', new UserRepository($this));
         $this->addService('gameStateStorageService', new GameStateStorageService($this));

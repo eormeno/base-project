@@ -3,9 +3,8 @@
 namespace App\Services\GuessTheNumber;
 
 use App\Models\GuessTheNumberGame;
-use App\Services\AbstractServiceComponent;
 
-class GameService extends AbstractServiceComponent
+class GameService extends AbstractGuessService
 {
     public function getGame(): GuessTheNumberGame
     {
@@ -48,7 +47,23 @@ class GameService extends AbstractServiceComponent
 
     public function guess($number)
     {
-        $this->guessService->guess($number);
+        $this->checkNumberIsCheat($number, function () {
+            $this->updateRemainingAttempts(1);
+        });
+        $this->checkNumberOutOfRange($number);
+        $this->checkNumberIsGuessed($number, function () {
+            $this->endGame();
+        });
+        $this->checkNumberIsLowerThanRandomNumber($number, function () {
+            $this->decreaseRemainingAttempts();
+        }, function () {
+            $this->endGame();
+        });
+        $this->checkNumberIsGreaterThanRandomNumber($number, function () {
+            $this->decreaseRemainingAttempts();
+        }, function () {
+            $this->endGame();
+        });
     }
 
     public function getRandomNumber(): int

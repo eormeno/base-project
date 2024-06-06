@@ -13,7 +13,7 @@ class GameOver extends StateAbstractImpl
     {
         $this->notification = $this->context->messageService->gameOverMessage();
         $this->subtitle = $this->context->messageService->gameOverSubtitle();
-        $this->context->gameService->endGame();
+        //$this->context->gameService->endGame();
     }
 
     public function onPlayAgainEvent()

@@ -22,14 +22,19 @@ abstract class StateContextController implements StateContextInterface
 
     public function setState($state_class): void
     {
+        //$debug_msg = "";
         $new_instance = $this->getStateInstance($state_class);
         $new_instance->setContext($this);
-        if ($this->__state != $new_instance) {
-            if ($this->__state) {
+        if ($this->__state && $this->__state != $new_instance) {
+            //if ($this->__state) {
+                //$debug_msg = "Exiting: <b>" . $this->__state::dashCaseName() . "</b><br>";
                 $this->__state->onExit();
-            }
+            //}
+            //$debug_msg .= "Entering: <b>" . $new_instance::dashCaseName() . "</b><br>";
             $new_instance->onEnter();
         }
+        //if ($debug_msg != "")
+        //    echo "<hr>$debug_msg";
         $this->__state = $new_instance;
     }
 
