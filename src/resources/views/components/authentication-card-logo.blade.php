@@ -1,3 +1,3 @@
 <div>
-    <img src="{{ asset('images/idei-circular.png') }}" alt="Logo" class="w-32 h-32" />
+    <img src="{{ asset('images/Idei-circular.png') }}" alt="Logo" class="w-32 h-32" />
 </div>
