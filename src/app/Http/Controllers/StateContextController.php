@@ -26,15 +26,15 @@ abstract class StateContextController implements StateContextInterface
         $new_instance = $this->getStateInstance($state_class);
         $new_instance->setContext($this);
         if ($new_instance->isNeedRestoring()) {
-            //$debug_msg = "Restoring: <b>" . $new_instance::dashCaseName() . "</b><br>";
-            $new_instance->onEnter();
             $new_instance->setNeedRestoring(false);
+            //$debug_msg = "Restoring: <b>" . $new_instance::dashCaseName() . "</b><br>";
+            $new_instance->onEnter(true);
         }
         if ($this->__state && $this->__state != $new_instance) {
             //$debug_msg = "Exiting: <b>" . $this->__state::dashCaseName() . "</b><br>";
             $this->__state->onExit();
             //$debug_msg .= "Entering: <b>" . $new_instance::dashCaseName() . "</b><br>";
-            $new_instance->onEnter();
+            $new_instance->onEnter(false);
         }
         //if ($debug_msg != "")
         //    echo "<hr>$debug_msg";

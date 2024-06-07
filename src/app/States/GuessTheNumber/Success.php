@@ -11,9 +11,8 @@ class Success extends StateAbstractImpl
     public string $current_score = "";
     public string $historic_score = "";
 
-    public function onEnter(): void
+    public function onEnter(bool $restoring): void
     {
-        //$this->context->gameService->endGame();
         $this->notification = $this->context->messageService->successMessage();
         $this->subtitle = $this->context->messageService->successSubtitleMessage();
         $this->current_score = $this->context->messageService->currentScoreMessage();

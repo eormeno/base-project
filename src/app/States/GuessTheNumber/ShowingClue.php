@@ -10,7 +10,7 @@ class ShowingClue extends StateAbstractImpl
     public string $goodLuck = "";
     public array $clues = [];
 
-    public function onEnter(): void
+    public function onEnter(bool $restoring): void
     {
         $this->title = $this->context->messageService->title();
         $this->goodLuck = $this->context->messageService->goodLuck();

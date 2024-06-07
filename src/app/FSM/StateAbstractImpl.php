@@ -36,7 +36,7 @@ abstract class StateAbstractImpl implements StateInterface
         $this->context = $content;
     }
 
-    public function onEnter(): void
+    public function onEnter(bool $restoring): void
     {
     }
 

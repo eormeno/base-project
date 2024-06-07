@@ -9,7 +9,7 @@ class AskingToPlay extends StateAbstractImpl
     public string $description = "";
     public array $ranking = [];
 
-    public function onEnter(): void
+    public function onEnter(bool $restoring): void
     {
         $this->description = $this->context->messageService->welcomeMessage();
         $this->ranking = $this->context->gameRepository->getRanking();

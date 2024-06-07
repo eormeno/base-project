@@ -6,7 +6,7 @@ use App\FSM\StateAbstractImpl;
 
 class Preparing extends StateAbstractImpl
 {
-    public function onEnter(): void
+    public function onEnter(bool $restoring): void
     {
         $this->context->gameService->startGame();
     }

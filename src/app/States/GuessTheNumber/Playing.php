@@ -13,7 +13,7 @@ class Playing extends StateAbstractImpl
 {
     public string $notification = "";
 
-    public function onEnter(): void
+    public function onEnter(bool $restoring): void
     {
         $this->notification = $this->context->messageService->remainingAttemptsMessage();
     }
