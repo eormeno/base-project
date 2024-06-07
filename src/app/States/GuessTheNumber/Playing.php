@@ -18,7 +18,7 @@ class Playing extends StateAbstractImpl
         $this->notification = $this->context->messageService->remainingAttemptsMessage();
     }
 
-    public function onGuessEvent(int $number = -1)
+    public function onGuessEvent(?int $number = -1)
     {
         try {
             $this->context->gameService->guess($number);

@@ -13,20 +13,14 @@
         -->
 
         <script>
-            window.addEventListener('DOMContentLoaded', (event) => {
-                previousData();
-            });
-            // on page load run the sendEvent function
             window.onload = function() {
+                previousData();
                 sendEvent();
             }
 
             function previousData() {
-                // get data from local storage
                 let data = localStorage.getItem('guess-the-number');
-                // if data is not null
                 if (data) {
-                    // set the innerHTML of the main div to the data
                     document.getElementById('main').innerHTML = data;
                 }
             }
@@ -59,7 +53,7 @@
         </script>
     </div>
 
-    <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 min-w-md max-w-md">
+    <div class="left-1/2 border mx-auto border-cyan-400 rounded-md p-4 min-w-md max-w-md">
         <div class="relative">
             <div
                 class="absolute top-2 w-3/4 left-1/2 transform -translate-x-1/2 z-50 items-center justify-center text-lg font-light text-white">
