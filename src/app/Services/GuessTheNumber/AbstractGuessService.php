@@ -11,19 +11,6 @@ use App\Exceptions\GuessTheNumber\NotInRangeException;
 
 abstract class AbstractGuessService extends AbstractServiceComponent
 {
-    public function updateRemainingAttempts(int $remainingAttempts): void
-    {
-        $game = $this->gameRepository->getGame();
-        $game->remaining_attempts = $remainingAttempts;
-        $game->save();
-    }
-
-    public function decreaseRemainingAttempts(): void
-    {
-        $game = $this->gameRepository->getGame();
-        $game->remaining_attempts--;
-        $game->save();
-    }
 
     protected function checkNumberIsCheat($number, callable $callback = null)
     {
@@ -64,7 +51,6 @@ abstract class AbstractGuessService extends AbstractServiceComponent
             if ($callback) {
                 $callback();
             }
-            //$this->decreaseRemainingAttempts();
             $this->checkNoEnoughAttempts($noEnoughAttemptsCallback);
             throw new FailException($this->messageService->greaterMessage($number));
         }
@@ -77,7 +63,6 @@ abstract class AbstractGuessService extends AbstractServiceComponent
             if ($callback) {
                 $callback();
             }
-            //$this->decreaseRemainingAttempts();
             $this->checkNoEnoughAttempts($noEnoughAttemptsCallback);
             throw new FailException($this->messageService->lowerMessage($number));
         }

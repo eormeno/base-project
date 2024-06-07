@@ -25,14 +25,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'pepe@example.com',
                 'password' => bcrypt('111')
             ]
-        )->has(GuessTheNumberGame::factory([
-            'state' => 'initial',
-            'min_number' => $min_number,
-            'max_number' => $max_number,
-            'max_attempts' => $max_attempts,
-            'half_attempts' => $half_attempts,
-            'remaining_attempts' => $max_attempts
-        ]))->create();
+        )->has(GuessTheNumberGame::factory())->create();
 
         User::factory()->has(GuessTheNumberGame::factory()->state(
             function (array $attributes) use ($min_number, $max_number, $max_attempts, $half_attempts) {
@@ -40,10 +33,6 @@ class DatabaseSeeder extends Seeder
                 $fake_attempts = random_int(1, $max_attempts);
                 $fake_score = random_int(1, 20) * 100;
                 return [
-                    'min_number' => $min_number,
-                    'max_number' => $max_number,
-                    'max_attempts' => $max_attempts,
-                    'half_attempts' => $half_attempts,
                     'remaining_attempts' => $fake_attempts,
                     'random_number' => $fake_random_number,
                     'score' => $fake_score,

@@ -9,40 +9,29 @@ class GameRepository extends AbstractServiceComponent
 {
     public function createEmptyNewGame(): void
     {
-        $game = new GuessTheNumberGame();
-        $game->user_id = auth()->id();
-        $game->min_number = $this->gameConfigService->getMinNumber();
-        $game->max_number = $this->gameConfigService->getMaxNumber();
-        $game->max_attempts = $this->gameConfigService->getMaxAttempts();
-        $game->half_attempts = $this->gameConfigService->getHalfAttempts();
-        $game->remaining_attempts = $this->gameConfigService->getMaxAttempts();
-        $game->save();
-    }
-
-    public function restartExistingGame($game): void
-    {
-        $game->remaining_attempts = $this->gameConfigService->getMaxAttempts();
-        $game->half_attempts = $this->gameConfigService->getHalfAttempts();
-        $game->finished = false;
-        $game->save();
-    }
-
-    private function existsGame(): bool
-    {
-        return auth()->user()->guessTheNumberGames()->exists();
+        GuessTheNumberGame::factory()->for(auth()->user())->create();
     }
 
     public function getGame(): GuessTheNumberGame
     {
-        if (!$this->existsGame()) {
+        if (!auth()->user()->guessTheNumberGames()->exists()) {
             $this->createEmptyNewGame();
         }
         return auth()->user()->guessTheNumberGames;
     }
 
-    /**
-     * List a ranking of the first 5 users with the most scores.
-     */
+    public function updateRemainingAttempts(int $remainingAttempts): void
+    {
+        $game = $this->getGame();
+        $game->update(['remaining_attempts' => $remainingAttempts]);
+    }
+
+    public function decreaseRemainingAttempts(): void
+    {
+        $game = $this->getGame();
+        $game->update(['remaining_attempts' => $game->remaining_attempts - 1]);
+    }
+
     public function getRanking(): array
     {
         $xxx = GuessTheNumberGame::select('user_id', 'score')
@@ -52,7 +41,6 @@ class GameRepository extends AbstractServiceComponent
             ->limit(5)
             ->get()
             ->toArray();
-        // convert the ranking to an array of the form ['user' => 'score']
         $ranking = [];
         foreach ($xxx as $item) {
             $ranking[$item['user']['name']] = $item['score'];

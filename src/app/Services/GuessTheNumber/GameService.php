@@ -48,19 +48,19 @@ class GameService extends AbstractGuessService
     public function guess($number)
     {
         $this->checkNumberIsCheat($number, function () {
-            $this->updateRemainingAttempts(1);
+            $this->gameRepository->updateRemainingAttempts(1);
         });
         $this->checkNumberOutOfRange($number);
         $this->checkNumberIsGuessed($number, function () {
             $this->endGame();
         });
         $this->checkNumberIsLowerThanRandomNumber($number, function () {
-            $this->decreaseRemainingAttempts();
+            $this->gameRepository->decreaseRemainingAttempts();
         }, function () {
             $this->endGame();
         });
         $this->checkNumberIsGreaterThanRandomNumber($number, function () {
-            $this->decreaseRemainingAttempts();
+            $this->gameRepository->decreaseRemainingAttempts();
         }, function () {
             $this->endGame();
         });
