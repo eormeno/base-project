@@ -1,5 +1,4 @@
 <div>
-
     <div class="mt-3 text-lg text-gray-900 dark:text-white text-center">
         {{ $description }}
     </div>
@@ -26,5 +25,4 @@
         <img src="{{ asset('images/fcefn.jpg') }}" alt="Laravel Logo" class="w-12 h-full mr-3 object-scale-down">
         <img src="{{ asset('images/unsj.jpg') }}" alt="Alpine.js Logo" class="w-12 h-full object-scale-down">
     </div>
-
 </div>
