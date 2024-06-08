@@ -13,7 +13,12 @@ class Playing extends StateAbstractImpl
 {
     public string $notification = "";
 
-    public function onEnter(bool $restoring): void
+    public function onReload(): void
+    {
+        $this->onEnter();
+    }
+
+    public function onEnter(): void
     {
         $this->notification = $this->context->messageService->remainingAttemptsMessage();
     }

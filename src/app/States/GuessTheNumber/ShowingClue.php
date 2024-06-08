@@ -12,7 +12,7 @@ class ShowingClue extends StateAbstractImpl
     public string $yes_i_accept_the_challenge = "";
     public string $another_challenge = "";
 
-    public function onEnter(bool $restoring): void
+    public function onEnter(): void
     {
         $this->title = $this->context->messageService->title();
         $this->goodLuck = $this->context->messageService->goodLuck();
@@ -21,9 +21,14 @@ class ShowingClue extends StateAbstractImpl
         $this->yes_i_accept_the_challenge = $this->context->messageService->yesIAcceptTheChallenge();
     }
 
+    public function onReload(): void
+    {
+        $this->onEnter();
+    }
+
     public function onRefresh(): void
     {
-        $this->onEnter(false);
+        $this->onEnter();
     }
 
     public function onWantToPlayEvent()

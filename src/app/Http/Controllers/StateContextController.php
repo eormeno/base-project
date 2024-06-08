@@ -28,11 +28,11 @@ abstract class StateContextController implements StateContextInterface
         $new_instance->setContext($this);
         if ($new_instance->isNeedRestoring()) {
             $new_instance->setNeedRestoring(false);
-            $new_instance->onEnter(true);
+            $new_instance->onReload();
         }
         if ($this->__state && $this->__state != $new_instance) {
             $this->__state->onExit();
-            $new_instance->onEnter(false);
+            $new_instance->onEnter();
         }
         $this->__state = $new_instance;
         $this->__state->onRefresh();
@@ -41,7 +41,6 @@ abstract class StateContextController implements StateContextInterface
     private function getStateInstance($state_class): StateInterface
     {
         $this->registerStateInstance($state_class);
-        //$state_dashed_name = $state_class::dashCaseName();
         $state_dashed_name = CaseConverters::pascalToKebab($state_class->getShortName());
         return session(self::INSTANCED_STATES_KEY)[$state_dashed_name];
     }

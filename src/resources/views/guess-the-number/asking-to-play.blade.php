@@ -1,4 +1,5 @@
 <div>
+    <div>{{ $times }}</div>
     <div class="mt-3 text-lg text-gray-900 dark:text-white text-center">
         {{ $description }}
     </div>

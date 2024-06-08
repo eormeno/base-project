@@ -9,8 +9,14 @@ class AskingToPlay extends StateAbstractImpl
     public string $description = "";
     public string $yes_i_accept_the_challenge = "";
     public array $ranking = [];
+    public int $times = 0;
 
-    public function onEnter(bool $restoring): void
+    public function onReload(): void
+    {
+        $this->onEnter();
+    }
+
+    public function onEnter(): void
     {
         $this->description = $this->context->messageService->welcomeMessage();
         $this->yes_i_accept_the_challenge = $this->context->messageService->yesIAcceptTheChallenge();
@@ -19,7 +25,8 @@ class AskingToPlay extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $this->onEnter(false);
+        $this->times++;
+        $this->onEnter();
     }
 
     public function onWantToPlayEvent()

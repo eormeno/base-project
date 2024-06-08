@@ -34,7 +34,15 @@ abstract class StateAbstractImpl implements StateInterface
         $this->context = $content;
     }
 
-    public function onEnter(bool $restoring): void
+    public function onReload(): void
+    {
+    }
+
+    public function onSave(): void
+    {
+    }
+
+    public function onEnter(): void
     {
     }
 
@@ -46,7 +54,7 @@ abstract class StateAbstractImpl implements StateInterface
     {
     }
 
-    public function passTo(): ReflectionClass
+    public function passTo()
     {
         return self::StateClass();
     }
@@ -55,7 +63,7 @@ abstract class StateAbstractImpl implements StateInterface
     {
         if ($event === null) {
             $cls = $this->passTo();
-            if ($cls === self::StateClass()) {
+            if ($cls == self::StateClass()) {
                 return;
             }
             return $this->context->setState($cls);
@@ -73,7 +81,6 @@ abstract class StateAbstractImpl implements StateInterface
 
     public function view()
     {
-        //$view_name = self::dashCaseName();
         $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
         $view_attr = $this->toArray();
         // add an html paragraph element to the view
