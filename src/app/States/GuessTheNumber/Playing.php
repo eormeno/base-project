@@ -18,14 +18,14 @@ class Playing extends StateAbstractImpl
         $this->notification = $this->context->messageService->remainingAttemptsMessage();
     }
 
-    public function onGuessEvent(int $number = -1)
+    public function onGuessEvent(?int $number = -1)
     {
         try {
             $this->context->gameService->guess($number);
         } catch (SuccessException $e) {
-            $this->context->setState(Success::class);
+            return Success::StateClass();
         } catch (GameOverException $e) {
-            $this->context->setState(GameOver::class);
+            return GameOver::StateClass();
         } catch (InfoException $e) {
             $this->infoToast($e->getMessage());
         } catch (NotInRangeException $e) {

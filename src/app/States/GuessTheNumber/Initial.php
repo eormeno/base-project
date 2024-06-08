@@ -2,12 +2,13 @@
 
 namespace App\States\GuessTheNumber;
 
+use ReflectionClass;
 use App\FSM\StateAbstractImpl;
 
 class Initial extends StateAbstractImpl
 {
-    public function passTo(): void
+    public function passTo(): ReflectionClass
     {
-        $this->context->setState(AskingToPlay::class);
+        return AskingToPlay::StateClass();
     }
 }

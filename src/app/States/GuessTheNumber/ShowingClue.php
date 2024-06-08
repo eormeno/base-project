@@ -28,11 +28,11 @@ class ShowingClue extends StateAbstractImpl
 
     public function onWantToPlayEvent()
     {
-        $this->context->setState(Playing::class);
+        return Playing::StateClass();
     }
 
     public function onAnotherChallengeEvent()
     {
-        $this->context->setState(Preparing::class);
+        return Preparing::StateClass();
     }
 }

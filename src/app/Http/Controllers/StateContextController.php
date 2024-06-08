@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Utils\CaseConverters;
+use ReflectionClass;
 use App\FSM\StateInterface;
-use App\Services\AbstractServiceManager;
 use Illuminate\Http\Request;
 use App\FSM\StateContextInterface;
 use App\FSM\StateStorageInterface;
+use App\Services\AbstractServiceManager;
 
 abstract class StateContextController implements StateContextInterface
 {
@@ -20,24 +22,18 @@ abstract class StateContextController implements StateContextInterface
         $this->serviceManager = $serviceManager;
     }
 
-    public function setState($state_class): void
+    public function setState(ReflectionClass $state_class): void
     {
-        //$debug_msg = "";
         $new_instance = $this->getStateInstance($state_class);
         $new_instance->setContext($this);
         if ($new_instance->isNeedRestoring()) {
             $new_instance->setNeedRestoring(false);
-            //$debug_msg = "Restoring: <b>" . $new_instance::dashCaseName() . "</b><br>";
             $new_instance->onEnter(true);
         }
         if ($this->__state && $this->__state != $new_instance) {
-            //$debug_msg = "Exiting: <b>" . $this->__state::dashCaseName() . "</b><br>";
             $this->__state->onExit();
-            //$debug_msg .= "Entering: <b>" . $new_instance::dashCaseName() . "</b><br>";
             $new_instance->onEnter(false);
         }
-        //if ($debug_msg != "")
-        //    echo "<hr>$debug_msg";
         $this->__state = $new_instance;
         $this->__state->onRefresh();
     }
@@ -45,24 +41,25 @@ abstract class StateContextController implements StateContextInterface
     private function getStateInstance($state_class): StateInterface
     {
         $this->registerStateInstance($state_class);
-        $state_dashed_name = $state_class::dashCaseName();
+        //$state_dashed_name = $state_class::dashCaseName();
+        $state_dashed_name = CaseConverters::pascalToKebab($state_class->getShortName());
         return session(self::INSTANCED_STATES_KEY)[$state_dashed_name];
     }
 
-    private function registerStateInstance($state_class): void
+    private function registerStateInstance(ReflectionClass $state_class): void
     {
-        if (!in_array(StateInterface::class, class_implements($state_class))) {
-            throw new \Exception("Class $state_class does not implement StateInterface");
+        if (!in_array(StateInterface::class, $state_class->getInterfaceNames())) {
+            throw new \Exception("The state class must implement the StateInterface.");
         }
         $need_restoring = false;
         if (!session()->has(self::INSTANCED_STATES_KEY)) {
             session()->put(self::INSTANCED_STATES_KEY, []);
             $need_restoring = true;
         }
-        $state_dashed_name = $state_class::dashCaseName();
+        $state_dashed_name = CaseConverters::pascalToKebab($state_class->getShortName());
         $instanced_states = session(self::INSTANCED_STATES_KEY);
         if (!array_key_exists($state_dashed_name, $instanced_states)) {
-            $new_instance = new $state_class();
+            $new_instance = $state_class->newInstance();
             $new_instance->setNeedRestoring($need_restoring);
             $instanced_states[$state_dashed_name] = $new_instance;
             session()->put(self::INSTANCED_STATES_KEY, $instanced_states);
@@ -84,7 +81,8 @@ abstract class StateContextController implements StateContextInterface
             $current_state = $this->__state;
             $current_state->handleRequest($event, $data);
             $changed_state = $this->__state;
-            $this->stateStorage->saveState($changed_state::dashCaseName());
+            $kebab_name = CaseConverters::pascalToKebab($changed_state::StateClass()->getShortName());
+            $this->stateStorage->saveState($kebab_name);
             $event = null;
         } while ($current_state != $changed_state);
         return $changed_state;
@@ -93,11 +91,11 @@ abstract class StateContextController implements StateContextInterface
     protected function restoreState(): void
     {
         $state_class = $this->stateStorage->readState();
-        $state_dashed_name = $state_class::dashCaseName();
+        $state_dashed_name = CaseConverters::pascalToKebab($state_class->getShortName());
         $this->registerStateInstance($state_class);
         $this->stateStorage->saveState($state_dashed_name);
         $instanced_states = session(self::INSTANCED_STATES_KEY);
-        $stored_state_class = $instanced_states[$state_dashed_name]::class;
+        $stored_state_class = $instanced_states[$state_dashed_name]::StateClass();
         $this->setState($stored_state_class);
     }
 

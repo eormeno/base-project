@@ -24,6 +24,6 @@ class AskingToPlay extends StateAbstractImpl
 
     public function onWantToPlayEvent()
     {
-        $this->context->setState(Preparing::class);
+        return Preparing::StateClass();
     }
 }

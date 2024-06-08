@@ -2,6 +2,7 @@
 
 namespace App\FSM;
 
+use ReflectionClass;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
@@ -11,14 +12,11 @@ abstract class StateAbstractImpl implements StateInterface
     use ToastTrigger;
 
     protected StateContextInterface $context;
-    private static string $_dashed_name;
     public bool $need_restoring = false;
 
-    public static function dashCaseName(): string
+    public static function StateClass(): ReflectionClass
     {
-        $class = get_called_class();
-        $class = substr($class, strrpos($class, '\\') + 1);
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $class));
+        return new ReflectionClass(static::class);
     }
 
     public function isNeedRestoring(): bool
@@ -48,18 +46,26 @@ abstract class StateAbstractImpl implements StateInterface
     {
     }
 
-    public function passTo(): void
+    public function passTo(): ReflectionClass
     {
+        return self::StateClass();
     }
 
-    public function handleRequest(?string $event = null, $data = null) {
+    public function handleRequest(?string $event = null, $data = null)
+    {
         if ($event === null) {
-            $this->passTo();
-            return;
+            $cls = $this->passTo();
+            if ($cls === self::StateClass()) {
+                return;
+            }
+            return $this->context->setState($cls);
         }
         $method = 'on' . CaseConverters::snakeToCamel($event) . 'Event';
         if (method_exists($this, $method)) {
-            ReflectionUtils::invokeMethod($this, $method, $data);
+            $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
+            if ($ref_cls) {
+                $this->context->setState($ref_cls);
+            }
         } else {
             throw new \Exception("Invalid event: $event");
         }
@@ -67,7 +73,8 @@ abstract class StateAbstractImpl implements StateInterface
 
     public function view()
     {
-        $view_name = self::dashCaseName();
+        //$view_name = self::dashCaseName();
+        $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
         $view_attr = $this->toArray();
         // add an html paragraph element to the view
         $view_attr['p'] = "<p>Guess a number between 1 and 100.</p>";

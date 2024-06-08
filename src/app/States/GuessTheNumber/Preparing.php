@@ -2,6 +2,7 @@
 
 namespace App\States\GuessTheNumber;
 
+use ReflectionClass;
 use App\FSM\StateAbstractImpl;
 
 class Preparing extends StateAbstractImpl
@@ -11,8 +12,8 @@ class Preparing extends StateAbstractImpl
         $this->context->gameService->startGame();
     }
 
-    public function passTo(): void
+    public function passTo(): ReflectionClass
     {
-        $this->context->setState(ShowingClue::class);
+        return ShowingClue::StateClass();
     }
 }

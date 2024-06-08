@@ -21,11 +21,11 @@ class Success extends StateAbstractImpl
 
     public function onPlayAgainEvent()
     {
-        $this->context->setState(Preparing::class);
+        return Preparing::StateClass();
     }
 
     public function onExitEvent()
     {
-        $this->context->setState(AskingToPlay::class);
+        return AskingToPlay::StateClass();
     }
 }
