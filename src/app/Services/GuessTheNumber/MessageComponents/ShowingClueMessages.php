@@ -38,4 +38,15 @@ class ShowingClueMessages extends AbstractComponent
         return $ret;
     }
 
+    public function anotherChallenge()
+    {
+        return __('guess-the-number.another-challenge');
+    }
+
+    public function yesIAcceptTheChallenge()
+    {
+        return __('guess-the-number.want-to-play');
+    }
+
+
 }

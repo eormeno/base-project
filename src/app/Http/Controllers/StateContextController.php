@@ -39,6 +39,7 @@ abstract class StateContextController implements StateContextInterface
         //if ($debug_msg != "")
         //    echo "<hr>$debug_msg";
         $this->__state = $new_instance;
+        $this->__state->onRefresh();
     }
 
     private function getStateInstance($state_class): StateInterface

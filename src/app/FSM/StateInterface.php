@@ -9,6 +9,7 @@ interface StateInterface
     public static function dashCaseName();
     public function setContext(StateContextInterface $content);
     public function onEnter(bool $restoring): void;
+    public function onRefresh(): void;
     public function onExit(): void;
     public function passTo(): void;
     public function handleRequest(?string $event = null, $data = null);

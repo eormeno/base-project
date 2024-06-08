@@ -40,6 +40,10 @@ abstract class StateAbstractImpl implements StateInterface
     {
     }
 
+    public function onRefresh(): void
+    {
+    }
+
     public function onExit(): void
     {
     }

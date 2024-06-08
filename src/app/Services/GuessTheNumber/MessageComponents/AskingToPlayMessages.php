@@ -16,4 +16,9 @@ class AskingToPlayMessages extends AbstractComponent
         ]);
     }
 
+    public function yesIAcceptTheChallenge()
+    {
+        return __('guess-the-number.want-to-play');
+    }
+
 }
