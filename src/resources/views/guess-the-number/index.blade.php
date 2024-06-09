@@ -39,6 +39,16 @@
                         document.write(data);
                     } else {
                         document.getElementById('main').innerHTML = data;
+                        // ensure the html data with script tags is executed
+                        document.getElementById('main').querySelectorAll('script').forEach(script => {
+
+                            const newScript = document.createElement('script');
+                            Array.from(script.attributes).forEach(attr => {
+                                newScript.setAttribute(attr.name, attr.value);
+                            });
+                            newScript.appendChild(document.createTextNode(script.innerHTML));
+                            script.parentNode.replaceChild(newScript, script);
+                        });
                         localStorage.setItem('guess-the-number', data);
                     }
                 });

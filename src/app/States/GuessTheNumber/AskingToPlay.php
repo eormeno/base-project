@@ -29,6 +29,7 @@ class AskingToPlay extends StateAbstractImpl
 
     public function onWantToPlayEvent()
     {
-        return Preparing::StateClass();
+        $this->toast("Let's play!", 4000, "debug");
+        //return Preparing::StateClass();
     }
 }
