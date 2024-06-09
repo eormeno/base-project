@@ -9,7 +9,6 @@ class AskingToPlay extends StateAbstractImpl
     public string $description = "";
     public string $yes_i_accept_the_challenge = "";
     public array $ranking = [];
-    public int $times = 0;
 
     public function onReload(): void
     {
@@ -25,7 +24,6 @@ class AskingToPlay extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $this->times++;
         $this->onEnter();
     }
 
