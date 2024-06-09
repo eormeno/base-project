@@ -1,63 +1,49 @@
 <x-guess-the-number-layout>
-    <div style="display: block">
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            previousData();
+        });
 
-        <!--
-        <button onclick="sendEvent()"
-            class="inline-flex text-xs items-center justify-center p-1 m-2 font-thin text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-blue-500">Send
-            event</button>
+        window.onload = function() {
+            sendEvent();
+        }
 
-        <a href="{ route('guess-the-number.reset') }}"
-            class="inline-flex text-xs items-center justify-center p-1 m-2 font-thin text-white bg-red-700 border border-transparent rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500">
-            Reset
-        </a>
-        -->
-
-        <script>
-            window.addEventListener('DOMContentLoaded', (event) => {
-                previousData();
-            });
-            // on page load run the sendEvent function
-            window.onload = function() {
-                sendEvent();
+        function previousData() {
+            // get data from local storage
+            let data = localStorage.getItem('guess-the-number');
+            // if data is not null
+            if (data) {
+                // set the innerHTML of the main div to the data
+                document.getElementById('main').innerHTML = data;
             }
+        }
 
-            function previousData() {
-                // get data from local storage
-                let data = localStorage.getItem('guess-the-number');
-                // if data is not null
-                if (data) {
-                    // set the innerHTML of the main div to the data
-                    document.getElementById('main').innerHTML = data;
-                }
-            }
-
-            function sendEvent(event, formData = {}) {
-                event = event || '';
-                //document.getElementById('main').innerHTML = 'Loading...';
-                fetch('{{ route('guess-the-number') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            event: event,
-                            data: formData
-                        })
+        function sendEvent(event, formData = {}) {
+            event = event || '';
+            //document.getElementById('main').innerHTML = 'Loading...';
+            fetch('{{ route('guess-the-number') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        event: event,
+                        data: formData
                     })
-                    .then(response => response.text())
-                    .then(data => {
-                        // if the data starts with a <!DOCTYPE html> tag, is an error page
-                        if (data.startsWith('<!DOCTYPE html>')) {
-                            document.write(data);
-                        } else {
-                            document.getElementById('main').innerHTML = data;
-                            localStorage.setItem('guess-the-number', data);
-                        }
-                    });
-            }
-        </script>
-    </div>
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // if the data starts with a <!DOCTYPE html> tag, is an error page
+                    if (data.startsWith('<!DOCTYPE html>')) {
+                        document.write(data);
+                    } else {
+                        document.getElementById('main').innerHTML = data;
+                        localStorage.setItem('guess-the-number', data);
+                    }
+                });
+        }
+    </script>
 
     <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 min-w-md max-w-md">
         <div class="relative">

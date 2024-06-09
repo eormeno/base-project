@@ -1,4 +1,4 @@
-<div id="{{ $event }}-event-render"></div>
+<div id="{{ $event }}-event-render">ddd</div>
 
 <script>
     document.addEventListener("{{ $event }}", (event) => {
