@@ -82,10 +82,7 @@ abstract class StateAbstractImpl implements StateInterface
     public function view()
     {
         $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
-        $view_attr = $this->toArray();
-        // add an html paragraph element to the view
-        $view_attr['p'] = "<p>Guess a number between 1 and 100.</p>";
-        $view = view("guess-the-number.$view_name", $view_attr);
+        $view = view("guess-the-number.$view_name", $this->toArray());
         return $view;
     }
 
