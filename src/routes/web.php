@@ -18,22 +18,11 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get(
-        'guess-the-number',
-        [GuessTheNumberController::class, 'index']
-    )->name('guess-the-number');
-    Route::post(
-        'guess-the-number',
-        [GuessTheNumberController::class, 'event']
-    )->name('guess-the-number');
-    Route::get(
-        'guess-the-number/reset',
-        [GuessTheNumberController::class, 'reset']
-    )->name('guess-the-number.reset');
-
-    Route::get('/clash-of-triad/{game_id?}', function () {
-        return view('play.clash-of-triad', ['game_id' => request()->route('game_id')]);
-    })->name('clash-of-triad');
+    Route::prefix('guess-the-number')->group(function () {
+        Route::get('/', [GuessTheNumberController::class, 'index'])->name('guess-the-number');
+        Route::post('/', [GuessTheNumberController::class, 'event'])->name('guess-the-number');
+        Route::get('/reset', [GuessTheNumberController::class, 'reset'])->name('guess-the-number.reset');
+    });
 
     Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
