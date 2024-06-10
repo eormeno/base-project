@@ -17,9 +17,11 @@ class GameStateStorageService extends AbstractServiceComponent implements StateS
 
     public function readState(): ReflectionClass|null
     {
-        $kebab_state_name = $this->gameService->getGame()->state;
-        $state_class_name = $this->stateNameToClass($kebab_state_name);
-        return $state_class_name;
+        $game = $this->gameService->getGame();
+        $int_id = $game->id;
+        $kebab_state_name = $game->state;
+        $rfl_class = $this->stateNameToClass($kebab_state_name);
+        return $rfl_class;
     }
 
     public function saveState(ReflectionClass|null $rfl_state): void

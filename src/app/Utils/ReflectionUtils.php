@@ -16,7 +16,6 @@ class ReflectionUtils
         if ($suffix_to_remove) {
             $short_class_name = substr($short_class_name, 0, -strlen($suffix_to_remove));
         }
-        //$short_class_name = substr($short_class_name, 0, -10);
         return CaseConverters::pascalToKebab($short_class_name);
     }
 
