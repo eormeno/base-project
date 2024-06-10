@@ -8,11 +8,6 @@
             sendEvent();
         }
 
-        window.onload = function() {
-            previousData();
-            sendEvent();
-        }
-
         function previousData() {
             let data = localStorage.getItem('guess-the-number');
             if (data) {
