@@ -6,6 +6,7 @@ use ReflectionClass;
 use App\FSM\StateInterface;
 use Illuminate\Http\Request;
 use App\Utils\CaseConverters;
+use App\Utils\ReflectionUtils;
 use App\Helpers\StatesLocalCache;
 use App\FSM\StateContextInterface;
 use App\FSM\StateStorageInterface;
@@ -25,10 +26,10 @@ abstract class StateContextController implements StateContextInterface
 
     public function index(Request $request)
     {
-        $debug = env('APP_DEBUG', false);
-        $local_debug = $debug && false;
-        $this_controller_kebab_name = $this->getKebabClassName();
-        return view("$this_controller_kebab_name.index", ['debug' => $local_debug]);
+        $is_debug = env('APP_DEBUG', false);
+        $is_local_debug = $is_debug && false;
+        $str_this_controller_kebab_name = ReflectionUtils::getKebabClassName($this, 'Controller');
+        return view("$str_this_controller_kebab_name.index", ['debug' => $is_local_debug]);
     }
 
     public function event(EventRequestFilter $request)
@@ -80,26 +81,18 @@ abstract class StateContextController implements StateContextInterface
     protected function restoreState(): void
     {
         $reflection_state_class = $this->stateStorage->readState();
-        $str_short_class_name = $reflection_state_class->getShortName();
-        $str_state_kebab_name = CaseConverters::pascalToKebab($str_short_class_name);
-        StatesLocalCache::registerStateInstance($reflection_state_class);
+        $str_state_kebab_name = ReflectionUtils::getKebabClassName($reflection_state_class);
+        $sta_registered = StatesLocalCache::findRegisteredStateInstance($reflection_state_class);
         $this->stateStorage->saveState($str_state_kebab_name);
-        $stored_reflection_state_class = StatesLocalCache::getStateInstanceFromKey($str_state_kebab_name);
-        $this->setState($stored_reflection_state_class);
+        $this->setState($sta_registered::StateClass());
     }
 
     public function reset(Request $request)
     {
         StatesLocalCache::reset();
         $this->stateStorage->saveState(null);
-        $this_controller_kebab_name = $this->getKebabClassName();
-        return redirect()->route($this_controller_kebab_name);
+        $str_this_controller_kebab_name = ReflectionUtils::getKebabClassName($this, 'Controller');
+        return redirect()->route($str_this_controller_kebab_name);
     }
 
-    private function getKebabClassName(): string
-    {
-        $short_class_name = (new ReflectionClass($this))->getShortName();
-        $short_class_name = substr($short_class_name, 0, -10);
-        return CaseConverters::pascalToKebab($short_class_name);
-    }
 }

@@ -7,6 +7,19 @@ use ReflectionMethod;
 
 class ReflectionUtils
 {
+    public static function getKebabClassName($gen_instance, string $suffix_to_remove = ""): string
+    {
+        if (!$gen_instance instanceof ReflectionClass) {
+            $gen_instance = new ReflectionClass($gen_instance);
+        }
+        $short_class_name = $gen_instance->getShortName();
+        if ($suffix_to_remove) {
+            $short_class_name = substr($short_class_name, 0, -strlen($suffix_to_remove));
+        }
+        //$short_class_name = substr($short_class_name, 0, -10);
+        return CaseConverters::pascalToKebab($short_class_name);
+    }
+
     public static function getMethods($class)
     {
         $reflection = new ReflectionClass($class);
