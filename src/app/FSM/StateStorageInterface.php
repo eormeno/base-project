@@ -8,5 +8,5 @@ interface StateStorageInterface
 {
     public function getInitialStateClass(): ReflectionClass;
     public function readState(): ReflectionClass | null;
-    public function saveState(string | null $state): void;
+    public function saveState(ReflectionClass | null $state): void;
 }

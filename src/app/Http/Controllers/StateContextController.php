@@ -26,17 +26,15 @@ abstract class StateContextController implements StateContextInterface
 
     public function index(Request $request)
     {
-        $is_debug = env('APP_DEBUG', false);
-        $is_local_debug = $is_debug && false;
-        $str_this_controller_kebab_name = ReflectionUtils::getKebabClassName($this, 'Controller');
-        return view("$str_this_controller_kebab_name.index", ['debug' => $is_local_debug]);
+        $strThisControllerKebabName = ReflectionUtils::getKebabClassName($this, 'Controller');
+        return view("$strThisControllerKebabName.index");
     }
 
     public function event(EventRequestFilter $request)
     {
-        $event = $request->eventInfo()['event'];
-        $data = $request->eventInfo()['data'];
-        return $this->request($event, $data)->view();
+        $strEvent = $request->eventInfo()['event'];
+        $arrData = $request->eventInfo()['data'];
+        return $this->request($strEvent, $arrData)->view();
     }
 
     public function setState(ReflectionClass $reflection_state_class): void
@@ -70,9 +68,7 @@ abstract class StateContextController implements StateContextInterface
             $current_state = $this->__state;
             $current_state->handleRequest($event, $data);
             $changed_state = $this->__state;
-            $short_class_name = $changed_state::StateClass()->getShortName();
-            $kebab_class_name = CaseConverters::pascalToKebab($short_class_name);
-            $this->stateStorage->saveState($kebab_class_name);
+            $this->stateStorage->saveState($changed_state::StateClass());
             $event = null;
         } while ($current_state != $changed_state);
         return $changed_state;
@@ -81,9 +77,8 @@ abstract class StateContextController implements StateContextInterface
     protected function restoreState(): void
     {
         $reflection_state_class = $this->stateStorage->readState();
-        $str_state_kebab_name = ReflectionUtils::getKebabClassName($reflection_state_class);
         $sta_registered = StatesLocalCache::findRegisteredStateInstance($reflection_state_class);
-        $this->stateStorage->saveState($str_state_kebab_name);
+        $this->stateStorage->saveState($reflection_state_class);
         $this->setState($sta_registered::StateClass());
     }
 

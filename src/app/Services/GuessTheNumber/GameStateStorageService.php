@@ -22,10 +22,13 @@ class GameStateStorageService extends AbstractServiceComponent implements StateS
         return $state_class_name;
     }
 
-    public function saveState(string|null $state): void
+    public function saveState(ReflectionClass|null $rfl_state): void
     {
+        if ($rfl_state) {
+            $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
+        }
         $game = $this->gameService->getGame();
-        $game->state = $state;
+        $game->state = $rfl_state;
         $game->save();
     }
 
