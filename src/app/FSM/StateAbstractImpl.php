@@ -59,21 +59,24 @@ abstract class StateAbstractImpl implements StateInterface
         return self::StateClass();
     }
 
-    public function handleRequest(?string $event = null, $data = null)
+    public function handleRequest(array $eventInfo) : ReflectionClass
     {
+        $event = $eventInfo['event'];
+        $data = $eventInfo['data'];
         if ($event === null) {
-            $cls = $this->passTo();
-            if ($cls == self::StateClass()) {
-                return;
+            $rfl_class = $this->passTo();
+            if ($rfl_class == self::StateClass()) {
+                return self::StateClass();
             }
-            return $this->context->setState($cls);
+            return $rfl_class;
         }
-        $method = 'on' . CaseConverters::snakeToCamel($event) . 'Event';
+        $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
         if (method_exists($this, $method)) {
             $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
             if ($ref_cls) {
-                $this->context->setState($ref_cls);
+                return $ref_cls;
             }
+            return self::StateClass();
         } else {
             throw new \Exception("Invalid event: $event");
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\GuessTheNumber;
 
+use App\Http\Requests\EventRequestFilter;
 use App\Http\Controllers\StateContextController;
 use App\Services\GuessTheNumber\GuessTheNumberGameServiceManager;
 
@@ -11,5 +12,10 @@ class GuessTheNumberController extends StateContextController
     {
         parent::__construct($serviceManager);
         $this->stateStorage = $serviceManager->gameStateStorageService;
+    }
+
+    public function event(EventRequestFilter $request)
+    {
+        return $this->request($request->eventInfo())->view();
     }
 }

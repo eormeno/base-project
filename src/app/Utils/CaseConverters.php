@@ -44,4 +44,9 @@ class CaseConverters
     {
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $input)));
     }
+
+    public static function snakeToPascal(string $input): string
+    {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', $input)));
+    }
 }
