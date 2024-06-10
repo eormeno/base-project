@@ -2,18 +2,20 @@
 
 namespace App\Services\GuessTheNumber;
 
+use App\Utils\CaseConverters;
+use ReflectionClass;
 use App\FSM\StateStorageInterface;
 use App\States\GuessTheNumber\Initial;
 use App\Services\AbstractServiceComponent;
 
 class GameStateStorageService extends AbstractServiceComponent implements StateStorageInterface
 {
-    public function getInitialStateClass(): string
+    public function getInitialStateClass(): ReflectionClass
     {
-        return Initial::class;
+        return Initial::StateClass();
     }
 
-    public function readState(): string|null
+    public function readState(): ReflectionClass|null
     {
         $dashed_state_name = $this->gameService->getGame()->state;
         $state_class_name = $this->stateNameToClass($dashed_state_name);
@@ -27,13 +29,16 @@ class GameStateStorageService extends AbstractServiceComponent implements StateS
         $game->save();
     }
 
-    private function stateNameToClass(string | null $dashed_state_name): string
+    private function stateNameToClass(string|null $dashed_state_name): ReflectionClass
     {
         if (!$dashed_state_name) {
             return $this->getInitialStateClass();
         }
-        $namespace = substr($this->getInitialStateClass(), 0, strrpos($this->getInitialStateClass(), '\\'));
-        $pascal_state_name = str_replace(' ', '', ucwords(str_replace('-', ' ', $dashed_state_name)));
-        return $namespace . '\\' . $pascal_state_name;
+        // todo: refactor this to a more generic method. because this class construction assumes
+        // that the state class is in the same namespace as the initial state class.
+        $namespace = $this->getInitialStateClass()->getNamespaceName();
+        $short_class_name = CaseConverters::kebabToPascal($dashed_state_name);
+        $full_class_name = $namespace . '\\' . $short_class_name;
+        return $full_class_name::StateClass();
     }
 }

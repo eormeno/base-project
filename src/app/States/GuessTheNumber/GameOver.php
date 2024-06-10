@@ -9,7 +9,12 @@ class GameOver extends StateAbstractImpl
     public string $notification = "";
     public string $subtitle = "";
 
-    public function onEnter(bool $restoring): void
+    public function onReload(): void
+    {
+        $this->onEnter();
+    }
+
+    public function onEnter(): void
     {
         $this->notification = $this->context->messageService->gameOverMessage();
         $this->subtitle = $this->context->messageService->gameOverSubtitle();
@@ -17,11 +22,11 @@ class GameOver extends StateAbstractImpl
 
     public function onPlayAgainEvent()
     {
-        $this->context->setState(Preparing::class);
+        return Preparing::StateClass();
     }
 
     public function onExitEvent()
     {
-        $this->context->setState(AskingToPlay::class);
+        return AskingToPlay::StateClass();
     }
 }

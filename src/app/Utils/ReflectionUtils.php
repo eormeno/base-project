@@ -57,10 +57,10 @@ class ReflectionUtils
         return $parametersValues;
     }
 
-    public static function invokeMethod($class, $method, $data)
+    public static function invokeMethod($state_instance, $method, $data)
     {
-        $reflection = new ReflectionClass($class);
-        $parametersValues = self::getMethodParametersValues($class, $method, $data);
-        $reflection->getMethod($method)->invokeArgs($class, $parametersValues);
+        $reflection = new ReflectionClass($state_instance);
+        $parametersValues = self::getMethodParametersValues($state_instance, $method, $data);
+        return $reflection->getMethod($method)->invokeArgs($state_instance, $parametersValues);
     }
 }

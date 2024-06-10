@@ -13,5 +13,4 @@ return [
     'games' => 'Juegos',
     'games_text' => 'Aquí puedes encontrar los juegos disponibles en la plataforma.',
     'guess-the-number' => '¡Adivina el número!',
-    'clash-of-triad' => '¡Clash Of Triad!',
 ];

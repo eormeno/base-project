@@ -6,8 +6,8 @@ use App\FSM\StateAbstractImpl;
 
 class Initial extends StateAbstractImpl
 {
-    public function passTo(): void
+    public function passTo()
     {
-        $this->context->setState(AskingToPlay::class);
+        return AskingToPlay::StateClass();
     }
 }

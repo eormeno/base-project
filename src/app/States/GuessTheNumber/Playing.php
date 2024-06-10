@@ -13,7 +13,12 @@ class Playing extends StateAbstractImpl
 {
     public string $notification = "";
 
-    public function onEnter(bool $restoring): void
+    public function onReload(): void
+    {
+        $this->onEnter();
+    }
+
+    public function onEnter(): void
     {
         $this->notification = $this->context->messageService->remainingAttemptsMessage();
     }
@@ -23,9 +28,9 @@ class Playing extends StateAbstractImpl
         try {
             $this->context->gameService->guess($number);
         } catch (SuccessException $e) {
-            $this->context->setState(Success::class);
+            return Success::StateClass();
         } catch (GameOverException $e) {
-            $this->context->setState(GameOver::class);
+            return GameOver::StateClass();
         } catch (InfoException $e) {
             $this->infoToast($e->getMessage());
         } catch (NotInRangeException $e) {

@@ -19,6 +19,11 @@
     </div>
 
     <x-button class="mt-4" type="button" onclick="sendEvent('want_to_play')">
-        {{ __('guess-the-number.want-to-play') }}
+        {{ $yes_i_accept_the_challenge }}
     </x-button>
+
+    <x-button class="mt-4" type="button" onclick="sendEvent('another_challenge')">
+        {{ $another_challenge }}
+    </x-button>
+
 </div>

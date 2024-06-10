@@ -6,13 +6,13 @@ use App\FSM\StateAbstractImpl;
 
 class Preparing extends StateAbstractImpl
 {
-    public function onEnter(bool $restoring): void
+    public function onEnter(): void
     {
         $this->context->gameService->startGame();
     }
 
-    public function passTo(): void
+    public function passTo()
     {
-        $this->context->setState(ShowingClue::class);
+        return ShowingClue::StateClass();
     }
 }
