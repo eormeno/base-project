@@ -9,18 +9,14 @@
         }
 
         function previousData() {
-            // get data from local storage
             let data = localStorage.getItem('guess-the-number');
-            // if data is not null
             if (data) {
-                // set the innerHTML of the main div to the data
                 document.getElementById('main').innerHTML = data;
             }
         }
 
         function sendEvent(event, formData = {}) {
             event = event || '';
-            //document.getElementById('main').innerHTML = 'Loading...';
             fetch('{{ route('guess-the-number') }}', {
                     method: 'POST',
                     headers: {
@@ -41,7 +37,6 @@
                         document.getElementById('main').innerHTML = data;
                         // ensure the html data with script tags is executed
                         document.getElementById('main').querySelectorAll('script').forEach(script => {
-
                             const newScript = document.createElement('script');
                             Array.from(script.attributes).forEach(attr => {
                                 newScript.setAttribute(attr.name, attr.value);
