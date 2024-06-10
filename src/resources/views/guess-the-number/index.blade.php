@@ -84,9 +84,7 @@
         <div id="main">
         </div>
 
-        @if ($debug)
-            @livewire('debug-bar', ['include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])
-        @endif
+        <!-- livewire('debug-bar', ['include' => ['state', 'random_number'], 'reset_route' => 'guess-the-number.reset'])-->
 
     </div>
 </x-guess-the-number-layout>
