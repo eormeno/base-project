@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\StateManager;
-use App\Utils\ReflectionUtils;
-use App\Http\Controllers\Controller;
+use App\Services\AbstractServiceManager;
 use App\Http\Requests\EventRequestFilter;
 use App\Services\GuessTheNumber\GuessTheNumberGameServiceManager;
 
-class GuessTheNumberController extends Controller
+class GuessTheNumberController extends BaseController
 {
+    private AbstractServiceManager $serviceManager;
     private StateManager $stateManager;
 
-    public function __construct(
-        protected GuessTheNumberGameServiceManager $serviceManager
+    public function __construct(GuessTheNumberGameServiceManager $serviceManager
     ) {
+        $this->serviceManager = $serviceManager;
         $this->stateManager = new StateManager($serviceManager);
-    }
-
-    public function index(Request $request)
-    {
-        $strThisControllerKebabName = ReflectionUtils::getKebabClassName($this, 'Controller');
-        return view("$strThisControllerKebabName.index");
     }
 
     public function event(EventRequestFilter $request)
@@ -31,10 +24,8 @@ class GuessTheNumberController extends Controller
         return $this->stateManager->getState($game, $request->eventInfo());
     }
 
-    public function reset()
+    public function reset() : void
     {
         $this->stateManager->reset($this->serviceManager->gameService->getGame());
-        $str_this_controller_kebab_name = ReflectionUtils::getKebabClassName($this, 'Controller');
-        return redirect()->route($str_this_controller_kebab_name);
     }
 }

@@ -21,7 +21,7 @@ Route::middleware([
     Route::prefix('guess-the-number')->group(function () {
         Route::get('/', [GuessTheNumberController::class, 'index'])->name('guess-the-number');
         Route::post('/', [GuessTheNumberController::class, 'event'])->name('guess-the-number');
-        Route::get('/reset', [GuessTheNumberController::class, 'reset'])->name('guess-the-number.reset');
+        Route::get('/reset', [GuessTheNumberController::class, '_reset'])->name('guess-the-number.reset');
     });
 
     Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
