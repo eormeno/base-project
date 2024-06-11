@@ -68,4 +68,9 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         $this->setState($sta_registered::StateClass());
     }
 
+    public function reset(): void
+    {
+        $this->stateStorage->saveState(null);
+    }
+
 }
