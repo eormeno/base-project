@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\GuessTheNumber\GuessTheNumberController;
+use App\Http\Controllers\GuessTheNumberController;
 
 Route::get('/', function () {
     return view('welcome');
