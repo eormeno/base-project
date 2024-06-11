@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\StateManager;
 use App\Utils\ReflectionUtils;
-use App\Helpers\StatesLocalCache;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequestFilter;
 use App\Services\GuessTheNumber\GuessTheNumberGameServiceManager;
 
@@ -34,7 +33,6 @@ class GuessTheNumberController extends Controller
 
     public function reset()
     {
-        StatesLocalCache::reset();
         $this->stateManager->reset($this->serviceManager->gameService->getGame());
         $str_this_controller_kebab_name = ReflectionUtils::getKebabClassName($this, 'Controller');
         return redirect()->route($str_this_controller_kebab_name);

@@ -70,6 +70,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
 
     public function reset(): void
     {
+        StatesLocalCache::reset(); // todo: try to reset speific object's states only
         $this->stateStorage->saveState(null);
     }
 
