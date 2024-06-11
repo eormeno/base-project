@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use ReflectionClass;
 use App\Models\GuessTheNumberGame;
+use App\Services\StateContextImpl;
 use App\States\GuessTheNumber\Initial;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,23 +13,29 @@ class StateManager
         GuessTheNumberGame::class => [
             'initial' => Initial::class,
             'state_field' => 'state',
-            'id_field' => 'id'
+            'id_field' => 'id',
+            'state_context' => null
         ],
     ];
+    protected $serviceManager;
 
-    public function getState(Model $model)
+    public function __construct(AbstractServiceManager $serviceManager)
     {
-        $class_name = get_class($model);
-        if (!isset($this->statesMap[$class_name])) {
-            throw new \Exception("State for $class_name is not defined.");
-        }
-        $short_class_name = (new ReflectionClass($model))->getShortName();
-        $id_field = $this->statesMap[$class_name]['id_field'];
-        $state_field = $this->statesMap[$class_name]['state_field'];
-        $id = $model->$id_field;
-        $state_value = $model->$state_field;
-        echo "<b>$short_class_name ($id)</b>: $state_value" . PHP_EOL;
+        $this->serviceManager = $serviceManager;
     }
 
-
+    public function getState(Model $object, array $eventInfo = ['event' => null, 'data' => null])
+    {
+        $modelClassName = get_class($object);
+        if (!isset($this->statesMap[$modelClassName])) {
+            throw new \Exception("State for $modelClassName is not defined.");
+        }
+        $stateConfig = $this->statesMap[$modelClassName];
+        $stateContext = $this->statesMap[$modelClassName]['state_context'];
+        if (!$stateContext) {
+            $stateContext = new StateContextImpl($this->serviceManager, $object, $stateConfig);
+            $this->statesMap[$modelClassName]['state_context'] = $stateContext;
+        }
+        return $stateContext->request($eventInfo)->view();
+    }
 }

@@ -19,14 +19,15 @@ class ClueService extends AbstractServiceComponent
             return $ret;
         }
 
-        if ($this->isEven($number)) {
-            $ret[] = ['clue' => 'even', 'data' => 'is-even'];
-        } else {
-            $ret[] = ['clue' => 'odd', 'data' => 'is-odd'];
-        }
+        // if ($this->isEven($number)) {
+        //     $ret[] = ['clue' => 'even', 'data' => 'is-even'];
+        // } else {
+        //     $ret[] = ['clue' => 'odd', 'data' => 'is-odd'];
+        // }
 
-        $multiples = $this->getMultiples($number);
-        $ret[] = ['clue' => 'multiples', 'data' => $multiples];
+        //$multiples = $this->getMultiples($number);
+        $factors = $this->getPrimeFactors($number);
+        $ret[] = ['clue' => 'multiples', 'data' => $factors];
 
         return $ret;
     }
@@ -85,14 +86,17 @@ class ClueService extends AbstractServiceComponent
         return $number % 2 == 0;
     }
 
-    public function getMultiples(int $number): array
+    public function getPrimeFactors(int $number): array
     {
         $multiples = [];
-        for ($i = 3; $i < 11; $i++) {
+        for ($i = 2; $i < $number; $i++) {
             if ($number % $i == 0) {
-                $multiples[] = $i;
+                if ($this->isPrime($i)) {
+                    $multiples[] = $i;
+                }
             }
         }
         return $multiples;
     }
+
 }

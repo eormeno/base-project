@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
+use App\Helpers\StateUpdateHelper;
 use ReflectionClass;
 use App\FSM\StateInterface;
 use App\Helpers\StatesLocalCache;
 use App\FSM\StateContextInterface;
-use App\FSM\StateStorageInterface;
+use Illuminate\Database\Eloquent\Model;
 use App\Services\AbstractServiceManager;
+use App\Services\AbstractServiceComponent;
 
-abstract class StateContextController implements StateContextInterface
+class StateContextImpl extends AbstractServiceComponent implements StateContextInterface
 {
     protected ?StateInterface $__state = null;
-    protected StateStorageInterface $stateStorage;
     protected AbstractServiceManager $serviceManager;
+    protected StateUpdateHelper $stateStorage;
 
-    public function __construct(AbstractServiceManager $serviceManager)
+    public function __construct(AbstractServiceManager $serviceManager, Model $object, array $stateConfig)
     {
         $this->serviceManager = $serviceManager;
+        $this->stateStorage = new StateUpdateHelper($object, $stateConfig);
     }
 
     private function setState(ReflectionClass $reflection_state_class): void
