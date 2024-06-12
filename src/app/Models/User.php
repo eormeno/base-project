@@ -63,13 +63,13 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the user's GuessTheNumberGame instance.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
     public function guessTheNumberGames(): HasOne
     {
         return $this->hasOne(GuessTheNumberGame::class);
+    }
+
+    public function mythicTreasureQuestGames(): HasOne
+    {
+        return $this->hasOne(MythicTreasureQuestGame::class);
     }
 }

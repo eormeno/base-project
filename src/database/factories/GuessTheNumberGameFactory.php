@@ -13,7 +13,7 @@ class GuessTheNumberGameFactory extends Factory
 
     public function definition(): array
     {
-        $configService = resolve(GuessTheNumberGameServiceManager::class)->gameConfigService;
+        $configService = resolve(GuessTheNumberGameServiceManager::class)->get('gameConfigService');
         $min_number = $configService->getMinNumber();
         $max_number = $configService->getMaxNumber();
         $max_attempts = $configService->getMaxAttempts();
@@ -31,7 +31,7 @@ class GuessTheNumberGameFactory extends Factory
     {
         return $this->state(
             function (array $attributes) {
-                $configService = resolve(GuessTheNumberGameServiceManager::class)->gameConfigService;
+                $configService = resolve(GuessTheNumberGameServiceManager::class)->get('gameConfigService');
                 $min_number = $configService->getMinNumber();
                 $max_number = $configService->getMaxNumber();
                 $max_attempts = $configService->getMaxAttempts();

@@ -130,10 +130,16 @@ Implementación en HTML, CSS y JavaScript utilizanzo Laravel como backend.
 **Carpeta de vistas**: `resources/views/mythic-treasure-quest`
 - **Vista principal**: `index.blade.php`
 ### Campos para migración
-- **id**: Identificador único del juego.
-- **player_id**: Identificador del jugador.
-- **level**: Nivel actual del jugador.
-- **health**: Salud actual del jugador.
+|Campo|Tipo|Descripción|
+|-------------|-----|-----------------|
+|id|int|Identificador de la partida.|
+|user_id|int|Identificador del jugador.|
+|state|string|Estado actual del juego.|
+|level|int|Nivel actual del jugador.|
+|map|json|Mapa de la mazmorra.|
+|inventory|json|Inventario del jugador.|
+|health|int|Salud actual del jugador.|
+|is_finished|bool|Indica si la partida finalizó.|
 #### Modelo
 `App\Models\MythicTreasureQuestGame`
 #### Rutas
