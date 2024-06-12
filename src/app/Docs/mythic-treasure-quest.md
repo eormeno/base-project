@@ -1,7 +1,34 @@
-# Documento de Diseño de Juego (GDD)
+# Mythic Treasure Quest GDD
 
-## Título del Juego
-**Mythic Treasure Quest**
+## Índice
+- [Resumen del Juego](#resumen-del-juego)
+- [Género](#género)
+- [Plataforma](#plataforma)
+- [Público Objetivo](#público-objetivo)
+- [Historia](#historia)
+- [Mecánicas de Juego](#mecánicas-de-juego)
+  - [Exploración de Mazmorras](#exploración-de-mazmorras)
+  - [Desbloqueo de Celdas](#desbloqueo-de-celdas)
+  - [Uso de Pistas](#uso-de-pistas)
+  - [Inventario y Objetos](#inventario-y-objetos)
+  - [Progresión y Niveles](#progresión-y-niveles)
+- [Controles](#controles)
+- [Estilo Visual](#estilo-visual)
+- [Sonido](#sonido)
+- [Niveles y Progresión](#niveles-y-progresión)
+- [Diseño de niveles](#diseño-de-niveles)
+  - [Nivel 1: La Cueva de los Antiguos](#nivel-1-la-cueva-de-los-antiguos)
+    - [Descripción](#descripción)
+    - [Mapa del Nivel](#mapa-del-nivel)
+    - [Detalles del Nivel](#detalles-del-nivel)
+      - [Celdas Reveladas](#celdas-reveladas)
+      - [Tesoros](#tesoros)
+      - [Trampas](#trampas)
+      - [Monstruos](#monstruos)
+      - [Celdas Vacías](#celdas-vacías)
+    - [Pistas del Nivel](#pistas-del-nivel)
+    - [Objetos del Inventario](#objetos-del-inventario)
+- [Aspectos Técnicos](#aspectos-técnicos)
 
 ## Resumen del Juego
 **Mythic Treasure Quest** es un juego de puzzle y aventura en el que los jugadores exploran mazmorras llenas de trampas, monstruios y tesoros. El objetivo es descubrir todos los tesoros mientras se evitan trampas y monstruos. Los jugadores deben utilizar pistas para identificar las celdas seguras y las que contienen peligros.
@@ -94,3 +121,25 @@ Todas las demás celdas están vacías o contienen pistas adicionales.
 - Mapa Antiguo: Revela aleatoriamente una celda segura en la mazmorra.
 - Desactivador de Trampas: Permite desactivar una trampa descubierta.
 - Poción de Salud: Restaura la salud del jugador si es atacado por un monstruo.
+
+## Aspectos Técnicos
+Implementación en HTML, CSS y JavaScript utilizanzo Laravel como backend.
+### Controlador
+`App\Http\Controllers\MythicTreasureQuestController`
+### Vistas
+**Carpeta de vistas**: `resources/views/mythic-treasure-quest`
+- **Vista principal**: `index.blade.php`
+### Campos para migración
+- **id**: Identificador único del juego.
+- **player_id**: Identificador del jugador.
+- **level**: Nivel actual del jugador.
+- **health**: Salud actual del jugador.
+#### Modelo
+`App\Models\MythicTreasureQuestGame`
+#### Rutas
+**Rutas**: `routes/web.php`
+- **Ruta principal**: `/mythic-treasure-quest`
+- **Ruta para guardar el progreso**: `/save`
+- **Ruta para cargar el progreso**: `/load`
+- **Ruta para reiniciar el juego**: `/reset`
+
