@@ -82,11 +82,11 @@ abstract class StateAbstractImpl implements StateInterface
         }
     }
 
-    public function view()
+    public function view(string $controller_name)
     {
         $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
         //todo: check if view exists before returning and resolve the view name
-        $view = view("guess-the-number.$view_name", $this->toArray());
+        $view = view("$controller_name.$view_name", $this->toArray());
         return $view;
     }
 

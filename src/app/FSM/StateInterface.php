@@ -18,5 +18,5 @@ interface StateInterface
     public function passTo();
     public function handleRequest(array $event): ReflectionClass;
     public function toArray(): array;
-    public function view();
+    public function view(string $controllerKebabCaseName);
 }

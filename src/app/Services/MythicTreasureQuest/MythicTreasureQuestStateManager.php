@@ -2,9 +2,9 @@
 
 namespace App\Services\MythicTreasureQuest;
 
-use App\Models\GuessTheNumberGame;
 use App\Services\AbstractStateManager;
-use App\States\GuessTheNumber\Initial;
+use App\Models\MythicTreasureQuestGame;
+use App\States\MythicTreasureQuest\Initial;
 
 class MythicTreasureQuestStateManager extends AbstractStateManager
 {
@@ -12,7 +12,7 @@ class MythicTreasureQuestStateManager extends AbstractStateManager
     {
         $this->serviceManager = new MythicTreasureQuestServiceManager();
         $this->statesMap = [
-            GuessTheNumberGame::class => [
+            MythicTreasureQuestGame::class => [
                 'initial' => Initial::class,
                 'state_field' => 'state',
                 'id_field' => 'id',

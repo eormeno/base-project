@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use ReflectionClass;
 use App\Services\StateContextImpl;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +16,10 @@ abstract class AbstractStateManager
         return $this->serviceManager->get($name);
     }
 
-    public final function getState(Model $object, array $eventInfo = ['event' => null, 'data' => null])
+    public final function getState(Model $object, array $eventInfo = ['event' => null, 'data' => null], string $strControllerKebabCaseName)
     {
         $stateContext = $this->getStateContext($object);
-        return $stateContext->request($eventInfo)->view();
+        return $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
     }
 
     private function getStateContext(Model $object)

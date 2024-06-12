@@ -4,46 +4,37 @@ namespace App\Helpers;
 
 use ReflectionClass;
 use App\FSM\StateInterface;
-use App\Utils\CaseConverters;
 
 class StatesLocalCache
 {
     private const INSTANCED_STATES_KEY = 'instanced_states';
 
-    public static function getStateInstance(ReflectionClass $reflection_state_class)
+    public static function getStateInstance(ReflectionClass $rflStateClass)
     {
-        self::findRegisteredStateInstance($reflection_state_class);
-        $short_class_name = $reflection_state_class->getShortName();
-        $state_kebab_name = CaseConverters::pascalToKebab($short_class_name);
-        return session(self::INSTANCED_STATES_KEY)[$state_kebab_name];
+        self::findRegisteredStateInstance($rflStateClass);
+        $strClassName = $rflStateClass->getName();
+        return session(self::INSTANCED_STATES_KEY)[$strClassName];
     }
 
-    public static function findRegisteredStateInstance(ReflectionClass $reflection_state_class): StateInterface
+    public static function findRegisteredStateInstance(ReflectionClass $rflStateClass): StateInterface
     {
-        if (!in_array(StateInterface::class, $reflection_state_class->getInterfaceNames())) {
+        if (!in_array(StateInterface::class, $rflStateClass->getInterfaceNames())) {
             throw new \Exception("The state class must implement the StateInterface.");
         }
-        $is_need_restoring = false;
+        $isNeedRestoring = false;
         if (!session()->has(self::INSTANCED_STATES_KEY)) {
             session()->put(self::INSTANCED_STATES_KEY, []);
-            $is_need_restoring = true;
+            $isNeedRestoring = true;
         }
-        $str_short_name = $reflection_state_class->getShortName();
-        $state_kebab_name = CaseConverters::pascalToKebab($str_short_name);
-        $arr_instanced_states = session(self::INSTANCED_STATES_KEY);
-        if (!array_key_exists($state_kebab_name, $arr_instanced_states)) {
-            $sta_new_instance = $reflection_state_class->newInstance();
-            $sta_new_instance->setNeedRestoring($is_need_restoring);
-            $arr_instanced_states[$state_kebab_name] = $sta_new_instance;
-            session()->put(self::INSTANCED_STATES_KEY, $arr_instanced_states);
+        $strClassName = $rflStateClass->getName();
+        $arrInstancedStates = session(self::INSTANCED_STATES_KEY);
+        if (!array_key_exists($strClassName, $arrInstancedStates)) {
+            $staNewInstance = $rflStateClass->newInstance();
+            $staNewInstance->setNeedRestoring($isNeedRestoring);
+            $arrInstancedStates[$strClassName] = $staNewInstance;
+            session()->put(self::INSTANCED_STATES_KEY, $arrInstancedStates);
         }
-        return $arr_instanced_states[$state_kebab_name];
-    }
-
-    public static function getStateInstanceFromKey(string $state_dashed_name) : ReflectionClass
-    {
-        $instanced_states = session(self::INSTANCED_STATES_KEY);
-        return $instanced_states[$state_dashed_name]::StateClass();
+        return $arrInstancedStates[$strClassName];
     }
 
     public static function reset(): void
