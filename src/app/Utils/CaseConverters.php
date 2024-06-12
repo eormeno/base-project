@@ -4,6 +4,16 @@ namespace App\Utils;
 
 class CaseConverters
 {
+    public static function toPascal(string $input): string
+    {
+        return str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $input)));
+    }
+
+    public static function toCamel(string $input): string
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $input))));
+    }
+
     public static function camelToSnake(string $input): string
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
