@@ -44,7 +44,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         if (property_exists($this, $attributeName)) {
             return $this->$attributeName;
         }
-        return $this->serviceManager->$attributeName;
+        return $this->serviceManager->get($attributeName);
     }
 
     public function request(array $eventInfo): StateInterface

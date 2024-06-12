@@ -2,29 +2,20 @@
 
 namespace App\Services;
 
-use App\Models\GuessTheNumberGame;
 use App\Services\StateContextImpl;
-use App\States\GuessTheNumber\Initial;
 use Illuminate\Database\Eloquent\Model;
 
-class StateManager
+abstract class AbstractStateManager
 {
-    protected $statesMap = [
-        GuessTheNumberGame::class => [
-            'initial' => Initial::class,
-            'state_field' => 'state',
-            'id_field' => 'id',
-            'state_context' => null
-        ],
-    ];
-    protected $serviceManager;
+    protected array $statesMap = [];
+    protected AbstractServiceManager $serviceManager;
 
-    public function __construct(AbstractServiceManager $serviceManager)
+    public function service(string $name): AbstractServiceComponent
     {
-        $this->serviceManager = $serviceManager;
+        return $this->serviceManager->get($name);
     }
 
-    public function getState(Model $object, array $eventInfo = ['event' => null, 'data' => null])
+    public final function getState(Model $object, array $eventInfo = ['event' => null, 'data' => null])
     {
         $stateContext = $this->getStateContext($object);
         return $stateContext->request($eventInfo)->view();
@@ -45,7 +36,7 @@ class StateManager
         return $stateContext;
     }
 
-    public function reset(Model $object)
+    public final function reset(Model $object)
     {
         $stateContext = $this->getStateContext($object);
         $stateContext->reset();

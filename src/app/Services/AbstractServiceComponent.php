@@ -15,6 +15,6 @@ abstract class AbstractServiceComponent
             return $this->$name;
         }
 
-        return $this->serviceManager->$name;
+        return $this->serviceManager->get($name);
     }
 }
