@@ -13,7 +13,11 @@
     <div class="mt-6">
         <a href="{{ route('guess-the-number') }}"
             class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-700 border border-transparent rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500">
-            {{ __('welcome_session.guess-the-number') }}
+            {{ __('guess-the-number.title') }}
+        </a>
+        <a href="{{ route('mythic-treasure-quest') }}"
+            class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 border border-transparent rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-geen-500">
+            {{ __('mythic-treasure-quest.title') }}
         </a>
     </div>
 </div>

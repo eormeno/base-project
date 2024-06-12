@@ -12,7 +12,9 @@ abstract class BaseController extends Controller
     public final function index(Request $request)
     {
         $strThisControllerKebabName = $this->name();
-        return view("$strThisControllerKebabName.index");
+        return view("$strThisControllerKebabName.index", [
+            'routeName' => $strThisControllerKebabName,
+        ]);
     }
 
     public abstract function event(EventRequestFilter $request);
