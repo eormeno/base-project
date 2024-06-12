@@ -50,6 +50,10 @@
         }
     </script>
 
+    <x-slot name="title">
+        {{ __("$routeName.title") }}
+    </x-slot>
+
     <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 min-w-md max-w-md">
         <div class="relative">
             <div
