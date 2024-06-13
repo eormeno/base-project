@@ -2,14 +2,16 @@
 
 namespace App\FSM;
 
+use ReflectionClass;
+
 interface IStateManagedModel
 {
     public function getId(): int;
 
-    public static function getInitialStateClass(): string;
+    public static function getInitialStateClass(): ReflectionClass;
 
-    public function getState(): string;
+    public function getState(): string|null;
 
-    public function setState(string $state): void;
+    public function updateState(string|null $state): void;
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use ReflectionClass;
 use App\FSM\IStateManagedModel;
 use App\States\GuessTheNumber\Initial;
 use Illuminate\Database\Eloquent\Model;
@@ -27,19 +28,19 @@ class GuessTheNumberGame extends Model implements IStateManagedModel
         return $this->id;
     }
 
-    public static function getInitialStateClass(): string
+    public static function getInitialStateClass(): ReflectionClass
     {
-        return Initial::class;
+        return Initial::StateClass();
     }
 
-    public function getState(): string
+    public function getState(): string|null
     {
         return $this->state;
     }
 
-    public function setState(string $state): void
+    public function updateState(string|null $state): void
     {
-        $this->state = $state;
+        $this->update(['state' => $state]);
     }
 
     public function user(): BelongsTo

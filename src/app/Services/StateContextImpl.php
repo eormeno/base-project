@@ -2,12 +2,12 @@
 
 namespace App\Services;
 
-use App\Helpers\StateUpdateHelper;
 use ReflectionClass;
 use App\FSM\StateInterface;
+use App\FSM\IStateManagedModel;
 use App\Helpers\StatesLocalCache;
 use App\FSM\StateContextInterface;
-use Illuminate\Database\Eloquent\Model;
+use App\Helpers\StateUpdateHelper;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
 
@@ -17,10 +17,12 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateStorage;
 
-    public function __construct(AbstractServiceManager $serviceManager, Model $object, array $stateConfig)
-    {
+    public function __construct(
+        AbstractServiceManager $serviceManager,
+        IStateManagedModel $object
+    ) {
         $this->serviceManager = $serviceManager;
-        $this->stateStorage = new StateUpdateHelper($object, $stateConfig);
+        $this->stateStorage = new StateUpdateHelper($object);
     }
 
     private function setState(ReflectionClass $reflection_state_class): void

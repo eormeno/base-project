@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use ReflectionClass;
 use App\FSM\IStateManagedModel;
 use Illuminate\Database\Eloquent\Model;
 use App\States\MythicTreasureQuest\Initial;
@@ -12,24 +13,28 @@ class MythicTreasureQuestGame extends Model implements IStateManagedModel
 {
     use HasFactory;
 
+    protected $fillable = [
+        'state',
+    ];
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    public static function getInitialStateClass(): string
+    public static function getInitialStateClass(): ReflectionClass
     {
-        return Initial::class;
+        return Initial::StateClass();
     }
 
-    public function getState(): string
+    public function getState(): string|null
     {
         return $this->state;
     }
 
-    public function setState(string $state): void
+    public function updateState(string|null $state): void
     {
-        $this->state = $state;
+        $this->update(['state' => $state]);
     }
 
     public function user(): BelongsTo

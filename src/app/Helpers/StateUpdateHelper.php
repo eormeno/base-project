@@ -4,33 +4,25 @@ namespace App\Helpers;
 
 use ReflectionClass;
 use App\Utils\CaseConverters;
-use Illuminate\Database\Eloquent\Model;
+use App\FSM\IStateManagedModel;
 
 class StateUpdateHelper
 {
-    protected Model $object;
-    protected string $strIdFieldName;
-    protected string $strStateFieldName;
-    protected $initialClass;
+    protected IStateManagedModel $object;
 
-    public function __construct(Model $object, array $stateConfig)
+    public function __construct(IStateManagedModel $object)
     {
         $this->object = $object;
-        $this->stateConfig = $stateConfig;
-        $this->strIdFieldName = $stateConfig['id_field'];
-        $this->strStateFieldName = $stateConfig['state_field'];
-        $this->initialClass = $stateConfig['initial'];
     }
 
     public function getInitialStateClass(): ReflectionClass
     {
-        return $this->initialClass::StateClass();
+        return $this->object->getInitialStateClass();
     }
 
     public function readState(): ReflectionClass|null
     {
-        $strField = $this->strStateFieldName;
-        $kebab_state_name = $this->object->$strField;
+        $kebab_state_name = $this->object->getState();
         $rfl_class = $this->stateNameToClass($kebab_state_name);
         return $rfl_class;
     }
@@ -40,9 +32,7 @@ class StateUpdateHelper
         if ($rfl_state) {
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }
-        $strField = $this->strStateFieldName;
-        $this->object->$strField = $rfl_state;
-        $this->object->save();
+        $this->object->updateState($rfl_state);
     }
 
     private function stateNameToClass(string|null $dashed_state_name): ReflectionClass
