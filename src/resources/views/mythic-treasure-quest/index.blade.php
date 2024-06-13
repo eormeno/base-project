@@ -54,7 +54,7 @@
         {{ __("$routeName.title") }}
     </x-slot>
 
-    <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 min-w-md max-w-md">
+    <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 max-w-md">
         <div class="relative">
             <div
                 class="absolute top-2 w-3/4 left-1/2 transform -translate-x-1/2 z-50 items-center justify-center text-lg font-light text-white">
@@ -87,5 +87,6 @@
 
         <div id="main">
         </div>
+
     </div>
 </x-guess-the-number-layout>

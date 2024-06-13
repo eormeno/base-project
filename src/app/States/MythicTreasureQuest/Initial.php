@@ -8,6 +8,6 @@ class Initial extends StateAbstractImpl
 {
     public function onStartQuestEvent()
     {
-        $this->warningToast("You have already started the quest.");
+        return Playing::StateClass();
     }
 }
