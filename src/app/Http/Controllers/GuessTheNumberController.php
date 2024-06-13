@@ -6,19 +6,23 @@ use App\Services\GuessTheNumber\GuessTheNumberStateManager;
 
 class GuessTheNumberController extends BaseController
 {
+    private $gameService;
+
     public function __construct(
         protected GuessTheNumberStateManager $stateManager
     ) {
+        $this->gameService = $this->stateManager->service('gameService');
     }
 
     public function event(EventRequestFilter $request)
     {
-        $game = $this->stateManager->service('gameService')->getGame(); // phpcs:ignore
+        $game = $this->gameService->getGame(); // phpcs:ignore
         return $this->stateManager->getState($game, $request->eventInfo(), $this->name());
     }
 
     public function reset(): void
     {
-        $this->stateManager->reset($this->stateManager->service('gameService')->getGame()); // phpcs:ignore
+        $game = $this->gameService->getGame(); // phpcs:ignore
+        $this->stateManager->reset($game);
     }
 }

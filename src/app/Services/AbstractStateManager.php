@@ -28,7 +28,7 @@ abstract class AbstractStateManager
     {
         $modelClassName = get_class($object);
         if (!isset($this->statesMap[$modelClassName])) {
-            throw new \Exception("State for $modelClassName is not defined.");
+            $this->statesMap[$modelClassName] = ['state_context' => null];
         }
         $stateContext = $this->statesMap[$modelClassName]['state_context'];
         if (!$stateContext) {
