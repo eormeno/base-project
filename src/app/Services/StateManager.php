@@ -5,26 +5,21 @@ namespace App\Services;
 use App\FSM\IStateManagedModel;
 use App\Services\StateContextImpl;
 
-abstract class AbstractStateManager
+class StateManager
 {
     protected array $statesMap = [];
-    protected AbstractServiceManager $serviceManager;
 
-    public function service(string $name): AbstractServiceComponent
-    {
-        return $this->serviceManager->get($name);
-    }
-
-    public final function getState(
+    public final function getStatesViews(
+        AbstractServiceManager $serviceManager,
         IStateManagedModel $object,
         array $eventInfo = ['event' => null, 'data' => null],
         string $strControllerKebabCaseName
     ) {
-        $stateContext = $this->getStateContext($object);
+        $stateContext = $this->getStateContext($serviceManager, $object);
         return $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
     }
 
-    private function getStateContext(IStateManagedModel $object)
+    private function getStateContext(AbstractServiceManager $serviceManager, IStateManagedModel $object)
     {
         $modelClassName = get_class($object);
         if (!isset($this->statesMap[$modelClassName])) {
@@ -32,15 +27,15 @@ abstract class AbstractStateManager
         }
         $stateContext = $this->statesMap[$modelClassName]['state_context'];
         if (!$stateContext) {
-            $stateContext = new StateContextImpl($this->serviceManager, $object);
+            $stateContext = new StateContextImpl($serviceManager, $object);
             $this->statesMap[$modelClassName]['state_context'] = $stateContext;
         }
         return $stateContext;
     }
 
-    public final function reset(IStateManagedModel $object)
+    public final function reset(AbstractServiceManager $serviceManager, IStateManagedModel $object)
     {
-        $stateContext = $this->getStateContext($object);
+        $stateContext = $this->getStateContext($serviceManager, $object);
         $stateContext->reset();
     }
 }
