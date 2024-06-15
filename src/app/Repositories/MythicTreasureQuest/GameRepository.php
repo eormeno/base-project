@@ -25,20 +25,10 @@ class GameRepository extends AbstractServiceComponent
     public function getMap(): Map
     {
         $game = $this->getGame();
-        // try to parse the json map file
-        $map = Map::fromJson($game->map);
+        $map = Map::fromJson($game->map, 8, 8);
+        $game->map = $map->jsonSerialize();
+        $game->save();
         return $map;
     }
-
-    private function generate(): void
-    {
-        $this->tiles = [];
-        for ($y = 0; $y < $this->height; $y++) {
-            for ($x = 0; $x < $this->width; $x++) {
-                $this->tiles[] = new Tile(['id' => $x + $y * $this->width]);
-            }
-        }
-    }
-
 
 }
