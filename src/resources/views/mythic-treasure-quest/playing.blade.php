@@ -12,8 +12,8 @@
     <div class="grid p-2 grid-cols-{{ $width }}">
         @for ($i = 0; $i < $width; $i++)
             @for ($j = 0; $j < $height; $j++)
-                <div id="tile_{{ $i * $width + $j }}"
-                    class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center">
+                <div class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
+                    <x-state-renderer name="tile" :id="$i * $width + $j" />
                 </div>
             @endfor
         @endfor
