@@ -1,4 +1,4 @@
-<div id="toast-{{ $name }}" toast="{{ $name }}">
+<div id="toast-{{ $name }}" toast="{{ $name }}" style="display: none">
     {{ $slot }}
 </div>
 

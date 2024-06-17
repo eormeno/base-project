@@ -19,10 +19,19 @@ class StateManager
         return $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
     }
 
+    public final function registerModel(AbstractServiceManager $serviceManager, IStateManagedModel $object)
+    {
+        $modelClassName = get_class($object);
+
+
+
+    }
+
     private function getStateContext(AbstractServiceManager $serviceManager, IStateManagedModel $object)
     {
         $modelClassName = get_class($object);
         if (!isset($this->statesMap[$modelClassName])) {
+            $pair = ['model_class_name' => $modelClassName, 'state_context' => null];
             $this->statesMap[$modelClassName] = ['state_context' => null];
         }
         $stateContext = $this->statesMap[$modelClassName]['state_context'];

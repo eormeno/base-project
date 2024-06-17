@@ -16,18 +16,20 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected ?StateInterface $__state = null;
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateStorage;
+    protected int $id;
 
     public function __construct(
         AbstractServiceManager $serviceManager,
         IStateManagedModel $object
     ) {
         $this->serviceManager = $serviceManager;
+        $this->id = $object->getId();
         $this->stateStorage = new StateUpdateHelper($object);
     }
 
     private function setState(ReflectionClass $reflection_state_class): void
     {
-        $new_instance = StatesLocalCache::getStateInstance($reflection_state_class);
+        $new_instance = StatesLocalCache::getStateInstance($reflection_state_class, $this->id);
         $new_instance->setContext($this);
         if ($new_instance->isNeedRestoring()) {
             $new_instance->setNeedRestoring(false);
@@ -65,7 +67,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected function restoreState(): void
     {
         $reflection_state_class = $this->stateStorage->readState();
-        $sta_registered = StatesLocalCache::findRegisteredStateInstance($reflection_state_class);
+        $sta_registered = StatesLocalCache::findRegisteredStateInstance($reflection_state_class, $this->id);
         $this->stateStorage->saveState($reflection_state_class);
         $this->setState($sta_registered::StateClass());
     }

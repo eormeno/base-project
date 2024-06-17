@@ -15,12 +15,6 @@
                 <div id="tile_{{ $i * $width + $j }}"
                     class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center">
                 </div>
-                <!--
-                <button
-                    class="text-xs w-12 h-12 bg-white border hover:bg-gray-300 border-gray-300 flex items-center justify-center"
-                    onclick="sendEvent('tile_click', { x: {{ $i }}, y: {{ $j }} })">
-                </button>
-            -->
             @endfor
         @endfor
     </div>

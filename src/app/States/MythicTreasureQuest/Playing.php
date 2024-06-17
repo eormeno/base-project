@@ -14,6 +14,8 @@ class Playing extends StateAbstractImpl
         $map = $this->context->gameRepository->getMap();
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
+
+        $map->getTiles();
     }
 
     public function onTileClickEvent(int $x, int $y): void
