@@ -7,6 +7,7 @@ use App\Services\StateContextImpl;
 
 class StateManager
 {
+    private const OBJECT_CONTEXT_KEY = 'objects_context';
     protected array $statesMap = [];
 
     public final function getStatesViews(
@@ -21,17 +22,34 @@ class StateManager
 
     public final function registerModel(AbstractServiceManager $serviceManager, IStateManagedModel $object)
     {
-        $modelClassName = get_class($object);
+        $strModelClassName = get_class($object);
+        $intId = $object->getId();
+        if (!session()->has(self::OBJECT_CONTEXT_KEY)) {
+            session()->put(self::OBJECT_CONTEXT_KEY, []);
+        }
+        $strObjectContextInstanceKey = $strModelClassName . $intId;
+        $arrObjectsContext = session(self::OBJECT_CONTEXT_KEY);
+        if (!array_key_exists($strObjectContextInstanceKey, $arrObjectsContext)) {
+            $stateContext = new StateContextImpl($serviceManager, $object);
+            $arrObjectsContext[$strObjectContextInstanceKey] = $stateContext;
+            session()->put(self::OBJECT_CONTEXT_KEY, $arrObjectsContext);
+        }
+    }
 
-
-
+    public function getModelContextByClassNameAndId(string $strModelClassName, int $intId)
+    {
+        $strObjectContextInstanceKey = $strModelClassName . $intId;
+        $arrObjectsContext = session(self::OBJECT_CONTEXT_KEY);
+        if (!array_key_exists($strObjectContextInstanceKey, $arrObjectsContext)) {
+            throw new \Exception("The object context with key $strObjectContextInstanceKey does not exist.");
+        }
+        return $arrObjectsContext[$strObjectContextInstanceKey];
     }
 
     private function getStateContext(AbstractServiceManager $serviceManager, IStateManagedModel $object)
     {
         $modelClassName = get_class($object);
         if (!isset($this->statesMap[$modelClassName])) {
-            $pair = ['model_class_name' => $modelClassName, 'state_context' => null];
             $this->statesMap[$modelClassName] = ['state_context' => null];
         }
         $stateContext = $this->statesMap[$modelClassName]['state_context'];
