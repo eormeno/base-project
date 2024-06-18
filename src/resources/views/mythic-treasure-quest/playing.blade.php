@@ -13,7 +13,13 @@
         @for ($i = 0; $i < $width; $i++)
             @for ($j = 0; $j < $height; $j++)
                 <div class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
+                    <!--
                     <x-state-renderer name="tile" :id="$i * $width + $j" />
+                    -->
+                    <!-- a button to click on
+                    <button class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs"
+                        onclick="sendEvent('tile_click', { x: {{ $i }}, y: {{ $j }} })">
+                    -->
                 </div>
             @endfor
         @endfor

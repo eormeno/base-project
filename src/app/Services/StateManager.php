@@ -28,7 +28,9 @@ class StateManager
         $arrViews = [];
         foreach ($this->arrStatesMap as $stateContext) {
             $key = key($this->arrStatesMap);
-            $arrViews[$key] = $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
+            $view = $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
+            $view = base64_encode($view);
+            $arrViews[$key] = $view;
         }
         return $arrViews;
     }

@@ -1,19 +1,19 @@
 <x-guess-the-number-layout>
     <script>
-        window.addEventListener('DOMContentLoaded', (event) => {
-            previousData();
-        });
+        // window.addEventListener('DOMContentLoaded', (event) => {
+        //     previousData();
+        // });
 
         window.onload = function() {
             sendEvent();
         }
 
-        function previousData() {
-            let data = localStorage.getItem('{{ $routeName }}');
-            if (data) {
-                document.getElementById('main').innerHTML = data;
-            }
-        }
+        // function previousData() {
+        //     let data = localStorage.getItem('{{ $routeName }}');
+        //     if (data) {
+        //         document.getElementById('main').innerHTML = data;
+        //     }
+        // }
 
         function sendEvent(event, formData = {}) {
             event = event || '';
@@ -34,17 +34,26 @@
                     if (data.startsWith('<!DOCTYPE html>')) {
                         document.write(data);
                     } else {
-                        document.getElementById('main').innerHTML = data;
-                        // ensure the html data with script tags is executed
-                        document.getElementById('main').querySelectorAll('script').forEach(script => {
-                            const newScript = document.createElement('script');
-                            Array.from(script.attributes).forEach(attr => {
-                                newScript.setAttribute(attr.name, attr.value);
-                            });
-                            newScript.appendChild(document.createTextNode(script.innerHTML));
-                            script.parentNode.replaceChild(newScript, script);
-                        });
-                        localStorage.setItem('guess-the-number', data);
+                        $json = JSON.parse(data);
+                        // iterate over the json keys, find the element in the dom and update it
+                        for (const key in $json) {
+                            if ($json.hasOwnProperty(key)) {
+                                let element = $json[key];
+                                // decode the element that is in base64
+                                element = atob(element);
+                                document.getElementById(key).innerHTML = element;
+                                // ensure the html data with script tags is executed
+                                document.getElementById(key).querySelectorAll('script').forEach(script => {
+                                    const newScript = document.createElement('script');
+                                    Array.from(script.attributes).forEach(attr => {
+                                        newScript.setAttribute(attr.name, attr.value);
+                                    });
+                                    newScript.appendChild(document.createTextNode(script.innerHTML));
+                                    script.parentNode.replaceChild(newScript, script);
+                                });
+                                // localStorage.setItem('{{ $routeName }}', element);
+                            }
+                        }
                     }
                 });
         }
@@ -87,6 +96,5 @@
 
         <div id="main">
         </div>
-
     </div>
 </x-guess-the-number-layout>
