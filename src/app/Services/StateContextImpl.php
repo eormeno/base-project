@@ -16,12 +16,15 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected ?StateInterface $__state = null;
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateStorage;
+    protected StateManager $stateManager;
     protected int $id;
 
     public function __construct(
+        StateManager $stateManager,
         AbstractServiceManager $serviceManager,
         IStateManagedModel $object
     ) {
+        $this->stateManager = $stateManager;
         $this->serviceManager = $serviceManager;
         $this->id = $object->getId();
         $this->stateStorage = new StateUpdateHelper($object);

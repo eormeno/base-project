@@ -14,6 +14,16 @@ class CaseConverters
         return lcfirst(str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $input))));
     }
 
+    public static function toSnake(string $input): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
+    }
+
+    public static function toKebab(string $input): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $input));
+    }
+
     public static function camelToSnake(string $input): string
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));

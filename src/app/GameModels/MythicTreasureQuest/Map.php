@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\MythicTreasureQuest;
+namespace App\GameModels\MythicTreasureQuest;
 
 use JsonSerializable;
 
@@ -20,10 +20,8 @@ class Map implements JsonSerializable
         $data = json_decode($json, true);
         $width = $data['width'];
         $height = $data['height'];
-        $tiles = $data['tiles'];
-        $map = new Map($width, $height);
-        $map->tiles = array_map(fn($tile) => new Tile($tile), $tiles);
-        return $map;
+        $tils = $data['tiles'];
+        return new Map($width, $height, $tils);
     }
 
     public function getWidth(): int
@@ -41,10 +39,14 @@ class Map implements JsonSerializable
         return $this->tiles;
     }
 
-    public function __construct(int $width, int $height)
+    public function __construct(int $width, int $height, array $tilesAsArray = [])
     {
         $this->width = $width;
         $this->height = $height;
+        $this->tiles = [];
+        foreach ($tilesAsArray as $tileAsArray) {
+            $this->tiles[] = new Tile($tileAsArray);
+        }
     }
 
     private function getTileAt(int $x, int $y): Tile

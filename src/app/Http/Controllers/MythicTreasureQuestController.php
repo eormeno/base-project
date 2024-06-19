@@ -18,14 +18,7 @@ class MythicTreasureQuestController extends BaseController
     {
         $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
         $this->stateManager->enqueueForRendering($this->serviceManager, $game, 'main');
-        $views = $this->stateManager->getAllStatesViews($request->eventInfo(), $this->name());
-        return $views;
-        // return $this->stateManager->getStatesViews(
-        //     $this->serviceManager,
-        //     $game,
-        //     $request->eventInfo(),
-        //     $this->name()
-        // );
+        return $this->stateManager->getAllStatesViews($request->eventInfo(), $this->name());
     }
 
     public function reset(): void

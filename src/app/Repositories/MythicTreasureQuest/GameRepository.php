@@ -2,10 +2,9 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
-use App\Models\MythicTreasureQuest\Map;
 use App\Models\MythicTreasureQuestGame;
-use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
+use App\GameModels\MythicTreasureQuest\Map;
 
 class GameRepository extends AbstractServiceComponent
 {
@@ -25,9 +24,10 @@ class GameRepository extends AbstractServiceComponent
     public function getMap(): Map
     {
         $game = $this->getGame();
-        $map = Map::fromJson($game->map, 8, 8);
-        $game->map = $map->jsonSerialize();
-        $game->save();
+        $json = $game->map;
+        $map = Map::fromJson($json, 8, 8);
+        // $game->map = $map->jsonSerialize();
+        // $game->save();
         return $map;
     }
 

@@ -10,7 +10,13 @@
 
 <div class="bg-gray-100 flex items-center justify-center">
     <div class="grid p-2 grid-cols-{{ $width }}">
-        @for ($i = 0; $i < $width; $i++)
+        <!-- iterate all the $list -->
+        @foreach ($list as $item)
+            <div class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
+                <div id="{{ $item }}"></div>
+            </div>
+        @endforeach
+        {{-- @for ($i = 0; $i < $width; $i++)
             @for ($j = 0; $j < $height; $j++)
                 <div class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
                     <!--
@@ -22,6 +28,6 @@
                     -->
                 </div>
             @endfor
-        @endfor
+        @endfor --}}
     </div>
 </div>
