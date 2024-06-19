@@ -1,19 +1,19 @@
 <x-guess-the-number-layout>
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
-            previousData();
+            // previousData();
         });
 
         window.onload = function() {
             sendEvent();
         }
 
-        function previousData() {
-            let data = localStorage.getItem('{{ $routeName }}');
-            if (data) {
-                document.getElementById('main').innerHTML = data;
-            }
-        }
+        // function previousData() {
+        //     let data = localStorage.getItem('{{ $routeName }}');
+        //     if (data) {
+        //         document.getElementById('main').innerHTML = data;
+        //     }
+        // }
 
         function sendEvent(event, formData = {}) {
             event = event || '';
@@ -34,19 +34,38 @@
                     if (data.startsWith('<!DOCTYPE html>')) {
                         document.write(data);
                     } else {
-                        document.getElementById('main').innerHTML = data;
-                        // ensure the html data with script tags is executed
-                        document.getElementById('main').querySelectorAll('script').forEach(script => {
-                            const newScript = document.createElement('script');
-                            Array.from(script.attributes).forEach(attr => {
-                                newScript.setAttribute(attr.name, attr.value);
-                            });
-                            newScript.appendChild(document.createTextNode(script.innerHTML));
-                            script.parentNode.replaceChild(newScript, script);
-                        });
-                        localStorage.setItem('guess-the-number', data);
+                        json = JSON.parse(data);
+                        // iterate over the json keys, find the element in the dom and update it
+                        for (const key in json) {
+                            const element = document.getElementById(key);
+                            if (element) {
+                                element.innerHTML = decodeBase64(json[key])
+                                runScripts(element);
+                                // localStorage.setItem('{{ $routeName }}', element);
+                            }
+                        }
                     }
                 });
+        }
+
+        function decodeBase64(data) {
+            const binaryString = atob(data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return new TextDecoder().decode(bytes);
+        }
+
+        function runScripts(domElement) {
+            domElement.querySelectorAll('script').forEach(script => {
+                const newScript = document.createElement('script');
+                Array.from(script.attributes).forEach(attr => {
+                    newScript.setAttribute(attr.name, attr.value);
+                });
+                newScript.appendChild(document.createTextNode(script.innerHTML));
+                script.parentNode.replaceChild(newScript, script);
+            });
         }
     </script>
 

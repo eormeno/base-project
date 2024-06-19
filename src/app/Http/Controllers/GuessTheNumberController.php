@@ -17,13 +17,8 @@ class GuessTheNumberController extends BaseController
     public function event(EventRequestFilter $request)
     {
         $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
-        $this->stateManager->enqueueForRendering($this->serviceManager, $game);
-        return $this->stateManager->getStatesViews(
-            $this->serviceManager,
-            $game,
-            $request->eventInfo(),
-            $this->name()
-        );
+        $this->stateManager->enqueueForRendering($this->serviceManager, $game, 'main');
+        return $this->stateManager->getAllStatesViews($request->eventInfo(), $this->name());
     }
 
     public function reset(): void
