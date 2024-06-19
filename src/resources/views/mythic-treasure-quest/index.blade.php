@@ -15,7 +15,23 @@
         //     }
         // }
 
+        function findParentWithKey(element) {
+            let parent = element.parentElement;
+            while (parent) {
+                if (parent.getAttribute('key')) {
+                    return parent;
+                }
+                parent = parent.parentElement;
+            }
+            return null;
+        }
+
         function sendEvent(event, formData = {}) {
+            // get the element that triggered this function
+            const keyParent = findParentWithKey(document.activeElement);
+            const source = keyParent ? keyParent.getAttribute('key') : null;
+            console.log('source: ', source);
+
             event = event || '';
             fetch("{{ route($routeName) }}", {
                     method: 'POST',
@@ -25,6 +41,7 @@
                     },
                     body: JSON.stringify({
                         event: event,
+                        source: source,
                         data: formData
                     })
                 })
@@ -34,19 +51,17 @@
                     if (data.startsWith('<!DOCTYPE html>')) {
                         document.write(data);
                     } else {
-                        try {
-                            json = JSON.parse(data);
-                            // iterate over the json keys, find the element in the dom and update it
-                            for (const key in json) {
-                                const element = document.getElementById(key);
-                                if (element) {
-                                    element.innerHTML = decodeBase64(json[key])
-                                    runScripts(element);
-                                    // localStorage.setItem('{{ $routeName }}', element);
-                                }
+                        json = JSON.parse(data);
+                        // iterate over the json keys, find the element in the dom and update it
+                        for (const key in json) {
+                            const element = document.getElementById(key);
+                            if (element) {
+                                $html = decodeBase64(json[key]);
+                                $html = '<div key="' + key + '">' + $html + '</div>';
+                                element.innerHTML = $html;
+                                runScripts(element);
+                                // localStorage.setItem('{{ $routeName }}', element);
                             }
-                        } catch (e) {
-                            document.write(data);
                         }
                     }
                 });

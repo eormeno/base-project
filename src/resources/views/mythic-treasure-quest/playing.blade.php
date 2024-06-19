@@ -12,10 +12,8 @@
     <div class="grid p-2 grid-cols-{{ $width }}">
         <!-- iterate all the $list -->
         @foreach ($list as $item)
-            <div class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
-                <button onclick="sendEvent('ddd')">
-                    <div id="{{ $item }}"></div>
-                </button>
+            <div id="{{ $item }}"
+                class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
             </div>
         @endforeach
         {{-- @for ($i = 0; $i < $width; $i++)
