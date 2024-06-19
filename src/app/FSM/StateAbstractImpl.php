@@ -72,16 +72,12 @@ abstract class StateAbstractImpl implements StateInterface
         }
         $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
         if (method_exists($this, $method)) {
-            try {
-                $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
-                if ($ref_cls) {
-                    return $ref_cls;
-                }
-            } catch (\Exception $e) {
-                $this->errorToast($e->getMessage());
+            $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
+            if ($ref_cls) {
+                return $ref_cls;
             }
         }
-        return self::StateClass();
+        return $this->passTo();
     }
 
     public function view(string $controller_name)

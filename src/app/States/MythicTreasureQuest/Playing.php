@@ -19,8 +19,8 @@ class Playing extends StateAbstractImpl
         $this->height = $map->getHeight();
     }
 
-    public function onTileClickEvent(int $x, int $y): void
-    {
-        $this->warningToast('You clicked on tile (' . $x . ', ' . $y . ')');
-    }
+    // public function onTileClickEvent(int $x, int $y): void
+    // {
+    //     $this->warningToast('You clicked on tile (' . $x . ', ' . $y . ')');
+    // }
 }
