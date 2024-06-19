@@ -19,7 +19,8 @@ class StatesLocalCache
     public static function findRegisteredStateInstance(ReflectionClass $rflStateClass, int $id): StateInterface
     {
         if (!in_array(StateInterface::class, $rflStateClass->getInterfaceNames())) {
-            throw new \Exception("The state class must implement the StateInterface.");
+            $strShortName = $rflStateClass->getShortName();
+            throw new \Exception("The state class [$strShortName] must implement the StateInterface.");
         }
         $isNeedRestoring = false;
         if (!session()->has(self::INSTANCED_STATES_KEY)) {

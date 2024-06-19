@@ -36,7 +36,6 @@
                     } else {
                         try {
                             json = JSON.parse(data);
-                            console.log(json);
                             // iterate over the json keys, find the element in the dom and update it
                             for (const key in json) {
                                 const element = document.getElementById(key);

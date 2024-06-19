@@ -17,24 +17,16 @@ class StateManager
         string $strControllerKebabCaseName
     ) {
         $arrViews = [];
-        $i = 0;
-        $length = count($this->arrStatesMap);
-        while ($i < $length) {
-            $stateContext = $this->arrStatesMap[$i];
+        reset($this->arrStatesMap);
+        $key = key($this->arrStatesMap);
+        while($key) {
+            $stateContext = $this->arrStatesMap[$key];
             $view = $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
-            $length = count($this->arrStatesMap);
             $view = base64_encode($view);
-            $arrViews[] = $view;
-            $i++;
+            $arrViews[$key] = $view;
+            next($this->arrStatesMap);
+            $key = key($this->arrStatesMap);
         }
-
-
-        // foreach ($this->arrStatesMap as $stateContext) {
-        //     $key = key($this->arrStatesMap);
-        //     $view = $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
-        //     $view = base64_encode($view);
-        //     $arrViews[$key] = $view;
-        // }
         return $arrViews;
     }
 

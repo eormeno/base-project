@@ -4,6 +4,7 @@ namespace App\GameModels\MythicTreasureQuest;
 
 use ReflectionClass;
 use JsonSerializable;
+use App\States\Tile\Initial;
 use App\FSM\IStateManagedModel;
 
 class Tile implements JsonSerializable, IStateManagedModel {
@@ -20,7 +21,7 @@ class Tile implements JsonSerializable, IStateManagedModel {
     }
 
     public static function getInitialStateClass(): ReflectionClass {
-        return new ReflectionClass(Tile::class);
+        return Initial::StateClass();
     }
 
     public function getState(): string|null {

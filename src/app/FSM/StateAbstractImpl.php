@@ -59,7 +59,7 @@ abstract class StateAbstractImpl implements StateInterface
         return self::StateClass();
     }
 
-    public function handleRequest(array $eventInfo) : ReflectionClass
+    public function handleRequest(array $eventInfo): ReflectionClass
     {
         $event = $eventInfo['event'];
         $data = $eventInfo['data'];
@@ -72,14 +72,16 @@ abstract class StateAbstractImpl implements StateInterface
         }
         $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
         if (method_exists($this, $method)) {
-            $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
-            if ($ref_cls) {
-                return $ref_cls;
+            try {
+                $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
+                if ($ref_cls) {
+                    return $ref_cls;
+                }
+            } catch (\Exception $e) {
+                $this->errorToast($e->getMessage());
             }
-            return self::StateClass();
-        } else {
-            throw new \Exception("Invalid event: $event");
         }
+        return self::StateClass();
     }
 
     public function view(string $controller_name)
