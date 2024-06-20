@@ -5,6 +5,7 @@ namespace App\Helpers;
 use ReflectionClass;
 use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
+use App\FSM\StatesChangeEventListeners;
 
 class StateUpdateHelper
 {
@@ -29,13 +30,16 @@ class StateUpdateHelper
 
     public function saveState(ReflectionClass|null $rfl_state): void
     {
-        if ($rfl_state == $this->readState()) {
+        $oldState = $this->readState();
+        $newState = $rfl_state;
+        if ($newState == $oldState) {
             return;
         }
         if ($rfl_state) {
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }
         $this->object->updateState($rfl_state);
+        StatesChangeEventListeners::notify($this->object, $oldState, $newState);
     }
 
     private function stateNameToClass(string|null $dashed_state_name): ReflectionClass

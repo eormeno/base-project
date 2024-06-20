@@ -39,9 +39,9 @@ class Tile implements JsonSerializable, IStateManagedModel
     public function updateState(string|null $state): void
     {
         $this->state = $state;
-        if ($this->getId() === 1) {
-            $this->log("Tile state updated to: $state");
-        }
+        // if ($this->getId() === 1) {
+        //     $this->log("Tile state updated to: $state");
+        // }
     }
 
     public function jsonSerialize(): array

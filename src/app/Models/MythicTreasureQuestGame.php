@@ -22,6 +22,11 @@ class MythicTreasureQuestGame extends Model implements IStateManagedModel
         return $this->id;
     }
 
+    protected $casts = [
+        'map' => 'array',
+        'inventory' => 'array',
+    ];
+
     public static function getInitialStateClass(): ReflectionClass
     {
         return Initial::StateClass();

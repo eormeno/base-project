@@ -10,14 +10,13 @@ class Map implements JsonSerializable
     private int $width;
     private int $height;
 
-    public static function fromJson(string|null $json, int $width = 8, int $height = 8): Map
+    public static function fromJson(array|null $data, int $width = 8, int $height = 8): Map
     {
-        if ($json === null) {
+        if ($data === null) {
             $map = new Map($width, $height);
             $map->tiles = self::generateTiles($width, $height);
             return $map;
         }
-        $data = json_decode($json, true);
         $width = $data['width'];
         $height = $data['height'];
         $tils = $data['tiles'];

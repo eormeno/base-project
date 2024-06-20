@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FSM\StatesChangeEventListeners;
 use App\Services\StateManager;
 use App\Http\Requests\EventRequestFilter;
 use App\Services\MythicTreasureQuest\MythicTreasureQuestServiceManager;
@@ -12,6 +13,8 @@ class MythicTreasureQuestController extends BaseController
         protected StateManager $stateManager,
         protected MythicTreasureQuestServiceManager $serviceManager
     ) {
+        //todo: try to remove this
+        StatesChangeEventListeners::clear();
     }
 
     public function event(EventRequestFilter $request)

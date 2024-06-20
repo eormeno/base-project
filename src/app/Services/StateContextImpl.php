@@ -66,12 +66,12 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         bool $debug,
         string $message = "",
         string $strShortType = "Tile",
-        int $id = 1
+        int $id = 0
     ) {
         if (!$debug) {
             return;
         }
-        if ($this->shortObjectType == $strShortType && $this->id == $id) {
+        if ($this->shortObjectType == $strShortType && ($this->id == $id || $id == 0)) {
             $this->log("$message {$this->shortObjectType}:{$this->id}");
         }
     }
@@ -86,7 +86,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
             $this->restoreState();
             $current_state = $this->__state;
             $stateClass = $current_state::StateClass()->getShortName();
-            $this->debugObject(true, "$stateClass");
+            $this->debugObject(false, "$stateClass");
             $this->setState($current_state->handleRequest($eventInfo));
             $changed_state = $this->__state;
             if ($changed_state != $current_state) {
