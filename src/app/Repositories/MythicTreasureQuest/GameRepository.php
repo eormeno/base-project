@@ -4,7 +4,7 @@ namespace App\Repositories\MythicTreasureQuest;
 
 use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceComponent;
-use App\GameModels\MythicTreasureQuest\Map;
+use App\Models\MythicTreasureQuest\Map;
 
 class GameRepository extends AbstractServiceComponent
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GameModels\MythicTreasureQuest;
+namespace App\Models\MythicTreasureQuest;
 
 use ReflectionClass;
 use JsonSerializable;
