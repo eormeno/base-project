@@ -8,6 +8,8 @@ use App\Models\MythicTreasureQuest\Map;
 
 class GameRepository extends AbstractServiceComponent
 {
+    private Map $map;
+
     public function createEmptyNewGame(): void
     {
         MythicTreasureQuestGame::factory()->for(auth()->user())->create();
@@ -25,10 +27,15 @@ class GameRepository extends AbstractServiceComponent
     {
         $game = $this->getGame();
         $json = $game->map;
-        $map = Map::fromJson($json, 8, 8);
-        // $game->map = $map->jsonSerialize();
-        // $game->save();
-        return $map;
+        $this->map = Map::fromJson($json, 8, 8); // phpcs:ignore
+        return $this->map;
+    }
+
+    public function saveMap(): void
+    {
+        $game = $this->getGame();
+        $game->map = $this->map->jsonSerialize();
+        $game->save();
     }
 
 }

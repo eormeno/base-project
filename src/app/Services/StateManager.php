@@ -2,30 +2,28 @@
 
 namespace App\Services;
 
-use App\Utils\CaseConverters;
 use ReflectionClass;
+use App\Utils\Constants;
+use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
 use App\Services\StateContextImpl;
 
 class StateManager
 {
-    private const EMPTY_EVENT = ['event' => null, 'data' => null];
     protected array $arrStatesMap = [];
 
     public final function getAllStatesViews(
-        array $eventInfo = self::EMPTY_EVENT,
-        string $strControllerKebabCaseName
+        array $eventInfo = Constants::EMPTY_EVENT,
+        string $strControllerKebabName
     ) {
         $arrViews = [];
         reset($this->arrStatesMap);
-        $key = key($this->arrStatesMap);
-        while($key) {
+        while ($key = key($this->arrStatesMap)) {
             $stateContext = $this->arrStatesMap[$key];
-            $view = $stateContext->request($eventInfo)->view($strControllerKebabCaseName);
+            $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
             $view = base64_encode($view);
             $arrViews[$key] = $view;
             next($this->arrStatesMap);
-            $key = key($this->arrStatesMap);
         }
         return $arrViews;
     }
@@ -54,34 +52,18 @@ class StateManager
         IStateManagedModel $object,
         string|null $alias = null
     ) {
-        $strObjectContextInstanceKey = "";
-        if ($alias) {
-            $strObjectContextInstanceKey = $alias;
-        } else {
-            $strObjectContextInstanceKey = get_class($object) . $object->getId();
-        }
+        $strObjectContextInstanceKey = $alias ?? get_class($object) . $object->getId();
         if (!array_key_exists($strObjectContextInstanceKey, $this->arrStatesMap)) {
             $this->arrStatesMap[$strObjectContextInstanceKey] = new StateContextImpl($this, $serviceManager, $object);
         }
     }
 
-    private function getStateContext(AbstractServiceManager $serviceManager, IStateManagedModel $object)
+    public final function reset()
     {
-        $modelClassName = get_class($object);
-        if (!isset($this->arrStatesMap[$modelClassName])) {
-            $this->arrStatesMap[$modelClassName] = ['state_context' => null];
+        reset($this->arrStatesMap);
+        while ($key = key($this->arrStatesMap)) {
+            $this->arrStatesMap[$key]->reset();
+            next($this->arrStatesMap);
         }
-        $stateContext = $this->arrStatesMap[$modelClassName]['state_context'];
-        if (!$stateContext) {
-            $stateContext = new StateContextImpl($this, $serviceManager, $object);
-            $this->arrStatesMap[$modelClassName]['state_context'] = $stateContext;
-        }
-        return $stateContext;
-    }
-
-    public final function reset(AbstractServiceManager $serviceManager, IStateManagedModel $object)
-    {
-        $stateContext = $this->getStateContext($serviceManager, $object);
-        $stateContext->reset();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\FSM;
 
 use ReflectionClass;
+use App\Traits\DebugHelper;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
@@ -10,6 +11,7 @@ use App\Utils\ReflectionUtils;
 abstract class StateAbstractImpl implements StateInterface
 {
     use ToastTrigger;
+    use DebugHelper;
 
     protected StateContextInterface $context;
     public bool $need_restoring = false;
@@ -34,6 +36,7 @@ abstract class StateAbstractImpl implements StateInterface
         $this->context = $content;
     }
 
+    #region Callbacks
     public function onReload(): void
     {
     }
@@ -58,11 +61,13 @@ abstract class StateAbstractImpl implements StateInterface
     {
         return self::StateClass();
     }
+    #endregion
 
     public function handleRequest(array $eventInfo): ReflectionClass
     {
         $event = $eventInfo['event'];
         $data = $eventInfo['data'];
+        $source = $eventInfo['source'];
         if ($event === null) {
             $rfl_class = $this->passTo();
             if ($rfl_class == self::StateClass()) {
@@ -70,8 +75,15 @@ abstract class StateAbstractImpl implements StateInterface
             }
             return $rfl_class;
         }
-        $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
+        if ($source) {
+            $namespace = get_class($this);
+            $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
+            //$this->log("Firing $namespace->$method from $source.");
+        }
         if (method_exists($this, $method)) {
+            // if ($source) {
+            //     $this->log("Event $event source is $source in $namespace.");
+            // }
             $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
             if ($ref_cls) {
                 return $ref_cls;
@@ -84,11 +96,11 @@ abstract class StateAbstractImpl implements StateInterface
     {
         $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
         //todo: check if view exists before returning and resolve the view name
-        $view = view("$controller_name.$view_name", $this->toArray());
+        $view = view("$controller_name.$view_name", $this->publicPropertiesToArray());
         return $view;
     }
 
-    public function toArray(): array
+    private function publicPropertiesToArray(): array
     {
         $properties = get_object_vars($this);
         $array = [];

@@ -16,6 +16,12 @@ trait ToastTrigger
         $name = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $name));
         $duration = $duration < 1000 ? 3000 : $duration;
         $events = session($session_storage, []);
+        // if toast_name is already in the session, ignore it
+        foreach ($events as $event) {
+            if ($event['name'] === 'toast' && $event['data']['toast_name'] === $name) {
+                //return;
+            }
+        }
         $events[] = [
             'name' => 'toast',
             'data' => [

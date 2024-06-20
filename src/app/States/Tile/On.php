@@ -6,7 +6,7 @@ use App\FSM\StateAbstractImpl;
 
 class On extends StateAbstractImpl
 {
-    public function onTileClickEvent()
+    public function onTileOnClickEvent()
     {
         return Off::StateClass();
     }

@@ -20,12 +20,14 @@ class EventRequestFilter extends FormRequest
     {
         $validated = $this->all();
         $event_name = $validated['event'] ?? null;
+        $eventSource = $validated['source'] ?? null;
         unset($validated['event']);
         unset($validated['_token']);
         unset($validated['_method']);
         unset($validated['submit']);
         $event = [
             'event' => $event_name,
+            'source' => $eventSource,
             'data' => $validated['data']
         ];
         return $event;

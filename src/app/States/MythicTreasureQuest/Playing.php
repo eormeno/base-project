@@ -8,7 +8,6 @@ class Playing extends StateAbstractImpl
 {
     public int $width = 8;
     public int $height = 8;
-
     public array $list = [];
 
     public function onRefresh(): void
@@ -19,8 +18,4 @@ class Playing extends StateAbstractImpl
         $this->height = $map->getHeight();
     }
 
-    // public function onTileClickEvent(int $x, int $y): void
-    // {
-    //     $this->warningToast('You clicked on tile (' . $x . ', ' . $y . ')');
-    // }
 }

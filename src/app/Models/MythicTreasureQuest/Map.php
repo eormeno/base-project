@@ -66,7 +66,6 @@ class Map implements JsonSerializable
         return $tiles;
     }
 
-
     public function jsonSerialize(): array
     {
         return [

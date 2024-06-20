@@ -29,6 +29,9 @@ class StateUpdateHelper
 
     public function saveState(ReflectionClass|null $rfl_state): void
     {
+        if ($rfl_state == $this->readState()) {
+            return;
+        }
         if ($rfl_state) {
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }

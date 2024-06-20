@@ -30,7 +30,7 @@
             // get the element that triggered this function
             const keyParent = findParentWithKey(document.activeElement);
             const source = keyParent ? keyParent.getAttribute('key') : null;
-            console.log('source: ', source);
+            // console.log('source: ', source);
 
             event = event || '';
             fetch("{{ route($routeName) }}", {
@@ -47,22 +47,26 @@
                 })
                 .then(response => response.text())
                 .then(data => {
-                    // if the data starts with a <!DOCTYPE html> tag, is an error page
-                    if (data.startsWith('<!DOCTYPE html>')) {
-                        document.write(data);
-                    } else {
-                        json = JSON.parse(data);
-                        // iterate over the json keys, find the element in the dom and update it
-                        for (const key in json) {
-                            const element = document.getElementById(key);
-                            if (element) {
-                                $html = decodeBase64(json[key]);
-                                $html = '<div key="' + key + '">' + $html + '</div>';
-                                element.innerHTML = $html;
-                                runScripts(element);
-                                // localStorage.setItem('{{ $routeName }}', element);
+                    try {
+                        // if the data starts with a <!DOCTYPE html> tag, is an error page
+                        if (data.startsWith('<!DOCTYPE html>')) {
+                            document.write(data);
+                        } else {
+                            json = JSON.parse(data);
+                            // iterate over the json keys, find the element in the dom and update it
+                            for (const key in json) {
+                                const element = document.getElementById(key);
+                                if (element) {
+                                    $html = decodeBase64(json[key]);
+                                    $html = '<div key="' + key + '">' + $html + '</div>';
+                                    element.innerHTML = $html;
+                                    runScripts(element);
+                                    // localStorage.setItem('{{ $routeName }}', element);
+                                }
                             }
                         }
+                    } catch (error) {
+                        document.write(data);
                     }
                 });
         }
@@ -125,5 +129,9 @@
 
         <div id="main">
         </div>
+
+        <a href="{{ route($routeName) }}/reset"
+            class="top-2 text-white bg-gray-600 px-2 py-1 rounded-sm hover:bg-gray-700 text-xs">Reset</a>
+
     </div>
 </x-guess-the-number-layout>

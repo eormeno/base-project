@@ -24,6 +24,7 @@ class MythicTreasureQuestController extends BaseController
     public function reset(): void
     {
         $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
-        $this->stateManager->reset($this->serviceManager, $game);
+        $this->stateManager->enqueueForRendering($this->serviceManager, $game, 'main');
+        $this->stateManager->reset();
     }
 }
