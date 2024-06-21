@@ -19,6 +19,7 @@ class StateManager
         $arrViews = [];
         reset($this->arrStatesMap);
         while ($key = key($this->arrStatesMap)) {
+            $eventInfo['destination'] = $key;
             $stateContext = $this->arrStatesMap[$key];
             $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
             $view = base64_encode($view);
@@ -30,17 +31,21 @@ class StateManager
 
     public final function enqueueAllForRendering(
         AbstractServiceManager $serviceManager,
-        array $arrObjects
+        array $arrObjects,
+        bool $isUseObjectAlias = true
     ) {
         $enqueuedObjectAliases = [];
         if (count($arrObjects) === 0) {
             return $enqueuedObjectAliases;
         }
-        $object = $arrObjects[0];
-        $rflClass = new ReflectionClass($object);
-        $strAliasPrefix = CaseConverters::toKebab($rflClass->getShortName());
+        $strAliasPrefix = '';
+        if ($isUseObjectAlias){
+            $object = $arrObjects[0];
+            $rflClass = new ReflectionClass($object);
+            $strAliasPrefix = CaseConverters::toKebab($rflClass->getShortName());
+        }
         foreach ($arrObjects as $object) {
-            $alias = $strAliasPrefix . $object->getId();
+            $alias = $isUseObjectAlias ? $strAliasPrefix . $object->getId() : null;
             $this->enqueueForRendering($serviceManager, $object, $alias);
             $enqueuedObjectAliases[] = $alias;
         }
@@ -52,9 +57,9 @@ class StateManager
         IStateManagedModel $object,
         string|null $alias = null
     ) {
-        $strObjectContextInstanceKey = $alias ?? get_class($object) . $object->getId();
-        if (!array_key_exists($strObjectContextInstanceKey, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strObjectContextInstanceKey] = new StateContextImpl($this, $serviceManager, $object);
+        $strAliasOrKey = $alias ?? get_class($object) . $object->getId();
+        if (!array_key_exists($strAliasOrKey, $this->arrStatesMap)) {
+            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $serviceManager, $object);
         }
     }
 

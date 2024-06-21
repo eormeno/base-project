@@ -78,10 +78,12 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
 
     public function request(array $eventInfo): StateInterface
     {
-
         $event = $eventInfo['event'];
         $source = $eventInfo['source'];
-        $this->debugObject(false, "Requesting state for event $event from $source");
+        $destination = $eventInfo['destination'];
+        if ($source == $destination) {
+            $this->debugObject(false, "Requesting state for event $event from $source");
+        }
         do {
             $this->restoreState();
             $current_state = $this->__state;

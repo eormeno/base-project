@@ -68,6 +68,7 @@ abstract class StateAbstractImpl implements StateInterface
         $event = $eventInfo['event'];
         $data = $eventInfo['data'];
         $source = $eventInfo['source'];
+        $destination = $eventInfo['destination'];
         if ($event === null) {
             $rfl_class = $this->passTo();
             if ($rfl_class == self::StateClass()) {
@@ -75,15 +76,11 @@ abstract class StateAbstractImpl implements StateInterface
             }
             return $rfl_class;
         }
-        if ($source) {
-            $namespace = get_class($this);
-            $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
-            //$this->log("Firing $namespace->$method from $source.");
+        if ($source != $destination) {
+            return $this->passTo();
         }
+        $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
         if (method_exists($this, $method)) {
-            // if ($source) {
-            //     $this->log("Event $event source is $source in $namespace.");
-            // }
             $ref_cls = ReflectionUtils::invokeMethod($this, $method, $data);
             if ($ref_cls) {
                 return $ref_cls;
