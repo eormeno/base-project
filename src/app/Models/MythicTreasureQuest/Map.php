@@ -59,7 +59,7 @@ class Map implements JsonSerializable
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $tile = new Tile(['id' => $x + $y * $width]);
-                $tiles[] = $tile->jsonSerialize();
+                $tiles[] = $tile;
             }
         }
         return $tiles;

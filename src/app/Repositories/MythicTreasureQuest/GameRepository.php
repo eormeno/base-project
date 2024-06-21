@@ -43,6 +43,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         $game = $this->getGame();
         $json = $game->map;
         $this->map = Map::fromJson($json, 8, 8);
+        $this->saveMap();
 
         $this->eventManager->add($this);
 

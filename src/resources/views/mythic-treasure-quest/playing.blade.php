@@ -13,7 +13,7 @@
         <!-- iterate all the $list -->
         @foreach ($list as $item)
             <div id="{{ $item }}"
-                class="w-10 h-10 border hover:bg-gray-300 flex items-center justify-center text-xs">
+                class="flex items-center justify-center">
             </div>
         @endforeach
         {{-- @for ($i = 0; $i < $width; $i++)
