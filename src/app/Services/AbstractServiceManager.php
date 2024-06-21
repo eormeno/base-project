@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use Exception;
+
 abstract class AbstractServiceManager
 {
     protected $services = [];
+    protected ?EventManager $eventManager = null;
 
     protected function addService(string $name, AbstractServiceComponent $service): void
     {
@@ -16,10 +19,21 @@ abstract class AbstractServiceManager
         return isset($this->services[$name]);
     }
 
+    public function __get($name)
+    {
+        if (property_exists($this, $name)) {
+            if ($name === 'eventManager' && $this->eventManager === null) {
+                $this->eventManager = new EventManager();
+            }
+            return $this->$name;
+        }
+        throw new Exception("Property $name does not exist");
+    }
+
     public function get(string $name): AbstractServiceComponent
     {
         if (!$this->hasService($name)) {
-            throw new \Exception("Service $name does not exist");
+            throw new Exception("Service $name does not exist");
         }
         return $this->services[$name];
     }

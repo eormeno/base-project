@@ -35,7 +35,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         $this->id = $object->getId();
         $this->objectType = get_class($object);
         $this->shortObjectType = (new ReflectionClass($object))->getShortName();
-        $this->stateUpdater = new StateUpdateHelper($object);
+        $this->stateUpdater = new StateUpdateHelper($serviceManager, $object);
     }
 
     private function setState(ReflectionClass $reflection_state_class): void

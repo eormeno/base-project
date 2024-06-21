@@ -5,15 +5,22 @@ namespace App\Helpers;
 use ReflectionClass;
 use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
-use App\FSM\StatesChangeEventListeners;
+use App\Services\AbstractServiceManager;
+use App\Services\EventManager;
 
 class StateUpdateHelper
 {
     protected IStateManagedModel $object;
+    protected AbstractServiceManager $serviceManager;
+    protected EventManager $eventManager;
 
-    public function __construct(IStateManagedModel $object)
-    {
+    public function __construct(
+        AbstractServiceManager $serviceManager,
+        IStateManagedModel $object
+    ) {
         $this->object = $object;
+        $this->serviceManager = $serviceManager;
+        $this->eventManager = $serviceManager->eventManager;
     }
 
     public function getInitialStateClass(): ReflectionClass
@@ -39,7 +46,7 @@ class StateUpdateHelper
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }
         $this->object->updateState($rfl_state);
-        StatesChangeEventListeners::notify($this->object, $oldState, $newState);
+        $this->eventManager->notify($this->object, $oldState, $newState);
     }
 
     private function stateNameToClass(string|null $dashed_state_name): ReflectionClass

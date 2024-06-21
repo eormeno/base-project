@@ -4,7 +4,7 @@ namespace App\Repositories\MythicTreasureQuest;
 
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
-use App\FSM\StatesChangeEventListeners;
+use App\Services\EventManager;
 use App\Models\MythicTreasureQuest\Map;
 use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceManager;
@@ -13,11 +13,13 @@ use App\Services\AbstractServiceComponent;
 class GameRepository extends AbstractServiceComponent implements IEventListener
 {
     private ?Map $map;
+    private EventManager $eventManager;
 
     public function __construct(AbstractServiceManager $serviceManager)
     {
         parent::__construct($serviceManager);
         $this->map = null;
+        $this->eventManager = $serviceManager->eventManager;
     }
 
     public function createEmptyNewGame(): void
@@ -41,7 +43,9 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         $game = $this->getGame();
         $json = $game->map;
         $this->map = Map::fromJson($json, 8, 8);
-        StatesChangeEventListeners::add($this);
+
+        $this->eventManager->add($this);
+
         return $this->map;
     }
 
