@@ -37,6 +37,23 @@ class Tile implements JsonSerializable, IStateManagedModel
         }
     }
 
+    public function __set($name, $value): void
+    {
+        switch ($name) {
+            case 'hasFlag':
+                $this->hasFlag = $value;
+                break;
+            case 'trapsAround':
+                $this->trapsAround = $value;
+                break;
+            case 'hasTrap':
+                $this->hasTrap = $value;
+                break;
+            default:
+                throw new \Exception("Property $name not found");
+        }
+    }
+
     public static function getInitialStateClass(): ReflectionClass
     {
         return Initial::StateClass();
@@ -67,6 +84,8 @@ class Tile implements JsonSerializable, IStateManagedModel
         return [
             'id' => $this->id,
             'trap' => $this->hasTrap,
+            'flag' => $this->hasFlag,
+            'trapsAround' => $this->trapsAround,
             'state' => $this->state,
         ];
     }

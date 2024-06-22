@@ -28,19 +28,33 @@ class MythicTreasureQuestGameFactory extends Factory
         $width = 8;
         $height = 8;
         $map = new Map($width, $height);
-        $randomPositions = $this->generateUniqueRandomPositions(5, $width, $height);
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
-                $hasTrap = $this->isPositionInArray($x, $y, $randomPositions);
                 $jsonTile = [
                     'id' => $y * $width + $x,
-                    'trap' => $hasTrap,
+                    'trap' => false,
+                    'flag' => false,
+                    'trapsAround' => 0,
                     'state' => null
                 ];
                 $map->addTile(Tile::fromJson($jsonTile));
             }
         }
+        $this->fillTraps(5, $map);
         return $map;
+    }
+
+    private function fillTraps(int $count, Map $map): void
+    {
+        $width = $map->getWidth();
+        $height = $map->getHeight();
+        $randomPositions = $this->generateUniqueRandomPositions($count, $width, $height);
+        foreach ($randomPositions as $pos) {
+            $x = $pos['x'];
+            $y = $pos['y'];
+            $tile = $map->getTile($x, $y);
+            $tile->hasTrap = true;
+        }
     }
 
     private function isPositionInArray(int $x, int $y, array $positions): bool

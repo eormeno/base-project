@@ -44,6 +44,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     {
         $new_instance = StatesLocalCache::getStateInstance($reflection_state_class, $this->id);
         $new_instance->setContext($this);
+        $new_instance->setManagedModel($this->object);
         if ($new_instance->isNeedRestoring()) {
             $new_instance->setNeedRestoring(false);
             $new_instance->onReload();

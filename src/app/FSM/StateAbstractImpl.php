@@ -3,7 +3,6 @@
 namespace App\FSM;
 
 use ReflectionClass;
-use App\Traits\DebugHelper;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
@@ -11,9 +10,9 @@ use App\Utils\ReflectionUtils;
 abstract class StateAbstractImpl implements StateInterface
 {
     use ToastTrigger;
-    use DebugHelper;
 
     protected StateContextInterface $context;
+    public IStateManagedModel $model;
     public bool $need_restoring = false;
 
     public static function StateClass(): ReflectionClass
@@ -29,6 +28,11 @@ abstract class StateAbstractImpl implements StateInterface
     public function setNeedRestoring(bool $value): void
     {
         $this->need_restoring = $value;
+    }
+
+    public function setManagedModel(IStateManagedModel $model)
+    {
+        $this->model = $model;
     }
 
     public function setContext(StateContextInterface $content)
