@@ -12,13 +12,13 @@ use App\Services\AbstractServiceComponent;
 
 class GameRepository extends AbstractServiceComponent implements IEventListener
 {
-    private ?Map $map;
+    private ?Map $localInMemoryMap;
     private EventManager $eventManager;
 
     public function __construct(AbstractServiceManager $serviceManager)
     {
         parent::__construct($serviceManager);
-        $this->map = null;
+        $this->localInMemoryMap = null;
         $this->eventManager = $serviceManager->eventManager;
     }
 
@@ -37,17 +37,13 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
 
     public function getMap(): Map
     {
-        if ($this->map) {
-            return $this->map;
+        if ($this->localInMemoryMap) {
+            return $this->localInMemoryMap;
         }
         $game = $this->getGame();
-        $json = $game->map;
-        $this->map = Map::fromJson($json, 8, 8);
-        $this->saveMap();
-
+        $this->localInMemoryMap = Map::fromJson($game->map);
         $this->eventManager->add($this);
-
-        return $this->map;
+        return $this->localInMemoryMap;
     }
 
     public function onEvent(StateChangedEvent $event): void
@@ -63,7 +59,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
     public function saveMap(): void
     {
         $game = $this->getGame();
-        $game->map = $this->map->jsonSerialize();
+        $game->map = $this->localInMemoryMap->jsonSerialize();
         $game->save();
     }
 
