@@ -32,6 +32,8 @@ class Tile implements JsonSerializable, IStateManagedModel
                 return $this->trapsAround;
             case 'hasTrap':
                 return $this->hasTrap;
+            case 'state':
+                return $this->state;
             default:
                 throw new \Exception("Property $name not found");
         }
@@ -48,6 +50,9 @@ class Tile implements JsonSerializable, IStateManagedModel
                 break;
             case 'hasTrap':
                 $this->hasTrap = $value;
+                break;
+            case 'state':
+                $this->state = $value;
                 break;
             default:
                 throw new \Exception("Property $name not found");

@@ -1,6 +1,9 @@
 <button onclick="sendEvent('tile_on_click')">
-    <div
-        class="w-10 h-10 bg-cyan-200 text-gray-700 text-xs border border-gray-500 hover:bg-cyan-100 flex items-center justify-center">
-        <p>{{ $showTrap }}</p>
+    <div class="w-10 h-10 bg-slate-700 text-gray-300 text-xs hover:bg-slate-500 flex items-center justify-center">
+        <p>
+            @if (!$hasTrap && $trapsAround > 0)
+                {{ $trapsAround }}
+            @endif
+        </p>
     </div>
 </button>

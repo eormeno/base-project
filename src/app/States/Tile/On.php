@@ -6,11 +6,13 @@ use App\FSM\StateAbstractImpl;
 
 class On extends StateAbstractImpl
 {
-    public string $showTrap = '';
+    public bool $hasTrap = false;
+    public int $trapsAround = 0;
 
     public function onRefresh(): void
     {
-        $this->showTrap = $this->model->hasTrap ? 'x' : '';
+        $this->hasTrap = $this->model->hasTrap;
+        $this->trapsAround = $this->model->trapsAround;
     }
 
     public function onTileOnClickEvent()

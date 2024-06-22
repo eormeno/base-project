@@ -8,11 +8,10 @@
 <div class="grid-cols-11"></div>
 <div class="grid-cols-12"></div>
 
-<div class="bg-gray-100 flex items-center justify-center">
-    <div class="grid p-2 grid-cols-{{ $width }}">
+<div class="flex items-center justify-center">
+    <div class="grid grid-cols-{{ $width }}">
         @foreach ($list as $item)
-            <div id="{{ $item }}"
-                class="flex items-center justify-center">
+            <div id="{{ $item }}">
             </div>
         @endforeach
     </div>

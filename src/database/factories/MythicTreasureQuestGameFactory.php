@@ -35,12 +35,12 @@ class MythicTreasureQuestGameFactory extends Factory
                     'trap' => false,
                     'flag' => false,
                     'trapsAround' => 0,
-                    'state' => null
+                    'state' => 'off'
                 ];
                 $map->addTile(Tile::fromJson($jsonTile));
             }
         }
-        $this->fillTraps(5, $map);
+        $this->fillTraps(8, $map);
         return $map;
     }
 
@@ -54,6 +54,25 @@ class MythicTreasureQuestGameFactory extends Factory
             $y = $pos['y'];
             $tile = $map->getTile($x, $y);
             $tile->hasTrap = true;
+            $this->incrementTrapsAround($map, $x, $y);
+        }
+    }
+
+    /**
+     * Increments the number of traps around each tile
+     */
+    private function incrementTrapsAround(Map $map, int $x, int $y): void
+    {
+        $width = $map->getWidth();
+        $height = $map->getHeight();
+        $directions = [[-1, -1],[0, -1], [1, -1],[-1, 0],[1, 0],[-1, 1], [0, 1],[1, 1]];
+        foreach ($directions as $dir) {
+            $newX = $x + $dir[0];
+            $newY = $y + $dir[1];
+            if ($newX >= 0 && $newX < $width && $newY >= 0 && $newY < $height) {
+                $tile = $map->getTile($newX, $newY);
+                $tile->trapsAround++;
+            }
         }
     }
 
