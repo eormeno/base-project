@@ -43,6 +43,11 @@ class GuessTheNumberGame extends Model implements IStateManagedModel
         $this->update(['state' => $state]);
     }
 
+    public function __get($key): mixed
+    {
+        return $this->getAttribute($key);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

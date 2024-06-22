@@ -19,6 +19,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateUpdater;
     protected StateManager $stateManager;
+    protected IStateManagedModel $object;
     protected int $id;
     protected string $objectType;
     protected string $shortObjectType;
@@ -32,6 +33,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     ) {
         $this->stateManager = $stateManager;
         $this->serviceManager = $serviceManager;
+        $this->object = $object;
         $this->id = $object->getId();
         $this->objectType = get_class($object);
         $this->shortObjectType = (new ReflectionClass($object))->getShortName();
