@@ -28,7 +28,8 @@ class EventRequestFilter extends FormRequest
         $event = [
             'event' => $event_name,
             'source' => $eventSource,
-            'data' => $validated['data']
+            'data' => $validated['data'],
+            'destination' => null,
         ];
         return $event;
     }

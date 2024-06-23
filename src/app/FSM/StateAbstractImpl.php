@@ -2,6 +2,7 @@
 
 namespace App\FSM;
 
+use App\Traits\DebugHelper;
 use ReflectionClass;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
@@ -10,6 +11,7 @@ use App\Utils\ReflectionUtils;
 abstract class StateAbstractImpl implements StateInterface
 {
     use ToastTrigger;
+    use DebugHelper;
 
     protected StateContextInterface $context;
     public IStateManagedModel $model;
@@ -80,8 +82,10 @@ abstract class StateAbstractImpl implements StateInterface
             }
             return $rfl_class;
         }
-        if ($source != $destination) {
-            return $this->passTo();
+        if ($destination != 'all') {
+            if ($source != $destination) {
+                return $this->passTo();
+            }
         }
         $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
         if (method_exists($this, $method)) {

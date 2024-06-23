@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Traits\DebugHelper;
 use ReflectionClass;
 use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
@@ -11,6 +12,8 @@ class StateManager
 {
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
+
+    use DebugHelper;
 
     public final function __construct(
         protected AbstractServiceManager $serviceManager
@@ -29,7 +32,9 @@ class StateManager
         while ($eventInfo = current($this->eventQueue)) {
             reset($this->arrStatesMap);
             while ($key = key($this->arrStatesMap)) {
-                $eventInfo['destination'] = $key;
+                if ($eventInfo['destination'] != 'all') {
+                    $eventInfo['destination'] = $key;
+                }
                 $stateContext = $this->arrStatesMap[$key];
                 $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
                 $view = base64_encode($view);

@@ -2,8 +2,8 @@
 
 namespace App\Services\MythicTreasureQuest;
 
+use App\FSM\StateContextInterface;
 use App\Models\MythicTreasureQuestGame;
-use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
 
 class GameService extends AbstractServiceComponent
@@ -13,13 +13,9 @@ class GameService extends AbstractServiceComponent
         return $this->gameRepository->getGame();
     }
 
-    public function revealTile(Tile $tile)
+    public function revealTile(StateContextInterface $context)
     {
-        dd($tile);
-        $game = $this->gameRepository->getGame();
-        $game->revealTile($tile);
-        $this->gameRepository->saveGame($game);
-        return $game;
+        $this->sendEvent($context, 'reveal');
     }
 
 }
