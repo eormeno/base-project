@@ -22,6 +22,7 @@ class Hidden extends StateAbstractImpl
 
     public function onTileOffClickEvent()
     {
-        $this->sendEvent('reveal');
+        $this->context->gameService->revealTile($this->model);
+        //$this->sendEvent('reveal');
     }
 }

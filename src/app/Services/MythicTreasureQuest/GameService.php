@@ -3,6 +3,7 @@
 namespace App\Services\MythicTreasureQuest;
 
 use App\Models\MythicTreasureQuestGame;
+use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
 
 class GameService extends AbstractServiceComponent
@@ -12,8 +13,13 @@ class GameService extends AbstractServiceComponent
         return $this->gameRepository->getGame();
     }
 
-    /**
-     * Given a tile id, this method will reveal the tile and return the updated game
-     */
+    public function revealTile(Tile $tile)
+    {
+        dd($tile);
+        $game = $this->gameRepository->getGame();
+        $game->revealTile($tile);
+        $this->gameRepository->saveGame($game);
+        return $game;
+    }
 
 }

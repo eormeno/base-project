@@ -13,7 +13,7 @@ class Playing extends StateAbstractImpl
     public function onRefresh(): void
     {
         $map = $this->context->gameRepository->getMap();
-        $this->list = $this->context->stateManager->enqueueAllForRendering($this->context->serviceManager, $map->getTiles());
+        $this->list = $this->context->stateManager->enqueueAllForRendering($map->getTiles());
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
     }

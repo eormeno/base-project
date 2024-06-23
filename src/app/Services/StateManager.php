@@ -10,12 +10,11 @@ use App\Services\StateContextImpl;
 class StateManager
 {
     protected array $arrStatesMap = [];
-    protected string $strControllerKebabName;
     protected array $eventQueue = [];
 
-    public final function setControllerKebabName(string $strControllerKebabName)
-    {
-        $this->strControllerKebabName = $strControllerKebabName;
+    public final function __construct(
+        protected AbstractServiceManager $serviceManager
+    ) {
     }
 
     public final function enqueueEvent(array $eventInfo)
@@ -23,7 +22,7 @@ class StateManager
         $this->eventQueue[] = $eventInfo;
     }
 
-    public final function getAllStatesViews()
+    public final function getAllStatesViews(string $strControllerKebabName)
     {
         $arrViews = [];
         reset($this->eventQueue);
@@ -32,7 +31,7 @@ class StateManager
             while ($key = key($this->arrStatesMap)) {
                 $eventInfo['destination'] = $key;
                 $stateContext = $this->arrStatesMap[$key];
-                $view = $stateContext->request($eventInfo)->view($this->strControllerKebabName);
+                $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
                 $view = base64_encode($view);
                 $arrViews[$key] = $view;
                 next($this->arrStatesMap);
@@ -43,7 +42,6 @@ class StateManager
     }
 
     public final function enqueueAllForRendering(
-        AbstractServiceManager $serviceManager,
         array $arrObjects,
         bool $isUseObjectAlias = true
     ) {
@@ -59,20 +57,19 @@ class StateManager
         }
         foreach ($arrObjects as $object) {
             $alias = $isUseObjectAlias ? $strAliasPrefix . $object->getId() : null;
-            $this->enqueueForRendering($serviceManager, $object, $alias);
+            $this->enqueueForRendering($object, $alias);
             $enqueuedObjectAliases[] = $alias;
         }
         return $enqueuedObjectAliases;
     }
 
     public final function enqueueForRendering(
-        AbstractServiceManager $serviceManager,
         IStateManagedModel $object,
         string|null $alias = null
     ) {
         $strAliasOrKey = $alias ?? get_class($object) . $object->getId();
         if (!array_key_exists($strAliasOrKey, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $serviceManager, $object, $strAliasOrKey);
+            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $this->serviceManager, $object, $strAliasOrKey);
         }
     }
 

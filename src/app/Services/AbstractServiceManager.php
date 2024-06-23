@@ -8,6 +8,7 @@ abstract class AbstractServiceManager
 {
     protected $services = [];
     protected ?EventManager $eventManager = null;
+    protected ?StateManager $stateManager = null;
 
     protected function addService(string $name, AbstractServiceComponent $service): void
     {
@@ -24,6 +25,9 @@ abstract class AbstractServiceManager
         if (property_exists($this, $name)) {
             if ($name === 'eventManager' && $this->eventManager === null) {
                 $this->eventManager = new EventManager();
+            }
+            if ($name === 'stateManager' && $this->stateManager === null) {
+                $this->stateManager = new StateManager($this);
             }
             return $this->$name;
         }
