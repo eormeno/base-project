@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\FSM\Event;
 use ReflectionClass;
 use App\Utils\Constants;
 use App\FSM\StateInterface;
@@ -23,17 +24,20 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected int $id;
     protected string $objectType;
     protected string $shortObjectType;
+    protected string $alias;
 
     use DebugHelper;
 
     public function __construct(
         StateManager $stateManager,
         AbstractServiceManager $serviceManager,
-        IStateManagedModel $object
+        IStateManagedModel $object,
+        string $alias
     ) {
         $this->stateManager = $stateManager;
         $this->serviceManager = $serviceManager;
         $this->object = $object;
+        $this->alias = $alias;
         $this->id = $object->getId();
         $this->objectType = get_class($object);
         $this->shortObjectType = (new ReflectionClass($object))->getShortName();

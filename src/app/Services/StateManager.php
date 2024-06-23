@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use ReflectionClass;
-use App\Utils\Constants;
 use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
 use App\Services\StateContextImpl;
@@ -73,7 +72,7 @@ class StateManager
     ) {
         $strAliasOrKey = $alias ?? get_class($object) . $object->getId();
         if (!array_key_exists($strAliasOrKey, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $serviceManager, $object);
+            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $serviceManager, $object, $strAliasOrKey);
         }
     }
 

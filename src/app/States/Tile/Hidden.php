@@ -17,11 +17,11 @@ class Hidden extends StateAbstractImpl
 
     public function onRevealEvent()
     {
-        Revealed::StateClass();
+        return Revealed::StateClass();
     }
 
     public function onTileOffClickEvent()
     {
-        $this->infoToast('You must reveal the tile first');
+        $this->sendEvent('reveal');
     }
 }
