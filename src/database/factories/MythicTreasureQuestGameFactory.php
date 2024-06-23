@@ -35,7 +35,7 @@ class MythicTreasureQuestGameFactory extends Factory
                     'trap' => false,
                     'flag' => false,
                     'trapsAround' => 0,
-                    'state' => 'off'
+                    'state' => 'hidden'
                 ];
                 $map->addTile(Tile::fromJson($jsonTile));
             }

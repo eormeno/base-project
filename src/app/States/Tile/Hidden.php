@@ -4,7 +4,7 @@ namespace App\States\Tile;
 
 use App\FSM\StateAbstractImpl;
 
-class Off extends StateAbstractImpl
+class Hidden extends StateAbstractImpl
 {
     public bool $hasTrap = false;
     public int $trapsAround = 0;
@@ -15,6 +15,6 @@ class Off extends StateAbstractImpl
     }
     public function onTileOffClickEvent()
     {
-        return On::StateClass();
+        return Revealed::StateClass();
     }
 }
