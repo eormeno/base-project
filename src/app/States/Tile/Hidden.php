@@ -15,8 +15,13 @@ class Hidden extends StateAbstractImpl
         $this->trapsAround = $this->model->trapsAround;
     }
 
+    public function onRevealEvent()
+    {
+        Revealed::StateClass();
+    }
+
     public function onTileOffClickEvent()
     {
-        return Revealed::StateClass();
+        $this->infoToast('You must reveal the tile first');
     }
 }

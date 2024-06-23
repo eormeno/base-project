@@ -11,20 +11,34 @@ use App\Services\StateContextImpl;
 class StateManager
 {
     protected array $arrStatesMap = [];
+    protected string $strControllerKebabName;
+    protected array $eventQueue = [];
 
-    public final function getAllStatesViews(
-        array $eventInfo = Constants::EMPTY_EVENT,
-        string $strControllerKebabName
-    ) {
+    public final function setControllerKebabName(string $strControllerKebabName)
+    {
+        $this->strControllerKebabName = $strControllerKebabName;
+    }
+
+    public final function enqueueEvent(array $eventInfo)
+    {
+        $this->eventQueue[] = $eventInfo;
+    }
+
+    public final function getAllStatesViews()
+    {
         $arrViews = [];
-        reset($this->arrStatesMap);
-        while ($key = key($this->arrStatesMap)) {
-            $eventInfo['destination'] = $key;
-            $stateContext = $this->arrStatesMap[$key];
-            $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
-            $view = base64_encode($view);
-            $arrViews[$key] = $view;
-            next($this->arrStatesMap);
+        reset($this->eventQueue);
+        while ($eventInfo = current($this->eventQueue)) {
+            reset($this->arrStatesMap);
+            while ($key = key($this->arrStatesMap)) {
+                $eventInfo['destination'] = $key;
+                $stateContext = $this->arrStatesMap[$key];
+                $view = $stateContext->request($eventInfo)->view($this->strControllerKebabName);
+                $view = base64_encode($view);
+                $arrViews[$key] = $view;
+                next($this->arrStatesMap);
+            }
+            next($this->eventQueue);
         }
         return $arrViews;
     }
@@ -39,7 +53,7 @@ class StateManager
             return $enqueuedObjectAliases;
         }
         $strAliasPrefix = '';
-        if ($isUseObjectAlias){
+        if ($isUseObjectAlias) {
             $object = $arrObjects[0];
             $rflClass = new ReflectionClass($object);
             $strAliasPrefix = CaseConverters::toKebab($rflClass->getShortName());

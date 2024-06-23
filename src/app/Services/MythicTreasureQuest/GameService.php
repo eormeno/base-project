@@ -11,4 +11,9 @@ class GameService extends AbstractServiceComponent
     {
         return $this->gameRepository->getGame();
     }
+
+    /**
+     * Given a tile id, this method will reveal the tile and return the updated game
+     */
+
 }
