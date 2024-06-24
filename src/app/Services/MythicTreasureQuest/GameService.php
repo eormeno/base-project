@@ -15,6 +15,14 @@ class GameService extends AbstractServiceComponent
         return $this->gameRepository->getGame();
     }
 
+    public function revealAll()
+    {
+        $map = $this->gameRepository->getMap();
+        foreach ($map->getTiles() as $tile) {
+            $this->sendEvent($tile, 'reveal');
+        }
+    }
+
     public function revealTile(Tile $tile)
     {
         if (array_key_exists($tile->getId(), $this->forbiddenTiles)) {
@@ -29,8 +37,9 @@ class GameService extends AbstractServiceComponent
             $newY = $intY + $dir[1];
             if ($newX >= 0 && $newX < $map->getWidth() && $newY >= 0 && $newY < $map->getHeight()) {
                 $newTile = $map->getTile($newX, $newY);
-                if ($newTile->getHasTrap()){
+                if ($newTile->getHasTrap() || $newTile->isRevealed()) {
                     $this->forbiddenTiles[$newTile->getId()] = true;
+                    continue;
                 }
                 if ($newTile->getTrapsAround() === 0) {
                     $this->revealTile($newTile);
@@ -41,11 +50,6 @@ class GameService extends AbstractServiceComponent
                 }
             }
         }
-
-        // if ($intY > 0 && $intX > 0) {
-        //     $this->revealTile($map->getTile($intX - 1, $intY - 1));
-        // }
-
         $this->sendEvent($tile, 'reveal');
     }
 }

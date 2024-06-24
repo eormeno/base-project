@@ -19,6 +19,11 @@ class Hidden extends StateAbstractImpl
 
     public function onTileOffClickEvent()
     {
+        if ($this->cast()->getHasTrap()) {
+            $this->errorToast('Game Over');
+            $this->context->gameService->revealAll();
+            return;
+        }
         $this->context->gameService->revealTile($this->cast());
     }
 }
