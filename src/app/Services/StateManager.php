@@ -2,9 +2,6 @@
 
 namespace App\Services;
 
-use ReflectionClass;
-use App\Traits\DebugHelper;
-use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
 use App\Services\StateContextImpl;
 
@@ -13,11 +10,8 @@ class StateManager
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
 
-    use DebugHelper;
-
-    public final function __construct(
-        protected AbstractServiceManager $serviceManager
-    ) {
+    public final function __construct(protected AbstractServiceManager $serviceManager)
+    {
     }
 
     public final function enqueueEvent(array $eventInfo)
@@ -31,14 +25,14 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             reset($this->arrStatesMap);
-            while ($key = key($this->arrStatesMap)) {
+            while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
-                    $eventInfo['destination'] = $key;
+                    $eventInfo['destination'] = $strAlias;
                 }
-                $stateContext = $this->arrStatesMap[$key];
+                $stateContext = $this->arrStatesMap[$strAlias];
                 $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
                 $view = base64_encode($view);
-                $arrViews[$key] = $view;
+                $arrViews[$strAlias] = $view;
                 next($this->arrStatesMap);
             }
             next($this->eventQueue);
@@ -48,33 +42,24 @@ class StateManager
 
     public final function enqueueAllForRendering(
         array $arrObjects,
-        bool $isUseObjectAlias = true
+        bool $isUseShortAlias = false
     ) {
         $enqueuedObjectAliases = [];
         if (count($arrObjects) === 0) {
             return $enqueuedObjectAliases;
         }
-        $strAliasPrefix = '';
-        if ($isUseObjectAlias) {
-            $object = $arrObjects[0];
-            $rflClass = new ReflectionClass($object);
-            $strAliasPrefix = CaseConverters::toKebab($rflClass->getShortName());
-        }
         foreach ($arrObjects as $object) {
-            $alias = $isUseObjectAlias ? $strAliasPrefix . $object->getId() : null;
-            $this->enqueueForRendering($object, $alias);
-            $enqueuedObjectAliases[] = $alias;
+            $this->enqueueForRendering($object);
+            $enqueuedObjectAliases[] = $object->getAlias();
         }
         return $enqueuedObjectAliases;
     }
 
-    public final function enqueueForRendering(
-        IStateManagedModel $object,
-        string|null $alias = null
-    ) {
-        $strAliasOrKey = $alias ?? get_class($object) . $object->getId();
-        if (!array_key_exists($strAliasOrKey, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this->serviceManager, $object, $strAliasOrKey);
+    public final function enqueueForRendering(IStateManagedModel $object)
+    {
+        $strAlias = $object->getAlias();
+        if (!array_key_exists($strAlias, $this->arrStatesMap)) {
+            $this->arrStatesMap[$strAlias] = new StateContextImpl($this->serviceManager, $object);
         }
     }
 }

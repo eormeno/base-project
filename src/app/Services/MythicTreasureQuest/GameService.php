@@ -2,11 +2,9 @@
 
 namespace App\Services\MythicTreasureQuest;
 
-use App\FSM\StateContextInterface;
 use App\Models\MythicTreasureQuestGame;
 use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
-use App\States\Tile\Revealed;
 
 class GameService extends AbstractServiceComponent
 {
@@ -15,13 +13,8 @@ class GameService extends AbstractServiceComponent
         return $this->gameRepository->getGame();
     }
 
-    public function revealTile(StateContextInterface $context)
+    public function revealTile(Tile $tile)
     {
-        $this->sendEvent($context, 'reveal');
+        $this->sendEvent($tile, 'reveal');
     }
-
-    public function revealTile2(Tile $tile)
-    {
-    }
-
 }

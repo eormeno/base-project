@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\FSM\IStateManagedModel;
 use App\FSM\StateContextInterface;
 
 abstract class AbstractServiceComponent
@@ -12,14 +13,14 @@ abstract class AbstractServiceComponent
     }
 
     protected function sendEvent(
-        StateContextInterface $context,
+        IStateManagedModel $model,
         string $event,
         string|null $destination = null,
         array $data = []
     ) {
         $event = [
             'event' => $event,
-            'source' => $context->alias,
+            'source' => $model->getAlias(),
             'data' => $data,
             'destination' => $destination,
         ];

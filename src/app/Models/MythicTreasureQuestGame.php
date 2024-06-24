@@ -32,6 +32,11 @@ class MythicTreasureQuestGame extends Model implements IStateManagedModel
         return Initial::StateClass();
     }
 
+    public function getAlias(): string
+    {
+        return 'main';
+    }
+
     public function getState(): string|null
     {
         return $this->state;

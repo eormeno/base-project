@@ -8,6 +8,8 @@ interface IStateManagedModel
 {
     public function getId(): int;
 
+    public function getAlias(): string;
+
     public static function getInitialStateClass(): ReflectionClass;
 
     public function getState(): string|null;

@@ -29,6 +29,11 @@ class Tile implements JsonSerializable, IStateManagedModel
         return $this->id;
     }
 
+    public function getAlias(): string
+    {
+        return 'tile' . $this->id;
+    }
+
     public function getX(): int
     {
         return $this->x;
