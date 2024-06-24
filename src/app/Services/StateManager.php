@@ -74,7 +74,7 @@ class StateManager
     ) {
         $strAliasOrKey = $alias ?? get_class($object) . $object->getId();
         if (!array_key_exists($strAliasOrKey, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $this->serviceManager, $object, $strAliasOrKey);
+            $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this->serviceManager, $object, $strAliasOrKey);
         }
     }
 }

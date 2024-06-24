@@ -5,7 +5,6 @@ namespace App\Services;
 use ReflectionClass;
 use App\Utils\Constants;
 use App\FSM\StateInterface;
-use App\Traits\DebugHelper;
 use App\FSM\IStateManagedModel;
 use App\Helpers\StatesLocalCache;
 use App\FSM\StateContextInterface;
@@ -21,25 +20,18 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected StateManager $stateManager;
     protected IStateManagedModel $object;
     protected int $id;
-    protected string $objectType;
-    protected string $shortObjectType;
     protected string $alias;
 
-    use DebugHelper;
-
     public function __construct(
-        StateManager $stateManager,
         AbstractServiceManager $serviceManager,
         IStateManagedModel $object,
         string $alias
     ) {
-        $this->stateManager = $stateManager;
         $this->serviceManager = $serviceManager;
+        $this->stateManager = $serviceManager->stateManager;
         $this->object = $object;
         $this->alias = $alias;
         $this->id = $object->getId();
-        $this->objectType = get_class($object);
-        $this->shortObjectType = (new ReflectionClass($object))->getShortName();
         $this->stateUpdater = new StateUpdateHelper($serviceManager, $object);
     }
 
@@ -68,33 +60,11 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         return $this->serviceManager->get($attributeName);
     }
 
-    private function debugObject(
-        bool $debug,
-        string $message = "",
-        string $strShortType = "Tile",
-        int $id = 0
-    ) {
-        if (!$debug) {
-            return;
-        }
-        if ($this->shortObjectType == $strShortType && ($this->id == $id || $id == 0)) {
-            $this->log("$message {$this->shortObjectType}:{$this->id}");
-        }
-    }
-
     public function request(array $eventInfo): StateInterface
     {
-        $event = $eventInfo['event'];
-        $source = $eventInfo['source'];
-        $destination = $eventInfo['destination'];
-        if ($source == $destination) {
-            $this->debugObject(false, "Requesting state for event $event from $source");
-        }
         do {
             $this->restoreState();
             $current_state = $this->__state;
-            $stateClass = $current_state::StateClass()->getShortName();
-            $this->debugObject(false, "$stateClass");
             $this->setState($current_state->handleRequest($eventInfo));
             $changed_state = $this->__state;
             if ($changed_state != $current_state) {
