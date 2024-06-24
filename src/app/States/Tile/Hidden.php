@@ -3,16 +3,19 @@
 namespace App\States\Tile;
 
 use App\FSM\StateAbstractImpl;
+use App\Models\MythicTreasureQuest\Tile;
 
 class Hidden extends StateAbstractImpl
 {
+    private Tile $tile;
     public bool $hasTrap = false;
     public int $trapsAround = 0;
 
     public function onRefresh(): void
     {
-        $this->hasTrap = $this->model->hasTrap;
-        $this->trapsAround = $this->model->trapsAround;
+        $this->tile = $this->model;
+        $this->hasTrap = $this->tile->getHasTrap();
+        $this->trapsAround = $this->tile->getTrapsAround();
     }
 
     public function onRevealEvent()
@@ -22,7 +25,7 @@ class Hidden extends StateAbstractImpl
 
     public function onTileOffClickEvent()
     {
-        $this->context->gameService->revealTile($this->context);
+        $this->context->gameService->revealTile2($this->model);
         //$this->sendEvent('reveal');
     }
 }

@@ -30,14 +30,7 @@ class MythicTreasureQuestGameFactory extends Factory
         $map = new Map($width, $height);
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
-                $jsonTile = [
-                    'id' => $y * $width + $x,
-                    'trap' => false,
-                    'flag' => false,
-                    'trapsAround' => 0,
-                    'state' => 'hidden'
-                ];
-                $map->addTile(Tile::fromJson($jsonTile));
+                $map->addTile(Tile::newEmptyTile($width, $x, $y));
             }
         }
         $this->fillTraps(8, $map);
@@ -53,7 +46,7 @@ class MythicTreasureQuestGameFactory extends Factory
             $x = $pos['x'];
             $y = $pos['y'];
             $tile = $map->getTile($x, $y);
-            $tile->hasTrap = true;
+            $tile->setHasTrap(true);
             $this->incrementTrapsAround($map, $x, $y);
         }
     }
@@ -65,13 +58,13 @@ class MythicTreasureQuestGameFactory extends Factory
     {
         $width = $map->getWidth();
         $height = $map->getHeight();
-        $directions = [[-1, -1],[0, -1], [1, -1],[-1, 0],[1, 0],[-1, 1], [0, 1],[1, 1]];
+        $directions = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
         foreach ($directions as $dir) {
             $newX = $x + $dir[0];
             $newY = $y + $dir[1];
             if ($newX >= 0 && $newX < $width && $newY >= 0 && $newY < $height) {
                 $tile = $map->getTile($newX, $newY);
-                $tile->trapsAround++;
+                $tile->setTrapsAround($tile->getTrapsAround() + 1);
             }
         }
     }

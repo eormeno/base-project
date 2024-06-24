@@ -9,13 +9,19 @@ use App\FSM\IStateManagedModel;
 
 class Tile implements JsonSerializable, IStateManagedModel
 {
-    public function __construct(
+    private int $x;
+    private int $y;
+
+    private function __construct(
         private int $id,
+        private int $mapWidth,
         private bool $hasTrap = false,
         private bool $hasFlag = false,
         private int $trapsAround = 0,
         private ?string $state = null
     ) {
+        $this->x = $id % $mapWidth;
+        $this->y = intdiv($id, $mapWidth);
     }
 
     public function getId(): int
@@ -23,45 +29,49 @@ class Tile implements JsonSerializable, IStateManagedModel
         return $this->id;
     }
 
-    public function __get($name): mixed
+    public function getX(): int
     {
-        switch ($name) {
-            case 'hasFlag':
-                return $this->hasFlag;
-            case 'trapsAround':
-                return $this->trapsAround;
-            case 'hasTrap':
-                return $this->hasTrap;
-            case 'state':
-                return $this->state;
-            default:
-                throw new \Exception("Property $name not found");
-        }
+        return $this->x;
     }
 
-    public function __set($name, $value): void
+    public function getY(): int
     {
-        switch ($name) {
-            case 'hasFlag':
-                $this->hasFlag = $value;
-                break;
-            case 'trapsAround':
-                $this->trapsAround = $value;
-                break;
-            case 'hasTrap':
-                $this->hasTrap = $value;
-                break;
-            case 'state':
-                $this->state = $value;
-                break;
-            default:
-                throw new \Exception("Property $name not found");
-        }
+        return $this->y;
     }
 
     public static function getInitialStateClass(): ReflectionClass
     {
         return Hidden::StateClass();
+    }
+
+    public function getHasTrap(): bool
+    {
+        return $this->hasTrap;
+    }
+
+    public function setHasTrap(bool $hasTrap): void
+    {
+        $this->hasTrap = $hasTrap;
+    }
+
+    public function getHasFlag(): bool
+    {
+        return $this->hasFlag;
+    }
+
+    public function setHasFlag(bool $hasFlag): void
+    {
+        $this->hasFlag = $hasFlag;
+    }
+
+    public function getTrapsAround(): int
+    {
+        return $this->trapsAround;
+    }
+
+    public function setTrapsAround(int $trapsAround): void
+    {
+        $this->trapsAround = $trapsAround;
     }
 
     public function getState(): string|null
@@ -77,17 +87,31 @@ class Tile implements JsonSerializable, IStateManagedModel
     public static function fromJson(array $data): Tile
     {
         $id = $data['id'];
+        $mapWidth = $data['mapWidth'];
         $state = $data['state'];
         $hasTrap = $data['trap'] ?? false;
         $hasFlag = $data['flag'] ?? false;
         $trapsAround = $data['trapsAround'] ?? 0;
-        return new Tile($id, $hasTrap, $hasFlag, $trapsAround, $state);
+        return new Tile($id, $mapWidth, $hasTrap, $hasFlag, $trapsAround, $state);
+    }
+
+    public static function newEmptyTile(int $mapWidth, int $x, int $y): Tile
+    {
+        return self::fromJson([
+            'id' => $y * $mapWidth + $x,
+            'mapWidth' => $mapWidth,
+            'trap' => false,
+            'flag' => false,
+            'trapsAround' => 0,
+            'state' => 'hidden'
+        ]);
     }
 
     public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
+            'mapWidth' => $this->mapWidth,
             'trap' => $this->hasTrap,
             'flag' => $this->hasFlag,
             'trapsAround' => $this->trapsAround,
