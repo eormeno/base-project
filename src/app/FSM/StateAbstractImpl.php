@@ -117,12 +117,13 @@ abstract class StateAbstractImpl implements StateInterface
         return $array;
     }
 
-    protected function sendEvent(string $event, array $data = [])
+    protected function sendSignal(string $event, array $data = [])
     {
         $this->context->stateManager->enqueueEvent([
             'event' => $event,
-            'source' => $this->context->alias,
+            'source' => $this->model->getAlias(),
             'data' => $data,
+            'destination' => 'all'
         ]);
     }
 

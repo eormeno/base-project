@@ -16,3 +16,8 @@
         @endforeach
     </div>
 </div>
+
+@if ($playAgain)
+    <button class="bg-blue-500 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onclick="sendEvent('play_again')">Play Again</button>
+@endif
