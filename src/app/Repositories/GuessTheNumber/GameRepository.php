@@ -20,6 +20,11 @@ class GameRepository extends AbstractServiceComponent
         return auth()->user()->guessTheNumberGames;
     }
 
+    public function reset(): void
+    {
+        $this->getGame()->delete();
+    }
+
     public function updateRemainingAttempts(int $remainingAttempts): void
     {
         $game = $this->getGame();

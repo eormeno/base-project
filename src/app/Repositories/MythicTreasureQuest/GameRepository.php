@@ -35,6 +35,11 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         return auth()->user()->mythicTreasureQuestGames;
     }
 
+    public function reset(): void
+    {
+        $this->getGame()->delete();
+    }
+
     public function getMap(): Map
     {
         if ($this->localInMemoryMap) {

@@ -22,8 +22,6 @@ class GuessTheNumberController extends BaseController
 
     public function reset(): void
     {
-        $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
-        $this->serviceManager->stateManager->enqueueForRendering($game, 'main');
-        $this->serviceManager->stateManager->reset();
+        $this->serviceManager->get('gameRepository')->reset(); // phpcs:ignore
     }
 }

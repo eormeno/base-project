@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\FSM\Event;
 use ReflectionClass;
 use App\Utils\Constants;
 use App\FSM\StateInterface;
@@ -113,11 +112,4 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         $this->stateUpdater->saveState($rflState);
         $this->setState($staRegistered::StateClass());
     }
-
-    public function reset(): void
-    {
-        StatesLocalCache::reset(); // todo: try to reset speific object's states only
-        $this->stateUpdater->saveState(null);
-    }
-
 }

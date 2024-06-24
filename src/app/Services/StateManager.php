@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Traits\DebugHelper;
 use ReflectionClass;
+use App\Traits\DebugHelper;
 use App\Utils\CaseConverters;
 use App\FSM\IStateManagedModel;
 use App\Services\StateContextImpl;
@@ -75,15 +75,6 @@ class StateManager
         $strAliasOrKey = $alias ?? get_class($object) . $object->getId();
         if (!array_key_exists($strAliasOrKey, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAliasOrKey] = new StateContextImpl($this, $this->serviceManager, $object, $strAliasOrKey);
-        }
-    }
-
-    public final function reset()
-    {
-        reset($this->arrStatesMap);
-        while ($key = key($this->arrStatesMap)) {
-            $this->arrStatesMap[$key]->reset();
-            next($this->arrStatesMap);
         }
     }
 }
