@@ -30,7 +30,7 @@ class MythicTreasureQuestGameFactory extends Factory
         $map = new Map($width, $height);
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
-                $map->addTile(Tile::newEmptyTile($width, $x, $y));
+                $map->addTile(Tile::newEmptyTile($map, $x, $y));
             }
         }
         $this->fillTraps(8, $map);

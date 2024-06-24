@@ -14,14 +14,14 @@ class Tile implements JsonSerializable, IStateManagedModel
 
     private function __construct(
         private int $id,
-        private int $mapWidth,
+        private Map $map,
         private bool $hasTrap = false,
         private bool $hasFlag = false,
         private int $trapsAround = 0,
         private ?string $state = null
     ) {
-        $this->x = $id % $mapWidth;
-        $this->y = intdiv($id, $mapWidth);
+        $this->x = $id % $map->getWidth();
+        $this->y = intdiv($id, $map->getWidth());
     }
 
     public function getId(): int
@@ -32,6 +32,11 @@ class Tile implements JsonSerializable, IStateManagedModel
     public function getAlias(): string
     {
         return 'tile' . $this->id;
+    }
+
+    public function getMap(): Map
+    {
+        return $this->map;
     }
 
     public function getX(): int
@@ -84,27 +89,31 @@ class Tile implements JsonSerializable, IStateManagedModel
         return $this->state;
     }
 
+    public function isRevealed(): bool
+    {
+        return $this->state === 'revealed';
+    }
+
     public function updateState(string|null $state): void
     {
         $this->state = $state;
     }
 
-    public static function fromJson(array $data): Tile
+    public static function fromJson(Map $map, array $data): Tile
     {
         $id = $data['id'];
-        $mapWidth = $data['mapWidth'];
         $state = $data['state'];
         $hasTrap = $data['trap'] ?? false;
         $hasFlag = $data['flag'] ?? false;
         $trapsAround = $data['trapsAround'] ?? 0;
-        return new Tile($id, $mapWidth, $hasTrap, $hasFlag, $trapsAround, $state);
+        return new Tile($id, $map, $hasTrap, $hasFlag, $trapsAround, $state);
     }
 
-    public static function newEmptyTile(int $mapWidth, int $x, int $y): Tile
+    public static function newEmptyTile(Map $map, int $x, int $y): Tile
     {
-        return self::fromJson([
-            'id' => $y * $mapWidth + $x,
-            'mapWidth' => $mapWidth,
+        return self::fromJson($map, [
+            'id' => $y * $map->getWidth() + $x,
+            'mapWidth' => $map->getWidth(),
             'trap' => false,
             'flag' => false,
             'trapsAround' => 0,
@@ -116,7 +125,6 @@ class Tile implements JsonSerializable, IStateManagedModel
     {
         return [
             'id' => $this->id,
-            'mapWidth' => $this->mapWidth,
             'trap' => $this->hasTrap,
             'flag' => $this->hasFlag,
             'trapsAround' => $this->trapsAround,

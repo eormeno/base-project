@@ -15,7 +15,7 @@ class Map implements JsonSerializable
         $tiles = $data['tiles'];
         $map = new Map($width, $height);
         foreach ($tiles as $tile) {
-            $map->addTile(Tile::fromJson($tile));
+            $map->addTile(Tile::fromJson($map, $tile));
         }
         return $map;
     }
