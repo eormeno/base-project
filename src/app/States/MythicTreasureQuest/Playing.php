@@ -10,11 +10,11 @@ class Playing extends StateAbstractImpl
     public int $width = 8;
     public int $height = 8;
     public array $list = [];
-
     public bool $playAgain = false;
 
     public function onEnter(): void{
         $this->playAgain = false;
+        $this->context->gameRepository->restartGame();
     }
 
     public function onRefresh(): void

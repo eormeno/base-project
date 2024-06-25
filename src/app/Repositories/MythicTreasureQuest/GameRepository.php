@@ -2,6 +2,7 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
+use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
 use App\Services\EventManager;
@@ -33,6 +34,14 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
             $this->createEmptyNewGame();
         }
         return auth()->user()->mythicTreasureQuestGames;
+    }
+
+    public function restartGame(): void
+    {
+        $this->eventManager->remove($this);
+        $this->localInMemoryMap = null;
+        $this->getGame()->map = MapHelper::generateMap(8, 8)->jsonSerialize();
+        $this->getGame()->save();
     }
 
     public function reset(): void
