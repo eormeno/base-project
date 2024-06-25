@@ -25,31 +25,45 @@ class GameService extends AbstractServiceComponent
 
     public function revealTile(Tile $tile)
     {
-        if (array_key_exists($tile->getId(), $this->forbiddenTiles)) {
+        if ($this->isTileTested($tile)) {
             return;
         }
-        $this->forbiddenTiles[$tile->getId()] = true;
+        $this->setTileAsTested($tile);
         $map = $tile->getMap();
         $intX = $tile->getX();
         $intY = $tile->getY();
         foreach (self::DIRECTIONS as $dir) {
             $newX = $intX + $dir[0];
             $newY = $intY + $dir[1];
-            if ($newX >= 0 && $newX < $map->getWidth() && $newY >= 0 && $newY < $map->getHeight()) {
+            if ($map->isValid($newX, $newY)) {
                 $newTile = $map->getTile($newX, $newY);
+                if ($this->isTileTested($newTile)) {
+                    continue;
+                }
                 if ($newTile->getHasTrap() || $newTile->isRevealed()) {
-                    $this->forbiddenTiles[$newTile->getId()] = true;
+                    $this->setTileAsTested($newTile);
                     continue;
                 }
                 if ($newTile->getTrapsAround() === 0) {
                     $this->revealTile($newTile);
                 }
                 if ($newTile->getTrapsAround() > 0) {
-                    $this->forbiddenTiles[$newTile->getId()] = true;
+                    $this->setTileAsTested($newTile);
                     $this->sendEvent($newTile, 'reveal');
                 }
             }
         }
         $this->sendEvent($tile, 'reveal');
     }
+
+    private function isTileTested(Tile $tile): bool
+    {
+        return array_key_exists($tile->getId(), $this->forbiddenTiles);
+    }
+
+    private function setTileAsTested(Tile $tile): void
+    {
+        $this->forbiddenTiles[$tile->getId()] = true;
+    }
+
 }

@@ -46,17 +46,14 @@ class Map implements JsonSerializable
         return $this->tiles;
     }
 
-    public function getTileCoordinates(Tile $tile): array
-    {
-        $index = $tile->getId();
-        $x = $index % $this->width;
-        $y = ($index - $x) / $this->width;
-        return [$x, $y];
-    }
-
     public function getTile(int $x, int $y): Tile
     {
         return $this->tiles[$y * $this->width + $x];
+    }
+
+    public function isValid(int $x, int $y): bool
+    {
+        return $x >= 0 && $x < $this->width && $y >= 0 && $y < $this->height;
     }
 
     public function jsonSerialize(): array
