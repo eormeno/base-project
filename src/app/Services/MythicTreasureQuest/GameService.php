@@ -9,7 +9,7 @@ use App\Services\AbstractServiceComponent;
 class GameService extends AbstractServiceComponent
 {
     private const DIRECTIONS = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
-    private array $forbiddenTiles = [];
+    private array $testedTiles = [];
     private array $availableTiles = [];
 
 
@@ -22,10 +22,9 @@ class GameService extends AbstractServiceComponent
     {
         $map = $this->gameRepository->getMap();
         foreach ($map->getTiles() as $tile) {
-            if ($tile->isRevealed()) {
-                continue;
+            if ($tile->getHasTrap()) {
+                $this->sendEvent($tile, 'reveal');
             }
-            $this->sendEvent($tile, 'reveal');
         }
     }
 
@@ -76,21 +75,6 @@ class GameService extends AbstractServiceComponent
                     }
                     $this->revealTile($newTile);
                 }
-                // if ($this->isTileTested($newTile)) {
-                //     continue;
-                // }
-                // if ($newTile->getHasTrap() || $newTile->isRevealed()) {
-                //     $this->setTileAsTested($newTile);
-                //     continue;
-                // }
-                // if ($newTile->getTrapsAround() === 0) {
-                //     $this->revealTile($newTile);
-                // }
-                // if ($newTile->getTrapsAround() > 0) {
-                //     $this->setTileAsTested($newTile);
-                //     $this->sendEvent($newTile, 'reveal');
-                //     $this->log('Revealed # ' . $newX . ' ' . $newY);
-                // }
             }
         }
         $this->sendEvent($tile, 'reveal');
@@ -98,12 +82,12 @@ class GameService extends AbstractServiceComponent
 
     private function isTileTested(Tile $tile): bool
     {
-        return array_key_exists($tile->getId(), $this->forbiddenTiles);
+        return array_key_exists($tile->getId(), $this->testedTiles);
     }
 
     private function setTileAsTested(Tile $tile): void
     {
-        $this->forbiddenTiles[$tile->getId()] = true;
+        $this->testedTiles[$tile->getId()] = true;
     }
 
 }
