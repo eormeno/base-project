@@ -77,6 +77,7 @@
                 });
         }
 
+        //todo: move to a helper file and optimize it
         function decodeBase64(data) {
             const binaryString = atob(data);
             return binaryString;
