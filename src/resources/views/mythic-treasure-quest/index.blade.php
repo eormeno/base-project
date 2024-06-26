@@ -26,11 +26,15 @@
             return null;
         }
 
+        var eventSent = false;
+
         function sendEvent(event, formData = {}) {
-            // get the element that triggered this function
+            if (eventSent) {
+                return;
+            }
+            eventSent = true;
             const keyParent = findParentWithKey(document.activeElement);
             const source = keyParent ? keyParent.getAttribute('key') : null;
-            // console.log('source: ', source);
 
             event = event || '';
             fetch("{{ route($routeName) }}", {
@@ -51,9 +55,9 @@
                         // if the data starts with a <!DOCTYPE html> tag, is an error page
                         if (data.startsWith('<!DOCTYPE html>')) {
                             document.write(data);
+                            eventSent = false;
                         } else {
                             json = JSON.parse(data);
-                            // iterate over the json keys, find the element in the dom and update it
                             for (const key in json) {
                                 const element = document.getElementById(key);
                                 if (element) {
@@ -64,16 +68,20 @@
                                     // localStorage.setItem('{{ $routeName }}', element);
                                 }
                             }
+                            eventSent = false;
                         }
                     } catch (error) {
                         document.write(data);
+                        eventSent = false;
                     }
                 });
         }
 
         function decodeBase64(data) {
             const binaryString = atob(data);
+            return binaryString;
             const bytes = new Uint8Array(binaryString.length);
+            console.log(binaryString.length);
             for (let i = 0; i < binaryString.length; i++) {
                 bytes[i] = binaryString.charCodeAt(i);
             }
