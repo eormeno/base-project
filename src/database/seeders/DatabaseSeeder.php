@@ -13,12 +13,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         fake()->seed(10);
-        User::factory()->adminUser()
-            ->has(GuessTheNumberGame::factory())
-            ->has(MythicTreasureQuestGame::factory())
-            ->create();
-
-        User::factory()->has(GuessTheNumberGame::factory()->fakeGame())->count(9)->create();
 
         MythicTreasureQuestItem::factory([
             'slug' => 'selector',
@@ -40,5 +34,13 @@ class DatabaseSeeder extends Seeder
             'icon' => 'clue.png',
             'description' => 'Hint to the next location'
         ])->create();
+
+        User::factory()->adminUser()
+            ->has(GuessTheNumberGame::factory())
+            ->has(MythicTreasureQuestGame::factory())
+            ->create();
+
+        User::factory()->has(GuessTheNumberGame::factory()->fakeGame())->count(9)->create();
+
     }
 }
