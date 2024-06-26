@@ -6,6 +6,7 @@ use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
 use App\Services\EventManager;
+use App\Models\MythicTreasureQuest\Bag;
 use App\Models\MythicTreasureQuest\Map;
 use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceManager;
@@ -14,6 +15,7 @@ use App\Services\AbstractServiceComponent;
 class GameRepository extends AbstractServiceComponent implements IEventListener
 {
     private ?Map $localInMemoryMap;
+    private ?Bag $localInMemoryBag;
     private EventManager $eventManager;
 
     public function __construct(AbstractServiceManager $serviceManager)
@@ -58,6 +60,16 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         $this->localInMemoryMap = Map::fromJson($game->map);
         $this->eventManager->add($this);
         return $this->localInMemoryMap;
+    }
+
+    public function getBag(): Bag
+    {
+        if ($this->localInMemoryBag) {
+            return $this->localInMemoryBag;
+        }
+        $game = $this->getGame();
+        $this->localInMemoryBag = Bag::fromJson($game->bag);
+        return $this->localInMemoryBag;
     }
 
     public function onEvent(StateChangedEvent $event): void
