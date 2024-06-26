@@ -6,24 +6,20 @@ use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
 use App\Services\EventManager;
-use App\Helpers\InventoryHelper;
 use App\Models\MythicTreasureQuest\Map;
 use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
-use App\Models\MythicTreasureQuest\Inventory;
 
 class GameRepository extends AbstractServiceComponent implements IEventListener
 {
     private ?Map $localInMemoryMap;
-    private ?Inventory $localInMemoryInventory;
     private EventManager $eventManager;
 
     public function __construct(AbstractServiceManager $serviceManager)
     {
         parent::__construct($serviceManager);
         $this->localInMemoryMap = null;
-        $this->localInMemoryInventory = null;
         $this->eventManager = $serviceManager->eventManager;
     }
 
@@ -44,9 +40,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
     {
         $this->eventManager->remove($this);
         $this->localInMemoryMap = null;
-        $this->localInMemoryInventory = null;
         $this->getGame()->map = MapHelper::generateMap(8, 8)->jsonSerialize();
-        $this->getGame()->inventory = InventoryHelper::generateInventory()->jsonSerialize();
         $this->getGame()->save();
     }
 
@@ -66,20 +60,9 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         return $this->localInMemoryMap;
     }
 
-    public function getInventory(): Inventory
-    {
-        if ($this->localInMemoryInventory) {
-            return $this->localInMemoryInventory;
-        }
-        $game = $this->getGame();
-        $this->localInMemoryInventory = Inventory::fromJson($game->inventory);
-        return $this->localInMemoryInventory;
-    }
-
     public function onEvent(StateChangedEvent $event): void
     {
         $tile = $event->getModel();
-        $id = $tile->getId();
         $className = class_basename($tile);
         if ($className === 'Tile') {
             $this->saveMap();

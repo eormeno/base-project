@@ -7,6 +7,9 @@
 <div class="grid-cols-10"></div>
 <div class="grid-cols-11"></div>
 <div class="grid-cols-12"></div>
+<div class="grid-cols-13"></div>
+<div class="grid-cols-14"></div>
+<div class="grid-cols-15"></div>
 
 <div class="flex items-center justify-center">
     <div class="grid grid-cols-{{ $width }}">
