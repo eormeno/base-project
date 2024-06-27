@@ -32,6 +32,11 @@ class Item implements JsonSerializable, IStateManagedModel
         return $this->quantity;
     }
 
+    public function decrementQuantity(): void
+    {
+        $this->quantity--;
+    }
+
     public static function fromJson(array $data): Item
     {
         $id = $data['id'];

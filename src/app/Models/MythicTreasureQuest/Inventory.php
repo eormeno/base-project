@@ -45,6 +45,16 @@ class Inventory implements JsonSerializable, IStateManagedModel
         return $this->items[$index];
     }
 
+    public function getItemByTypeId(int $itemId): Item | null
+    {
+        foreach ($this->items as $item) {
+            if ($item->getItemId() === $itemId) {
+                return $item;
+            }
+        }
+        return null;
+    }
+
     public function jsonSerialize(): array
     {
         return [

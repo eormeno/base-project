@@ -127,12 +127,13 @@ abstract class StateAbstractImpl implements StateInterface
         ]);
     }
 
-    protected function doAction(string $action_name): void
+    protected function doAction(string $action_name, string $method, $parameter): void
     {
         $action_name = CaseConverters::snakeToPascal($action_name);
         $action_class = 'App\\Actions\\' . $this->context->serviceManager->baseName() . '\\' . $action_name . 'Action';
-        $instance = (new ReflectionClass($action_class))->newInstance();
-        $instance->use();
+        $class = new ReflectionClass($action_class);
+        $instance = $class->newInstance();
+        $instance->$method($parameter);
     }
 
 }

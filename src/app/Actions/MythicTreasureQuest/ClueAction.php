@@ -2,14 +2,17 @@
 
 namespace App\Actions\MythicTreasureQuest;
 
+use App\FSM\IStateManagedModel;
+use App\FSM\StateAbstractImpl;
 use App\Traits\ToastTrigger;
 
 class ClueAction
 {
     use ToastTrigger;
 
-    public function use(): void
+    public function use($inventoryRepository): void
     {
-        $this->infoToast('Do you want to consume one clue?');
+        $this->infoToast('Clue shown!');
+        $inventoryRepository->decrementItemBySlug('clue');
     }
 }

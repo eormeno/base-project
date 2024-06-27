@@ -1,4 +1,4 @@
-<button onclick="sendEvent('select',{'item':{{ $id }}})">
+<button onclick="sendEvent('select',{'slug': '{{ $slug }}'})">
     <div
         class="w-12 h-12 m-1 text-gray-600 hover:bg-slate-700 hover:text-white flex items-center justify-center border rounded-md shadow-md relative">
         <img src="{{ asset('images/items/' . $icon) }}" alt="{{ $name }}" class="w-5 h-5">

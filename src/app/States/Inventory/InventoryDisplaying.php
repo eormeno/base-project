@@ -16,6 +16,12 @@ class InventoryDisplaying extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $this->items = $this->context->stateManager->enqueueAllForRendering($this->cast()->getItems());
+        $items = $this->cast()->getItems();
+        // remove items with quantity 0
+        $items = array_filter($items, function ($item) {
+            $qty = $item->getQuantity();
+            return $qty > 0 || $qty == -1 ;
+        });
+        $this->items = $this->context->stateManager->enqueueAllForRendering($items);
     }
 }
