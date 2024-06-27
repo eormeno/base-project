@@ -28,7 +28,7 @@ class ItemNormalState extends StateAbstractImpl
     {
         $this->id = $this->cast()->getId();
         $itemId = $this->cast()->getItemId();
-        $this->itemInfo = $this->context->inventoryRepository->getItemInfo($itemId);
+        $this->itemInfo = $this->context->mythicTreasureQuestItemRepository->getItemInfo($itemId);
         $this->icon = $this->itemInfo['icon'];
         $this->name = $this->itemInfo['name'];
         $this->quantity = $this->cast()->getQuantity();

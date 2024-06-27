@@ -2,7 +2,6 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
-use App\Models\MythicTreasureQuestItem;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
 use App\Models\MythicTreasureQuest\Inventory;
@@ -28,14 +27,4 @@ class InventoryRepository extends AbstractServiceComponent
         $this->localInMemoryInventory = Inventory::fromJson($game->inventory);
         return $this->localInMemoryInventory;
     }
-
-    public function getItemInfo(int $itemId): array
-    {
-        $item = MythicTreasureQuestItem::findOrFail($itemId);
-        $icon = $item->icon;
-        $name = $item->name;
-        $description = $item->description;
-        return compact('icon', 'name', 'description');
-    }
-
 }
