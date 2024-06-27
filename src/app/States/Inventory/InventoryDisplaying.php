@@ -8,6 +8,7 @@ use App\Models\MythicTreasureQuest\Inventory;
 class InventoryDisplaying extends StateAbstractImpl
 {
     public array $items = [];
+    public int $itemsCount = 0;
 
     protected function cast(): Inventory
     {
@@ -20,8 +21,9 @@ class InventoryDisplaying extends StateAbstractImpl
         // remove items with quantity 0
         $items = array_filter($items, function ($item) {
             $qty = $item->getQuantity();
-            return $qty > 0 || $qty == -1 ;
+            return $qty > 0;
         });
+        $this->itemsCount = count($items);
         $this->items = $this->context->stateManager->enqueueAllForRendering($items);
     }
 }
