@@ -57,7 +57,7 @@ class GameService extends AbstractServiceComponent
         }
         $tile = $this->availableTiles[array_rand($this->availableTiles)];
         $tile->setMarkedAsClue(true);
-        $this->inventoryRepository->saveInventory();
+        $this->gameRepository->saveMap();
         return true;
     }
 
