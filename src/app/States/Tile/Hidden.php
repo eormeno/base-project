@@ -25,6 +25,11 @@ class Hidden extends StateAbstractImpl
         return Revealed::StateClass();
     }
 
+    public function onRefreshEvent()
+    {
+        $this->onRefresh();
+    }
+
     public function onTileOffClickEvent()
     {
         if ($this->cast()->getHasTrap()) {
