@@ -20,8 +20,8 @@ class ItemNormalState extends StateAbstractImpl
 
     public function onSelectEvent(int $item)
     {
-        $description = $this->itemInfo['description'];
-        $this->infoToast($description);
+        $slug = $this->itemInfo['slug'];
+        $this->doAction($slug);
     }
 
     public function onRefresh(): void

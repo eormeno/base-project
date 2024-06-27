@@ -3,12 +3,33 @@
 namespace App\Services;
 
 use Exception;
+use ReflectionClass;
+use App\Utils\CaseConverters;
 
 abstract class AbstractServiceManager
 {
     protected $services = [];
     protected ?EventManager $eventManager = null;
     protected ?StateManager $stateManager = null;
+    protected string $baseName = '';
+    protected string $baseKebabName = '';
+
+    public function __construct()
+    {
+        $serviceManagerName = (new ReflectionClass($this))->getShortName();
+        $this->baseName = substr($serviceManagerName, 0, -14);
+        $this->baseKebabName = CaseConverters::toKebab($this->baseName);
+    }
+
+    public function baseName(): string
+    {
+        return $this->baseName;
+    }
+
+    public function baseKebabName(): string
+    {
+        return $this->baseKebabName;
+    }
 
     protected function addService(string $name, AbstractServiceComponent $service): void
     {

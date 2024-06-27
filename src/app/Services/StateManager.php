@@ -9,9 +9,11 @@ class StateManager
 {
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
+    protected AbstractServiceManager $serviceManager;
 
-    public final function __construct(protected AbstractServiceManager $serviceManager)
+    public final function __construct(AbstractServiceManager $serviceManager)
     {
+        $this->serviceManager = $serviceManager;
     }
 
     public final function enqueueEvent(array $eventInfo)
@@ -19,7 +21,7 @@ class StateManager
         $this->eventQueue[] = $eventInfo;
     }
 
-    public final function getAllStatesViews(string $strControllerKebabName)
+    public final function getAllStatesViews()
     {
         $arrViews = [];
         reset($this->eventQueue);
@@ -30,7 +32,7 @@ class StateManager
                     $eventInfo['destination'] = $strAlias;
                 }
                 $stateContext = $this->arrStatesMap[$strAlias];
-                $view = $stateContext->request($eventInfo)->view($strControllerKebabName);
+                $view = $stateContext->request($eventInfo)->view($this->serviceManager->baseKebabName());
                 $view = base64_encode($view);
                 $arrViews[$strAlias] = $view;
                 next($this->arrStatesMap);

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequestFilter;
-use App\Services\GuessTheNumber\GuessTheNumberGameServiceManager;
+use App\Services\GuessTheNumber\GuessTheNumberServiceManager;
 
 class GuessTheNumberController extends BaseController
 {
     public function __construct(
-        protected GuessTheNumberGameServiceManager $serviceManager
+        GuessTheNumberServiceManager $serviceManager
     ) {
+        parent::__construct($serviceManager);
     }
 
     public function event(EventRequestFilter $request)
@@ -17,7 +18,7 @@ class GuessTheNumberController extends BaseController
         $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
         $this->serviceManager->stateManager->enqueueForRendering($game);
         $this->serviceManager->stateManager->enqueueEvent($request->eventInfo());
-        return $this->serviceManager->stateManager->getAllStatesViews($this->name());
+        return $this->serviceManager->stateManager->getAllStatesViews();
     }
 
     public function reset(): void

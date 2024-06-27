@@ -8,8 +8,9 @@ use App\Services\MythicTreasureQuest\MythicTreasureQuestServiceManager;
 class MythicTreasureQuestController extends BaseController
 {
     public function __construct(
-        protected MythicTreasureQuestServiceManager $serviceManager
+        MythicTreasureQuestServiceManager $serviceManager
     ) {
+        parent::__construct($serviceManager);
     }
 
     public function event(EventRequestFilter $request)
@@ -17,7 +18,7 @@ class MythicTreasureQuestController extends BaseController
         $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
         $this->serviceManager->stateManager->enqueueForRendering($game);
         $this->serviceManager->stateManager->enqueueEvent($request->eventInfo());
-        return $this->serviceManager->stateManager->getAllStatesViews($this->name());
+        return $this->serviceManager->stateManager->getAllStatesViews();
     }
 
     public function reset(): void

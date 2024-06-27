@@ -6,10 +6,11 @@ use App\Services\AbstractServiceManager;
 use App\Repositories\Globals\UserRepository;
 use App\Repositories\GuessTheNumber\GameRepository;
 
-class GuessTheNumberGameServiceManager extends AbstractServiceManager
+class GuessTheNumberServiceManager extends AbstractServiceManager
 {
     public function __construct()
     {
+        parent::__construct();
         $this->addService('gameConfigService', new GameConfigService($this));
         $this->addService('messageService', new MessageService($this));
         $this->addService('gameService', new GameService($this));

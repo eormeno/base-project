@@ -12,6 +12,7 @@ class MythicTreasureQuestServiceManager extends AbstractServiceManager
 {
     public function __construct()
     {
+        parent::__construct();
         $this->addService('gameService', new GameService($this));
         $this->addService('gameRepository', new GameRepository($this));
         $this->addService('inventoryRepository', new InventoryRepository($this));

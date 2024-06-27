@@ -10,9 +10,10 @@ class MythicTreasureQuestItemRepository extends AbstractServiceComponent
     public function getItemInfo(int $itemId): array
     {
         $item = MythicTreasureQuestItem::findOrFail($itemId);
+        $slug = $item->slug;
         $icon = $item->icon;
         $name = $item->name;
         $description = $item->description;
-        return compact('icon', 'name', 'description');
+        return compact('slug', 'icon', 'name', 'description');
     }
 }
