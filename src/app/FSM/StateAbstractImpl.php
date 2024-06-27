@@ -127,11 +127,12 @@ abstract class StateAbstractImpl implements StateInterface
         ]);
     }
 
-    protected function doAction(string $action_name): ReflectionClass
+    protected function doAction(string $action_name): void
     {
         $action_name = CaseConverters::snakeToPascal($action_name);
-        $action_class = 'App\\Actions\\' . self::StateClass()->getNamespaceName() . '\\' . $action_name . 'Action';
-        return new ReflectionClass($action_class);
+        $action_class = 'App\\Actions\\' . $this->context->serviceManager->baseName() . '\\' . $action_name . 'Action';
+        $instance = (new ReflectionClass($action_class))->newInstance();
+        $instance->use();
     }
 
 }
