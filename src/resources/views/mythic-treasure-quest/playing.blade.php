@@ -12,7 +12,7 @@
 <div class="grid-cols-15"></div>
 
 <div class="flex items-center justify-center">
-    <div class="grid grid-cols-{{ $width }}">
+    <div class="grid grid-cols-{{ $width }} bg-slate-700">
         @foreach ($list as $item)
             <div id="{{ $item }}">
             </div>
