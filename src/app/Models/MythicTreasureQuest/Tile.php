@@ -17,6 +17,7 @@ class Tile implements JsonSerializable, IStateManagedModel
         private Map $map,
         private bool $hasTrap = false,
         private bool $hasFlag = false,
+        private bool $isMarkedAsClue = false,
         private int $trapsAround = 0,
         private ?string $state = null
     ) {
@@ -84,6 +85,16 @@ class Tile implements JsonSerializable, IStateManagedModel
         $this->trapsAround = $trapsAround;
     }
 
+    public function isMarkedAsClue(): bool
+    {
+        return $this->isMarkedAsClue;
+    }
+
+    public function setMarkedAsClue(bool $isMarkedAsClue): void
+    {
+        $this->isMarkedAsClue = $isMarkedAsClue;
+    }
+
     public function getState(): string|null
     {
         return $this->state;
@@ -105,17 +116,18 @@ class Tile implements JsonSerializable, IStateManagedModel
         $state = $data['state'];
         $hasTrap = $data['trap'] ?? false;
         $hasFlag = $data['flag'] ?? false;
+        $markedAsClue = $data['markedAsClue'] ?? false;
         $trapsAround = $data['trapsAround'] ?? 0;
-        return new Tile($id, $map, $hasTrap, $hasFlag, $trapsAround, $state);
+        return new Tile($id, $map, $hasTrap, $hasFlag, $markedAsClue, $trapsAround, $state);
     }
 
     public static function newEmptyTile(Map $map, int $x, int $y): Tile
     {
         return self::fromJson($map, [
             'id' => $y * $map->getWidth() + $x,
-            'mapWidth' => $map->getWidth(),
             'trap' => false,
             'flag' => false,
+            'markedAsClue' => false,
             'trapsAround' => 0,
             'state' => 'hidden'
         ]);
@@ -127,6 +139,7 @@ class Tile implements JsonSerializable, IStateManagedModel
             'id' => $this->id,
             'trap' => $this->hasTrap,
             'flag' => $this->hasFlag,
+            'markedAsClue' => $this->isMarkedAsClue,
             'trapsAround' => $this->trapsAround,
             'state' => $this->state,
         ];

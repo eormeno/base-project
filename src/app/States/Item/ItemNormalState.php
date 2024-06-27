@@ -22,7 +22,7 @@ class ItemNormalState extends StateAbstractImpl
 
     public function onSelectEvent(string $slug)
     {
-        $this->doAction($slug, 'use', $this->context->inventoryRepository);
+        $this->doAction($slug, 'use');
     }
 
     public function onRefresh(): void

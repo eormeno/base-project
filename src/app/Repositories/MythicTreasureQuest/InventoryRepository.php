@@ -40,15 +40,15 @@ class InventoryRepository extends AbstractServiceComponent
         $item = $inventory->getItemByTypeId($itemTypeInfo['id']);
         if ($item) {
             $item->decrementQuantity();
-            $this->saveInventory($inventory);
+            $this->saveInventory();
         }
     }
 
-    public function saveInventory(Inventory $inventory): void
+    public function saveInventory(): void
     {
+        $inventory = $this->getInventory();
         $game = $this->gameRepository->getGame();
         $game->inventory = $inventory->jsonSerialize();
         $game->save();
-        $this->localInMemoryInventory = $inventory;
     }
 }

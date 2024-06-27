@@ -7,9 +7,17 @@ use App\Models\MythicTreasureQuest\Tile;
 
 class Hidden extends StateAbstractImpl
 {
+    public bool $hasClue = false;
+    public bool $hasFlag = false;
+
     protected function cast(): Tile
     {
         return $this->model;
+    }
+
+    public function onRefresh(): void {
+        $this->hasClue = $this->cast()->isMarkedAsClue();
+        $this->hasFlag = $this->cast()->getHasFlag();
     }
 
     public function onRevealEvent()
