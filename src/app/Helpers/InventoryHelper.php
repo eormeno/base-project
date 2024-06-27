@@ -17,7 +17,7 @@ class InventoryHelper
         $clue = $defaultItems->where('slug', 'clue')->first();
 
         $inventory = new Inventory();
-        $inventory->addItem(new Item(1, $selector->id, 1));
+        $inventory->addItem(new Item(1, $selector->id, -1));
         $inventory->addItem(new Item(2, $flag->id, 8));
         $inventory->addItem(new Item(3, $clue->id, 2));
 
