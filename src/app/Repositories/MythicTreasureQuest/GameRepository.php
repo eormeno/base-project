@@ -6,6 +6,7 @@ use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
 use App\Services\EventManager;
+use App\Helpers\InventoryHelper;
 use App\Models\MythicTreasureQuest\Map;
 use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceManager;
@@ -41,6 +42,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         $this->eventManager->remove($this);
         $this->localInMemoryMap = null;
         $this->getGame()->map = MapHelper::generateMap(8, 8)->jsonSerialize();
+        $this->getGame()->inventory = InventoryHelper::generateInventory()->jsonSerialize();
         $this->getGame()->save();
     }
 
