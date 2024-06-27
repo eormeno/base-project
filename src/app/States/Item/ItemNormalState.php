@@ -11,6 +11,8 @@ class ItemNormalState extends StateAbstractImpl
     public string $icon;
     public string $name;
 
+    public int $quantity;
+
     protected function cast(): Item
     {
         return $this->model;
@@ -28,5 +30,6 @@ class ItemNormalState extends StateAbstractImpl
         $itemInfo = $this->context->inventoryRepository->getItemInfo($itemId);
         $this->icon = $itemInfo['icon'];
         $this->name = $itemInfo['name'];
+        $this->quantity = $this->cast()->getQuantity();
     }
 }

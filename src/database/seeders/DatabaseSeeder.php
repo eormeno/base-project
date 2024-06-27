@@ -17,21 +17,21 @@ class DatabaseSeeder extends Seeder
         MythicTreasureQuestItem::factory([
             'slug' => 'selector',
             'name' => 'Selector',
-            'icon' => 'selector.png',
+            'icon' => 'selector.svg',
             'description' => 'Selection tool'
         ])->create();
 
         MythicTreasureQuestItem::factory([
             'slug' => 'flag',
             'name' => 'Flag',
-            'icon' => 'flag.png',
+            'icon' => 'flag.svg',
             'description' => 'Marking tool'
         ])->create();
 
         MythicTreasureQuestItem::factory([
             'slug' => 'clue',
             'name' => 'Clue',
-            'icon' => 'clue.png',
+            'icon' => 'clue.svg',
             'description' => 'Hint to the next location'
         ])->create();
 

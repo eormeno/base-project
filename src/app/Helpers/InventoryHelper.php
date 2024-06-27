@@ -11,11 +11,16 @@ class InventoryHelper
     public static function generateInventory(): Inventory
     {
         $defaultItems = MythicTreasureQuestItem::all();
+
+        $selector = $defaultItems->where('slug', 'selector')->first();
+        $flag = $defaultItems->where('slug', 'flag')->first();
+        $clue = $defaultItems->where('slug', 'clue')->first();
+
         $inventory = new Inventory();
-        $inBagItemId = 1;
-        foreach ($defaultItems as $item) {
-            $inventory->addItem(new Item($inBagItemId++, $item->id, 1));
-        }
+        $inventory->addItem(new Item(1, $selector->id, 1));
+        $inventory->addItem(new Item(2, $flag->id, 8));
+        $inventory->addItem(new Item(3, $clue->id, 2));
+
         return $inventory;
     }
 }
