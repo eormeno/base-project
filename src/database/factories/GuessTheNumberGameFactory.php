@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Services\GuessTheNumber\GuessTheNumberGameServiceManager;
+use App\Services\GuessTheNumber\GuessTheNumberServiceManager;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\GuessTheNumberGame>
@@ -13,7 +13,7 @@ class GuessTheNumberGameFactory extends Factory
 
     public function definition(): array
     {
-        $configService = resolve(GuessTheNumberGameServiceManager::class)->get('gameConfigService');
+        $configService = resolve(GuessTheNumberServiceManager::class)->get('gameConfigService');
         $min_number = $configService->getMinNumber();
         $max_number = $configService->getMaxNumber();
         $max_attempts = $configService->getMaxAttempts();
@@ -31,7 +31,7 @@ class GuessTheNumberGameFactory extends Factory
     {
         return $this->state(
             function (array $attributes) {
-                $configService = resolve(GuessTheNumberGameServiceManager::class)->get('gameConfigService');
+                $configService = resolve(GuessTheNumberServiceManager::class)->get('gameConfigService');
                 $min_number = $configService->getMinNumber();
                 $max_number = $configService->getMaxNumber();
                 $max_attempts = $configService->getMaxAttempts();

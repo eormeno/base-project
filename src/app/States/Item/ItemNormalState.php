@@ -28,9 +28,9 @@ class ItemNormalState extends StateAbstractImpl
     public function onRefresh(): void
     {
         $this->id = $this->cast()->getId();
-        $this->slug = $this->itemInfo['slug'];
         $itemId = $this->cast()->getItemId();
         $this->itemInfo = $this->context->mythicTreasureQuestItemRepository->getItemInfo($itemId);
+        $this->slug = $this->itemInfo['slug'];
         $this->icon = $this->itemInfo['icon'];
         $this->name = $this->itemInfo['name'];
         $this->quantity = $this->cast()->getQuantity();
