@@ -25,12 +25,14 @@ function findParentWithKey(element) {
 }
 
 var eventSent = false;
+var currentMillis = 0;
 
 function sendEvent(event, formData = {}) {
     if (eventSent) {
         return;
     }
     eventSent = true;
+    currentMillis = Date.now();
     const keyParent = findParentWithKey(document.activeElement);
     const source = keyParent ? keyParent.getAttribute('key') : null;
 
@@ -60,6 +62,7 @@ function sendEvent(event, formData = {}) {
                     eventSent = false;
                 } else {
                     json = JSON.parse(data);
+                    elementsUpdated = 0;
                     for (const key in json) {
                         const element = document.getElementById(key);
                         if (element) {
@@ -68,9 +71,11 @@ function sendEvent(event, formData = {}) {
                             element.innerHTML = $html;
                             runScripts(element);
                             // localStorage.setItem('{{ $routeName }}', element);
+                            elementsUpdated++;
                         }
                     }
                     eventSent = false;
+                    console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
                 }
             } catch (error) {
                 document.write(data);
