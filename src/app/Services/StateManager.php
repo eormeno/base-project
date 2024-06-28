@@ -32,9 +32,12 @@ class StateManager
                     $eventInfo['destination'] = $strAlias;
                 }
                 $stateContext = $this->arrStatesMap[$strAlias];
-                $view = $stateContext->request($eventInfo)->view($this->serviceManager->baseKebabName());
-                $view = base64_encode($view);
-                $arrViews[$strAlias] = $view;
+                $state = $stateContext->request($eventInfo);
+                if ($stateContext->isStateChanged || $eventInfo['event'] == null) {
+                    $view = $state->view($this->serviceManager->baseKebabName());
+                    $view = base64_encode($view);
+                    $arrViews[$strAlias] = $view;
+                }
                 next($this->arrStatesMap);
             }
             next($this->eventQueue);

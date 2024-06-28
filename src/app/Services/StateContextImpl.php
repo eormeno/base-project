@@ -20,6 +20,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected StateManager $stateManager;
     protected IStateManagedModel $object;
     protected int $id;
+    public bool $isStateChanged = false;
 
     public function __construct(
         AbstractServiceManager $serviceManager,
@@ -59,6 +60,8 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
 
     public function request(array $eventInfo): StateInterface
     {
+        $this->restoreState();
+        $initial_state = $this->__state;
         do {
             $this->restoreState();
             $current_state = $this->__state;
@@ -69,6 +72,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
             }
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($current_state != $changed_state);
+        $this->isStateChanged = $initial_state != $changed_state;
         return $changed_state;
     }
 
