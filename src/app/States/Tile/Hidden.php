@@ -20,6 +20,11 @@ class Hidden extends StateAbstractImpl
         $this->hasFlag = $this->cast()->getHasFlag();
     }
 
+    public function onFlagEvent()
+    {
+        return FlaggingTile::StateClass();
+    }
+
     public function onRevealEvent()
     {
         return Revealed::StateClass();
