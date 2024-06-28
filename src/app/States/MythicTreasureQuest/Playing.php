@@ -4,6 +4,7 @@ namespace App\States\MythicTreasureQuest;
 
 use App\FSM\StateAbstractImpl;
 use App\States\MythicTreasureQuest\Initial;
+use App\States\MythicTreasureQuest\Flagging;
 
 class Playing extends StateAbstractImpl
 {
@@ -11,11 +12,6 @@ class Playing extends StateAbstractImpl
     public int $height = 8;
     public array $list = [];
     public bool $playAgain = false;
-
-    public function onEnter(): void{
-        $this->playAgain = false;
-        $this->context->gameRepository->restartGame();
-    }
 
     public function onRefresh(): void
     {
@@ -29,7 +25,14 @@ class Playing extends StateAbstractImpl
 
     public function onPlayAgainEvent()
     {
+        $this->playAgain = false;
+        $this->context->gameRepository->restartGame();
         return Initial::StateClass();
+    }
+
+    public function onFlagEvent()
+    {
+        return Flagging::StateClass();
     }
 
     public function onGameOverEvent(): void

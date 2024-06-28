@@ -30,7 +30,7 @@ class Hidden extends StateAbstractImpl
         $this->onRefresh();
     }
 
-    public function onTileOffClickEvent()
+    public function onTileClickedEvent()
     {
         if ($this->cast()->getHasTrap()) {
             $this->context->gameService->revealAll();

@@ -22,6 +22,10 @@ class ItemNormalState extends StateAbstractImpl
 
     public function onSelectEvent(string $slug)
     {
+        if ($slug==='flag'){
+            $this->sendSignal('flag');
+            return;
+        }
         $this->doAction($slug, 'use');
     }
 
