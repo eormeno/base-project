@@ -9,5 +9,6 @@ class Constants
         'source' => null,
         'data' => null,
         'destination' => null,
+        'rendered' => [],
     ];
 }

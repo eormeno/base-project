@@ -1,17 +1,11 @@
-window.addEventListener('DOMContentLoaded', (event) => {
-    // previousData();
-});
+var eventSent = false;
+var currentMillis = 0;
+var arrObjects = [];
 
 window.onload = function() {
+    arrObjects = [];
     sendEvent();
 }
-
-// function previousData() {
-//     let data = localStorage.getItem('{{ $routeName }}');
-//     if (data) {
-//         document.getElementById('main').innerHTML = data;
-//     }
-// }
 
 function findParentWithKey(element) {
     let parent = element.parentElement;
@@ -23,9 +17,6 @@ function findParentWithKey(element) {
     }
     return null;
 }
-
-var eventSent = false;
-var currentMillis = 0;
 
 function sendEvent(event, formData = {}) {
     if (eventSent) {
@@ -50,13 +41,13 @@ function sendEvent(event, formData = {}) {
             body: JSON.stringify({
                 event: event,
                 source: source,
-                data: formData
+                data: formData,
+                rendered: arrObjects
             })
         })
         .then(response => response.text())
         .then(data => {
             try {
-                // if the data starts with a <!DOCTYPE html> tag, is an error page
                 if (data.startsWith('<!DOCTYPE html>')) {
                     document.write(data);
                     eventSent = false;
@@ -70,8 +61,8 @@ function sendEvent(event, formData = {}) {
                             $html = '<div key="' + key + '">' + $html + '</div>';
                             element.innerHTML = $html;
                             runScripts(element);
-                            // localStorage.setItem('{{ $routeName }}', element);
                             elementsUpdated++;
+                            arrObjects.push(key);
                         }
                     }
                     eventSent = false;

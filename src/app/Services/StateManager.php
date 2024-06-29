@@ -9,6 +9,7 @@ class StateManager
 {
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
+    protected array $clientRenderedAliases = [];
     protected AbstractServiceManager $serviceManager;
 
     public final function __construct(AbstractServiceManager $serviceManager)
@@ -18,7 +19,16 @@ class StateManager
 
     public final function enqueueEvent(array $eventInfo)
     {
+        $rendered = $eventInfo['rendered'] ?? [];
+        if (!empty($rendered)) {
+            $this->clientRenderedAliases = $rendered;
+        }
         $this->eventQueue[] = $eventInfo;
+    }
+
+    private function requireRefresh(string $strAlias): bool
+    {
+        return !in_array($strAlias, $this->clientRenderedAliases);
     }
 
     public final function getAllStatesViews()
@@ -33,7 +43,11 @@ class StateManager
                 }
                 $stateContext = $this->arrStatesMap[$strAlias];
                 $state = $stateContext->request($eventInfo);
-                if ($stateContext->isStateChanged || $eventInfo['event'] == null) {
+                if (
+                    $eventInfo['event'] == null ||
+                    $stateContext->isStateChanged ||
+                    $this->requireRefresh($strAlias)
+                ) {
                     $view = $state->view($this->serviceManager->baseKebabName());
                     $view = base64_encode($view);
                     $arrViews[$strAlias] = $view;
