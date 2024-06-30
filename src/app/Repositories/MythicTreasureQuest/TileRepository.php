@@ -20,14 +20,14 @@ class TileRepository extends AbstractServiceComponent
     {
         $tile->setMarkedAsClue(true);
         $this->gameRepository->saveMap();
-        $this->requireRefresh($tile->getAlias());
+        $this->requireRefresh($tile);
     }
 
     public function markTileWithFlag(Tile $tile): void
     {
         $tile->setHasFlag(true);
         $this->gameRepository->saveMap();
-        $this->requireRefresh($tile->getAlias());
+        $this->requireRefresh($tile);
     }
 
 }

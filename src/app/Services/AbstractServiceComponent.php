@@ -36,7 +36,12 @@ abstract class AbstractServiceComponent
         $this->serviceManager->stateManager->enqueueEvent($event);
     }
 
-    protected final function requireRefresh(string $alias)
+    protected final function requireRefresh(IStateManagedModel $model)
+    {
+        $this->_requireRefresh($model->getAlias());
+    }
+
+    protected final function _requireRefresh(string $alias)
     {
         $this->serviceManager->stateManager->requireRefresh($alias);
         $this->_sendEvent($alias, 'refresh');

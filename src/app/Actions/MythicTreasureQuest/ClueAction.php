@@ -28,6 +28,6 @@ class ClueAction
         }
 
         //$this->infoToast('Clue shown!');
-        //$this->inventoryRepository->decrementItemBySlug('clue');
+        $this->inventoryRepository->decrementItemBySlug('clue');
     }
 }
