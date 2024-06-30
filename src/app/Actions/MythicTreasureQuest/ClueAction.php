@@ -27,7 +27,7 @@ class ClueAction
             return;
         }
 
-        $this->infoToast('Clue shown!');
-        $this->inventoryRepository->decrementItemBySlug('clue');
+        //$this->infoToast('Clue shown!');
+        //$this->inventoryRepository->decrementItemBySlug('clue');
     }
 }

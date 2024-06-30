@@ -4,12 +4,15 @@ namespace App\Services;
 
 use App\FSM\IStateManagedModel;
 use App\Services\StateContextImpl;
+use App\Traits\DebugHelper;
 
 class StateManager
 {
+    use DebugHelper;
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
     protected array $clientRenderedAliases = [];
+    protected array $refreshRequiredAliases = [];
     protected AbstractServiceManager $serviceManager;
 
     public final function __construct(AbstractServiceManager $serviceManager)
@@ -26,9 +29,16 @@ class StateManager
         $this->eventQueue[] = $eventInfo;
     }
 
-    private function requireRefresh(string $strAlias): bool
+    private function isRefreshRequired(string $strAlias): bool
     {
-        return !in_array($strAlias, $this->clientRenderedAliases);
+        $hasExplicitRefresh = in_array($strAlias, $this->refreshRequiredAliases);
+        $notIsBeingRendered = !in_array($strAlias, $this->clientRenderedAliases);
+        return $hasExplicitRefresh || $notIsBeingRendered;
+    }
+
+    public final function requireRefresh(string $strAlias)
+    {
+        $this->refreshRequiredAliases[] = $strAlias;
     }
 
     public final function getAllStatesViews()
@@ -46,7 +56,7 @@ class StateManager
                 if (
                     $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
-                    $this->requireRefresh($strAlias)
+                    $this->isRefreshRequired($strAlias)
                 ) {
                     $view = $state->view($this->serviceManager->baseKebabName());
                     $view = base64_encode($view);

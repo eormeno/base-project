@@ -12,19 +12,34 @@ abstract class AbstractServiceComponent
     ) {
     }
 
-    protected function sendEvent(
+    protected final function sendEvent(
         IStateManagedModel $model,
+        string $event,
+        string|null $destination = null,
+        array $data = []
+    ) {
+        $this->_sendEvent($model->getAlias(), $event, $destination, $data);
+    }
+
+    private function _sendEvent(
+        string $modelAlias,
         string $event,
         string|null $destination = null,
         array $data = []
     ) {
         $event = [
             'event' => $event,
-            'source' => $model->getAlias(),
+            'source' => $modelAlias,
             'data' => $data,
             'destination' => $destination,
         ];
         $this->serviceManager->stateManager->enqueueEvent($event);
+    }
+
+    protected final function requireRefresh(string $alias)
+    {
+        $this->serviceManager->stateManager->requireRefresh($alias);
+        $this->_sendEvent($alias, 'refresh');
     }
 
     public function __get($name)
