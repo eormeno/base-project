@@ -2,7 +2,7 @@ var eventSent = false;
 var currentMillis = 0;
 var arrObjects = [];
 
-window.onload = function() {
+window.onload = function () {
     arrObjects = [];
     sendEvent();
 }
@@ -33,18 +33,18 @@ function sendEvent(event, formData = {}) {
     var token = routeDiv.getAttribute('token');
 
     fetch(route, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': token
-            },
-            body: JSON.stringify({
-                event: event,
-                source: source,
-                data: formData,
-                rendered: arrObjects
-            })
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token
+        },
+        body: JSON.stringify({
+            event: event,
+            source: source,
+            data: formData,
+            rendered: arrObjects
         })
+    })
         .then(response => response.text())
         .then(data => {
             try {
@@ -54,6 +54,7 @@ function sendEvent(event, formData = {}) {
                 } else {
                     json = JSON.parse(data);
                     elementsUpdated = 0;
+                    updated = "";
                     for (const key in json) {
                         const element = document.getElementById(key);
                         if (element) {
@@ -62,11 +63,18 @@ function sendEvent(event, formData = {}) {
                             element.innerHTML = $html;
                             runScripts(element);
                             elementsUpdated++;
-                            arrObjects.push(key);
+                            updated += key + ", ";
+                            if (!arrObjects.includes(key)) {
+                                arrObjects.push(key);
+                            }
+                        } else{
+                            console.error('Element not found: ' + key);
                         }
                     }
                     eventSent = false;
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
+                    console.info('Current: ' + arrObjects);
+                    console.info('Updated: ' + updated);
                 }
             } catch (error) {
                 document.write(data);

@@ -41,8 +41,11 @@ class InventoryRepository extends AbstractServiceComponent
         if ($item) {
             $item->decrementQuantity();
             $this->saveInventory();
-            //$this->requireRefresh($item);
-            $this->requireRefresh($inventory);
+
+            //$this->requireRefresh($inventory);
+            // lo que pasa, es que refrescar un contenedor de items, no refresca los items en si, sino que refresca el contenedor.
+            // NECESITO establecer la relación padre-hijo entre el contenedor y los items, para que al refrescar el contenedor, se refresquen los items.
+            $this->requireRefresh($item);
         }
     }
 

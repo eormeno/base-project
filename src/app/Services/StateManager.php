@@ -105,9 +105,10 @@ class StateManager
         $strAlias = $object->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAlias] = new StateContextImpl($this->serviceManager, $object);
-            if (!in_array($strAlias, $this->refreshRequiredAliases)) {
-            	$this->refreshRequiredAliases[] = $strAlias;
-            }
+            //if (!in_array($strAlias, $this->refreshRequiredAliases)) {
+                // todo: check if this is necessary
+            //	$this->refreshRequiredAliases[] = $strAlias;
+            //}
         }
     }
 }
