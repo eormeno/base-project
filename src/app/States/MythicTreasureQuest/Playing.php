@@ -19,6 +19,12 @@ class Playing extends StateAbstractImpl
         $inventory = $this->context->inventoryRepository->getInventory();
         $this->context->stateManager->enqueueForRendering($inventory);
         $this->list = $this->context->stateManager->enqueueAllForRendering($map->getTiles());
+
+
+        $inventoryAlias = $this->context->addChild($inventory);
+        $this->list = $this->context->addChildren($map->getTiles());
+
+
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
     }
