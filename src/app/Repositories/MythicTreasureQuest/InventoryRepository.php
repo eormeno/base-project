@@ -41,7 +41,8 @@ class InventoryRepository extends AbstractServiceComponent
         if ($item) {
             $item->decrementQuantity();
             $this->saveInventory();
-            $this->requireRefresh($item);
+            //$this->requireRefresh($item);
+            $this->requireRefresh($inventory);
         }
     }
 

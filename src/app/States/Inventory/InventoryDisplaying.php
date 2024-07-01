@@ -4,9 +4,11 @@ namespace App\States\Inventory;
 
 use App\FSM\StateAbstractImpl;
 use App\Models\MythicTreasureQuest\Inventory;
+use App\Traits\DebugHelper;
 
 class InventoryDisplaying extends StateAbstractImpl
 {
+    use DebugHelper;
     public array $items = [];
     public int $itemsCount = 0;
 
@@ -25,5 +27,6 @@ class InventoryDisplaying extends StateAbstractImpl
         });
         $this->itemsCount = count($items);
         $this->items = $this->context->stateManager->enqueueAllForRendering($items);
+        //$this->log('InventoryDisplaying onRefresh itemsCount ' . count($this->items));
     }
 }

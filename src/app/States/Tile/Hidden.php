@@ -30,10 +30,10 @@ class Hidden extends StateAbstractImpl
         return Revealed::StateClass();
     }
 
-    public function onRefreshEvent()
-    {
-        $this->onRefresh();
-    }
+    // public function onRefreshEvent()
+    // {
+    //     $this->onRefresh();
+    // }
 
     public function onTileClickedEvent()
     {

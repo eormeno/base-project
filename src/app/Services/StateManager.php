@@ -14,6 +14,7 @@ class StateManager
     protected array $clientRenderedAliases = [];
     protected array $refreshRequiredAliases = [];
     protected AbstractServiceManager $serviceManager;
+    protected bool $isEnqueuedRefreshEvent = false;
 
     public final function __construct(AbstractServiceManager $serviceManager)
     {
@@ -39,6 +40,21 @@ class StateManager
     public final function requireRefresh(string $strAlias)
     {
         $this->refreshRequiredAliases[] = $strAlias;
+        $this->enqueueRefreshEvent();
+    }
+
+    private function enqueueRefreshEvent()
+    {
+        if ($this->isEnqueuedRefreshEvent) {
+            return;
+        }
+        $this->enqueueEvent([
+            'event' => 'refresh',
+            'source' => null,
+            'data' => [],
+            'destination' => 'all'
+        ]);
+        $this->isEnqueuedRefreshEvent = true;
     }
 
     public final function getAllStatesViews()
@@ -89,6 +105,9 @@ class StateManager
         $strAlias = $object->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAlias] = new StateContextImpl($this->serviceManager, $object);
+            if (!in_array($strAlias, $this->refreshRequiredAliases)) {
+            	$this->refreshRequiredAliases[] = $strAlias;
+            }
         }
     }
 }

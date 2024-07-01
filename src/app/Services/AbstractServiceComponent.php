@@ -44,7 +44,7 @@ abstract class AbstractServiceComponent
     protected final function _requireRefresh(string $alias)
     {
         $this->serviceManager->stateManager->requireRefresh($alias);
-        $this->_sendEvent($alias, 'refresh');
+        //$this->_sendEvent($alias, 'refresh');
     }
 
     public function __get($name)
