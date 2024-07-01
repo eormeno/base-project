@@ -67,14 +67,16 @@ function sendEvent(event, formData = {}) {
                             if (!arrObjects.includes(key)) {
                                 arrObjects.push(key);
                             }
-                        } else{
+                        } else {
                             console.error('Element not found: ' + key);
                         }
                     }
                     eventSent = false;
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
-                    console.info('Current: ' + arrObjects);
-                    console.info('Updated: ' + updated);
+                    // console.info('Current: ' + arrObjects);
+                    if (elementsUpdated > 0 && elementsUpdated < 10) {
+                        console.info('Updated: ' + updated);
+                    }
                 }
             } catch (error) {
                 document.write(data);

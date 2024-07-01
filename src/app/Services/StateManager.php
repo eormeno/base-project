@@ -86,29 +86,33 @@ class StateManager
     }
 
     public final function enqueueAllForRendering(
-        array $arrObjects,
-        bool $isUseShortAlias = false
+        array $arrObjects, IStateManagedModel $parent = null
     ) {
         $enqueuedObjectAliases = [];
         if (count($arrObjects) === 0) {
             return $enqueuedObjectAliases;
         }
         foreach ($arrObjects as $object) {
-            $this->enqueueForRendering($object);
+            $this->enqueueForRendering($object, $parent);
             $enqueuedObjectAliases[] = $object->getAlias();
         }
         return $enqueuedObjectAliases;
     }
 
-    public final function enqueueForRendering(IStateManagedModel $object)
+    public final function enqueueForRendering(IStateManagedModel $object, IStateManagedModel $parent = null)
+    {
+        $context = $this->findOrCreateContext($object);
+        if ($parent) {
+            $this->findOrCreateContext($parent)->addChild($context);
+        }
+    }
+
+    private function findOrCreateContext(IStateManagedModel $object): StateContextImpl
     {
         $strAlias = $object->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAlias] = new StateContextImpl($this->serviceManager, $object);
-            //if (!in_array($strAlias, $this->refreshRequiredAliases)) {
-                // todo: check if this is necessary
-            //	$this->refreshRequiredAliases[] = $strAlias;
-            //}
         }
+        return $this->arrStatesMap[$strAlias];
     }
 }

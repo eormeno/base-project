@@ -19,6 +19,8 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected StateUpdateHelper $stateUpdater;
     protected StateManager $stateManager;
     protected IStateManagedModel $object;
+    protected array $children = [];
+    protected StateContextInterface $parent;
     protected int $id;
     public bool $isStateChanged = false;
 
@@ -82,5 +84,32 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         $staRegistered = StatesLocalCache::findRegisteredStateInstance($rflState, $this->id);
         $this->stateUpdater->saveState($rflState);
         $this->setState($staRegistered::StateClass());
+    }
+
+    public function setParent(StateContextInterface $parent): void
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent(): StateContextInterface
+    {
+        return $this->parent;
+    }
+
+    public function addChild(StateContextInterface $child): void
+    {
+        $this->children[] = $child;
+    }
+
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    public function removeChild(StateContextInterface $child): void
+    {
+        $this->children = array_filter($this->children, function ($item) use ($child) {
+            return $item != $child;
+        });
     }
 }
