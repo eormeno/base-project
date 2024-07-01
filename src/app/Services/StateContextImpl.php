@@ -96,9 +96,14 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         return $this->parent;
     }
 
-    public function addChild(StateContextInterface $child): void
+    public function addChild(IStateManagedModel $child): StateContextInterface
     {
-        $this->children[] = $child;
+        $strAlias = $child->getAlias();
+        if (!array_key_exists($strAlias, $this->children)) {
+            $this->children[$strAlias] = new StateContextImpl($this->serviceManager, $child);
+            $this->children[$strAlias]->setParent($this);
+        }
+        return $this->children[$strAlias];
     }
 
     public function getChildren(): array
@@ -106,7 +111,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         return $this->children;
     }
 
-    public function removeChild(StateContextInterface $child): void
+    public function removeChild(IStateManagedModel $child): void
     {
         $this->children = array_filter($this->children, function ($item) use ($child) {
             return $item != $child;
