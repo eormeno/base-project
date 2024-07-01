@@ -10,6 +10,8 @@ interface StateContextInterface
 
     public function addChild(IStateManagedModel $child): StateContextInterface;
 
+    public function addChildren(array $children): array;
+
     public function getChildren(): array;
 
     public function removeChild(IStateManagedModel $child): void;

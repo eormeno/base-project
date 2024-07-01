@@ -96,6 +96,15 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         return $this->parent;
     }
 
+    public function addChildren(array $children): array
+    {
+        $arrChildren = [];
+        foreach ($children as $child) {
+            $arrChildren[] = $this->addChild($child);
+        }
+        return $arrChildren;
+    }
+
     public function addChild(IStateManagedModel $child): StateContextInterface
     {
         $strAlias = $child->getAlias();

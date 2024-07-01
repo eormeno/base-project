@@ -86,7 +86,8 @@ class StateManager
     }
 
     public final function enqueueAllForRendering(
-        array $arrObjects, IStateManagedModel $parent = null
+        array $arrObjects,
+        IStateManagedModel $parent = null
     ) {
         $enqueuedObjectAliases = [];
         if (count($arrObjects) === 0) {
@@ -101,9 +102,9 @@ class StateManager
 
     public final function enqueueForRendering(IStateManagedModel $object, IStateManagedModel $parent = null)
     {
-        $context = $this->findOrCreateContext($object);
+        $this->findOrCreateContext($object);
         if ($parent) {
-            $this->findOrCreateContext($parent)->addChild($context);
+            $this->findOrCreateContext($parent)->addChild($object);
         }
     }
 
