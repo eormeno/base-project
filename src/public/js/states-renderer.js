@@ -75,7 +75,7 @@ function sendEvent(event, formData = {}) {
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
                     // console.info('Current: ' + arrObjects);
                     if (elementsUpdated > 0 && elementsUpdated < 10) {
-                        console.info('Updated: ' + updated);
+                        //console.info('Updated: ' + updated);
                     }
                 }
             } catch (error) {

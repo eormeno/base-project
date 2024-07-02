@@ -77,7 +77,8 @@ class StateManager
 
     public final function getAllStatesViews()
     {
-        //$arrViews = [];
+        // get current microtime
+        $currentTimestamp = microtime(true);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             reset($this->arrStatesMap);
@@ -94,14 +95,16 @@ class StateManager
                 ) {
                     $view = $state->view($this->serviceManager->baseKebabName());
                     $view = base64_encode($view);
-                    //$arrViews[$strAlias] = $view;
                     $this->arrStatesMap[$strAlias]['view'] = $view;
                 }
                 next($this->arrStatesMap);
             }
             next($this->eventQueue);
         }
-        return $this->getViewsForRender();
+        $views = $this->getViewsForRender();
+        $elapsed = microtime(true) - $currentTimestamp;
+        $this->log('StateManager ' . $elapsed . 's');
+        return $views;
     }
 
     private function getViewsForRender(): array
@@ -138,7 +141,6 @@ class StateManager
         $strModelAlias = $this->findOrCreateContext($model);
         if ($parentModel) {
             $strParentModelAlias = $this->findOrCreateContext($parentModel);
-            // if the child is already a child of the parent, then don't add it again
             if (!in_array($strModelAlias, $this->arrStatesMap[$strParentModelAlias]['children'])) {
                 $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
             }
