@@ -46,6 +46,11 @@ class StateManager
         $this->enqueueRefreshEvent();
     }
 
+    private function getTree():array {
+        reset($this->arrStatesMap);
+        return $this->findAllChildren(key($this->arrStatesMap));
+    }
+
     private function findAllChildren(string $strAlias): array
     {
         $arrChildren = [];
@@ -72,7 +77,7 @@ class StateManager
 
     public final function getAllStatesViews()
     {
-        $arrViews = [];
+        //$arrViews = [];
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             reset($this->arrStatesMap);
@@ -89,11 +94,25 @@ class StateManager
                 ) {
                     $view = $state->view($this->serviceManager->baseKebabName());
                     $view = base64_encode($view);
-                    $arrViews[$strAlias] = $view;
+                    //$arrViews[$strAlias] = $view;
+                    $this->arrStatesMap[$strAlias]['view'] = $view;
                 }
                 next($this->arrStatesMap);
             }
             next($this->eventQueue);
+        }
+        return $this->getViewsForRender();
+    }
+
+    private function getViewsForRender(): array
+    {
+        $arrViews = [];
+        $tree = $this->getTree();
+        foreach ($tree as $strAlias) {
+            $view = $this->arrStatesMap[$strAlias]['view'];
+            if ($view) {
+                $arrViews[$strAlias] = $view;
+            }
         }
         return $arrViews;
     }
@@ -133,6 +152,7 @@ class StateManager
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
             $this->arrStatesMap[$strAlias]['children'] = [];
+            $this->arrStatesMap[$strAlias]['view'] = null;
         }
         return $strAlias;
     }
