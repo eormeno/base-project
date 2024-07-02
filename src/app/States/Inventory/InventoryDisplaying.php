@@ -26,8 +26,6 @@ class InventoryDisplaying extends StateAbstractImpl
             return $qty > 0;
         });
         $this->itemsCount = count($items);
-        $this->items = $this->context->stateManager->enqueueAllForRendering($items);
-        $this->items = $this->context->addChildren($items);
-        //$this->log('InventoryDisplaying onRefresh itemsCount ' . count($this->items));
+        $this->items = $this->context->stateManager->enqueueAllForRendering($items, $this->cast());
     }
 }
