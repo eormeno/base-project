@@ -69,6 +69,7 @@ class StateManager
         $this->enqueueEvent([
             'event' => 'refresh',
             'source' => null,
+            'is_signal' => true,
             'data' => [],
             'destination' => 'all'
         ]);
@@ -102,7 +103,7 @@ class StateManager
         }
         $views = $this->getViewsForRender();
         $elapsed = microtime(true) - $currentTimestamp;
-        $this->log('StateManager ' . $elapsed . 's');
+        //$this->log('StateManager ' . $elapsed . 's');
         return $views;
     }
 

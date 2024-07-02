@@ -19,9 +19,6 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
     protected StateUpdateHelper $stateUpdater;
     protected StateManager $stateManager;
     protected IStateManagedModel $object;
-    protected array $arrChildrenContext = [];
-    protected array $arrChildrenAliases = [];
-    protected StateContextInterface $parent;
     protected int $id;
     public bool $isStateChanged = false;
 
@@ -85,55 +82,5 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         $staRegistered = StatesLocalCache::findRegisteredStateInstance($rflState, $this->id);
         $this->stateUpdater->saveState($rflState);
         $this->setState($staRegistered::StateClass());
-    }
-
-    public function setParent(StateContextInterface $parent): void
-    {
-        $this->parent = $parent;
-    }
-
-    public function getParent(): StateContextInterface
-    {
-        return $this->parent;
-    }
-
-    public function addChildren(array $children): array
-    {
-        foreach ($children as $child) {
-            $this->arrChildrenAliases[] = $this->addChild($child);
-        }
-        return $this->arrChildrenAliases;
-    }
-
-    public function addChild(IStateManagedModel $child): string
-    {
-        $strAlias = $child->getAlias();
-        if (!array_key_exists($strAlias, $this->arrChildrenContext)) {
-            $this->arrChildrenContext[$strAlias] = new StateContextImpl($this->serviceManager, $child);
-            $this->arrChildrenContext[$strAlias]->setParent($this);
-        }
-        return $strAlias;
-    }
-
-    public function getChildren(): array
-    {
-        return $this->arrChildrenAliases;
-    }
-
-    public function hasChildren(): bool
-    {
-        return count($this->arrChildrenAliases) > 0;
-    }
-
-    public function removeChild(IStateManagedModel $child): void
-    {
-        $this->arrChildrenContext = array_filter($this->arrChildrenContext, function ($item) use ($child) {
-            return $item != $child;
-        });
-    }
-
-    public function getChildContext(string $alias): StateContextInterface
-    {
-        return $this->arrChildrenContext[$alias];
     }
 }

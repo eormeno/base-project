@@ -45,6 +45,7 @@ class Playing extends StateAbstractImpl
     {
         $this->errorToast('Game Over');
         $this->playAgain = true;
+        $this->refresh();
     }
 
 }
