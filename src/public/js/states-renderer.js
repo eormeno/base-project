@@ -55,6 +55,7 @@ function sendEvent(event, formData = {}) {
                     json = JSON.parse(data);
                     elementsUpdated = 0;
                     updated = "";
+                    elementsNotFound = [];
                     for (const key in json) {
                         const element = document.getElementById(key);
                         if (element) {
@@ -68,7 +69,7 @@ function sendEvent(event, formData = {}) {
                                 arrObjects.push(key);
                             }
                         } else {
-                            console.error('Element not found: ' + key);
+                            elementsNotFound.push(key);
                         }
                     }
                     eventSent = false;
@@ -76,6 +77,9 @@ function sendEvent(event, formData = {}) {
                     //console.info('Current: ' + arrObjects);
                     if (elementsUpdated > 0 && elementsUpdated < 15) {
                         console.info('Updated: ' + updated);
+                    }
+                    if (elementsNotFound.length > 0) {
+                        console.error('Not found: ' + elementsNotFound);
                     }
                 }
             } catch (error) {

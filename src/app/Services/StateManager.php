@@ -103,8 +103,8 @@ class StateManager
             next($this->eventQueue);
         }
         $views = $this->getViewsForRender();
-        $elapsed = microtime(true) - $currentTimestamp;
-        $this->log('StateManager ' . $elapsed . 's');
+        $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
+        $this->log('StateManager ' . $elapsed . 'ms');
         return $views;
     }
 
