@@ -11,7 +11,8 @@ class Playing extends StateAbstractImpl
 {
     public int $width = 8;
     public int $height = 8;
-    public array $list = [];
+    public string $strInventoryVID = '';
+    public array $strArrTilesVID = [];
     public bool $playAgain = false;
 
     private function cast(): MythicTreasureQuestGame
@@ -23,10 +24,11 @@ class Playing extends StateAbstractImpl
     {
         $map = $this->context->gameRepository->getMap();
         $inventory = $this->context->inventoryRepository->getInventory();
-        $this->context->stateManager->enqueueForRendering($inventory, $this->cast());
-        $this->list = $this->context->stateManager->enqueueAllForRendering($map->getTiles(), $this->cast());
+        $this->strInventoryVID = $this->context->stateManager->enqueueForRendering($inventory, $this->cast());
+        $this->strArrTilesVID = $this->context->stateManager->enqueueAllForRendering($map->getTiles(), $this->cast());
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
+        $this->requireRefresh();    // TODO: Implement this in callback
     }
 
     public function onPlayAgainEvent()
@@ -45,7 +47,7 @@ class Playing extends StateAbstractImpl
     {
         $this->errorToast('Game Over');
         $this->playAgain = true;
-        $this->refresh();
+        $this->requireRefresh();
     }
 
 }

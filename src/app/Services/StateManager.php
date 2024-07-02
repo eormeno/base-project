@@ -46,7 +46,8 @@ class StateManager
         $this->enqueueRefreshEvent();
     }
 
-    private function getTree():array {
+    private function getTree(): array
+    {
         reset($this->arrStatesMap);
         return $this->findAllChildren(key($this->arrStatesMap));
     }
@@ -103,7 +104,7 @@ class StateManager
         }
         $views = $this->getViewsForRender();
         $elapsed = microtime(true) - $currentTimestamp;
-        //$this->log('StateManager ' . $elapsed . 's');
+        $this->log('StateManager ' . $elapsed . 's');
         return $views;
     }
 
@@ -123,7 +124,7 @@ class StateManager
     public final function enqueueAllForRendering(
         array $arrModels,
         IStateManagedModel $parent = null
-    ) {
+    ): array {
         $enqueuedObjectAliases = [];
         if (count($arrModels) === 0) {
             return $enqueuedObjectAliases;

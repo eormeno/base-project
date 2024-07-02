@@ -17,14 +17,14 @@
 
 <div class="flex items-center justify-center">
     <div class="grid grid-cols-{{ $width }} bg-slate-600">
-        @foreach ($list as $item)
-            <div id="{{ $item }}">
+        @foreach ($strArrTilesVID as $strTileVID)
+            <div id="{{ $strTileVID }}">
             </div>
         @endforeach
     </div>
 </div>
 
-<div id="inventory" class="mt-2 border border-cyan-600 rounded-md shadow-md"></div>
+<div id="{{ $strInventoryVID }}" class="mt-2 border border-cyan-600 rounded-md shadow-md"></div>
 
 @if ($playAgain)
     <button class="bg-blue-500 mt-2 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"

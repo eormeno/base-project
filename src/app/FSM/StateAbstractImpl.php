@@ -117,9 +117,16 @@ abstract class StateAbstractImpl implements StateInterface
         return $array;
     }
 
-    protected function refresh(): void
+    protected function requireRefresh(IStateManagedModel|string|null $modelOrAlias = null): void
     {
-        $this->context->stateManager->requireRefresh($this->model->getAlias());
+        $strAlias = '';
+        if (is_string($modelOrAlias)) {
+            $strAlias = $modelOrAlias;
+        } else {
+            $modelOrAlias = $modelOrAlias ?? $this->model;
+            $strAlias = $modelOrAlias->getAlias();
+        }
+        $this->context->stateManager->requireRefresh($strAlias);
     }
 
     protected function sendSignal(string $event, array $data = [])
