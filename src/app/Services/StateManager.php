@@ -77,7 +77,6 @@ class StateManager
 
     public final function getAllStatesViews()
     {
-        // get current microtime
         $currentTimestamp = microtime(true);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
