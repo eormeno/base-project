@@ -67,7 +67,7 @@ class StateManager
                 if ($eventInfo['destination'] != 'all') {
                     $eventInfo['destination'] = $strAlias;
                 }
-                $stateContext = $this->arrStatesMap[$strAlias];
+                $stateContext = $this->arrStatesMap[$strAlias]['context'];
                 $state = $stateContext->request($eventInfo);
                 if (
                     $eventInfo['event'] == null ||
@@ -86,34 +86,38 @@ class StateManager
     }
 
     public final function enqueueAllForRendering(
-        array $arrObjects,
+        array $arrModels,
         IStateManagedModel $parent = null
     ) {
         $enqueuedObjectAliases = [];
-        if (count($arrObjects) === 0) {
+        if (count($arrModels) === 0) {
             return $enqueuedObjectAliases;
         }
-        foreach ($arrObjects as $object) {
-            $this->enqueueForRendering($object, $parent);
-            $enqueuedObjectAliases[] = $object->getAlias();
+        foreach ($arrModels as $object) {
+            $enqueuedObjectAliases[] = $this->enqueueForRendering($object, $parent);
         }
         return $enqueuedObjectAliases;
     }
 
-    public final function enqueueForRendering(IStateManagedModel $object, IStateManagedModel $parent = null)
-    {
-        $this->findOrCreateContext($object);
-        if ($parent) {
-            $this->findOrCreateContext($parent)->addChild($object);
+    public final function enqueueForRendering(
+        IStateManagedModel $model,
+        IStateManagedModel $parentModel = null
+    ): string {
+        $strModelAlias = $this->findOrCreateContext($model);
+        if ($parentModel) {
+            $strParentModelAlias = $this->findOrCreateContext($parentModel);
+            $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
         }
+        return $strModelAlias;
     }
 
-    private function findOrCreateContext(IStateManagedModel $object): StateContextImpl
+    private function findOrCreateContext(IStateManagedModel $model): string
     {
-        $strAlias = $object->getAlias();
+        $strAlias = $model->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAlias] = new StateContextImpl($this->serviceManager, $object);
+            $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
+            $this->arrStatesMap[$strAlias]['children'] = [];
         }
-        return $this->arrStatesMap[$strAlias];
+        return $strAlias;
     }
 }

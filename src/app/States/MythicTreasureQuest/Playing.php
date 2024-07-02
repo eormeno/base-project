@@ -3,6 +3,7 @@
 namespace App\States\MythicTreasureQuest;
 
 use App\FSM\StateAbstractImpl;
+use App\Models\MythicTreasureQuestGame;
 use App\States\MythicTreasureQuest\Initial;
 use App\States\MythicTreasureQuest\Flagging;
 
@@ -13,18 +14,17 @@ class Playing extends StateAbstractImpl
     public array $list = [];
     public bool $playAgain = false;
 
+    private function cast(): MythicTreasureQuestGame
+    {
+        return $this->model;
+    }
+
     public function onRefresh(): void
     {
         $map = $this->context->gameRepository->getMap();
         $inventory = $this->context->inventoryRepository->getInventory();
-        $this->context->stateManager->enqueueForRendering($inventory);
-        $this->list = $this->context->stateManager->enqueueAllForRendering($map->getTiles());
-
-
-        $inventoryAlias = $this->context->addChild($inventory);
-        $this->list = $this->context->addChildren($map->getTiles());
-
-
+        $this->context->stateManager->enqueueForRendering($inventory, $this->cast());
+        $this->list = $this->context->stateManager->enqueueAllForRendering($map->getTiles(), $this->cast());
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
     }
