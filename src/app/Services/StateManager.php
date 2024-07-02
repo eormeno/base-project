@@ -39,8 +39,21 @@ class StateManager
 
     public final function requireRefresh(string $strAlias)
     {
-        $this->refreshRequiredAliases[] = $strAlias;
+        $arrChildren = $this->findAllChildren($strAlias);
+        foreach ($arrChildren as $childAlias) {
+            $this->refreshRequiredAliases[] = $childAlias;
+        }
         $this->enqueueRefreshEvent();
+    }
+
+    private function findAllChildren(string $strAlias): array
+    {
+        $arrChildren = [];
+        $arrChildren[] = $strAlias;
+        foreach ($this->arrStatesMap[$strAlias]['children'] as $childAlias) {
+            $arrChildren = array_merge($arrChildren, $this->findAllChildren($childAlias));
+        }
+        return $arrChildren;
     }
 
     private function enqueueRefreshEvent()
@@ -106,7 +119,10 @@ class StateManager
         $strModelAlias = $this->findOrCreateContext($model);
         if ($parentModel) {
             $strParentModelAlias = $this->findOrCreateContext($parentModel);
-            $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
+            // if the child is already a child of the parent, then don't add it again
+            if (!in_array($strModelAlias, $this->arrStatesMap[$strParentModelAlias]['children'])) {
+                $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
+            }
         }
         return $strModelAlias;
     }
