@@ -75,7 +75,9 @@ function sendEvent(event, formData = {}) {
                                 arrObjects.push(key);
                             }
                         } else {
-                            elementsNotFound.push(key);
+                            //elementsNotFound.push(key);
+                            // TODO: review this
+                            arrObjects = [];
                         }
                     }
                     eventSent = false;
