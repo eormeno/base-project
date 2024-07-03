@@ -2,8 +2,9 @@
 
 namespace App\FSM;
 
-use App\Traits\DebugHelper;
+use Exception;
 use ReflectionClass;
+use App\Traits\DebugHelper;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
@@ -14,6 +15,7 @@ abstract class StateAbstractImpl implements IState
     use DebugHelper;
 
     protected IStateContext $context;
+    protected array $arrStrChildrenVID = [];
     public IStateModel $model;
     public bool $need_restoring = false;
 
@@ -37,6 +39,34 @@ abstract class StateAbstractImpl implements IState
         $this->model = $model;
     }
 
+    protected function addChilren(array|IStateModel $models): array|string
+    {
+        $arrStrChildrenVID = [];
+        if (!is_array($models)) {
+            $models = [$models];
+        }
+        foreach ($models as $model) {
+            if (!($model instanceof IStateModel)) {
+                throw new Exception('Model must be an instance of IStateModel');
+            }
+            $strAlias = $model->getAlias();
+            if (array_key_exists($strAlias, $this->arrStrChildrenVID)) {
+                continue;
+            }
+            $arrStrChildrenVID[$strAlias] = $model;
+        }
+        $this->arrStrChildrenVID = array_merge($this->arrStrChildrenVID, $arrStrChildrenVID);
+        if (count($arrStrChildrenVID) == 1) {
+            return array_values($arrStrChildrenVID)[0]->getAlias();
+        }
+        return array_map(fn($model) => $model->getAlias(), $arrStrChildrenVID);
+    }
+
+    public function getChildren(): array
+    {
+        return $this->arrStrChildrenVID;
+    }
+
     public function setContext(IStateContext $content)
     {
         $this->context = $content;
@@ -45,6 +75,7 @@ abstract class StateAbstractImpl implements IState
     #region Callbacks
     public function onReload(): void
     {
+        $this->onEnter();
     }
 
     public function onSave(): void

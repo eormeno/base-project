@@ -15,12 +15,23 @@ class StateManager
     protected array $refreshRequiredAliases = [];
     protected AbstractServiceManager $serviceManager;
     protected bool $isEnqueuedRefreshEvent = false;
+    protected IStateModel $rootModel;
 
     public final function __construct(AbstractServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
         // TODO: Stdy this instantiation
         // $this->log('StateManager Constructed');
+    }
+
+    public final function setRootModel(IStateModel $model)
+    {
+        $this->rootModel = $model;
+    }
+
+    private function resetRenderedAliases()
+    {
+        $this->arrStatesMap = [];
     }
 
     public final function enqueueEvent(array $eventInfo)
@@ -77,6 +88,41 @@ class StateManager
             'destination' => 'all'
         ]);
         $this->isEnqueuedRefreshEvent = true;
+    }
+
+    public final function getAllStatesViews2()
+    {
+        $this->resetRenderedAliases();
+        $currentTimestamp = microtime(true);
+        $this->enqueueForRendering($this->rootModel);
+        reset($this->eventQueue);
+        while ($eventInfo = current($this->eventQueue)) {
+            reset($this->arrStatesMap);
+            while ($strAlias = key($this->arrStatesMap)) {
+                if ($eventInfo['destination'] != 'all') {
+                    $eventInfo['destination'] = $strAlias;
+                }
+                $stateContext = $this->arrStatesMap[$strAlias]['context'];
+                $state = $stateContext->request($eventInfo);
+                $this->enqueueAllForRendering($state->getChildren(), $state->model);
+
+                if (
+                    $eventInfo['event'] == null ||
+                    $stateContext->isStateChanged ||
+                    $this->isRefreshRequired($strAlias)
+                ) {
+                    $view = $state->view($this->serviceManager->baseKebabName());
+                    $view = base64_encode($view);
+                    $this->arrStatesMap[$strAlias]['view'] = $view;
+                }
+                next($this->arrStatesMap);
+            }
+            next($this->eventQueue);
+        }
+        $views = $this->getViewsForRender();
+        $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
+        $this->log('StateManager ' . $elapsed . 'ms');
+        return $views;
     }
 
     public final function getAllStatesViews()
@@ -149,6 +195,7 @@ class StateManager
                 $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
             }
         }
+        //$this->log('Enqueued ' . $strModelAlias);
         return $strModelAlias;
     }
 

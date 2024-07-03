@@ -17,15 +17,18 @@ class InventoryDisplaying extends StateAbstractImpl
         return $this->model;
     }
 
-    public function onRefresh(): void
+    public function onEnter(): void
+    {
+        $items = $this->filterAvailableItems();
+        $this->itemsCount = count($items);
+        $this->items = $this->addChilren($items);
+    }
+
+    private function filterAvailableItems(): array
     {
         $items = $this->cast()->getItems();
-        // remove items with quantity 0
-        $items = array_filter($items, function ($item) {
-            $qty = $item->getQuantity();
-            return $qty > 0;
+        return array_filter($items, function ($item) {
+            return $item->getQuantity() > 0;
         });
-        $this->itemsCount = count($items);
-        $this->items = $this->context->stateManager->enqueueAllForRendering($items, $this->cast());
     }
 }

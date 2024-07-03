@@ -5,6 +5,7 @@ namespace App\Repositories\MythicTreasureQuest;
 use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
+use App\Helpers\StatesLocalCache;
 use App\Services\EventManager;
 use App\Helpers\InventoryHelper;
 use App\Models\MythicTreasureQuest\Map;
@@ -49,6 +50,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
     public function reset(): void
     {
         $this->getGame()->delete();
+        StatesLocalCache::reset();
     }
 
     public function getMap(): Map
