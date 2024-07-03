@@ -11,6 +11,11 @@ class Revealed extends StateAbstractImpl
     public bool $hasTrap = false;
     public int $trapsAround = 0;
 
+    public function onGameOverEvent()
+    {
+        return GameOverTile::StateClass();
+    }
+
     public function onRefresh(): void
     {
         $this->tile = $this->model;

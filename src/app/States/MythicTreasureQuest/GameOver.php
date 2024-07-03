@@ -6,8 +6,8 @@ class GameOver extends Playing
 {
     public function onEnter(): void
     {
+        parent::onEnter();
         $this->errorToast('Game Over');
-        $this->requireRefresh();
     }
 
     public function onPlayAgainEvent()
