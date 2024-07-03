@@ -24,6 +24,11 @@ abstract class StateAbstractImpl implements IState
         return new ReflectionClass(static::class);
     }
 
+    public function reset(): void
+    {
+        $this->arrStrChildrenVID = [];
+    }
+
     public function isNeedRestoring(): bool
     {
         return $this->need_restoring;

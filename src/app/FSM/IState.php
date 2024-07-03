@@ -19,4 +19,5 @@ interface IState
     public function passTo();
     public function handleRequest(array $event): ReflectionClass;
     public function view(string $controllerKebabCaseName);
+    public function reset(): void;
 }

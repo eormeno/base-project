@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Traits\DebugHelper;
 use ReflectionClass;
 use App\Utils\Constants;
 use App\FSM\IState;
@@ -14,6 +15,7 @@ use App\Services\AbstractServiceComponent;
 
 class StateContextImpl extends AbstractServiceComponent implements IStateContext
 {
+    use DebugHelper;
     protected ?IState $__state = null;
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateUpdater;
@@ -40,14 +42,18 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $new_instance->setManagedModel($this->object);
         if ($new_instance->isNeedRestoring()) {
             $new_instance->setNeedRestoring(false);
+            $new_instance->reset();
             $new_instance->onReload();
         }
         // TODO: OJO CAMBIO ACÁ
-        if ($this->__state != $new_instance) {
-            if ($this->__state != null) {
-                $this->__state->onExit();
-            }
+        if ($this->__state && $this->__state != $new_instance) {
+            $this->__state->onExit();
             $new_instance->onEnter();
+        } else {
+            if (!$this->__state) {
+                $new_instance->reset();
+                $new_instance->onEnter();
+            }
         }
         $this->__state = $new_instance;
         $this->__state->onRefresh();
