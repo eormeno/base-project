@@ -19,6 +19,11 @@ class Playing extends StateAbstractImpl
         return $this->model;
     }
 
+    public function onEnter(): void
+    {
+        $this->requireRefresh();
+    }
+
     public function onRefresh(): void
     {
         $map = $this->context->gameRepository->getMap();
@@ -27,7 +32,7 @@ class Playing extends StateAbstractImpl
         $this->strArrTilesVID = $this->context->stateManager->enqueueAllForRendering($map->getTiles(), $this->cast());
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
-        //$this->requireRefresh();    // TODO: Implement this in callback
+
     }
 
     public function onFlagEvent()

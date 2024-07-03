@@ -7,6 +7,7 @@ class FlaggingTile extends Hidden
     public function onTileFlagEvent()
     {
         $this->cast()->setHasFlag(true);
+        return FlaggedTile::StateClass();
     }
 
     public function onCancelTileFlaggingEvent()

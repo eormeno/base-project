@@ -1,8 +1,7 @@
-<h1 class="animate-pulse text-xl font-bold text-green-700">Select the tile to flag</h1>
 <div class="flex items-center justify-center">
     <div class="grid grid-cols-{{ $width }} bg-slate-600">
-        @foreach ($list as $item)
-            <div id="{{ $item }}">
+        @foreach ($strArrTilesVID as $strTileVID)
+            <div id="{{ $strTileVID }}">
             </div>
         @endforeach
     </div>
