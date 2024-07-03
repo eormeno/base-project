@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use ReflectionClass;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 use Illuminate\Database\Eloquent\Model;
 use App\States\MythicTreasureQuest\Initial;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class MythicTreasureQuestGame extends Model implements IStateManagedModel
+class MythicTreasureQuestGame extends Model implements IStateModel
 {
     use HasFactory;
 

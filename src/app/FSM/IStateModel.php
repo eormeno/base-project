@@ -4,7 +4,7 @@ namespace App\FSM;
 
 use ReflectionClass;
 
-interface IStateManagedModel
+interface IStateModel
 {
     public function getId(): int;
 

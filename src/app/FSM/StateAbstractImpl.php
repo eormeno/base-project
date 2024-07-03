@@ -8,13 +8,13 @@ use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 
-abstract class StateAbstractImpl implements StateInterface
+abstract class StateAbstractImpl implements IState
 {
     use ToastTrigger;
     use DebugHelper;
 
-    protected StateContextInterface $context;
-    public IStateManagedModel $model;
+    protected IStateContext $context;
+    public IStateModel $model;
     public bool $need_restoring = false;
 
     public static function StateClass(): ReflectionClass
@@ -32,12 +32,12 @@ abstract class StateAbstractImpl implements StateInterface
         $this->need_restoring = $value;
     }
 
-    public function setManagedModel(IStateManagedModel $model)
+    public function setManagedModel(IStateModel $model)
     {
         $this->model = $model;
     }
 
-    public function setContext(StateContextInterface $content)
+    public function setContext(IStateContext $content)
     {
         $this->context = $content;
     }
@@ -117,7 +117,7 @@ abstract class StateAbstractImpl implements StateInterface
         return $array;
     }
 
-    protected function requireRefresh(IStateManagedModel|string|null $modelOrAlias = null): void
+    protected function requireRefresh(IStateModel|string|null $modelOrAlias = null): void
     {
         $strAlias = '';
         if (is_string($modelOrAlias)) {

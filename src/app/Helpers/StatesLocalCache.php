@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use ReflectionClass;
-use App\FSM\StateInterface;
+use App\FSM\IState;
 
 class StatesLocalCache
 {
@@ -16,9 +16,9 @@ class StatesLocalCache
         return session(self::INSTANCED_STATES_KEY)[$strStateInstanceForObject];
     }
 
-    public static function findRegisteredStateInstance(ReflectionClass $rflStateClass, int $id): StateInterface
+    public static function findRegisteredStateInstance(ReflectionClass $rflStateClass, int $id): IState
     {
-        if (!in_array(StateInterface::class, $rflStateClass->getInterfaceNames())) {
+        if (!in_array(IState::class, $rflStateClass->getInterfaceNames())) {
             $strShortName = $rflStateClass->getShortName();
             throw new \Exception("The state class [$strShortName] must implement the StateInterface.");
         }

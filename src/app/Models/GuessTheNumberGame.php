@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use ReflectionClass;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 use App\States\GuessTheNumber\Initial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class GuessTheNumberGame extends Model implements IStateManagedModel
+class GuessTheNumberGame extends Model implements IStateModel
 {
     use HasFactory;
 

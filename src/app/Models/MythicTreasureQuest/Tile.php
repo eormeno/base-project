@@ -5,9 +5,9 @@ namespace App\Models\MythicTreasureQuest;
 use ReflectionClass;
 use JsonSerializable;
 use App\States\Tile\Hidden;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 
-class Tile implements JsonSerializable, IStateManagedModel
+class Tile implements JsonSerializable, IStateModel
 {
     private int $x;
     private int $y;

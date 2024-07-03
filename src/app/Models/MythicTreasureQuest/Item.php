@@ -4,10 +4,10 @@ namespace App\Models\MythicTreasureQuest;
 
 use ReflectionClass;
 use JsonSerializable;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 use App\States\Item\ItemNormalState;
 
-class Item implements JsonSerializable, IStateManagedModel
+class Item implements JsonSerializable, IStateModel
 {
     private int $id;
     private int $item_id;

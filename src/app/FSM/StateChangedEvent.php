@@ -4,12 +4,12 @@ namespace App\FSM;
 
 class StateChangedEvent
 {
-    private IStateManagedModel $model;
+    private IStateModel $model;
     private string|null $oldState;
     private string|null $newState;
 
     public function __construct(
-        IStateManagedModel $model,
+        IStateModel $model,
         string|null $oldState,
         string|null $newState
     ) {
@@ -18,7 +18,7 @@ class StateChangedEvent
         $this->newState = $newState;
     }
 
-    public function getModel(): IStateManagedModel
+    public function getModel(): IStateModel
     {
         return $this->model;
     }

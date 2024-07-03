@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 use App\Services\StateContextImpl;
 use App\Traits\DebugHelper;
 
@@ -126,7 +126,7 @@ class StateManager
 
     public final function enqueueAllForRendering(
         array $arrModels,
-        IStateManagedModel $parent = null
+        IStateModel $parent = null
     ): array {
         $enqueuedObjectAliases = [];
         if (count($arrModels) === 0) {
@@ -139,8 +139,8 @@ class StateManager
     }
 
     public final function enqueueForRendering(
-        IStateManagedModel $model,
-        IStateManagedModel $parentModel = null
+        IStateModel $model,
+        IStateModel $parentModel = null
     ): string {
         $strModelAlias = $this->findOrCreateContext($model);
         if ($parentModel) {
@@ -152,7 +152,7 @@ class StateManager
         return $strModelAlias;
     }
 
-    private function findOrCreateContext(IStateManagedModel $model): string
+    private function findOrCreateContext(IStateModel $model): string
     {
         $strAlias = $model->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {

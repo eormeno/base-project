@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\FSM\IEventListener;
 use App\FSM\StateChangedEvent;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 
 class EventManager
 {
@@ -27,7 +27,7 @@ class EventManager
     }
 
     public function notify(
-        IStateManagedModel $model,
+        IStateModel $model,
         string|null $oldState,
         string|null $newState
     ) {

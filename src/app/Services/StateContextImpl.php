@@ -4,27 +4,27 @@ namespace App\Services;
 
 use ReflectionClass;
 use App\Utils\Constants;
-use App\FSM\StateInterface;
-use App\FSM\IStateManagedModel;
+use App\FSM\IState;
+use App\FSM\IStateModel;
 use App\Helpers\StatesLocalCache;
-use App\FSM\StateContextInterface;
+use App\FSM\IStateContext;
 use App\Helpers\StateUpdateHelper;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
 
-class StateContextImpl extends AbstractServiceComponent implements StateContextInterface
+class StateContextImpl extends AbstractServiceComponent implements IStateContext
 {
-    protected ?StateInterface $__state = null;
+    protected ?IState $__state = null;
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateUpdater;
     protected StateManager $stateManager;
-    protected IStateManagedModel $object;
+    protected IStateModel $object;
     protected int $id;
     public bool $isStateChanged = false;
 
     public function __construct(
         AbstractServiceManager $serviceManager,
-        IStateManagedModel $object
+        IStateModel $object
     ) {
         $this->serviceManager = $serviceManager;
         $this->stateManager = $serviceManager->stateManager;
@@ -58,7 +58,7 @@ class StateContextImpl extends AbstractServiceComponent implements StateContextI
         return $this->serviceManager->get($attributeName);
     }
 
-    public function request(array $eventInfo): StateInterface
+    public function request(array $eventInfo): IState
     {
         $this->restoreState();
         $initial_state = $this->__state;

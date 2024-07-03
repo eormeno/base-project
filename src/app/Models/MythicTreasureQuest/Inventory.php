@@ -4,10 +4,10 @@ namespace App\Models\MythicTreasureQuest;
 
 use ReflectionClass;
 use JsonSerializable;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 use App\States\Inventory\InventoryDisplaying;
 
-class Inventory implements JsonSerializable, IStateManagedModel
+class Inventory implements JsonSerializable, IStateModel
 {
     private array $items = [];
     private ?Item $selected = null;

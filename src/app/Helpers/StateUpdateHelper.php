@@ -4,19 +4,19 @@ namespace App\Helpers;
 
 use ReflectionClass;
 use App\Utils\CaseConverters;
-use App\FSM\IStateManagedModel;
+use App\FSM\IStateModel;
 use App\Services\AbstractServiceManager;
 use App\Services\EventManager;
 
 class StateUpdateHelper
 {
-    protected IStateManagedModel $object;
+    protected IStateModel $object;
     protected AbstractServiceManager $serviceManager;
     protected EventManager $eventManager;
 
     public function __construct(
         AbstractServiceManager $serviceManager,
-        IStateManagedModel $object
+        IStateModel $object
     ) {
         $this->object = $object;
         $this->serviceManager = $serviceManager;

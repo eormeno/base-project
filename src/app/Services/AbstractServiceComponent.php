@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\FSM\IStateManagedModel;
-use App\FSM\StateContextInterface;
+use App\FSM\IStateModel;
+use App\FSM\IStateContext;
 
 abstract class AbstractServiceComponent
 {
@@ -13,7 +13,7 @@ abstract class AbstractServiceComponent
     }
 
     protected final function sendEvent(
-        IStateManagedModel $model,
+        IStateModel $model,
         string $event,
         string|null $destination = null,
         array $data = []
@@ -36,7 +36,7 @@ abstract class AbstractServiceComponent
         $this->serviceManager->stateManager->enqueueEvent($event);
     }
 
-    protected final function requireRefresh(IStateManagedModel $model)
+    protected final function requireRefresh(IStateModel $model)
     {
         $this->_requireRefresh($model->getAlias());
     }
