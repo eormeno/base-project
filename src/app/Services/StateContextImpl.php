@@ -48,6 +48,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         // TODO: OJO CAMBIO ACÁ
         if ($this->__state && $this->__state != $new_instance) {
             $this->__state->onExit();
+            $new_instance->reset();
             $new_instance->onEnter();
         } else {
             if (!$this->__state) {

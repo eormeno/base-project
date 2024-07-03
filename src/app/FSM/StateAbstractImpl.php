@@ -44,12 +44,19 @@ abstract class StateAbstractImpl implements IState
         $this->model = $model;
     }
 
-    protected function addChilren(array|IStateModel $models): array|string
+    protected function addChild(IStateModel $model): string
+    {
+        $strAlias = $model->getAlias();
+        if (array_key_exists($strAlias, $this->arrStrChildrenVID)) {
+            return $strAlias;
+        }
+        $this->arrStrChildrenVID[$strAlias] = $model;
+        return $strAlias;
+    }
+
+    protected function addChilren(array $models): array
     {
         $arrStrChildrenVID = [];
-        if (!is_array($models)) {
-            $models = [$models];
-        }
         foreach ($models as $model) {
             if (!($model instanceof IStateModel)) {
                 throw new Exception('Model must be an instance of IStateModel');
@@ -61,9 +68,6 @@ abstract class StateAbstractImpl implements IState
             $arrStrChildrenVID[$strAlias] = $model;
         }
         $this->arrStrChildrenVID = array_merge($this->arrStrChildrenVID, $arrStrChildrenVID);
-        if (count($arrStrChildrenVID) == 1) {
-            return array_values($arrStrChildrenVID)[0]->getAlias();
-        }
         return array_map(fn($model) => $model->getAlias(), $arrStrChildrenVID);
     }
 

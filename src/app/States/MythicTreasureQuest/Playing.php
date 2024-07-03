@@ -20,7 +20,7 @@ class Playing extends StateAbstractImpl
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
 
-        $this->strInventoryVID = $this->addChilren($inventory);
+        $this->strInventoryVID = $this->addChild($inventory);
         $this->strArrTilesVID  = $this->addChilren($map->getTiles());
     }
 
