@@ -2,7 +2,7 @@
 
 namespace App\States\MythicTreasureQuest;
 
-class GameOver extends Playing
+class GameOver extends APlayingStates
 {
     public function onEnter(): void
     {
