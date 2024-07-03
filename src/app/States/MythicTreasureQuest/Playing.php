@@ -10,6 +10,7 @@ class Playing extends APlayingStates
 
     public function onEnter(): void
     {
+        parent::onEnter();
         $inventory = $this->context->inventoryRepository->getInventory();
         $this->strInventoryVID = $this->addChild($inventory);
     }
