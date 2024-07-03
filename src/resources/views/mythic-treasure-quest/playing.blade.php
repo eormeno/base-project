@@ -25,8 +25,3 @@
 </div>
 
 <div id="{{ $strInventoryVID }}" class="mt-2 border border-cyan-600 rounded-md shadow-md"></div>
-
-@if ($playAgain)
-    <button class="bg-blue-500 mt-2 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
-        onclick="sendEvent('play_again')">Play Again</button>
-@endif

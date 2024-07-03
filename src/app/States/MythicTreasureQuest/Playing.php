@@ -13,7 +13,6 @@ class Playing extends StateAbstractImpl
     public int $height = 8;
     public string $strInventoryVID = '';
     public array $strArrTilesVID = [];
-    public bool $playAgain = false;
 
     private function cast(): MythicTreasureQuestGame
     {
@@ -28,14 +27,7 @@ class Playing extends StateAbstractImpl
         $this->strArrTilesVID = $this->context->stateManager->enqueueAllForRendering($map->getTiles(), $this->cast());
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
-        $this->requireRefresh();    // TODO: Implement this in callback
-    }
-
-    public function onPlayAgainEvent()
-    {
-        $this->playAgain = false;
-        $this->context->gameRepository->restartGame();
-        return Initial::StateClass();
+        //$this->requireRefresh();    // TODO: Implement this in callback
     }
 
     public function onFlagEvent()
@@ -43,11 +35,9 @@ class Playing extends StateAbstractImpl
         return Flagging::StateClass();
     }
 
-    public function onGameOverEvent(): void
+    public function onGameOverEvent()
     {
-        $this->errorToast('Game Over');
-        $this->playAgain = true;
-        $this->requireRefresh();
+        return GameOver::StateClass();
     }
 
 }

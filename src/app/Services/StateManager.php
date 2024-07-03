@@ -19,6 +19,8 @@ class StateManager
     public final function __construct(AbstractServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
+        // TODO: Stdy this instantiation
+        // $this->log('StateManager Constructed');
     }
 
     public final function enqueueEvent(array $eventInfo)
@@ -104,7 +106,7 @@ class StateManager
         }
         $views = $this->getViewsForRender();
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-        $this->log('StateManager ' . $elapsed . 'ms');
+        //$this->log('StateManager ' . $elapsed . 'ms');
         return $views;
     }
 
@@ -118,6 +120,7 @@ class StateManager
                 $arrViews[$strAlias] = $view;
             }
         }
+        //$arrViews['tree'] = $tree;
         return $arrViews;
     }
 

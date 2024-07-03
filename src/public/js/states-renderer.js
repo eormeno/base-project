@@ -53,10 +53,16 @@ function sendEvent(event, formData = {}) {
                     eventSent = false;
                 } else {
                     json = JSON.parse(data);
+                    if (json['tree']) {
+                        console.warn(json['tree']);
+                    }
                     elementsUpdated = 0;
                     updated = "";
                     elementsNotFound = [];
                     for (const key in json) {
+                        if (key === 'tree') {
+                            continue;
+                        }
                         const element = document.getElementById(key);
                         if (element) {
                             $html = decodeBase64(json[key]);
