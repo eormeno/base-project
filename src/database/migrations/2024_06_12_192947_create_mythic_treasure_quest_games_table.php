@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->string('state')->nullable()->default(null);
             $table->integer('level')->default(1);
             $table->integer('health')->default(100);
-            $table->json('map')->nullable()->default('{}');
-            $table->json('inventory')->nullable()->default('{}');
+            $table->json('map')->nullable();
+            $table->json('inventory')->nullable();
             $table->boolean('is_finished')->default(false);
             $table->timestamps();
         });
