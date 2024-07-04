@@ -5,9 +5,11 @@ namespace App\Services\MythicTreasureQuest;
 use App\Models\MythicTreasureQuestGame;
 use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
+use App\Traits\DebugHelper;
 
 class GameService extends AbstractServiceComponent
 {
+    use DebugHelper;
     private const DIRECTIONS = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
     private array $testedTiles = [];
     private array $availableTiles = [];
@@ -39,14 +41,15 @@ class GameService extends AbstractServiceComponent
             if ($tile->getHasTrap() || $tile->isRevealed() || $tile->isMarkedAsClue()) {
                 continue;
             }
-            $this->availableTiles[] = $tile;
+            $this->availableTiles[] = $tile->getId();
         }
     }
 
     private function isTileAvailable(Tile $tile): bool
     {
         $this->fillAvailableTiles();
-        return in_array($tile, $this->availableTiles);
+        $ret = in_array($tile->getId(), $this->availableTiles);
+        return $ret;
     }
 
     public function showClue(): bool
@@ -55,7 +58,8 @@ class GameService extends AbstractServiceComponent
         if (empty($this->availableTiles)) {
             return false;
         }
-        $tile = $this->availableTiles[array_rand($this->availableTiles)];
+        $tileId = $this->availableTiles[array_rand($this->availableTiles)];
+        $tile = $this->tileRepository->getTileById($tileId);
         $this->tileRepository->markTileWithClue($tile);
         return true;
     }

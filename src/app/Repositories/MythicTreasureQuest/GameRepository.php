@@ -4,10 +4,11 @@ namespace App\Repositories\MythicTreasureQuest;
 
 use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
+use App\Traits\DebugHelper;
 use App\FSM\StateChangedEvent;
-use App\Helpers\StatesLocalCache;
 use App\Services\EventManager;
 use App\Helpers\InventoryHelper;
+use App\Helpers\StatesLocalCache;
 use App\Models\MythicTreasureQuest\Map;
 use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceManager;
@@ -15,6 +16,7 @@ use App\Services\AbstractServiceComponent;
 
 class GameRepository extends AbstractServiceComponent implements IEventListener
 {
+    use DebugHelper;
     private ?Map $localInMemoryMap;
     private EventManager $eventManager;
 
@@ -69,6 +71,12 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         $tile = $event->getModel();
         $className = class_basename($tile);
         if ($className === 'Tile') {
+
+            $storedTile = $this->localInMemoryMap->getTileById($tile->getId());
+            $this->log("Tile to {$storedTile->getState()} but {$tile->getState()}");
+            // $oldState = $event->getOldState();
+            // $newState = $event->getNewState();
+            //$this->log("Tile from $oldState to $newState");
             $this->saveMap();
         }
     }

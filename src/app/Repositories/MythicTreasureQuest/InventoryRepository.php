@@ -2,6 +2,7 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
+use App\Models\MythicTreasureQuest\Item;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
 use App\Models\MythicTreasureQuest\Inventory;
@@ -30,11 +31,11 @@ class InventoryRepository extends AbstractServiceComponent
         return $this->localInMemoryInventory;
     }
 
-    public function decrementItemBySlug(string $slug): void
+    public function decrementItemBySlug(string $slug): Item | null
     {
         $itemTypeInfo = $this->mythicTreasureQuestItemRepository->getItemInfoBySlug($slug);
         if (!$itemTypeInfo) {
-            return;
+            return null;
         }
         $inventory = $this->getInventory();
         $item = $inventory->getItemByTypeId($itemTypeInfo['id']);
@@ -43,6 +44,7 @@ class InventoryRepository extends AbstractServiceComponent
             $this->saveInventory();
             $this->requireRefresh($inventory);
         }
+        return $item;
     }
 
     public function saveInventory(): void

@@ -4,20 +4,28 @@ namespace App\States\Tile;
 
 use App\FSM\StateAbstractImpl;
 use App\Models\MythicTreasureQuest\Tile;
+use App\Traits\DebugHelper;
 
 class Hidden extends StateAbstractImpl
 {
+    use DebugHelper;
     public bool $hasClue = false;
     public bool $hasFlag = false;
 
     protected function cast(): Tile
     {
-        return $this->model;
+        return $this->context->tileRepository->getTileById($this->model->getId());
     }
 
-    public function onRefresh(): void {
+    public function onEnter(): void
+    {
         $this->hasClue = $this->cast()->isMarkedAsClue();
         $this->hasFlag = $this->cast()->getHasFlag();
+    }
+
+    public function onClueMarkedEvent()
+    {
+        $this->hasClue = $this->cast()->isMarkedAsClue();
     }
 
     public function onFlagEvent()
@@ -38,7 +46,6 @@ class Hidden extends StateAbstractImpl
     public function onTileClickedEvent()
     {
         if ($this->cast()->getHasTrap()) {
-            $this->context->gameService->revealAll();
             $this->sendSignal('game_over');
             return;
         }

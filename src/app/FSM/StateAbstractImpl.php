@@ -18,6 +18,7 @@ abstract class StateAbstractImpl implements IState
     protected array $arrStrChildrenVID = [];
     public IStateModel $model;
     public bool $need_restoring = false;
+    public bool $isOnEnterExecuted = false;
 
     public static function StateClass(): ReflectionClass
     {
@@ -141,16 +142,25 @@ abstract class StateAbstractImpl implements IState
     {
         $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
         //todo: check if view exists before returning and resolve the view name
+        // if ($view_name == 'hidden') {
+        //     $vars = json_encode($this->publicPropertiesToArray());
+        //     $this->log($vars);
+        // }
         $view = view("$controller_name.$view_name", $this->publicPropertiesToArray());
         return $view;
     }
 
     private function publicPropertiesToArray(): array
     {
+        $exclude = ['context', 'arrStrChildrenVID', 'model', 'need_restoring', 'isOnEnterExecuted'];
         $properties = get_object_vars($this);
         $array = [];
         foreach ($properties as $key => $value) {
-            if ($key[0] != '_') {
+            if (in_array($key, $exclude)) {
+                continue;
+            }
+            // exclude private and protected properties
+            if (strpos($key, "\0") === false) {
                 $array[$key] = $value;
             }
         }

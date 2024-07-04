@@ -46,7 +46,7 @@ class StateUpdateHelper
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }
         $this->object->updateState($rfl_state);
-        $this->eventManager->notify($this->object, $oldState, $newState);
+        $this->eventManager->notify($this->object, $oldState->getShortName(), $newState->getShortName());
     }
 
     private function stateNameToClass(string|null $dashed_state_name): ReflectionClass

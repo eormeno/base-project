@@ -24,6 +24,8 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
     protected int $id;
     public bool $isStateChanged = false;
 
+    private bool $firstTime = true;
+
     public function __construct(
         AbstractServiceManager $serviceManager,
         IStateModel $object
@@ -37,6 +39,13 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     private function setState(ReflectionClass $reflection_state_class): void
     {
+        // $cls = $reflection_state_class->getShortName();
+        // if ($cls == 'Hidden') {
+        //     if ($this->firstTime) {
+        //         $this->firstTime = false;
+        //         $this->logBacktrace();
+        //     }
+        // }
         $new_instance = StatesLocalCache::getStateInstance($reflection_state_class, $this->id);
         $new_instance->setContext($this);
         $new_instance->setManagedModel($this->object);
@@ -45,16 +54,14 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $new_instance->reset();
             $new_instance->onReload();
         }
-        // TODO: OJO CAMBIO ACÁ
         if ($this->__state && $this->__state != $new_instance) {
             $this->__state->onExit();
+            $this->__state->isOnEnterExecuted = false;
+        }
+        if (!$new_instance->isOnEnterExecuted) {
             $new_instance->reset();
             $new_instance->onEnter();
-        } else {
-            if (!$this->__state) {
-                $new_instance->reset();
-                $new_instance->onEnter();
-            }
+            $new_instance->isOnEnterExecuted = true;
         }
         $this->__state = $new_instance;
         $this->__state->onRefresh();
@@ -77,9 +84,9 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $current_state = $this->__state;
             $this->setState($current_state->handleRequest($eventInfo));
             $changed_state = $this->__state;
-            if ($changed_state != $current_state) {
+            //if ($changed_state != $current_state) {
                 $this->stateUpdater->saveState($changed_state::StateClass());
-            }
+            //}
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($current_state != $changed_state);
         $this->isStateChanged = $initial_state != $changed_state;

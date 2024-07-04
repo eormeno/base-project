@@ -2,6 +2,7 @@
 
 namespace App\Models\MythicTreasureQuest;
 
+use App\Traits\DebugHelper;
 use ReflectionClass;
 use JsonSerializable;
 use App\States\Tile\Hidden;
@@ -9,6 +10,7 @@ use App\FSM\IStateModel;
 
 class Tile implements JsonSerializable, IStateModel
 {
+    use DebugHelper;
     private int $x;
     private int $y;
 
