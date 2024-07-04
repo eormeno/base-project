@@ -2,7 +2,7 @@
 
 namespace App\Models\MythicTreasureQuest;
 
-use App\Traits\DebugHelper;
+use App\FSM\AStateObject;
 use ReflectionClass;
 use JsonSerializable;
 use App\States\Tile\Hidden;
@@ -10,7 +10,6 @@ use App\FSM\IStateModel;
 
 class Tile implements JsonSerializable, IStateModel
 {
-    use DebugHelper;
     private int $x;
     private int $y;
 
@@ -25,6 +24,7 @@ class Tile implements JsonSerializable, IStateModel
     ) {
         $this->x = $id % $map->getWidth();
         $this->y = intdiv($id, $map->getWidth());
+        AStateObject::SessionInstance()->register($this);
     }
 
     public function getId(): int
@@ -105,6 +105,11 @@ class Tile implements JsonSerializable, IStateModel
     public function isRevealed(): bool
     {
         return $this->state === 'revealed';
+    }
+
+    public function setState(string|null $state): void
+    {
+        $this->state = $state;
     }
 
     public function updateState(string|null $state): void

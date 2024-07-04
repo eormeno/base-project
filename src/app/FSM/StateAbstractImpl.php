@@ -48,10 +48,10 @@ abstract class StateAbstractImpl implements IState
     protected function addChild(IStateModel $model): string
     {
         $strAlias = $model->getAlias();
-        if (array_key_exists($strAlias, $this->arrStrChildrenVID)) {
+        if (in_array($strAlias, $this->arrStrChildrenVID)) {
             return $strAlias;
         }
-        $this->arrStrChildrenVID[$strAlias] = $model;
+        $this->arrStrChildrenVID[] = $strAlias;
         return $strAlias;
     }
 
@@ -63,13 +63,13 @@ abstract class StateAbstractImpl implements IState
                 throw new Exception('Model must be an instance of IStateModel');
             }
             $strAlias = $model->getAlias();
-            if (array_key_exists($strAlias, $this->arrStrChildrenVID)) {
+            if (in_array($strAlias, $this->arrStrChildrenVID)) {
                 continue;
             }
-            $arrStrChildrenVID[$strAlias] = $model;
+            $arrStrChildrenVID[] = $strAlias;
         }
         $this->arrStrChildrenVID = array_merge($this->arrStrChildrenVID, $arrStrChildrenVID);
-        return array_map(fn($model) => $model->getAlias(), $arrStrChildrenVID);
+        return $arrStrChildrenVID;
     }
 
     public function getChildren(): array

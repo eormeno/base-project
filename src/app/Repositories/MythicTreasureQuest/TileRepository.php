@@ -23,6 +23,13 @@ class TileRepository extends AbstractServiceComponent
         return $this->gameRepository->getMap()->getTileById($id);
     }
 
+    public function changeState(int $id, string $state): void
+    {
+        $tile = $this->getTileById($id);
+        $tile->setState($state);
+        $this->gameRepository->saveMap();
+    }
+
     public function markTileWithClue(Tile $tile): void
     {
         $tile->setMarkedAsClue(true);

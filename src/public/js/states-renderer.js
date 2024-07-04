@@ -84,7 +84,7 @@ function sendEvent(event, formData = {}) {
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
                     //console.info('Current: ' + arrObjects);
                     if (elementsUpdated > 0 && elementsUpdated < 15) {
-                        console.info('Updated: ' + updated);
+                        //console.info('Updated: ' + updated);
                     }
                     if (elementsNotFound.length > 0) {
                         console.error('Not found: ' + elementsNotFound);

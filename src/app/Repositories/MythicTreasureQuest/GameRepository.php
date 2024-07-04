@@ -71,12 +71,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         $tile = $event->getModel();
         $className = class_basename($tile);
         if ($className === 'Tile') {
-
-            $storedTile = $this->localInMemoryMap->getTileById($tile->getId());
-            $this->log("Tile to {$storedTile->getState()} but {$tile->getState()}");
-            // $oldState = $event->getOldState();
-            // $newState = $event->getNewState();
-            //$this->log("Tile from $oldState to $newState");
+            $this->localInMemoryMap->replaceTile($tile);
             $this->saveMap();
         }
     }

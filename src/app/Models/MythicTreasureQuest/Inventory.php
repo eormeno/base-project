@@ -2,6 +2,7 @@
 
 namespace App\Models\MythicTreasureQuest;
 
+use App\FSM\AStateObject;
 use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
@@ -16,6 +17,7 @@ class Inventory implements JsonSerializable, IStateModel
     public function __construct(?string $state = null)
     {
         $this->state = $state;
+        AStateObject::SessionInstance()->register($this);
     }
 
     public static function fromJson(array $data): Inventory

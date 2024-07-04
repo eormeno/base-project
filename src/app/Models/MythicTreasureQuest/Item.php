@@ -2,6 +2,7 @@
 
 namespace App\Models\MythicTreasureQuest;
 
+use App\FSM\AStateObject;
 use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
@@ -20,6 +21,7 @@ class Item implements JsonSerializable, IStateModel
         $this->item_id = $item_id;
         $this->quantity = $quantity;
         $this->state = $state;
+        AStateObject::SessionInstance()->register($this);
     }
 
     public function getItemId(): int

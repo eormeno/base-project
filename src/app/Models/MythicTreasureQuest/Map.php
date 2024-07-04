@@ -56,6 +56,11 @@ class Map implements JsonSerializable
         return $this->tiles[$y * $this->width + $x];
     }
 
+    public function replaceTile(Tile $tile): void
+    {
+        $this->tiles[$tile->getId()] = $tile;
+    }
+
     public function isValid(int $x, int $y): bool
     {
         return $x >= 0 && $x < $this->width && $y >= 0 && $y < $this->height;

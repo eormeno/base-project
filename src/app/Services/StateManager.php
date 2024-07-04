@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\FSM\AStateObject;
 use App\FSM\IStateModel;
 use App\Services\StateContextImpl;
 use App\Traits\DebugHelper;
@@ -104,8 +105,11 @@ class StateManager
                 }
                 $stateContext = $this->arrStatesMap[$strAlias]['context'];
                 $state = $stateContext->request($eventInfo);
-                $this->enqueueAllForRendering($state->getChildren(), $state->model);
-
+                $children = $state->getChildren();
+                if (count($children) > 0) {
+                    $models = AStateObject::SessionInstance()->getModels($state->getChildren());
+                    $this->enqueueAllForRendering($models, $state->model);
+                }
                 if (
                     $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
@@ -121,7 +125,7 @@ class StateManager
         }
         $views = $this->getViewsForRender();
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-        $this->log('StateManager ' . $elapsed . 'ms');
+        //$this->log('StateManager ' . $elapsed . 'ms');
         return $views;
     }
 
