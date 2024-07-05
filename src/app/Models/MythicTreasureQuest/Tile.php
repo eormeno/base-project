@@ -2,7 +2,6 @@
 
 namespace App\Models\MythicTreasureQuest;
 
-use App\FSM\AStateObject;
 use ReflectionClass;
 use JsonSerializable;
 use App\States\Tile\Hidden;
@@ -24,7 +23,6 @@ class Tile implements JsonSerializable, IStateModel
     ) {
         $this->x = $id % $map->getWidth();
         $this->y = intdiv($id, $map->getWidth());
-        AStateObject::SessionInstance()->register($this);
     }
 
     public function getId(): int

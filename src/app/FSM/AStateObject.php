@@ -2,11 +2,8 @@
 
 namespace App\FSM;
 
-use App\Traits\DebugHelper;
-
 class AStateObject
 {
-    use DebugHelper;
     const KEY_INSTANCE = 'AStateoOjectInstance';
     const KEY_ALIAS = 'alias';
 
@@ -30,7 +27,6 @@ class AStateObject
         $alias = $model->getAlias();
         $aliases[$alias] = $model;
         session()->put(self::KEY_ALIAS, $aliases);
-        //$this->log('Registered ' . $alias);
     }
 
     public final function get(string $alias): IStateModel|null
@@ -51,7 +47,6 @@ class AStateObject
         foreach ($aliases as $alias) {
             $model = $this->get($alias);
             if ($model === null) {
-                $this->log('Model not found for ' . $alias);
                 continue;
             }
             $models[] = $model;

@@ -47,11 +47,14 @@ abstract class StateAbstractImpl implements IState
 
     protected function addChild(IStateModel $model): string
     {
+        if (!($model instanceof IStateModel)) {
+            throw new Exception('Model must be an instance of IStateModel');
+        }
         $strAlias = $model->getAlias();
-        if (in_array($strAlias, $this->arrStrChildrenVID)) {
+        if (array_key_exists($strAlias, $this->arrStrChildrenVID)) {
             return $strAlias;
         }
-        $this->arrStrChildrenVID[] = $strAlias;
+        $this->arrStrChildrenVID[$strAlias] = $model;
         return $strAlias;
     }
 
@@ -59,22 +62,24 @@ abstract class StateAbstractImpl implements IState
     {
         $arrStrChildrenVID = [];
         foreach ($models as $model) {
-            if (!($model instanceof IStateModel)) {
-                throw new Exception('Model must be an instance of IStateModel');
-            }
-            $strAlias = $model->getAlias();
-            if (in_array($strAlias, $this->arrStrChildrenVID)) {
-                continue;
-            }
-            $arrStrChildrenVID[] = $strAlias;
+            $arrStrChildrenVID[] = $this->addChild($model);
         }
-        $this->arrStrChildrenVID = array_merge($this->arrStrChildrenVID, $arrStrChildrenVID);
         return $arrStrChildrenVID;
     }
 
-    public function getChildren(): array
+    public function getChildrenModels(): array
     {
-        return $this->arrStrChildrenVID;
+        return array_values($this->arrStrChildrenVID);
+    }
+
+    public function getChildModel(string $strAlias): IStateModel
+    {
+        return $this->arrStrChildrenVID[$strAlias];
+    }
+
+    public function hasChildren(): bool
+    {
+        return count($this->arrStrChildrenVID) > 0;
     }
 
     public function setContext(IStateContext $content)
