@@ -3,10 +3,45 @@
 namespace App\Models\MythicTreasureQuest;
 
 use JsonSerializable;
+use App\FSM\IStateModel;
+use Illuminate\Database\Eloquent\Model;
 
 class Map implements JsonSerializable
 {
     private array $tiles;
+    private Model $castModel;
+
+    private function __construct(
+        private int $width,
+        private int $height,
+        private IStateModel | null $model = null,
+        private string | null $fieldName = null
+    ) {
+    }
+
+    public static function fromField(IStateModel $model, string $fieldName): Map
+    {
+        $data = $model->$fieldName;
+        $width = $data['width'];
+        $height = $data['height'];
+        $tiles = $data['tiles'];
+        $map = new Map($width, $height, $model, $fieldName);
+        foreach ($tiles as $tile) {
+            $map->addTile(Tile::fromJson($map, $tile));
+        }
+        return $map;
+    }
+
+    public function save(): void
+    {
+        if ($this->model === null || $this->fieldName === null) {
+            return;
+        }
+        $data = $this->jsonSerialize();
+        $this->model->{$this->fieldName} = $data;
+        $this->castModel = $this->model;
+        $this->castModel->save();
+    }
 
     public static function fromJson(array $data): Map
     {
@@ -18,12 +53,6 @@ class Map implements JsonSerializable
             $map->addTile(Tile::fromJson($map, $tile));
         }
         return $map;
-    }
-
-    public function __construct(
-        private int $width,
-        private int $height
-    ) {
     }
 
     public function addTile(Tile $tile): void

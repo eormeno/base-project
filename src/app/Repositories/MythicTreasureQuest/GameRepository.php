@@ -32,12 +32,22 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         MythicTreasureQuestGame::factory()->for(auth()->user())->create();
     }
 
+    private function hasUserAGame(): bool
+    {
+        return auth()->user()->mythicTreasureQuestGames()->exists();
+    }
+
+    private function getCurrentUserGame(): MythicTreasureQuestGame
+    {
+        return auth()->user()->mythicTreasureQuestGames;
+    }
+
     public function getGame(): MythicTreasureQuestGame
     {
-        if (!auth()->user()->mythicTreasureQuestGames()->exists()) {
+        if (!$this->hasUserAGame()) {
             $this->createEmptyNewGame();
         }
-        return auth()->user()->mythicTreasureQuestGames;
+        return $this->getCurrentUserGame();
     }
 
     public function restartGame(): void
@@ -61,7 +71,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
             return $this->localInMemoryMap;
         }
         $game = $this->getGame();
-        $this->localInMemoryMap = Map::fromJson($game->map);
+        $this->localInMemoryMap = Map::fromField($game, 'map');
         $this->eventManager->add($this);
         return $this->localInMemoryMap;
     }

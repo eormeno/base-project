@@ -10,7 +10,11 @@ class MapHelper
 
     public static function generateMap(int $width, int $height): Map
     {
-        $map = new Map($width, $height);
+        $map = Map::fromJson([
+            "width" => $width,
+            "height" => $height,
+            "tiles" => []]);
+
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
                 $map->addTile(Tile::newEmptyTile($map, $x, $y));
