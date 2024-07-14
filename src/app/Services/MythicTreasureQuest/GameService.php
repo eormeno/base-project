@@ -5,11 +5,9 @@ namespace App\Services\MythicTreasureQuest;
 use App\Models\MythicTreasureQuestGame;
 use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
-use App\Traits\DebugHelper;
 
 class GameService extends AbstractServiceComponent
 {
-    use DebugHelper;
     private const DIRECTIONS = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
     private array $testedTiles = [];
     private array $availableTiles = [];
@@ -22,7 +20,7 @@ class GameService extends AbstractServiceComponent
 
     public function revealAll()
     {
-        $map = $this->gameRepository->getMap();
+        $map = $this->mapService->getMap();
         foreach ($map->getTiles() as $tile) {
             if ($tile->getHasTrap()) {
                 $this->sendEvent($tile, 'reveal');
@@ -36,7 +34,7 @@ class GameService extends AbstractServiceComponent
             return;
         }
         $this->availableTiles = [];
-        $map = $this->gameRepository->getMap();
+        $map = $this->mapService->getMap();
         foreach ($map->getTiles() as $tile) {
             if ($tile->getHasTrap() || $tile->isRevealed() || $tile->isMarkedAsClue()) {
                 continue;
@@ -79,7 +77,8 @@ class GameService extends AbstractServiceComponent
         }
         $this->setTileAsTested($tile);
         $this->fillAvailableTiles();
-        $map = $tile->getMap();
+        //$map = $tile->getMap();
+        $map = $this->mapService->getMap();
         $intX = $tile->getX();
         $intY = $tile->getY();
         foreach (self::DIRECTIONS as $dir) {

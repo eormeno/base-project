@@ -15,9 +15,10 @@ class MapHelper
             "height" => $height,
             "tiles" => []]);
 
+        $tileId = 0;
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
-                $map->addTile(Tile::newEmptyTile($map, $x, $y));
+                $map->addTile(Tile::newEmptyTile($tileId++, $x, $y));
             }
         }
         self::fillTraps(8, $map);

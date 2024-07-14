@@ -65,16 +65,16 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         StatesLocalCache::reset();
     }
 
-    public function getMap(): Map
-    {
-        if ($this->localInMemoryMap) {
-            return $this->localInMemoryMap;
-        }
-        $game = $this->getGame();
-        $this->localInMemoryMap = Map::fromField($game, 'map');
-        $this->eventManager->add($this);
-        return $this->localInMemoryMap;
-    }
+    // public function getMap(): Map
+    // {
+    //     if ($this->localInMemoryMap) {
+    //         return $this->localInMemoryMap;
+    //     }
+    //     $game = $this->getGame();
+    //     $this->localInMemoryMap = Map::fromField($game, 'map');
+    //     $this->eventManager->add($this);
+    //     return $this->localInMemoryMap;
+    // }
 
     public function onEvent(StateChangedEvent $event): void
     {

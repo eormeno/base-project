@@ -20,7 +20,7 @@ class TileRepository extends AbstractServiceComponent
 
     public function getTileById(int $id): Tile
     {
-        return $this->gameRepository->getMap()->getTileById($id);
+        return $this->mapService->getMap()->getTileById($id);
     }
 
     public function changeState(int $id, string $state): void

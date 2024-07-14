@@ -27,7 +27,7 @@ class Map implements JsonSerializable
         $tiles = $data['tiles'];
         $map = new Map($width, $height, $model, $fieldName);
         foreach ($tiles as $tile) {
-            $map->addTile(Tile::fromJson($map, $tile));
+            $map->addTile(Tile::fromJson($tile));
         }
         return $map;
     }
@@ -50,7 +50,7 @@ class Map implements JsonSerializable
         $tiles = $data['tiles'];
         $map = new Map($width, $height);
         foreach ($tiles as $tile) {
-            $map->addTile(Tile::fromJson($map, $tile));
+            $map->addTile(Tile::fromJson($tile));
         }
         return $map;
     }

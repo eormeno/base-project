@@ -12,7 +12,7 @@ abstract class APlayingStates extends StateAbstractImpl
 
     public function onEnter(): void
     {
-        $map = $this->context->gameRepository->getMap();
+        $map = $this->context->mapService->getMap();
         $this->width = $map->getWidth();
         $this->height = $map->getHeight();
         $this->strArrTilesVID  = $this->addChilren($map->getTiles());

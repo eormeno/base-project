@@ -20,5 +20,6 @@ class MythicTreasureQuestServiceManager extends AbstractServiceManager
         $this->addService('mythicTreasureQuestItemRepository', new MythicTreasureQuestItemRepository($this));
         $this->addService('inventoryRepository', new InventoryRepository($this));
         $this->addService('gameService', new GameService($this));
+        $this->addService('mapService', new MapService($this));
     }
 }
