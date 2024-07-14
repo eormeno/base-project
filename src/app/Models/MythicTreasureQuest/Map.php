@@ -14,22 +14,15 @@ class Map implements JsonSerializable
     private function __construct(
         private int $width,
         private int $height,
-        private IStateModel | null $model = null,
-        private string | null $fieldName = null
+        private IStateModel|null $model = null,
+        private string|null $fieldName = null
     ) {
     }
 
     public static function fromField(IStateModel $model, string $fieldName): Map
     {
         $data = $model->$fieldName;
-        $width = $data['width'];
-        $height = $data['height'];
-        $tiles = $data['tiles'];
-        $map = new Map($width, $height, $model, $fieldName);
-        foreach ($tiles as $tile) {
-            $map->addTile(Tile::fromJson($tile));
-        }
-        return $map;
+        return self::fromJson($data, null, $model, $fieldName);
     }
 
     public function save(): void
@@ -43,14 +36,18 @@ class Map implements JsonSerializable
         $this->castModel->save();
     }
 
-    public static function fromJson(array $data): Map
-    {
+    public static function fromJson(
+        array $data,
+        $parent = null,
+        IStateModel|null $model = null,
+        string|null $field = null
+    ): Map {
         $width = $data['width'];
         $height = $data['height'];
         $tiles = $data['tiles'];
-        $map = new Map($width, $height);
+        $map = new Map($width, $height, $model, $field);
         foreach ($tiles as $tile) {
-            $map->addTile(Tile::fromJson($tile));
+            $map->addTile(Tile::fromJson($tile, $map, $model, $field));
         }
         return $map;
     }

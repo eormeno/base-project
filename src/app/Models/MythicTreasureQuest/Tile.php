@@ -17,7 +17,10 @@ class Tile implements JsonSerializable, IStateModel
         private bool $hasFlag = false,
         private bool $isMarkedAsClue = false,
         private int $trapsAround = 0,
-        private ?string $state = null
+        private ?string $state = null,
+        private $parent = null,
+        private IStateModel|null $model = null,
+        private string|null $fieldName = null
     ) {
     }
 
@@ -106,8 +109,12 @@ class Tile implements JsonSerializable, IStateModel
         $this->state = $state;
     }
 
-    public static function fromJson(array $data): Tile
-    {
+    public static function fromJson(
+        array $data,
+        $parent = null,
+        IStateModel|null $model,
+        string|null $field
+    ): Tile {
         $id = $data['id'];
         $x = $data['x'];
         $y = $data['y'];
@@ -116,7 +123,19 @@ class Tile implements JsonSerializable, IStateModel
         $hasFlag = $data['flag'] ?? false;
         $markedAsClue = $data['markedAsClue'] ?? false;
         $trapsAround = $data['trapsAround'] ?? 0;
-        return new Tile($id, $x, $y, $hasTrap, $hasFlag, $markedAsClue, $trapsAround, $state);
+        return new Tile(
+            $id,
+            $x,
+            $y,
+            $hasTrap,
+            $hasFlag,
+            $markedAsClue,
+            $trapsAround,
+            $state,
+            $parent,
+            $model,
+            $field
+        );
     }
 
     public static function newEmptyTile(int $id, int $x, int $y): Tile
@@ -130,7 +149,7 @@ class Tile implements JsonSerializable, IStateModel
             'markedAsClue' => false,
             'trapsAround' => 0,
             'state' => 'hidden'
-        ]);
+        ], null, null, null);
     }
 
     public function jsonSerialize(): array
