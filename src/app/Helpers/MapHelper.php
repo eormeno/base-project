@@ -13,6 +13,7 @@ class MapHelper
         $map = Map::fromJson([
             "width" => $width,
             "height" => $height,
+            "state" => null,
             "tiles" => []]);
 
         $tileId = 0;

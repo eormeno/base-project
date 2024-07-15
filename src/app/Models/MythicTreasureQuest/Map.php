@@ -2,21 +2,51 @@
 
 namespace App\Models\MythicTreasureQuest;
 
+use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
+use App\Traits\DebugHelper;
+use App\States\Map\MapDisplaying;
 use Illuminate\Database\Eloquent\Model;
 
-class Map implements JsonSerializable
+class Map implements JsonSerializable, IStateModel
 {
+    use DebugHelper;
     private array $tiles;
     private Model $castModel;
 
     private function __construct(
         private int $width,
         private int $height,
+        private ?string $state = null,
         private IStateModel|null $model = null,
         private string|null $fieldName = null
     ) {
+    }
+
+    public function getId(): int
+    {
+        return 0;
+    }
+
+    public function getAlias(): string
+    {
+        return 'map';
+    }
+
+    public static function getInitialStateClass(): ReflectionClass
+    {
+        return MapDisplaying::StateClass();
+    }
+
+    public function getState(): string|null
+    {
+        return $this->state;
+    }
+
+    public function updateState(string|null $state): void
+    {
+        $this->state = $state;
     }
 
     public static function fromField(IStateModel $model, string $fieldName): Map
@@ -44,8 +74,9 @@ class Map implements JsonSerializable
     ): Map {
         $width = $data['width'];
         $height = $data['height'];
+        $state = $data['state'];
         $tiles = $data['tiles'];
-        $map = new Map($width, $height, $model, $field);
+        $map = new Map($width, $height, $state, $model, $field);
         foreach ($tiles as $tile) {
             $map->addTile(Tile::fromJson($tile, $map, $model, $field));
         }
@@ -94,9 +125,16 @@ class Map implements JsonSerializable
 
     public function jsonSerialize(): array
     {
+        // convert the tiles array to an associative array whose keys are the tile ids
+        $tiles = [];
+        foreach ($this->tiles as $tile) {
+            $tiles[$tile->getId()] = $tile;
+        }
+
         return [
             'width' => $this->width,
             'height' => $this->height,
+            'state' => $this->state,
             'tiles' => $this->tiles
         ];
     }
