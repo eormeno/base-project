@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(MythicTreasureQuestGame::class);
     }
+
+    public function mtqGames(): HasOne
+    {
+        return $this->hasOne(MtqGame::class);
+    }
 }
