@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\MtqMap;
+use App\Helpers\MapHelper2;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MtqMapFactory extends Factory
@@ -18,20 +19,7 @@ class MtqMapFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (MtqMap $map) {
-            $tiles = [];
-            for ($i = 0; $i < $map->width; $i++) {
-                for ($j = 0; $j < $map->height; $j++) {
-                    $tiles[] = [
-                        'x' => $i,
-                        'y' => $j,
-                        'state' => null,
-                        'has_trap' => false,
-                        'has_flag' => false,
-                        'marked_as_clue' => false,
-                        'traps_around' => 0,
-                    ];
-                }
-            }
+            $tiles = MapHelper2::generateMap($map->width, $map->height, 8);
             $map->tiles()->createMany($tiles);
         });
     }
