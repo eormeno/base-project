@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('mtq_tiles', function (Blueprint $table) {
             $table->id();
+            $table->string('state')->nullable()->default(null);
             $table->foreignId('mtq_map_id')->constrained()->onDelete('cascade');
             $table->integer('x');
             $table->integer('y');
@@ -19,7 +20,6 @@ return new class extends Migration {
             $table->boolean('has_flag')->default(false);
             $table->boolean('marked_as_clue')->default(false);
             $table->integer('traps_around')->default(0);
-            $table->string('state');
             $table->timestamps();
         });
     }

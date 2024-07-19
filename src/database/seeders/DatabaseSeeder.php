@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\MtqMap;
 use App\Models\User;
+use App\Models\MtqGame;
+use App\Models\MtqItemClass;
 use Illuminate\Database\Seeder;
 use App\Models\GuessTheNumberGame;
 use App\Models\MythicTreasureQuestGame;
@@ -14,30 +17,25 @@ class DatabaseSeeder extends Seeder
     {
         fake()->seed(10);
 
-        MythicTreasureQuestItem::factory([
-            'slug' => 'selector',
-            'name' => 'Selector',
-            'icon' => 'selector.svg',
-            'description' => 'Selection tool'
-        ])->create();
+        $items = [
+            ['slug' => 'selector', 'name' => 'Selector', 'icon' => 'selector.svg', 'description' => 'Selection tool'],
+            ['slug' => 'flag', 'name' => 'Flag', 'icon' => 'flag.svg', 'description' => 'Marking tool'],
+            ['slug' => 'clue', 'name' => 'Clue', 'icon' => 'clue.svg', 'description' => 'Hint to the next location'],
+        ];
 
-        MythicTreasureQuestItem::factory([
-            'slug' => 'flag',
-            'name' => 'Flag',
-            'icon' => 'flag.svg',
-            'description' => 'Marking tool'
-        ])->create();
+        foreach ($items as $item) {
+            MythicTreasureQuestItem::factory()->create($item);
+        }
 
-        MythicTreasureQuestItem::factory([
-            'slug' => 'clue',
-            'name' => 'Clue',
-            'icon' => 'clue.svg',
-            'description' => 'Hint to the next location'
-        ])->create();
+        foreach ($items as $item) {
+            MtqItemClass::factory()->create($item);
+        }
 
         User::factory()->adminUser()
             ->has(GuessTheNumberGame::factory())
             ->has(MythicTreasureQuestGame::factory())
+            ->has(MtqGame::factory()
+                ->has(MtqMap::factory()))
             ->create();
 
         User::factory()->has(GuessTheNumberGame::factory()->fakeGame())->count(9)->create();
