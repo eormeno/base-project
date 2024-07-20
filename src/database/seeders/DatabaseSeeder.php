@@ -18,27 +18,21 @@ class DatabaseSeeder extends Seeder
         fake()->seed(10);
 
         $items = [
-            ['slug' => 'selector', 'name' => 'Selector', 'icon' => 'selector.svg', 'description' => 'Selection tool'],
-            ['slug' => 'flag', 'name' => 'Flag', 'icon' => 'flag.svg', 'description' => 'Marking tool'],
-            ['slug' => 'clue', 'name' => 'Clue', 'icon' => 'clue.svg', 'description' => 'Hint to the next location'],
+            ['slug' => 'selector', 'name' => 'Selector', 'icon' => 'selector.svg', 'description' => 'Selection tool', 'default_quantity' => 1],
+            ['slug' => 'flag', 'name' => 'Flag', 'icon' => 'flag.svg', 'description' => 'Marking tool', 'default_quantity' => 8],
+            ['slug' => 'clue', 'name' => 'Clue', 'icon' => 'clue.svg', 'description' => 'Hint to the next location', 'default_quantity' => 2],
         ];
 
-        foreach ($items as $item) {
-            MythicTreasureQuestItem::factory()->create($item);
-        }
-
-        foreach ($items as $item) {
-            MtqItemClass::factory()->create($item);
-        }
+        MythicTreasureQuestItem::factory()->createMany($items);
+        MtqItemClass::factory()->createMany($items);
 
         User::factory()->adminUser()
             ->has(GuessTheNumberGame::factory())
             ->has(MythicTreasureQuestGame::factory())
-            ->has(MtqGame::factory()
-                ->has(MtqMap::factory()))
+            ->has(MtqGame::factory())
             ->create();
 
-        User::factory()->has(GuessTheNumberGame::factory()->fakeGame())->count(9)->create();
+        //User::factory()->has(GuessTheNumberGame::factory()->fakeGame())->count(9)->create();
 
     }
 }

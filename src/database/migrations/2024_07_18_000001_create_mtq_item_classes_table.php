@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('icon');
             $table->string('description');
+            $table->integer('default_quantity')->default(0);
             $table->timestamps();
         });
     }

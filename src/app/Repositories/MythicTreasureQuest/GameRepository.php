@@ -2,6 +2,7 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
+use App\Models\MtqGame;
 use App\Helpers\MapHelper;
 use App\FSM\IEventListener;
 use App\Traits\DebugHelper;
@@ -32,9 +33,19 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         MythicTreasureQuestGame::factory()->for(auth()->user())->create();
     }
 
+    public function createEmptyNewGame2(): void
+    {
+        MtqGame::factory()->for(auth()->user())->create();
+    }
+
     private function hasUserAGame(): bool
     {
         return auth()->user()->mythicTreasureQuestGames()->exists();
+    }
+
+    private function hasUserAGame2(): bool
+    {
+        return auth()->user()->mtqGames()->exists();
     }
 
     private function getCurrentUserGame(): MythicTreasureQuestGame
@@ -50,6 +61,14 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
         return $this->getCurrentUserGame();
     }
 
+    public function getGame2(): MtqGame
+    {
+        if (!$this->hasUserAGame2()) {
+            $this->createEmptyNewGame2();
+        }
+        return auth()->user()->mtqGames;
+    }
+
     public function restartGame(): void
     {
         $this->eventManager->remove($this);
@@ -62,6 +81,7 @@ class GameRepository extends AbstractServiceComponent implements IEventListener
     public function reset(): void
     {
         $this->getGame()->delete();
+        $this->getGame2()->delete();
         StatesLocalCache::reset();
     }
 

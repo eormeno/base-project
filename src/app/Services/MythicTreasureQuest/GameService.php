@@ -2,6 +2,7 @@
 
 namespace App\Services\MythicTreasureQuest;
 
+use App\Models\MtqGame;
 use App\Models\MythicTreasureQuestGame;
 use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
@@ -16,6 +17,11 @@ class GameService extends AbstractServiceComponent
     public function getGame(): MythicTreasureQuestGame
     {
         return $this->gameRepository->getGame();
+    }
+
+    public function getGame2(): MtqGame
+    {
+        return $this->gameRepository->getGame2();
     }
 
     public function revealAll()

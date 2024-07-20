@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\MtqInventory;
+use App\Models\MtqMap;
+use App\Models\MtqGame;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,4 +19,11 @@ class MtqGameFactory extends Factory
         ];
     }
 
+    public function configure(): MtqGameFactory
+    {
+        return $this->afterCreating(function (MtqGame $mtqGame) {
+            MtqMap::factory()->for($mtqGame)->create();
+            MtqInventory::factory()->for($mtqGame)->create();
+        });
+    }
 }

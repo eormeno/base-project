@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('state')->nullable()->default(null);
             $table->foreignId('mtq_inventory_id')->constrained()->onDelete('cascade');
-            $table->foreignId('mtq_item_classes_id')->constrained()->onDelete('cascade');
+            $table->foreignId('mtq_item_class_id')->constrained()->onDelete('cascade');
             $table->integer('quantity')->default(0);
             $table->timestamps();
         });
