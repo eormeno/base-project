@@ -25,25 +25,25 @@ class MapHelper2
         return $tiles;
     }
 
-    private static function fillTraps(int $count, int $width, int $height, array &$map): void
+    private static function fillTraps(int $count, int $width, int $height, array &$tiles): void
     {
         $randomPositions = self::generateUniqueRandomPositions($count, $width * $height);
         foreach ($randomPositions as $pos) {
-            $x = $map[$pos]['x'];
-            $y = $map[$pos]['y'];
-            $map[$pos]['has_trap'] = true;
-            self::incrementTrapsAround($map, $width, $height, $x, $y);
+            $x = $tiles[$pos]['x'];
+            $y = $tiles[$pos]['y'];
+            $tiles[$pos]['has_trap'] = true;
+            self::incrementTrapsAround($tiles, $width, $height, $x, $y);
         }
     }
 
-    private static function incrementTrapsAround(array &$map, int $width, int $height, int $x, int $y): void
+    private static function incrementTrapsAround(array &$tiles, int $width, int $height, int $x, int $y): void
     {
         $directions = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
         foreach ($directions as $dir) {
             $newX = $x + $dir[0];
             $newY = $y + $dir[1];
             if ($newX >= 0 && $newX < $width && $newY >= 0 && $newY < $height) {
-                $tile = $map[$newY * $width + $newX];
+                $tile = $tiles[$newY * $width + $newX];
                 $tile['traps_around']++;
             }
         }

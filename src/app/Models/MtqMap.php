@@ -4,14 +4,21 @@
 
 namespace App\Models;
 
+use ReflectionClass;
+use App\FSM\IStateModel;
+use App\States\Map\MapDisplaying;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class MtqMap extends Model
+class MtqMap extends Model implements IStateModel
 {
     use HasFactory;
+
+    protected $fillable = [
+        'state',
+    ];
 
     public function mtqGame(): BelongsTo
     {
@@ -22,4 +29,30 @@ class MtqMap extends Model
     {
         return $this->hasMany(MtqTile::class);
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getAlias(): string
+    {
+        return 'map';
+    }
+
+    public static function getInitialStateClass(): ReflectionClass
+    {
+        return MapDisplaying::StateClass();
+    }
+
+    public function getState(): string|null
+    {
+        return $this->state;
+    }
+
+    public function updateState(string|null $state): void
+    {
+        $this->update(['state' => $state]);
+    }
+
 }
