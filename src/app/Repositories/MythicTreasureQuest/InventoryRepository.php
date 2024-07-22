@@ -2,6 +2,7 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
+use App\Models\MtqInventory;
 use App\Models\MythicTreasureQuest\Item;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
@@ -29,6 +30,11 @@ class InventoryRepository extends AbstractServiceComponent
         $game = $this->gameRepository->getGame();
         $this->localInMemoryInventory = Inventory::fromJson($game->inventory);
         return $this->localInMemoryInventory;
+    }
+
+    public function getInventory2(): MtqInventory
+    {
+        return $this->gameRepository->getGame2()->mtqInventories()->first();
     }
 
     public function decrementItemBySlug(string $slug): Item | null

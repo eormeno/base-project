@@ -2,17 +2,15 @@
 
 namespace App\States\Inventory;
 
+use App\Models\MtqInventory;
 use App\FSM\StateAbstractImpl;
-use App\Models\MythicTreasureQuest\Inventory;
-use App\Traits\DebugHelper;
 
 class InventoryDisplaying extends StateAbstractImpl
 {
-    use DebugHelper;
     public array $items = [];
     public int $itemsCount = 0;
 
-    protected function cast(): Inventory
+    protected function cast(): MtqInventory
     {
         return $this->model;
     }
@@ -26,9 +24,8 @@ class InventoryDisplaying extends StateAbstractImpl
 
     private function filterAvailableItems(): array
     {
-        $items = $this->cast()->getItems();
-        return array_filter($items, function ($item) {
-            return $item->getQuantity() > 0;
-        });
+        return $this->cast()->mtqGameItems()->get()->filter(function ($item) {
+            return $item->quantity > 0;
+        })->all();
     }
 }

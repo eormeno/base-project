@@ -20,6 +20,7 @@ class MtqGame extends Model implements IStateModel
         'state',
     ];
 
+    #region IStateModel implementation
     public function getId(): int
     {
         return $this->id;
@@ -44,6 +45,7 @@ class MtqGame extends Model implements IStateModel
     {
         $this->update(['state' => $state]);
     }
+    #endregion
 
     public function user(): BelongsTo
     {
