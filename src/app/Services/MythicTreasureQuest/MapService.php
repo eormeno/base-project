@@ -36,4 +36,11 @@ class MapService extends AbstractServiceComponent
         $this->castedGame = $this->gameRepository->getGame2();
         return $this->castedGame->mtqMaps()->first();
     }
+
+    public function getMap2Tiles() : array
+    {
+        $map = $this->getMap2();
+        return $map->tiles()->get()->all();
+    }
+
 }

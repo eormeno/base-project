@@ -30,6 +30,7 @@ class MtqMap extends Model implements IStateModel
         return $this->hasMany(MtqTile::class);
     }
 
+    #region IStateModel implementation
     public function getId(): int
     {
         return $this->id;
@@ -54,5 +55,6 @@ class MtqMap extends Model implements IStateModel
     {
         $this->update(['state' => $state]);
     }
+    #endregion
 
 }

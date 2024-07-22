@@ -3,24 +3,23 @@
 namespace App\States\Tile;
 
 use App\FSM\StateAbstractImpl;
-use App\Models\MythicTreasureQuest\Tile;
-use App\Traits\DebugHelper;
+use App\Models\MtqTile;
 
 class Hidden extends StateAbstractImpl
 {
-    use DebugHelper;
     public bool $hasClue = false;
     public bool $hasFlag = false;
 
-    protected function cast(): Tile
+    protected function cast(): MtqTile
     {
-        return $this->context->tileRepository->getTileById($this->model->getId());
+        //return $this->context->tileRepository->getTileById($this->model->getId());
+        return $this->model;
     }
 
     public function onEnter(): void
     {
-        $this->hasClue = $this->cast()->isMarkedAsClue();
-        $this->hasFlag = $this->cast()->getHasFlag();
+        $this->hasClue = $this->cast()->marked_as_clue;
+        $this->hasFlag = $this->cast()->has_flag;
     }
 
     public function onClueMarkedEvent()

@@ -12,9 +12,10 @@ class MapDisplaying extends StateAbstractImpl
 
     public function onEnter(): void
     {
-        $map = $this->context->mapService->getMap();
-        $this->width = $map->getWidth();
-        $this->height = $map->getHeight();
-        $this->strArrTilesVID = $this->addChilren($map->getTiles());
+        $map = $this->context->mapService->getMap2();
+        $tiles = $this->context->mapService->getMap2Tiles();
+        $this->width = $map->width;
+        $this->height = $map->height;
+        $this->strArrTilesVID = $this->addChilren($tiles);
     }
 }
