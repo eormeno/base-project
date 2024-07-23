@@ -2,8 +2,8 @@
 
 namespace App\States\Tile;
 
-use App\FSM\StateAbstractImpl;
 use App\Models\MtqTile;
+use App\FSM\StateAbstractImpl;
 
 class Hidden extends StateAbstractImpl
 {

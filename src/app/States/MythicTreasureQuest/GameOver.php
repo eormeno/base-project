@@ -13,7 +13,6 @@ class GameOver extends APlayingStates
     public function onPlayAgainEvent()
     {
         $this->context->gameRepository->restartGame();
-        //$this->requireRefresh();
         return Initial::StateClass();
     }
 }

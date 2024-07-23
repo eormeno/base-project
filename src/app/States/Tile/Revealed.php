@@ -2,14 +2,17 @@
 
 namespace App\States\Tile;
 
+use App\Models\MtqTile;
 use App\FSM\StateAbstractImpl;
-use App\Models\MythicTreasureQuest\Tile;
 
 class Revealed extends StateAbstractImpl
 {
-    private Tile $tile;
-    public bool $hasTrap = false;
-    public int $trapsAround = 0;
+    private MtqTile $tile;
+
+    protected function cast(): MtqTile
+    {
+        return $this->model;
+    }
 
     public function onGameOverEvent()
     {
@@ -18,8 +21,6 @@ class Revealed extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $this->tile = $this->model;
-        $this->hasTrap = $this->tile->getHasTrap();
-        $this->trapsAround = $this->tile->getTrapsAround();
+        $this->cast()->refresh();
     }
 }

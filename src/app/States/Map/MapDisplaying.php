@@ -18,4 +18,9 @@ class MapDisplaying extends StateAbstractImpl
         $this->height = $map->height;
         $this->strArrTilesVID = $this->addChilren($tiles);
     }
+
+    public function onGameOverEvent()
+    {
+        $this->requireRefresh();
+    }
 }

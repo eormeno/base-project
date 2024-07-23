@@ -4,33 +4,19 @@ namespace App\Repositories\MythicTreasureQuest;
 
 use App\Models\MtqGameItem;
 use App\Models\MtqInventory;
-use App\Models\MythicTreasureQuest\Item;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
-use App\Models\MythicTreasureQuest\Inventory;
 
 class InventoryRepository extends AbstractServiceComponent
 {
-    private ?Inventory $localInMemoryInventory;
     private GameRepository $gameRepository;
     private MythicTreasureQuestItemRepository $mythicTreasureQuestItemRepository;
 
     public function __construct(AbstractServiceManager $serviceManager)
     {
         parent::__construct($serviceManager);
-        $this->localInMemoryInventory = null;
         $this->gameRepository = $serviceManager->get('gameRepository');
         $this->mythicTreasureQuestItemRepository = $serviceManager->get('mythicTreasureQuestItemRepository');
-    }
-
-    public function getInventory(): Inventory
-    {
-        if ($this->localInMemoryInventory) {
-            return $this->localInMemoryInventory;
-        }
-        $game = $this->gameRepository->getGame();
-        $this->localInMemoryInventory = Inventory::fromJson($game->inventory);
-        return $this->localInMemoryInventory;
     }
 
     public function getInventory2(): MtqInventory
@@ -47,7 +33,6 @@ class InventoryRepository extends AbstractServiceComponent
         $inventory = $this->getInventory2();
         $items = $inventory->mtqGameItems()->get();
         $item = $items->where('mtq_item_class_id', $itemTypeInfo['id'])->first();
-        //$item = $inventory->getItemByTypeId($itemTypeInfo['id']);
         if ($item && $item->quantity > 0) {
             $item->quantity--;
             $item->save();
@@ -57,11 +42,4 @@ class InventoryRepository extends AbstractServiceComponent
         return null;
     }
 
-    public function saveInventory(): void
-    {
-        $inventory = $this->getInventory();
-        $game = $this->gameRepository->getGame();
-        $game->inventory = $inventory->jsonSerialize();
-        $game->save();
-    }
 }

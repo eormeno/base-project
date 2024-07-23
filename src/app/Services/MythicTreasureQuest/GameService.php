@@ -3,10 +3,10 @@
 namespace App\Services\MythicTreasureQuest;
 
 use App\Models\MtqGame;
-use App\Models\MythicTreasureQuestGame;
-use App\Models\MythicTreasureQuest\Tile;
-use App\Services\AbstractServiceComponent;
+use App\Models\MtqTile;
 use App\Traits\DebugHelper;
+use App\Models\MythicTreasureQuestGame;
+use App\Services\AbstractServiceComponent;
 
 class GameService extends AbstractServiceComponent
 {
@@ -36,7 +36,7 @@ class GameService extends AbstractServiceComponent
         }
     }
 
-    private function fillAvailableTiles()
+    private function fillAvailableTiles(bool $onlyWithZeroTraps = false): void
     {
         if (!empty($this->availableTiles)) {
             return;
@@ -47,11 +47,14 @@ class GameService extends AbstractServiceComponent
             if ($tile->has_trap || $tile->isRevealed() || $tile->marked_as_clue) {
                 continue;
             }
-            $this->availableTiles[] = $tile;
+            if ($onlyWithZeroTraps && $tile->traps_around > 0) {
+                continue;
+            }
+            $this->availableTiles[] = $tile->id;
         }
     }
 
-    private function isTileAvailable(Tile $tile): bool
+    private function isTileAvailable(MtqTile $tile): bool
     {
         $this->fillAvailableTiles();
         $ret = in_array($tile->getId(), $this->availableTiles);
@@ -60,46 +63,40 @@ class GameService extends AbstractServiceComponent
 
     public function showClue(): bool
     {
-        $this->fillAvailableTiles();
+        $this->fillAvailableTiles(true);
         if (empty($this->availableTiles)) {
             return false;
         }
-        $randomAvailableTile = $this->availableTiles[array_rand($this->availableTiles)];
-
-        //$tile = $this->tileRepository->getTileById($tileId);
-        $this->tileRepository->markTileWithClue($randomAvailableTile);
+        $randomAvailableTileId = $this->availableTiles[array_rand($this->availableTiles)];
+        $this->tileRepository->markTileWithClue($randomAvailableTileId);
         return true;
     }
 
-    public function revealTile(Tile $tile) {
-        if ($tile->getTrapsAround() > 0) {
+    public function revealTile(MtqTile $tile) {
+        if ($tile->traps_around > 0) {
             $this->sendEvent($tile, 'reveal');
             return;
         }
         $this->_revealTile($tile);
     }
 
-    private function _revealTile(Tile $tile)
+    private function _revealTile(MtqTile $tile)
     {
         if ($this->isTileTested($tile)) {
             return;
         }
         $this->setTileAsTested($tile);
         $this->fillAvailableTiles();
-        //$map = $tile->getMap();
-        $map = $this->mapService->getMap();
-        $intX = $tile->getX();
-        $intY = $tile->getY();
         foreach (self::DIRECTIONS as $dir) {
-            $newX = $intX + $dir[0];
-            $newY = $intY + $dir[1];
-            if ($map->isValid($newX, $newY)) {
-                $newTile = $map->getTile($newX, $newY);
+            $newX = $tile->x + $dir[0];
+            $newY = $tile->y + $dir[1];
+            if ($this->mapService->isValid($newX, $newY)) {
+                $newTile = $this->mapService->getTile($newX, $newY);
                 if ($this->isTileAvailable($newTile)) {
                     if ($this->isTileTested($newTile)) {
                         continue;
                     }
-                    if ($newTile->getTrapsAround() > 0) {
+                    if ($newTile->traps_around > 0) {
                         $this->setTileAsTested($newTile);
                         $this->sendEvent($newTile, 'reveal');
                         continue;
@@ -111,12 +108,12 @@ class GameService extends AbstractServiceComponent
         $this->sendEvent($tile, 'reveal');
     }
 
-    private function isTileTested(Tile $tile): bool
+    private function isTileTested(MtqTile $tile): bool
     {
         return array_key_exists($tile->getId(), $this->testedTiles);
     }
 
-    private function setTileAsTested(Tile $tile): void
+    private function setTileAsTested(MtqTile $tile): void
     {
         $this->testedTiles[$tile->getId()] = true;
     }
