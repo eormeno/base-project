@@ -22,6 +22,11 @@ class InventoryDisplaying extends StateAbstractImpl
         $this->items = $this->addChilren($items);
     }
 
+    public function onRefresh(): void
+    {
+        $this->onEnter();
+    }
+
     private function filterAvailableItems(): array
     {
         return $this->cast()->mtqGameItems()->get()->filter(function ($item) {
