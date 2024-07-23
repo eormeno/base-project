@@ -2,6 +2,7 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
+use App\Models\MtqGameItem;
 use App\Models\MtqInventory;
 use App\Models\MythicTreasureQuest\Item;
 use App\Services\AbstractServiceManager;
@@ -37,20 +38,23 @@ class InventoryRepository extends AbstractServiceComponent
         return $this->gameRepository->getGame2()->mtqInventories()->first();
     }
 
-    public function decrementItemBySlug(string $slug): Item | null
+    public function decrementItemBySlug(string $slug): MtqGameItem | null
     {
         $itemTypeInfo = $this->mythicTreasureQuestItemRepository->getItemInfoBySlug($slug);
         if (!$itemTypeInfo) {
             return null;
         }
-        $inventory = $this->getInventory();
-        $item = $inventory->getItemByTypeId($itemTypeInfo['id']);
-        if ($item) {
-            $item->decrementQuantity();
-            $this->saveInventory();
+        $inventory = $this->getInventory2();
+        $items = $inventory->mtqGameItems()->get();
+        $item = $items->where('mtq_item_class_id', $itemTypeInfo['id'])->first();
+        //$item = $inventory->getItemByTypeId($itemTypeInfo['id']);
+        if ($item && $item->quantity > 0) {
+            $item->quantity--;
+            $item->save();
             $this->requireRefresh($inventory);
+            return $item;
         }
-        return $item;
+        return null;
     }
 
     public function saveInventory(): void

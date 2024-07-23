@@ -3,14 +3,14 @@
 namespace App\Repositories\MythicTreasureQuest;
 
 use Exception;
-use App\Models\MythicTreasureQuestItem;
+use App\Models\MtqItemClass;
 use App\Services\AbstractServiceComponent;
 
 class MythicTreasureQuestItemRepository extends AbstractServiceComponent
 {
     public function getItemInfo(int $itemId): array
     {
-        $item = MythicTreasureQuestItem::findOrFail($itemId);
+        $item = MtqItemClass::findOrFail($itemId);
         $slug = $item->slug;
         $icon = $item->icon;
         $name = $item->name;
@@ -21,7 +21,7 @@ class MythicTreasureQuestItemRepository extends AbstractServiceComponent
     public function getItemInfoBySlug(string $slug): array
     {
         try {
-            $item = MythicTreasureQuestItem::where('slug', $slug)->firstOrFail();
+            $item = MtqItemClass::where('slug', $slug)->firstOrFail();
             $id = $item->id;
             $icon = $item->icon;
             $name = $item->name;

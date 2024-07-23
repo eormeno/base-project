@@ -7,24 +7,14 @@ use App\Models\MtqTile;
 
 class Hidden extends StateAbstractImpl
 {
-    public bool $hasClue = false;
-    public bool $hasFlag = false;
-
     protected function cast(): MtqTile
     {
-        //return $this->context->tileRepository->getTileById($this->model->getId());
         return $this->model;
-    }
-
-    public function onEnter(): void
-    {
-        $this->hasClue = $this->cast()->marked_as_clue;
-        $this->hasFlag = $this->cast()->has_flag;
     }
 
     public function onClueMarkedEvent()
     {
-        $this->hasClue = $this->cast()->isMarkedAsClue();
+        $this->cast()->refresh();
     }
 
     public function onFlagEvent()
@@ -44,7 +34,7 @@ class Hidden extends StateAbstractImpl
 
     public function onTileClickedEvent()
     {
-        if ($this->cast()->getHasTrap()) {
+        if ($this->cast()->has_trap) {
             $this->sendSignal('game_over');
             return;
         }

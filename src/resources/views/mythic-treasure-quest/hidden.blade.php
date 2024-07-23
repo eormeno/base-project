@@ -2,7 +2,7 @@
     <div
         class="w-10 h-10 bg-slate-800 text-gray-500 text-xs hover:bg-slate-700 flex items-center justify-center border rounded-md border-slate-600">
         <div>
-            @if ($hasClue)
+            @if ($model->marked_as_clue)
                 <span class="relative flex h-3 w-3">
                     <span
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>

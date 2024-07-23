@@ -21,11 +21,11 @@ class ItemNormalState extends StateAbstractImpl
 
     public function onSelectEvent(string $slug)
     {
-        if ($slug==='flag'){
+        if ($slug === 'flag') {
             $this->sendSignal('flag');
             return;
         }
-        if ($slug==='clue'){
+        if ($slug === 'clue') {
             $this->doClue();
             return;
         }
@@ -33,16 +33,16 @@ class ItemNormalState extends StateAbstractImpl
 
     private function doClue(): void
     {
-        if ($this->context->gameService->showClue() === false) {
-            $this->errorToast('No available tiles to show clue!');
-            return;
-        }
         $item = $this->context->inventoryRepository->decrementItemBySlug('clue');
         if (!$item) {
             $this->errorToast('No available clues!');
             return;
         }
-        $this->quantity = $item->getQuantity();
+        if ($this->context->gameService->showClue() === false) {
+            $this->errorToast('No available tiles to show clue!');
+            return;
+        }
+        $this->quantity = $item->quantity;
     }
 
 

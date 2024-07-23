@@ -2,6 +2,7 @@
 
 namespace App\Repositories\MythicTreasureQuest;
 
+use App\Models\MtqTile;
 use App\Traits\DebugHelper;
 use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceManager;
@@ -30,10 +31,10 @@ class TileRepository extends AbstractServiceComponent
         $this->gameRepository->saveMap();
     }
 
-    public function markTileWithClue(Tile $tile): void
+    public function markTileWithClue(MtqTile $tile): void
     {
-        $tile->setMarkedAsClue(true);
-        $this->gameRepository->saveMap();
+        $tile->marked_as_clue = true;
+        $tile->save();
         $this->sendEvent($tile, 'clue_marked');
         $this->requireRefresh($tile);
     }

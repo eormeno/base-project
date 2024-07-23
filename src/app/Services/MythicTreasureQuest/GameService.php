@@ -6,9 +6,11 @@ use App\Models\MtqGame;
 use App\Models\MythicTreasureQuestGame;
 use App\Models\MythicTreasureQuest\Tile;
 use App\Services\AbstractServiceComponent;
+use App\Traits\DebugHelper;
 
 class GameService extends AbstractServiceComponent
 {
+    use DebugHelper;
     private const DIRECTIONS = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
     private array $testedTiles = [];
     private array $availableTiles = [];
@@ -40,12 +42,12 @@ class GameService extends AbstractServiceComponent
             return;
         }
         $this->availableTiles = [];
-        $map = $this->mapService->getMap();
-        foreach ($map->getTiles() as $tile) {
-            if ($tile->getHasTrap() || $tile->isRevealed() || $tile->isMarkedAsClue()) {
+        $tiles = $this->mapService->getMap2Tiles();
+        foreach ($tiles as $tile) {
+            if ($tile->has_trap || $tile->isRevealed() || $tile->marked_as_clue) {
                 continue;
             }
-            $this->availableTiles[] = $tile->getId();
+            $this->availableTiles[] = $tile;
         }
     }
 
@@ -62,9 +64,10 @@ class GameService extends AbstractServiceComponent
         if (empty($this->availableTiles)) {
             return false;
         }
-        $tileId = $this->availableTiles[array_rand($this->availableTiles)];
-        $tile = $this->tileRepository->getTileById($tileId);
-        $this->tileRepository->markTileWithClue($tile);
+        $randomAvailableTile = $this->availableTiles[array_rand($this->availableTiles)];
+
+        //$tile = $this->tileRepository->getTileById($tileId);
+        $this->tileRepository->markTileWithClue($randomAvailableTile);
         return true;
     }
 

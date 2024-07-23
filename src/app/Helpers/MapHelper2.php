@@ -43,7 +43,7 @@ class MapHelper2
             $newX = $x + $dir[0];
             $newY = $y + $dir[1];
             if ($newX >= 0 && $newX < $width && $newY >= 0 && $newY < $height) {
-                $tile = $tiles[$newY * $width + $newX];
+                $tile = &$tiles[$newY * $width + $newX];
                 $tile['traps_around']++;
             }
         }

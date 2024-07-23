@@ -157,7 +157,7 @@ abstract class StateAbstractImpl implements IState
 
     private function publicPropertiesToArray(): array
     {
-        $exclude = ['context', 'arrStrChildrenVID', 'model', 'need_restoring', 'isOnEnterExecuted'];
+        $exclude = ['context', 'arrStrChildrenVID', 'need_restoring', 'isOnEnterExecuted'];
         $properties = get_object_vars($this);
         $array = [];
         foreach ($properties as $key => $value) {

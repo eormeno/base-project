@@ -30,6 +30,11 @@ class MtqTile extends Model implements IStateModel
         return $this->belongsTo(MtqMap::class);
     }
 
+    public function isRevealed(): bool
+    {
+        return $this->state === 'revealed';
+    }
+
     #region IStateModel implementation
     public function getId(): int
     {
