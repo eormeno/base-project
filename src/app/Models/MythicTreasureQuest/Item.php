@@ -5,6 +5,7 @@ namespace App\Models\MythicTreasureQuest;
 use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
+use Illuminate\Support\Carbon;
 use App\States\Item\ItemNormalState;
 
 class Item implements JsonSerializable, IStateModel
@@ -13,13 +14,15 @@ class Item implements JsonSerializable, IStateModel
     private int $item_id;
     private int $quantity;
     private ?string $state = null;
+    private Carbon|null $started_at = null;
 
-    public function __construct(int $id, int $item_id, int $quantity, ?string $state = null)
+    public function __construct(int $id, int $item_id, int $quantity, ?string $state = null, Carbon|null $started_at = null)
     {
         $this->id = $id;
         $this->item_id = $item_id;
         $this->quantity = $quantity;
         $this->state = $state;
+        $this->started_at = $started_at;
     }
 
     public function getItemId(): int
@@ -51,7 +54,8 @@ class Item implements JsonSerializable, IStateModel
             'id' => $this->id,
             'item_id' => $this->item_id,
             'quantity' => $this->quantity,
-            'state' => $this->state
+            'state' => $this->state,
+            'started_at' => $this->started_at,
         ];
     }
 
@@ -79,6 +83,16 @@ class Item implements JsonSerializable, IStateModel
     public function updateState(string|null $state): void
     {
         $this->state = $state;
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->started_at = $startedAt;
     }
     #endregion
 }

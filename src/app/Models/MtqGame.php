@@ -6,6 +6,7 @@ namespace App\Models;
 
 use ReflectionClass;
 use App\FSM\IStateModel;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\States\MythicTreasureQuest\Initial;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -18,6 +19,7 @@ class MtqGame extends Model implements IStateModel
 
     protected $fillable = [
         'state',
+        'started_at',
     ];
 
     #region IStateModel implementation
@@ -44,6 +46,16 @@ class MtqGame extends Model implements IStateModel
     public function updateState(string|null $state): void
     {
         $this->update(['state' => $state]);
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $started_at): void
+    {
+        $this->update(['started_at' => $started_at]);
     }
     #endregion
 

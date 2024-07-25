@@ -4,6 +4,7 @@ namespace App\Models;
 
 use ReflectionClass;
 use App\FSM\IStateModel;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\States\MythicTreasureQuest\Initial;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,17 +16,19 @@ class MythicTreasureQuestGame extends Model implements IStateModel
 
     protected $fillable = [
         'state',
+        'started_at',
     ];
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     protected $casts = [
         'map' => 'array',
         'inventory' => 'array',
     ];
+
+    #region IStateModel implementation
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     public static function getInitialStateClass(): ReflectionClass
     {
@@ -46,6 +49,17 @@ class MythicTreasureQuestGame extends Model implements IStateModel
     {
         $this->update(['state' => $state]);
     }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $started_at): void
+    {
+        $this->update(['started_at' => $started_at]);
+    }
+    #endregion
 
     public function user(): BelongsTo
     {

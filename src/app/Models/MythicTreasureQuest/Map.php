@@ -6,6 +6,7 @@ use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
 use App\Traits\DebugHelper;
+use Illuminate\Support\Carbon;
 use App\States\Map\MapDisplaying;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,10 +21,12 @@ class Map implements JsonSerializable, IStateModel
         private int $height,
         private ?string $state = null,
         private IStateModel|null $model = null,
-        private string|null $fieldName = null
+        private string|null $fieldName = null,
+        private Carbon|null $startedAt = null
     ) {
     }
 
+    #region IStateManagedModel
     public function getId(): int
     {
         return 0;
@@ -48,6 +51,17 @@ class Map implements JsonSerializable, IStateModel
     {
         $this->state = $state;
     }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->startedAt;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->started_at = $startedAt;
+    }
+    #endregion
 
     public static function fromField(IStateModel $model, string $fieldName): Map
     {
@@ -76,7 +90,8 @@ class Map implements JsonSerializable, IStateModel
         $height = $data['height'];
         $state = $data['state'];
         $tiles = $data['tiles'];
-        $map = new Map($width, $height, $state, $model, $field);
+        $started_at = $data['started_at'] ?? null;
+        $map = new Map($width, $height, $state, $model, $field, $started_at);
         foreach ($tiles as $tile) {
             $map->addTile(Tile::fromJson($tile, $map, $model, $field));
         }
@@ -135,7 +150,8 @@ class Map implements JsonSerializable, IStateModel
             'width' => $this->width,
             'height' => $this->height,
             'state' => $this->state,
-            'tiles' => $this->tiles
+            'tiles' => $this->tiles,
+            'started_at' => $this->startedAt
         ];
     }
 }

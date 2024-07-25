@@ -4,6 +4,7 @@ namespace App\Models;
 
 use ReflectionClass;
 use App\FSM\IStateModel;
+use Illuminate\Support\Carbon;
 use App\States\GuessTheNumber\Initial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ class GuessTheNumberGame extends Model implements IStateModel
     protected $fillable = [
         'user_id',
         'state',
+        'started_at',
         'min_number',
         'max_number',
         'max_attempts',
@@ -23,6 +25,7 @@ class GuessTheNumberGame extends Model implements IStateModel
         'remaining_attempts',
     ];
 
+    #region IStateModel implementation
     public function getId(): int
     {
         return $this->id;
@@ -47,6 +50,17 @@ class GuessTheNumberGame extends Model implements IStateModel
     {
         $this->update(['state' => $state]);
     }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->update(['started_at' => $startedAt]);
+    }
+    #endregion
 
     public function user(): BelongsTo
     {

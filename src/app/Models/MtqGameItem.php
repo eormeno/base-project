@@ -6,6 +6,7 @@ namespace App\Models;
 
 use ReflectionClass;
 use App\FSM\IStateModel;
+use Illuminate\Support\Carbon;
 use App\States\Item\ItemNormalState;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,6 +15,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class MtqGameItem extends Model implements IStateModel
 {
     use HasFactory;
+
+    protected $fillable = [
+        'state',
+        'started_at',
+    ];
 
     public function mtqInventory(): BelongsTo
     {
@@ -48,7 +54,17 @@ class MtqGameItem extends Model implements IStateModel
 
     public function updateState(string|null $state): void
     {
-        $this->state = $state;
+        $this->update(['state' => $state]);
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->update(['started_at' => $startedAt]);
     }
     #endregion
 }

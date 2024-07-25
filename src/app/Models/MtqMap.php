@@ -6,6 +6,7 @@ namespace App\Models;
 
 use ReflectionClass;
 use App\FSM\IStateModel;
+use Illuminate\Support\Carbon;
 use App\States\Map\MapDisplaying;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,6 +19,7 @@ class MtqMap extends Model implements IStateModel
 
     protected $fillable = [
         'state',
+        'started_at',
     ];
 
     public function mtqGame(): BelongsTo
@@ -54,6 +56,16 @@ class MtqMap extends Model implements IStateModel
     public function updateState(string|null $state): void
     {
         $this->update(['state' => $state]);
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->update(['started_at' => $startedAt]);
     }
     #endregion
 

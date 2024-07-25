@@ -7,6 +7,7 @@ namespace App\Models;
 use ReflectionClass;
 use App\FSM\IStateModel;
 use App\States\Tile\Hidden;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,7 @@ class MtqTile extends Model implements IStateModel
         'x',
         'y',
         'state',
+        'started_at',
         'has_trap',
         'has_flag',
         'marked_as_clue',
@@ -59,6 +61,16 @@ class MtqTile extends Model implements IStateModel
     public function updateState(string|null $state): void
     {
         $this->update(['state' => $state]);
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->update(['started_at' => $startedAt]);
     }
     #endregion
 }

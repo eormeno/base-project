@@ -2,6 +2,7 @@
 
 namespace App\Models\MythicTreasureQuest;
 
+use Illuminate\Support\Carbon;
 use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
@@ -12,17 +13,20 @@ class Inventory implements JsonSerializable, IStateModel
     private array $items = [];
     private ?Item $selected = null;
     private ?string $state = null;
+    private Carbon|null $started_at = null;
 
-    public function __construct(?string $state = null)
+    public function __construct(?string $state = null, Carbon|null $started_at = null)
     {
         $this->state = $state;
+        $this->started_at = $started_at;
     }
 
     public static function fromJson(array $data): Inventory
     {
         $items = $data['items'];
         $state = $data['state'];
-        $inventory = new Inventory($state);
+        $started_at = $data['started_at'];
+        $inventory = new Inventory($state, $started_at);
 
         foreach ($items as $item) {
             $inventory->addItem(Item::fromJson($item));
@@ -59,6 +63,7 @@ class Inventory implements JsonSerializable, IStateModel
     {
         return [
             'state' => $this->state,
+            'started_at' => $this->started_at,
             'items' => $this->items
         ];
     }
@@ -87,6 +92,16 @@ class Inventory implements JsonSerializable, IStateModel
     public function updateState(?string $state): void
     {
         $this->state = $state;
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return $this->started_at;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->started_at = $startedAt;
     }
     #endregion
 }

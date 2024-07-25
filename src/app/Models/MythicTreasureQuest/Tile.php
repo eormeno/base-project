@@ -6,6 +6,7 @@ use ReflectionClass;
 use JsonSerializable;
 use App\FSM\IStateModel;
 use App\States\Tile\Hidden;
+use Illuminate\Support\Carbon;
 
 class Tile implements JsonSerializable, IStateModel
 {
@@ -20,10 +21,12 @@ class Tile implements JsonSerializable, IStateModel
         private ?string $state = null,
         private $parent = null,
         private IStateModel|null $model = null,
-        private string|null $fieldName = null
+        private string|null $fieldName = null,
+        private Carbon|null $startedAt = null
     ) {
     }
 
+    #region IStateManagedModel
     public function getId(): int
     {
         return $this->id;
@@ -34,6 +37,32 @@ class Tile implements JsonSerializable, IStateModel
         return "tile{$this->id}";
     }
 
+    public static function getInitialStateClass(): ReflectionClass
+    {
+        return Hidden::StateClass();
+    }
+
+    public function getState(): string|null
+    {
+        return $this->state;
+    }
+
+    public function updateState(string|null $state): void
+    {
+        $this->state = $state;
+    }
+
+    public function getStartedAt(): Carbon|null
+    {
+        return null;
+    }
+
+    public function setStartedAt(Carbon|null $startedAt): void
+    {
+        $this->startedAt = $startedAt;
+    }
+    #endregion
+
     public function getX(): int
     {
         return $this->x;
@@ -42,11 +71,6 @@ class Tile implements JsonSerializable, IStateModel
     public function getY(): int
     {
         return $this->y;
-    }
-
-    public static function getInitialStateClass(): ReflectionClass
-    {
-        return Hidden::StateClass();
     }
 
     public function getHasTrap(): bool
@@ -89,22 +113,12 @@ class Tile implements JsonSerializable, IStateModel
         $this->isMarkedAsClue = $isMarkedAsClue;
     }
 
-    public function getState(): string|null
-    {
-        return $this->state;
-    }
-
     public function isRevealed(): bool
     {
         return $this->state === 'revealed';
     }
 
     public function setState(string|null $state): void
-    {
-        $this->state = $state;
-    }
-
-    public function updateState(string|null $state): void
     {
         $this->state = $state;
     }
@@ -119,6 +133,7 @@ class Tile implements JsonSerializable, IStateModel
         $x = $data['x'];
         $y = $data['y'];
         $state = $data['state'];
+        $startedAt = $data['startedAt'] ?? null;
         $hasTrap = $data['trap'] ?? false;
         $hasFlag = $data['flag'] ?? false;
         $markedAsClue = $data['markedAsClue'] ?? false;
@@ -134,7 +149,8 @@ class Tile implements JsonSerializable, IStateModel
             $state,
             $parent,
             $model,
-            $field
+            $field,
+            $startedAt
         );
     }
 
@@ -148,7 +164,8 @@ class Tile implements JsonSerializable, IStateModel
             'flag' => false,
             'markedAsClue' => false,
             'trapsAround' => 0,
-            'state' => 'hidden'
+            'state' => 'hidden',
+            'startedAt' => null,
         ], null, null, null);
     }
 
@@ -163,6 +180,7 @@ class Tile implements JsonSerializable, IStateModel
             'markedAsClue' => $this->isMarkedAsClue,
             'trapsAround' => $this->trapsAround,
             'state' => $this->state,
+            'startedAt' => $this->startedAt,
         ];
     }
 
