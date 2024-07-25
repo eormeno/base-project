@@ -52,12 +52,12 @@ class Tile implements JsonSerializable, IStateModel
         $this->state = $state;
     }
 
-    public function getStartedAt(): Carbon|null
+    public function getEnteredAt(): string|null
     {
-        return null;
+        return $this->startedAt;
     }
 
-    public function setStartedAt(Carbon|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $startedAt): void
     {
         $this->startedAt = $startedAt;
     }

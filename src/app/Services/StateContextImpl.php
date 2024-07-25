@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
-use App\Traits\DebugHelper;
-use ReflectionClass;
-use App\Utils\Constants;
 use App\FSM\IState;
+use ReflectionClass;
 use App\FSM\IStateModel;
-use App\Helpers\StatesLocalCache;
+use App\Utils\Constants;
 use App\FSM\IStateContext;
+use App\Traits\DebugHelper;
+use Illuminate\Support\Carbon;
+use App\Helpers\StatesLocalCache;
 use App\Helpers\StateUpdateHelper;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
@@ -39,16 +40,9 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     private function setState(ReflectionClass $reflection_state_class): void
     {
-        // $cls = $reflection_state_class->getShortName();
-        // if ($cls == 'Hidden') {
-        //     if ($this->firstTime) {
-        //         $this->firstTime = false;
-        //         $this->logBacktrace();
-        //     }
-        // }
         $new_instance = StatesLocalCache::getStateInstance($reflection_state_class, $this->id);
         $new_instance->setContext($this);
-        $new_instance->setManagedModel($this->object);
+        $new_instance->setStateModel($this->object);
         if ($new_instance->isNeedRestoring()) {
             $new_instance->setNeedRestoring(false);
             $new_instance->reset();
@@ -56,13 +50,15 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         }
         if ($this->__state && $this->__state != $new_instance) {
             $this->__state->onExit();
-            $this->__state->isOnEnterExecuted = false;
+            $this->stateUpdater->setEnteredAt(null);
         }
-        if (!$new_instance->isOnEnterExecuted) {
+        //$this->log('Entered at: ' . $this->stateUpdater->getEnteredAt());
+        if (!$this->stateUpdater->getEnteredAt()) {
             $new_instance->reset();
             $new_instance->onEnter();
-            $new_instance->isOnEnterExecuted = true;
+            $this->stateUpdater->setEnteredAt(Carbon::now());
         }
+        $new_instance->enteredAt = $this->stateUpdater->getEnteredAt();
         $this->__state = $new_instance;
         $this->__state->onRefresh();
     }

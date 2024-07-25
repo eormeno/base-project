@@ -8,6 +8,7 @@ use App\Traits\DebugHelper;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
+use Illuminate\Support\Carbon;
 
 abstract class StateAbstractImpl implements IState
 {
@@ -18,7 +19,7 @@ abstract class StateAbstractImpl implements IState
     protected array $arrStrChildrenVID = [];
     public IStateModel $model;
     public bool $need_restoring = false;
-    public bool $isOnEnterExecuted = false;
+    public Carbon|null $enteredAt = null;
 
     public static function StateClass(): ReflectionClass
     {
@@ -40,7 +41,7 @@ abstract class StateAbstractImpl implements IState
         $this->need_restoring = $value;
     }
 
-    public function setManagedModel(IStateModel $model)
+    public function setStateModel(IStateModel $model)
     {
         $this->model = $model;
     }
@@ -157,7 +158,7 @@ abstract class StateAbstractImpl implements IState
 
     private function publicPropertiesToArray(): array
     {
-        $exclude = ['context', 'arrStrChildrenVID', 'need_restoring', 'isOnEnterExecuted'];
+        $exclude = ['context', 'arrStrChildrenVID', 'need_restoring'];
         $properties = get_object_vars($this);
         $array = [];
         foreach ($properties as $key => $value) {

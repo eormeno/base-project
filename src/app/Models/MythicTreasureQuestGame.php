@@ -50,12 +50,12 @@ class MythicTreasureQuestGame extends Model implements IStateModel
         $this->update(['state' => $state]);
     }
 
-    public function getStartedAt(): Carbon|null
+    public function getEnteredAt(): string|null
     {
         return $this->started_at;
     }
 
-    public function setStartedAt(Carbon|null $started_at): void
+    public function setEnteredAt(Carbon|string|null $started_at): void
     {
         $this->update(['started_at' => $started_at]);
     }

@@ -51,12 +51,12 @@ class GuessTheNumberGame extends Model implements IStateModel
         $this->update(['state' => $state]);
     }
 
-    public function getStartedAt(): Carbon|null
+    public function getEnteredAt(): string|null
     {
         return $this->started_at;
     }
 
-    public function setStartedAt(Carbon|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $startedAt): void
     {
         $this->update(['started_at' => $startedAt]);
     }

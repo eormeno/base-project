@@ -10,7 +10,7 @@ interface IState
     public function isNeedRestoring(): bool;
     public function setNeedRestoring(bool $value): void;
     public function setContext(IStateContext $content);
-    public function setManagedModel(IStateModel $model);
+    public function setStateModel(IStateModel $model);
     public function onReload(): void;
     public function onSave(): void;
     public function onEnter(): void;
