@@ -3,10 +3,10 @@
 namespace App\Helpers;
 
 use ReflectionClass;
-use App\Utils\CaseConverters;
 use App\FSM\IStateModel;
-use App\Services\AbstractServiceManager;
+use App\Utils\CaseConverters;
 use App\Services\EventManager;
+use App\Services\AbstractServiceManager;
 
 class StateUpdateHelper
 {
