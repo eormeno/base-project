@@ -10,6 +10,7 @@ class MtqTileFactory extends Factory
     {
         return [
             'state' => null,
+            'started_at' => null,
             'has_trap' => false,
             'has_flag' => false,
             'marked_as_clue' => false,

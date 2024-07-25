@@ -10,6 +10,7 @@ class MtqGameItemFactory extends Factory
     {
         return [
             'state' => null,
+            'started_at' => null,
         ];
     }
 

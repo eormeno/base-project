@@ -11,6 +11,8 @@ class MtqMapFactory extends Factory
     public function definition()
     {
         return [
+            'state' => null,
+            'started_at' => null,
             'width' => 8,
             'height' => 8,
         ];

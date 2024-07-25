@@ -10,8 +10,9 @@ return new class extends Migration {
     {
         Schema::create('mythic_treasure_quest_games', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('state')->nullable()->default(null);
+            $table->dateTime('started_at')->nullable()->default(null);
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('level')->default(1);
             $table->integer('health')->default(100);
             $table->json('map')->nullable();

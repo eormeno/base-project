@@ -12,8 +12,9 @@ return new class extends Migration {
     {
         Schema::create('mtq_inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mtq_game_id')->constrained()->onDelete('cascade');
             $table->string('state')->nullable()->default(null);
+            $table->dateTime('started_at')->nullable()->default(null);
+            $table->foreignId('mtq_game_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
