@@ -4,9 +4,11 @@ namespace App\States\Item;
 
 use App\Models\MtqGameItem;
 use App\FSM\StateAbstractImpl;
+use App\Traits\DebugHelper;
 
 class ItemNormalState extends StateAbstractImpl
 {
+    use DebugHelper;
     public int $id;
     public string $slug;
     public string $icon;
@@ -45,9 +47,9 @@ class ItemNormalState extends StateAbstractImpl
         $this->quantity = $item->quantity;
     }
 
-
-    public function onEnter(): void
+    public function onRefresh(): void
     {
+        $this->cast()->refresh();
         $this->id = $this->cast()->getId();
         $itemId = $this->cast()->mtqItemClass()->first()->id;
         $this->itemInfo = $this->context->mythicTreasureQuestItemRepository->getItemInfo($itemId);
@@ -55,10 +57,5 @@ class ItemNormalState extends StateAbstractImpl
         $this->icon = $this->itemInfo['icon'];
         $this->name = $this->itemInfo['name'];
         $this->quantity = $this->cast()->quantity;
-    }
-
-    public function onRefresh(): void
-    {
-        $this->onEnter();
     }
 }

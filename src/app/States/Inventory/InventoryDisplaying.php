@@ -15,16 +15,11 @@ class InventoryDisplaying extends StateAbstractImpl
         return $this->model;
     }
 
-    public function onEnter(): void
+    public function onRefresh(): void
     {
         $items = $this->filterAvailableItems();
         $this->itemsCount = count($items);
         $this->items = $this->addChilren($items);
-    }
-
-    public function onRefresh(): void
-    {
-        $this->onEnter();
     }
 
     private function filterAvailableItems(): array

@@ -6,9 +6,11 @@ use App\Models\MtqGameItem;
 use App\Models\MtqInventory;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
+use App\Traits\DebugHelper;
 
 class InventoryRepository extends AbstractServiceComponent
 {
+    use DebugHelper;
     private GameRepository $gameRepository;
     private MythicTreasureQuestItemRepository $mythicTreasureQuestItemRepository;
 
