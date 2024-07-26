@@ -91,7 +91,6 @@ abstract class StateAbstractImpl implements IState
     #region Callbacks
     public function onReload(): void
     {
-        $this->onEnter();
     }
 
     public function onSave(): void

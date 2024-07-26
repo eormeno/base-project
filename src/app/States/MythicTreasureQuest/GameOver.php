@@ -6,7 +6,6 @@ class GameOver extends APlayingStates
 {
     public function onEnter(): void
     {
-        parent::onEnter();
         $this->errorToast('Game Over');
     }
 

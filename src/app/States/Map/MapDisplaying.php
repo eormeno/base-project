@@ -19,6 +19,10 @@ class MapDisplaying extends StateAbstractImpl
         $this->strArrTilesVID = $this->addChilren($tiles);
     }
 
+    public function onRefresh(): void {
+        $this->onEnter();
+    }
+
     public function onGameOverEvent()
     {
         $this->requireRefresh();

@@ -10,7 +10,7 @@ abstract class APlayingStates extends StateAbstractImpl
     public int $height = 8;
     public string $strMapVID = '';
 
-    public function onEnter(): void
+    public function onRefresh(): void
     {
         $map = $this->context->mapService->getMap2();
         $this->width = $map->width;

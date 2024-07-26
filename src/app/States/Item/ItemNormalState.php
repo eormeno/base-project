@@ -56,4 +56,9 @@ class ItemNormalState extends StateAbstractImpl
         $this->name = $this->itemInfo['name'];
         $this->quantity = $this->cast()->quantity;
     }
+
+    public function onRefresh(): void
+    {
+        $this->onEnter();
+    }
 }
