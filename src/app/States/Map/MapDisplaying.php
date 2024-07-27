@@ -12,7 +12,7 @@ class MapDisplaying extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $map = $this->context->mapService->getMap2();
+        $map = $this->context->mapService->getMap();
         $tiles = $this->context->mapService->getMap2Tiles();
         $this->width = $map->width;
         $this->height = $map->height;

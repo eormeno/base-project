@@ -38,29 +38,31 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $this->stateUpdater = new StateUpdateHelper($serviceManager, $object);
     }
 
-    private function setState(ReflectionClass $reflection_state_class): void
+    private function setState(ReflectionClass $rflStateClass, bool $isRestoring = false): void
     {
-        $new_instance = StatesLocalCache::getStateInstance($reflection_state_class, $this->id);
-        $new_instance->setContext($this);
-        $new_instance->setStateModel($this->object);
-        if ($new_instance->isNeedRestoring()) {
-            $new_instance->setNeedRestoring(false);
-            $new_instance->reset();
-            $new_instance->onReload();
+        $stateInstance = StatesLocalCache::getStateInstance($rflStateClass, $this->id);
+        $stateInstance->setContext($this);
+        $stateInstance->setStateModel($this->object);
+        if ($stateInstance->isNeedRestoring()) {
+            $stateInstance->setNeedRestoring(false);
+            $stateInstance->reset();
+            $stateInstance->onReload();
         }
-        if ($this->__state && $this->__state != $new_instance) {
+        if ($this->__state && $this->__state != $stateInstance) {
             $this->__state->onExit();
             $this->stateUpdater->setEnteredAt(null);
         }
-        //$this->log('Entered at: ' . $this->stateUpdater->getEnteredAt());
         if (!$this->stateUpdater->getEnteredAt()) {
-            $new_instance->reset();
-            $new_instance->onEnter();
+            $stateInstance->reset();
+            $stateInstance->onEnter();
             $this->stateUpdater->setEnteredAt(Carbon::now());
         }
-        $new_instance->enteredAt = $this->stateUpdater->getEnteredAt();
-        $this->__state = $new_instance;
-        $this->__state->onRefresh();
+        $stateInstance->enteredAt = $this->stateUpdater->getEnteredAt();
+        $this->__state = $stateInstance;
+        if (!$isRestoring && !$stateInstance->isRefreshed) {
+            $this->__state->onRefresh();
+            $this->__state->isRefreshed = true;
+        }
     }
 
     public function __get($attributeName)
@@ -80,9 +82,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $current_state = $this->__state;
             $this->setState($current_state->handleRequest($eventInfo));
             $changed_state = $this->__state;
-            //if ($changed_state != $current_state) {
-                $this->stateUpdater->saveState($changed_state::StateClass());
-            //}
+            $this->stateUpdater->saveState($changed_state::StateClass());
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($current_state != $changed_state);
         $this->isStateChanged = $initial_state != $changed_state;
@@ -94,6 +94,6 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $rflState = $this->stateUpdater->readState();
         $staRegistered = StatesLocalCache::findRegisteredStateInstance($rflState, $this->id);
         $this->stateUpdater->saveState($rflState);
-        $this->setState($staRegistered::StateClass());
+        $this->setState($staRegistered::StateClass(), true);
     }
 }

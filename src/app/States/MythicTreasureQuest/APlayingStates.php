@@ -12,7 +12,7 @@ abstract class APlayingStates extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $map = $this->context->mapService->getMap2();
+        $map = $this->context->mapService->getMap();
         $this->width = $map->width;
         $this->height = $map->height;
         $this->strMapVID = $this->addChild($map);

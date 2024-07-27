@@ -9,7 +9,7 @@ class TileService extends AbstractServiceComponent
 {
     public function getTileById(int $id): MtqTile
     {
-        return $this->mapService->getMap2()->tiles()->find($id);
+        return $this->mapService->getMap()->tiles()->find($id);
     }
 
     public function markTileWithClue(int $tileId): void

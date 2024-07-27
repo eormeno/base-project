@@ -4,26 +4,17 @@ namespace App\Services\MythicTreasureQuest;
 
 use App\Models\MtqGame;
 use App\Models\MtqTile;
-use App\Traits\DebugHelper;
-use App\Models\MythicTreasureQuestGame;
 use App\Services\AbstractServiceComponent;
 
 class GameService extends AbstractServiceComponent
 {
-    use DebugHelper;
     private const DIRECTIONS = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]];
     private array $testedTiles = [];
     private array $availableTiles = [];
 
-
-    public function getGame(): MythicTreasureQuestGame
+    public function getGame(): MtqGame
     {
         return $this->gameRepository->getGame();
-    }
-
-    public function getGame2(): MtqGame
-    {
-        return $this->gameRepository->getGame2();
     }
 
     public function revealAll()

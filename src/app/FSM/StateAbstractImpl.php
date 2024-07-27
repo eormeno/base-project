@@ -20,6 +20,7 @@ abstract class StateAbstractImpl implements IState
     public IStateModel $model;
     public bool $need_restoring = false;
     public Carbon|null $enteredAt = null;
+    public bool $isRefreshed = false;
 
     public static function StateClass(): ReflectionClass
     {
@@ -29,6 +30,7 @@ abstract class StateAbstractImpl implements IState
     public function reset(): void
     {
         $this->arrStrChildrenVID = [];
+        $this->isRefreshed = false;
     }
 
     public function isNeedRestoring(): bool

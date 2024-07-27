@@ -18,7 +18,7 @@ class MythicTreasureQuestController extends BaseController
 
     public function event(EventRequestFilter $request)
     {
-        $game = $this->serviceManager->get('gameService')->getGame2(); // phpcs:ignore
+        $game = $this->serviceManager->get('gameService')->getGame(); // phpcs:ignore
         $this->stateManager->setRootModel($game);
         //$this->stateManager->enqueueForRendering($game);
         $this->stateManager->enqueueEvent($request->eventInfo());
