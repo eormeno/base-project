@@ -11,7 +11,7 @@ class Playing extends APlayingStates
     public function onRefresh(): void
     {
         parent::onRefresh();
-        $inventory = $this->context->inventoryRepository->getInventory2();
+        $inventory = $this->context->inventoryService->getInventory();
         $this->strInventoryVID = $this->addChild($inventory);
     }
 

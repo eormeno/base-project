@@ -1,12 +1,16 @@
 <?php
 
 namespace App\States\MythicTreasureQuest;
+use App\Traits\DebugHelper;
 
 class GameOver extends APlayingStates
 {
-    public function onEnter(): void
+    use DebugHelper;
+
+    public function onRefresh(): void
     {
-        $this->errorToast('Game Over');
+        parent::onRefresh();
+        $this->log("GameOver::onRefresh");
     }
 
     public function onPlayAgainEvent()

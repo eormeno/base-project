@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\MythicTreasureQuest;
+namespace App\Services\MythicTreasureQuest;
 
 use App\Models\MtqTile;
 use App\Services\AbstractServiceComponent;
 
-class TileRepository extends AbstractServiceComponent
+class TileService extends AbstractServiceComponent
 {
     public function getTileById(int $id): MtqTile
     {

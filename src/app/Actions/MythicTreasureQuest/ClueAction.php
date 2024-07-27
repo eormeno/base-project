@@ -5,18 +5,18 @@ namespace App\Actions\MythicTreasureQuest;
 use App\Traits\ToastTrigger;
 use App\Services\AbstractServiceManager;
 use App\Services\MythicTreasureQuest\GameService;
-use App\Repositories\MythicTreasureQuest\InventoryRepository;
+use App\Services\MythicTreasureQuest\InventoryService;
 
 class ClueAction
 {
     use ToastTrigger;
 
-    private InventoryRepository $inventoryRepository;
+    private InventoryService $inventoryService;
     private GameService $gameService;
 
     public function __construct(AbstractServiceManager $serviceManager)
     {
-        $this->inventoryRepository = $serviceManager->get('inventoryRepository');
+        $this->inventoryService = $serviceManager->get('inventoryService');
         $this->gameService = $serviceManager->get('gameService');
     }
 
@@ -28,6 +28,6 @@ class ClueAction
         }
 
         //$this->infoToast('Clue shown!');
-        $this->inventoryRepository->decrementItemBySlug('clue');
+        $this->inventoryService->decrementItemBySlug('clue');
     }
 }

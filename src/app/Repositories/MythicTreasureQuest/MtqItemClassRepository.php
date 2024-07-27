@@ -6,7 +6,7 @@ use Exception;
 use App\Models\MtqItemClass;
 use App\Services\AbstractServiceComponent;
 
-class MythicTreasureQuestItemRepository extends AbstractServiceComponent
+class MtqItemClassRepository extends AbstractServiceComponent
 {
     public function getItemInfo(int $itemId): array
     {

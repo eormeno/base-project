@@ -63,12 +63,12 @@ class GameService extends AbstractServiceComponent
 
     public function showClue(): bool
     {
-        $this->fillAvailableTiles(true);
+        $this->fillAvailableTiles();
         if (empty($this->availableTiles)) {
             return false;
         }
         $randomAvailableTileId = $this->availableTiles[array_rand($this->availableTiles)];
-        $this->tileRepository->markTileWithClue($randomAvailableTileId);
+        $this->tileService->markTileWithClue($randomAvailableTileId);
         return true;
     }
 

@@ -35,7 +35,7 @@ class ItemNormalState extends StateAbstractImpl
 
     private function doClue(): void
     {
-        $item = $this->context->inventoryRepository->decrementItemBySlug('clue');
+        $item = $this->context->inventoryService->decrementItemBySlug('clue');
         if (!$item) {
             $this->errorToast('No available clues!');
             return;
@@ -52,7 +52,7 @@ class ItemNormalState extends StateAbstractImpl
         $this->cast()->refresh();
         $this->id = $this->cast()->getId();
         $itemId = $this->cast()->mtqItemClass()->first()->id;
-        $this->itemInfo = $this->context->mythicTreasureQuestItemRepository->getItemInfo($itemId);
+        $this->itemInfo = $this->context->mtqItemClassRepository->getItemInfo($itemId);
         $this->slug = $this->itemInfo['slug'];
         $this->icon = $this->itemInfo['icon'];
         $this->name = $this->itemInfo['name'];

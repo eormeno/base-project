@@ -1,38 +1,38 @@
 <?php
 
-namespace App\Repositories\MythicTreasureQuest;
+namespace App\Services\MythicTreasureQuest;
 
 use App\Models\MtqGameItem;
 use App\Models\MtqInventory;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
-use App\Traits\DebugHelper;
+use App\Repositories\MythicTreasureQuest\GameRepository;
+use App\Repositories\MythicTreasureQuest\MtqItemClassRepository;
 
-class InventoryRepository extends AbstractServiceComponent
+class InventoryService extends AbstractServiceComponent
 {
-    use DebugHelper;
     private GameRepository $gameRepository;
-    private MythicTreasureQuestItemRepository $mythicTreasureQuestItemRepository;
+    private MtqItemClassRepository $mtqItemClassRepository;
 
     public function __construct(AbstractServiceManager $serviceManager)
     {
         parent::__construct($serviceManager);
         $this->gameRepository = $serviceManager->get('gameRepository');
-        $this->mythicTreasureQuestItemRepository = $serviceManager->get('mythicTreasureQuestItemRepository');
+        $this->mtqItemClassRepository = $serviceManager->get('mtqItemClassRepository');
     }
 
-    public function getInventory2(): MtqInventory
+    public function getInventory(): MtqInventory
     {
         return $this->gameRepository->getGame2()->mtqInventories()->first();
     }
 
     public function decrementItemBySlug(string $slug): MtqGameItem | null
     {
-        $itemTypeInfo = $this->mythicTreasureQuestItemRepository->getItemInfoBySlug($slug);
+        $itemTypeInfo = $this->mtqItemClassRepository->getItemInfoBySlug($slug);
         if (!$itemTypeInfo) {
             return null;
         }
-        $inventory = $this->getInventory2();
+        $inventory = $this->getInventory();
         $items = $inventory->mtqGameItems()->get();
         $item = $items->where('mtq_item_class_id', $itemTypeInfo['id'])->first();
         if ($item && $item->quantity > 0) {

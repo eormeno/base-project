@@ -4,10 +4,10 @@ namespace App\Services\MythicTreasureQuest;
 
 use App\Services\AbstractServiceManager;
 use App\Repositories\Globals\UserRepository;
+use App\Services\MythicTreasureQuest\TileService;
 use App\Repositories\MythicTreasureQuest\GameRepository;
-use App\Repositories\MythicTreasureQuest\TileRepository;
-use App\Repositories\MythicTreasureQuest\InventoryRepository;
-use App\Repositories\MythicTreasureQuest\MythicTreasureQuestItemRepository;
+use App\Services\MythicTreasureQuest\InventoryService;
+use App\Repositories\MythicTreasureQuest\MtqItemClassRepository;
 
 class MythicTreasureQuestServiceManager extends AbstractServiceManager
 {
@@ -16,9 +16,9 @@ class MythicTreasureQuestServiceManager extends AbstractServiceManager
         parent::__construct();
         $this->addService('userRepository', new UserRepository($this));
         $this->addService('gameRepository', new GameRepository($this));
-        $this->addService('tileRepository', new TileRepository($this));
-        $this->addService('mythicTreasureQuestItemRepository', new MythicTreasureQuestItemRepository($this));
-        $this->addService('inventoryRepository', new InventoryRepository($this));
+        $this->addService('tileService', new TileService($this));
+        $this->addService('mtqItemClassRepository', new MtqItemClassRepository($this));
+        $this->addService('inventoryService', new InventoryService($this));
         $this->addService('gameService', new GameService($this));
         $this->addService('mapService', new MapService($this));
     }
