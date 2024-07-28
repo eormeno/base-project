@@ -113,9 +113,9 @@ class StateManager
 
             $event = $eventInfo['event'];
             $destination = $eventInfo['destination'];
-            // if ($event == 'select') {
-            //     $this->log(json_encode($eventInfo));
-            // }
+            if ($event == 'refresh' || $event == 'select') {
+                $this->log(json_encode($eventInfo));
+            }
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
@@ -221,7 +221,6 @@ class StateManager
                 $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
             }
         }
-//        $this->enqueueRefreshForAliasEvent($strModelAlias);
         return $strModelAlias;
     }
 

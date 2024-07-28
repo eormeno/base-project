@@ -43,6 +43,7 @@ class ItemNormalState extends StateAbstractImpl
             return;
         }
         $this->quantity = $item->quantity;
+        $this->requireRefresh();
     }
 
     public function onRefresh(): void
