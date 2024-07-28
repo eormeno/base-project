@@ -9,11 +9,7 @@ class InventoryDisplaying extends StateAbstractImpl
 {
     public array $items = [];
     public int $itemsCount = 0;
-
-    protected function cast(): MtqInventory
-    {
-        return $this->model;
-    }
+    public ?MtqInventory $model = null;
 
     public function onRefresh(): void
     {
@@ -24,7 +20,7 @@ class InventoryDisplaying extends StateAbstractImpl
 
     private function filterAvailableItems(): array
     {
-        return $this->cast()->mtqGameItems()->get()->filter(function ($item) {
+        return $this->model->mtqGameItems()->get()->filter(function ($item) {
             return $item->quantity > 0;
         })->all();
     }

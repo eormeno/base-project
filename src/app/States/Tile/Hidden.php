@@ -7,19 +7,16 @@ use App\FSM\StateAbstractImpl;
 
 class Hidden extends StateAbstractImpl
 {
-    protected function cast(): MtqTile
-    {
-        return $this->model;
-    }
+    public ?MtqTile $model = null;
 
     public function onRefresh(): void
     {
-        $this->cast()->refresh();
+        $this->model->refresh();
     }
 
     public function onClueMarkedEvent()
     {
-        $this->cast()->refresh();
+        $this->model->refresh();
     }
 
     public function onFlagEvent()
@@ -39,7 +36,7 @@ class Hidden extends StateAbstractImpl
 
     public function onTileClickedEvent()
     {
-        if ($this->cast()->has_trap) {
+        if ($this->model->has_trap) {
             $this->sendSignal('game_over');
             return;
         }

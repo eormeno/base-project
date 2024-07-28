@@ -90,6 +90,17 @@ class StateManager
         $this->isEnqueuedRefreshEvent = true;
     }
 
+    private function enqueueRefreshForAliasEvent(string $strAlias)
+    {
+        $this->enqueueEvent([
+            'event' => 'refresh',
+            'source' => null,
+            'is_signal' => false,
+            'data' => [],
+            'destination' => $strAlias
+        ]);
+    }
+
     public final function getAllStatesViews2()
     {
         $this->resetRenderedAliases();
@@ -97,14 +108,27 @@ class StateManager
         $this->enqueueForRendering($this->rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
+
+            $event = $eventInfo['event'];
+            $destination = $eventInfo['destination'];
+            if ($event == 'select') {
+                $this->log(json_encode($eventInfo));
+            }
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
-                    $eventInfo['destination'] = $strAlias;
+                    //$eventInfo['destination'] = $strAlias;
+                }
+                if ($destination && $destination != 'all' && $destination != $strAlias) {
+                    if($event == 'select') {
+                        $this->log('Skipping ' . $strAlias);
+                    }
+                    next($this->arrStatesMap);
+                    continue;
                 }
                 $stateContext = $this->arrStatesMap[$strAlias]['context'];
                 $state = $stateContext->request($eventInfo);
-                $this->enqueueAllForRendering($state->getChildrenModels(), $state->model);
+                $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel());
                 if (
                     $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
@@ -194,7 +218,7 @@ class StateManager
                 $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
             }
         }
-        //$this->log('Enqueued ' . $strModelAlias);
+//        $this->enqueueRefreshForAliasEvent($strModelAlias);
         return $strModelAlias;
     }
 
@@ -205,6 +229,8 @@ class StateManager
             $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
             $this->arrStatesMap[$strAlias]['children'] = [];
             $this->arrStatesMap[$strAlias]['view'] = null;
+            //$this->log("Enqueued $strAlias");
+            $this->enqueueRefreshForAliasEvent($strAlias);
         }
         return $strAlias;
     }

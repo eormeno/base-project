@@ -17,7 +17,7 @@ abstract class StateAbstractImpl implements IState
 
     protected IStateContext $context;
     protected array $arrStrChildrenVID = [];
-    public IStateModel $model;
+    private IStateModel $_model;
     public bool $need_restoring = false;
     public Carbon|null $enteredAt = null;
 
@@ -43,7 +43,17 @@ abstract class StateAbstractImpl implements IState
 
     public function setStateModel(IStateModel $model)
     {
-        $this->model = $model;
+        // search the 'model' property in the class
+        $properties = get_object_vars($this);
+        if (array_key_exists('model', $properties)) {
+            $this->model = $model;
+        }
+        $this->_model = $model;
+    }
+
+    public function getStateModel(): IStateModel
+    {
+        return $this->_model;
     }
 
     protected function addChild(IStateModel $model): string
@@ -178,7 +188,7 @@ abstract class StateAbstractImpl implements IState
         if (is_string($modelOrAlias)) {
             $strAlias = $modelOrAlias;
         } else {
-            $modelOrAlias = $modelOrAlias ?? $this->model;
+            $modelOrAlias = $modelOrAlias ?? $this->_model;
             $strAlias = $modelOrAlias->getAlias();
         }
         $this->context->stateManager->requireRefresh($strAlias);
@@ -189,7 +199,7 @@ abstract class StateAbstractImpl implements IState
         $this->context->stateManager->enqueueEvent([
             'event' => $event,
             'is_signal' => true,
-            'source' => $this->model->getAlias(),
+            'source' => $this->_model->getAlias(),
             'data' => $data,
             'destination' => 'all'
         ]);

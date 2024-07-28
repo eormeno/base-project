@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
 
         $items = [
             ['slug' => 'selector', 'name' => 'Selector', 'icon' => 'selector.svg', 'description' => 'Selection tool', 'default_quantity' => 1],
-            ['slug' => 'flag', 'name' => 'Flag', 'icon' => 'flag.svg', 'description' => 'Marking tool', 'default_quantity' => 8],
             ['slug' => 'clue', 'name' => 'Clue', 'icon' => 'clue.svg', 'description' => 'Hint to the next location', 'default_quantity' => 2],
+            ['slug' => 'flag', 'name' => 'Flag', 'icon' => 'flag.svg', 'description' => 'Marking tool', 'default_quantity' => 8],
         ];
 
         MythicTreasureQuestItem::factory()->createMany($items);
