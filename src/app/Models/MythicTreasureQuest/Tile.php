@@ -22,7 +22,7 @@ class Tile implements JsonSerializable, IStateModel
         private $parent = null,
         private IStateModel|null $model = null,
         private string|null $fieldName = null,
-        private Carbon|null $startedAt = null
+        private Carbon|null $enteredAt = null
     ) {
     }
 
@@ -54,12 +54,12 @@ class Tile implements JsonSerializable, IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->startedAt;
+        return $this->enteredAt;
     }
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->startedAt = $startedAt;
+        $this->enteredAt = $enteredAt;
     }
     #endregion
 
@@ -133,7 +133,7 @@ class Tile implements JsonSerializable, IStateModel
         $x = $data['x'];
         $y = $data['y'];
         $state = $data['state'];
-        $startedAt = $data['startedAt'] ?? null;
+        $enteredAt = $data['enteredAt'] ?? null;
         $hasTrap = $data['trap'] ?? false;
         $hasFlag = $data['flag'] ?? false;
         $markedAsClue = $data['markedAsClue'] ?? false;
@@ -150,7 +150,7 @@ class Tile implements JsonSerializable, IStateModel
             $parent,
             $model,
             $field,
-            $startedAt
+            $enteredAt
         );
     }
 
@@ -165,7 +165,7 @@ class Tile implements JsonSerializable, IStateModel
             'markedAsClue' => false,
             'trapsAround' => 0,
             'state' => 'hidden',
-            'startedAt' => null,
+            'enteredAt' => null,
         ], null, null, null);
     }
 
@@ -180,7 +180,7 @@ class Tile implements JsonSerializable, IStateModel
             'markedAsClue' => $this->isMarkedAsClue,
             'trapsAround' => $this->trapsAround,
             'state' => $this->state,
-            'startedAt' => $this->startedAt,
+            'enteredAt' => $this->enteredAt,
         ];
     }
 

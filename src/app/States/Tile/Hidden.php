@@ -12,6 +12,11 @@ class Hidden extends StateAbstractImpl
         return $this->model;
     }
 
+    public function onRefresh(): void
+    {
+        $this->cast()->refresh();
+    }
+
     public function onClueMarkedEvent()
     {
         $this->cast()->refresh();

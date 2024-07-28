@@ -15,7 +15,7 @@ class MtqInventoryFactory extends Factory
     {
         return [
             'state' => null,
-            'started_at' => null,
+            'entered_at' => null,
         ];
     }
 

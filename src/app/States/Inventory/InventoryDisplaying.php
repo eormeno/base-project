@@ -20,6 +20,7 @@ class InventoryDisplaying extends StateAbstractImpl
         $items = $this->filterAvailableItems();
         $this->itemsCount = count($items);
         $this->items = $this->addChilren($items);
+        $this->requireRefresh();
     }
 
     private function filterAvailableItems(): array

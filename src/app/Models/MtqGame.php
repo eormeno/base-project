@@ -19,7 +19,7 @@ class MtqGame extends Model implements IStateModel
 
     protected $fillable = [
         'state',
-        'started_at',
+        'entered_at',
     ];
 
     #region IStateModel implementation
@@ -50,12 +50,12 @@ class MtqGame extends Model implements IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->started_at;
+        return $this->entered_at;
     }
 
-    public function setEnteredAt(Carbon|string|null $started_at): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->update(['started_at' => $started_at]);
+        $this->update(['entered_at' => $enteredAt]);
     }
     #endregion
 

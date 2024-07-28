@@ -12,7 +12,7 @@ class MtqMapFactory extends Factory
     {
         return [
             'state' => null,
-            'started_at' => null,
+            'entered_at' => null,
             'width' => 8,
             'height' => 8,
         ];

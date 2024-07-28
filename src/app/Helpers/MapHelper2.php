@@ -14,6 +14,7 @@ class MapHelper2
                     'x' => $x,
                     'y' => $y,
                     'state' => null,
+                    'entered_at' => null,
                     'has_trap' => false,
                     'has_flag' => false,
                     'marked_as_clue' => false,

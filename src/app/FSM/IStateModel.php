@@ -19,6 +19,6 @@ interface IStateModel
 
     public function getEnteredAt(): string|null;
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void;
+    public function setEnteredAt(Carbon|string|null $enteredAt): void;
 
 }

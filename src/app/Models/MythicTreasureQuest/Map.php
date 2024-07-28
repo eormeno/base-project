@@ -22,7 +22,7 @@ class Map implements JsonSerializable, IStateModel
         private ?string $state = null,
         private IStateModel|null $model = null,
         private string|null $fieldName = null,
-        private Carbon|null $startedAt = null
+        private Carbon|null $enteredAt = null
     ) {
     }
 
@@ -54,12 +54,12 @@ class Map implements JsonSerializable, IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->startedAt;
+        return $this->enteredAt;
     }
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->started_at = $startedAt;
+        $this->entered_at = $enteredAt;
     }
     #endregion
 
@@ -90,8 +90,8 @@ class Map implements JsonSerializable, IStateModel
         $height = $data['height'];
         $state = $data['state'];
         $tiles = $data['tiles'];
-        $started_at = $data['started_at'] ?? null;
-        $map = new Map($width, $height, $state, $model, $field, $started_at);
+        $entered_at = $data['entered_at'] ?? null;
+        $map = new Map($width, $height, $state, $model, $field, $entered_at);
         foreach ($tiles as $tile) {
             $map->addTile(Tile::fromJson($tile, $map, $model, $field));
         }
@@ -151,7 +151,7 @@ class Map implements JsonSerializable, IStateModel
             'height' => $this->height,
             'state' => $this->state,
             'tiles' => $this->tiles,
-            'started_at' => $this->startedAt
+            'entered_at' => $this->enteredAt
         ];
     }
 }

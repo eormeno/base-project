@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('mtq_tiles', function (Blueprint $table) {
             $table->id();
             $table->string('state')->nullable()->default(null);
-            $table->dateTime('started_at')->nullable()->default(null);
+            $table->dateTime('entered_at')->nullable()->default(null);
             $table->foreignId('mtq_map_id')->constrained()->onDelete('cascade');
             $table->integer('x');
             $table->integer('y');

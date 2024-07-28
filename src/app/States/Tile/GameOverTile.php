@@ -6,4 +6,9 @@ use App\FSM\StateAbstractImpl;
 
 class GameOverTile extends StateAbstractImpl
 {
+    public function onRestartEvent()
+    {
+        return Hidden::StateClass();
+    }
+
 }

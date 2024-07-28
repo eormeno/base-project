@@ -28,8 +28,7 @@ class GameRepository extends AbstractServiceComponent
 
     public function restartGame(): void
     {
-        $this->getGame()->delete();
-        $this->createEmptyNewGame();
+        $this->mapService->restartTiles();
     }
 
     public function reset(): void

@@ -20,7 +20,7 @@ class MtqTile extends Model implements IStateModel
         'x',
         'y',
         'state',
-        'started_at',
+        'entered_at',
         'has_trap',
         'has_flag',
         'marked_as_clue',
@@ -65,12 +65,12 @@ class MtqTile extends Model implements IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->started_at;
+        return $this->entered_at;
     }
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->update(['started_at' => $startedAt]);
+        $this->update(['entered_at' => $enteredAt]);
     }
     #endregion
 }

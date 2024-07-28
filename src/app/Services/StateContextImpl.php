@@ -38,7 +38,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $this->stateUpdater = new StateUpdateHelper($serviceManager, $object);
     }
 
-    private function setState(ReflectionClass $rflStateClass, bool $isRestoring = false): void
+    private function setState(ReflectionClass $rflStateClass): IState
     {
         $stateInstance = StatesLocalCache::getStateInstance($rflStateClass, $this->id);
         $stateInstance->setContext($this);
@@ -59,10 +59,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         }
         $stateInstance->enteredAt = $this->stateUpdater->getEnteredAt();
         $this->__state = $stateInstance;
-        if (!$isRestoring && !$stateInstance->isRefreshed) {
-            $this->__state->onRefresh();
-            $this->__state->isRefreshed = true;
-        }
+        return $stateInstance;
     }
 
     public function __get($attributeName)
@@ -75,25 +72,30 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     public function request(array $eventInfo): IState
     {
-        $this->restoreState();
-        $initial_state = $this->__state;
+        $initialState = null;
+        $currentState = null;
+        $firstTime = true;
         do {
-            $this->restoreState();
-            $current_state = $this->__state;
-            $this->setState($current_state->handleRequest($eventInfo));
-            $changed_state = $this->__state;
-            $this->stateUpdater->saveState($changed_state::StateClass());
+            $currentState = $this->restoreState();
+            if ($firstTime) {
+                $firstTime = false;
+                $initialState = $currentState;
+            }
+            $changedState = $this->setState($currentState->handleRequest($eventInfo));
+            $this->stateUpdater->saveState($changedState::StateClass());
             $eventInfo = Constants::EMPTY_EVENT;
-        } while ($current_state != $changed_state);
-        $this->isStateChanged = $initial_state != $changed_state;
-        return $changed_state;
+        } while ($currentState != $changedState);
+        //$this->log("{$initialState::StateClass()->getShortName()} --> {$changedState::StateClass()->getShortName()}");
+        $this->isStateChanged = $initialState != $changedState;
+        $changedState->onRefresh();
+        return $changedState;
     }
 
-    protected function restoreState(): void
+    protected function restoreState(): IState
     {
         $rflState = $this->stateUpdater->readState();
         $staRegistered = StatesLocalCache::findRegisteredStateInstance($rflState, $this->id);
         $this->stateUpdater->saveState($rflState);
-        $this->setState($staRegistered::StateClass(), true);
+        return $this->setState($staRegistered::StateClass());
     }
 }

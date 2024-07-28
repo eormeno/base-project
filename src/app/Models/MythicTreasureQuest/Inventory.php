@@ -13,20 +13,20 @@ class Inventory implements JsonSerializable, IStateModel
     private array $items = [];
     private ?Item $selected = null;
     private ?string $state = null;
-    private Carbon|null $started_at = null;
+    private Carbon|null $entered_at = null;
 
-    public function __construct(?string $state = null, Carbon|null $started_at = null)
+    public function __construct(?string $state = null, Carbon|null $entered_at = null)
     {
         $this->state = $state;
-        $this->started_at = $started_at;
+        $this->entered_at = $entered_at;
     }
 
     public static function fromJson(array $data): Inventory
     {
         $items = $data['items'];
         $state = $data['state'];
-        $started_at = $data['started_at'];
-        $inventory = new Inventory($state, $started_at);
+        $entered_at = $data['entered_at'];
+        $inventory = new Inventory($state, $entered_at);
 
         foreach ($items as $item) {
             $inventory->addItem(Item::fromJson($item));
@@ -63,7 +63,7 @@ class Inventory implements JsonSerializable, IStateModel
     {
         return [
             'state' => $this->state,
-            'started_at' => $this->started_at,
+            'entered_at' => $this->entered_at,
             'items' => $this->items
         ];
     }
@@ -96,12 +96,12 @@ class Inventory implements JsonSerializable, IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->started_at;
+        return $this->entered_at;
     }
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->started_at = $startedAt;
+        $this->entered_at = $enteredAt;
     }
     #endregion
 }

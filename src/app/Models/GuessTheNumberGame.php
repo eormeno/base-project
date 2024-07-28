@@ -17,7 +17,7 @@ class GuessTheNumberGame extends Model implements IStateModel
     protected $fillable = [
         'user_id',
         'state',
-        'started_at',
+        'entered_at',
         'min_number',
         'max_number',
         'max_attempts',
@@ -53,12 +53,12 @@ class GuessTheNumberGame extends Model implements IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->started_at;
+        return $this->entered_at;
     }
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->update(['started_at' => $startedAt]);
+        $this->update(['entered_at' => $enteredAt]);
     }
     #endregion
 

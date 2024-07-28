@@ -14,15 +14,15 @@ class Item implements JsonSerializable, IStateModel
     private int $item_id;
     private int $quantity;
     private ?string $state = null;
-    private Carbon|null $started_at = null;
+    private Carbon|null $entered_at = null;
 
-    public function __construct(int $id, int $item_id, int $quantity, ?string $state = null, Carbon|null $started_at = null)
+    public function __construct(int $id, int $item_id, int $quantity, ?string $state = null, Carbon|null $entered_at = null)
     {
         $this->id = $id;
         $this->item_id = $item_id;
         $this->quantity = $quantity;
         $this->state = $state;
-        $this->started_at = $started_at;
+        $this->entered_at = $entered_at;
     }
 
     public function getItemId(): int
@@ -55,7 +55,7 @@ class Item implements JsonSerializable, IStateModel
             'item_id' => $this->item_id,
             'quantity' => $this->quantity,
             'state' => $this->state,
-            'started_at' => $this->started_at,
+            'entered_at' => $this->entered_at,
         ];
     }
 
@@ -87,12 +87,12 @@ class Item implements JsonSerializable, IStateModel
 
     public function getEnteredAt(): string|null
     {
-        return $this->started_at;
+        return $this->entered_at;
     }
 
-    public function setEnteredAt(Carbon|string|null $startedAt): void
+    public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->started_at = $startedAt;
+        $this->entered_at = $enteredAt;
     }
     #endregion
 }
