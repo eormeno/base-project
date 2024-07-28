@@ -9,30 +9,31 @@ use App\Traits\DebugHelper;
 class StateManager
 {
     use DebugHelper;
+
+    private const RENDERING_ALIASES = 'rendering_aliases';
+
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
     protected array $clientRenderedAliases = [];
     protected array $refreshRequiredAliases = [];
     protected AbstractServiceManager $serviceManager;
     protected bool $isEnqueuedRefreshEvent = false;
-    protected IStateModel $rootModel;
+    // protected IStateModel $rootModel;
 
     public final function __construct(AbstractServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
-        // TODO: Stdy this instantiation
-        // $this->log('StateManager Constructed');
     }
 
-    public final function setRootModel(IStateModel $model)
-    {
-        $this->rootModel = $model;
-    }
+    // public final function setRootModel(IStateModel $model)
+    // {
+    //     $this->rootModel = $model;
+    // }
 
-    private function resetRenderedAliases()
-    {
-        $this->arrStatesMap = [];
-    }
+    // private function resetRenderedAliases()
+    // {
+    //     $this->arrStatesMap = [];
+    // }
 
     public final function enqueueEvent(array $eventInfo)
     {
@@ -101,28 +102,29 @@ class StateManager
         ]);
     }
 
-    public final function getAllStatesViews2()
+    public final function getAllStatesViews2(IStateModel $rootModel)
     {
-        $this->resetRenderedAliases();
+        //$this->resetRenderedAliases();
+        $this->readRenderingAliases();
         $currentTimestamp = microtime(true);
-        $this->enqueueForRendering($this->rootModel);
+        $this->enqueueForRendering($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
 
             $event = $eventInfo['event'];
             $destination = $eventInfo['destination'];
-            if ($event == 'select') {
-                $this->log(json_encode($eventInfo));
-            }
+            // if ($event == 'select') {
+            //     $this->log(json_encode($eventInfo));
+            // }
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
                     //$eventInfo['destination'] = $strAlias;
                 }
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
-                    if($event == 'select') {
-                        $this->log('Skipping ' . $strAlias);
-                    }
+                    // if($event == 'select') {
+                    //     $this->log('Skipping ' . $strAlias);
+                    // }
                     next($this->arrStatesMap);
                     continue;
                 }
@@ -145,6 +147,7 @@ class StateManager
         $views = $this->getViewsForRender();
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
         //$this->log('StateManager ' . $elapsed . 'ms');
+        $this->persistRenderingAliases();
         return $views;
     }
 
@@ -233,5 +236,23 @@ class StateManager
             $this->enqueueRefreshForAliasEvent($strAlias);
         }
         return $strAlias;
+    }
+
+    public final function reset()
+    {
+        session()->forget(self::RENDERING_ALIASES);
+    }
+
+    private final function readRenderingAliases() : void
+    {
+        if (!session()->has(self::RENDERING_ALIASES)) {
+            session()->put(self::RENDERING_ALIASES, []);
+        }
+        $this->arrStatesMap = session(self::RENDERING_ALIASES);
+    }
+
+    private final function persistRenderingAliases() : void
+    {
+        session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
     }
 }
