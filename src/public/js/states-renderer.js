@@ -41,6 +41,7 @@ function sendEvent(event, formData = {}) {
         body: JSON.stringify({
             event: event,
             source: source,
+            destination: source,
             data: formData,
             rendered: arrObjects
         })
