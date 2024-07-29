@@ -25,8 +25,6 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
     protected int $id;
     public bool $isStateChanged = false;
 
-    private bool $firstTime = true;
-
     public function __construct(
         AbstractServiceManager $serviceManager,
         IStateModel $object
