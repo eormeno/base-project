@@ -57,7 +57,7 @@ class StateManager
         foreach ($arrChildren as $childAlias) {
             $this->refreshRequiredAliases[] = $childAlias;
         }
-        $this->enqueueRefreshEvent();
+        $this->enqueueRefreshForAliasEvent($strAlias);
     }
 
     private function getTree(): array
@@ -76,20 +76,20 @@ class StateManager
         return $arrChildren;
     }
 
-    private function enqueueRefreshEvent()
-    {
-        if ($this->isEnqueuedRefreshEvent) {
-            return;
-        }
-        $this->enqueueEvent([
-            'event' => 'refresh',
-            'source' => null,
-            'is_signal' => true,
-            'data' => [],
-            'destination' => 'all'
-        ]);
-        $this->isEnqueuedRefreshEvent = true;
-    }
+    // private function enqueueRefreshEvent()
+    // {
+    //     if ($this->isEnqueuedRefreshEvent) {
+    //         return;
+    //     }
+    //     $this->enqueueEvent([
+    //         'event' => 'refresh',
+    //         'source' => null,
+    //         'is_signal' => true,
+    //         'data' => [],
+    //         'destination' => 'all'
+    //     ]);
+    //     $this->isEnqueuedRefreshEvent = true;
+    // }
 
     private function enqueueRefreshForAliasEvent(string $strAlias)
     {
@@ -100,6 +100,9 @@ class StateManager
             'data' => [],
             'destination' => $strAlias
         ]);
+        $this->log('Require refresh ' . $strAlias);
+        $counts = count($this->eventQueue);
+        $this->log("eventes: $counts");
     }
 
     public final function getAllStatesViews2(IStateModel $rootModel)
@@ -113,9 +116,9 @@ class StateManager
 
             $event = $eventInfo['event'];
             $destination = $eventInfo['destination'];
-            if ($event == 'refresh' || $event == 'select') {
-                $this->log(json_encode($eventInfo));
-            }
+            //if ($event == 'refresh' || $event == 'select') {
+            $this->log(json_encode($eventInfo));
+            //}
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
@@ -148,6 +151,7 @@ class StateManager
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
         //$this->log('StateManager ' . $elapsed . 'ms');
         $this->persistRenderingAliases();
+        $this->eventQueue = [];
         return $views;
     }
 
@@ -242,7 +246,7 @@ class StateManager
         session()->forget(self::RENDERING_ALIASES);
     }
 
-    private final function readRenderingAliases() : void
+    private final function readRenderingAliases(): void
     {
         if (!session()->has(self::RENDERING_ALIASES)) {
             session()->put(self::RENDERING_ALIASES, []);
@@ -250,7 +254,7 @@ class StateManager
         $this->arrStatesMap = session(self::RENDERING_ALIASES);
     }
 
-    private final function persistRenderingAliases() : void
+    private final function persistRenderingAliases(): void
     {
         session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
     }

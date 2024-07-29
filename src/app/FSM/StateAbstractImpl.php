@@ -191,6 +191,7 @@ abstract class StateAbstractImpl implements IState
             $modelOrAlias = $modelOrAlias ?? $this->_model;
             $strAlias = $modelOrAlias->getAlias();
         }
+        // TODO: acá hay problemas con el stateManager porque hace referencia a un objeto diferente
         $this->context->stateManager->requireRefresh($strAlias);
     }
 

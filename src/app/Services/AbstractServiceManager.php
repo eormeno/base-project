@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Traits\DebugHelper;
 use Exception;
 use ReflectionClass;
 use App\Utils\CaseConverters;
 
 abstract class AbstractServiceManager
 {
+    use DebugHelper;
     protected $services = [];
     protected ?EventManager $eventManager = null;
     protected ?StateManager $stateManager = null;

@@ -4,16 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequestFilter;
 use App\Services\MythicTreasureQuest\MythicTreasureQuestServiceManager;
-use App\Services\StateManager;
 
 class MythicTreasureQuestController extends BaseController
 {
-    private StateManager $stateManager;
     public function __construct(
         MythicTreasureQuestServiceManager $serviceManager
     ) {
         parent::__construct($serviceManager);
-        $this->stateManager = $serviceManager->stateManager;
     }
 
     public function event(EventRequestFilter $request)
@@ -29,5 +26,6 @@ class MythicTreasureQuestController extends BaseController
     {
         $this->serviceManager->get('gameRepository')->reset(); // phpcs:ignore
         $this->stateManager->reset();
+        session()->forget('events');
     }
 }
