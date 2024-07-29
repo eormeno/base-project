@@ -76,21 +76,23 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $initialState = null;
         $currentState = null;
         $firstTime = true;
+        $hasIntermediateChange = false;
         do {
             $currentState = $this->restoreState();
             if ($firstTime) {
                 $firstTime = false;
                 $initialState = $currentState;
-                $initialName = $currentState::StateClass()->getShortName();
-                $this->log("Initial state is $initialName");
+                //$initialName = $currentState::StateClass()->getShortName();
+                //$this->log("Initial state is $initialName");
             }
             $changedState = $this->setState($currentState->handleRequest($eventInfo));
-            $changedName = $changedState::StateClass()->getShortName();
-            $this->log("State changed to $changedName");
+            //$changedName = $changedState::StateClass()->getShortName();
+            $hasIntermediateChange |= $currentState != $changedState;
+            //$this->log("State changed to $changedName");
             $this->stateUpdater->saveState($changedState::StateClass());
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($currentState != $changedState);
-        $this->isStateChanged = $initialState != $changedState;
+        $this->isStateChanged = $initialState != $changedState || $hasIntermediateChange;
         if ($eventDestination == $this->object->getAlias()) {
             $changedState->onRefresh();
         }
