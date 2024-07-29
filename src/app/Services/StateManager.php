@@ -100,9 +100,6 @@ class StateManager
             'data' => [],
             'destination' => $strAlias
         ]);
-        $this->log('Require refresh ' . $strAlias);
-        $counts = count($this->eventQueue);
-        $this->log("eventes: $counts");
     }
 
     public final function getAllStatesViews2(IStateModel $rootModel)
@@ -116,9 +113,7 @@ class StateManager
 
             $event = $eventInfo['event'];
             $destination = $eventInfo['destination'];
-            //if ($event == 'refresh' || $event == 'select') {
-            $this->log(json_encode($eventInfo));
-            //}
+            $this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
@@ -257,5 +252,14 @@ class StateManager
     private final function persistRenderingAliases(): void
     {
         session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
+    }
+
+    private function logEvent(array $eventInfo)
+    {
+        unset($eventInfo['source']);
+        unset($eventInfo['data']);
+        unset($eventInfo['is_signal']);
+        unset($eventInfo['rendered']);
+        $this->log(json_encode($eventInfo));
     }
 }
