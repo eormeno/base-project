@@ -12,6 +12,8 @@ return new class extends Migration {
             $table->id();
             $table->string('state')->nullable()->default(null);
             $table->dateTime('entered_at')->nullable()->default(null);
+            $table->json('state_children')->nullable()->default(null);
+            $table->json('state_attributes')->nullable()->default(null);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('level')->default(1);
             $table->integer('health')->default(100);

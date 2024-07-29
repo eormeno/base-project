@@ -5,14 +5,11 @@
 namespace App\Models;
 
 use ReflectionClass;
-use App\FSM\IStateModel;
 use App\States\Tile\Hidden;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class MtqTile extends Model implements IStateModel
+class MtqTile extends AStateModel
 {
     use HasFactory;
 
@@ -21,6 +18,8 @@ class MtqTile extends Model implements IStateModel
         'y',
         'state',
         'entered_at',
+        'state_children',
+        'state_attributes',
         'has_trap',
         'has_flag',
         'marked_as_clue',
@@ -37,40 +36,8 @@ class MtqTile extends Model implements IStateModel
         return $this->state === 'revealed';
     }
 
-    #region IStateModel implementation
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public static function getInitialStateClass(): ReflectionClass
     {
         return Hidden::StateClass();
     }
-
-    public function getAlias(): string
-    {
-        return "tile{$this->id}";
-    }
-
-    public function getState(): string|null
-    {
-        return $this->state;
-    }
-
-    public function updateState(string|null $state): void
-    {
-        $this->update(['state' => $state]);
-    }
-
-    public function getEnteredAt(): string|null
-    {
-        return $this->entered_at;
-    }
-
-    public function setEnteredAt(Carbon|string|null $enteredAt): void
-    {
-        $this->update(['entered_at' => $enteredAt]);
-    }
-    #endregion
 }
