@@ -101,9 +101,9 @@ function sendEvent(event, formData = {}) {
 //todo: move to a helper file and optimize it
 function decodeBase64(data) {
     const binaryString = atob(data);
-    return binaryString;
+    //return binaryString;
     const bytes = new Uint8Array(binaryString.length);
-    console.log(binaryString.length);
+    //console.log(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) {
         bytes[i] = binaryString.charCodeAt(i);
     }

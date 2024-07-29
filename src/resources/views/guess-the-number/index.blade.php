@@ -1,103 +1,13 @@
 <x-guess-the-number-layout>
-    <script>
-        window.addEventListener('DOMContentLoaded', (event) => {
-            // previousData();
-        });
+    <div id="routeDiv" route="{{ route($routeName) }}" token="{{ csrf_token() }}"></div>
 
-        window.onload = function() {
-            sendEvent();
-        }
-
-        // function previousData() {
-        //     let data = localStorage.getItem('{{ $routeName }}');
-        //     if (data) {
-        //         document.getElementById('main').innerHTML = data;
-        //     }
-        // }
-
-        // find a parent div that has the "key" attribute
-        function findParentWithKey(element) {
-            let parent = element.parentElement;
-            while (parent) {
-                if (parent.getAttribute('key')) {
-                    return parent;
-                }
-                parent = parent.parentElement;
-            }
-            return null;
-        }
-
-        function sendEvent(event, formData = {}) {
-            // get the element that triggered this function
-            const keyParent = findParentWithKey(document.activeElement);
-            const source = keyParent ? keyParent.getAttribute('key') : null;
-            // console.log('source: ', source);
-
-            event = event || '';
-            fetch("{{ route($routeName) }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        event: event,
-                        source: source,
-                        data: formData
-                    })
-                })
-                .then(response => response.text())
-                .then(data => {
-                    try {
-                        // if the data starts with a <!DOCTYPE html> tag, is an error page
-                        if (data.startsWith('<!DOCTYPE html>')) {
-                            document.write(data);
-                        } else {
-                            json = JSON.parse(data);
-                            // iterate over the json keys, find the element in the dom and update it
-                            for (const key in json) {
-                                const element = document.getElementById(key);
-                                if (element) {
-                                    $html = decodeBase64(json[key]);
-                                    $html = '<div key="' + key + '">' + $html + '</div>';
-                                    element.innerHTML = $html;
-                                    runScripts(element);
-                                    // localStorage.setItem('{{ $routeName }}', element);
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        document.write(data);
-                    }
-                });
-        }
-
-        function decodeBase64(data) {
-            const binaryString = atob(data);
-            const bytes = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return new TextDecoder().decode(bytes);
-        }
-
-        function runScripts(domElement) {
-            domElement.querySelectorAll('script').forEach(script => {
-                const newScript = document.createElement('script');
-                Array.from(script.attributes).forEach(attr => {
-                    newScript.setAttribute(attr.name, attr.value);
-                });
-                newScript.appendChild(document.createTextNode(script.innerHTML));
-                script.parentNode.replaceChild(newScript, script);
-            });
-        }
-    </script>
+    <script src="{{ asset('js/states-renderer.js') }}"></script>
 
     <x-slot name="title">
         {{ __("$routeName.title") }}
     </x-slot>
 
-    <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-4 min-w-md max-w-md">
+    <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-2 max-w-md bg-slate-200">
         <div class="relative">
             <div
                 class="absolute top-2 w-3/4 left-1/2 transform -translate-x-1/2 z-50 items-center justify-center text-lg font-light text-white">
@@ -126,9 +36,11 @@
                     </div>
                 </x-toast>
             </div>
+            <a href="{{ route($routeName) }}/reset"
+                class="absolute top-1 right-1 text-white bg-gray-600 px-2 py-1 rounded-full hover:bg-gray-700 text-xs">R</a>
         </div>
 
-        <div id="main">
+        <div id="main" class="bg-slate-200">
         </div>
     </div>
 </x-guess-the-number-layout>
