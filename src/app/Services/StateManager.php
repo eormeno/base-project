@@ -18,22 +18,11 @@ class StateManager
     protected array $refreshRequiredAliases = [];
     protected AbstractServiceManager $serviceManager;
     protected bool $isEnqueuedRefreshEvent = false;
-    // protected IStateModel $rootModel;
 
     public final function __construct(AbstractServiceManager $serviceManager)
     {
         $this->serviceManager = $serviceManager;
     }
-
-    // public final function setRootModel(IStateModel $model)
-    // {
-    //     $this->rootModel = $model;
-    // }
-
-    // private function resetRenderedAliases()
-    // {
-    //     $this->arrStatesMap = [];
-    // }
 
     public final function enqueueEvent(array $eventInfo)
     {
@@ -75,21 +64,6 @@ class StateManager
         }
         return $arrChildren;
     }
-
-    // private function enqueueRefreshEvent()
-    // {
-    //     if ($this->isEnqueuedRefreshEvent) {
-    //         return;
-    //     }
-    //     $this->enqueueEvent([
-    //         'event' => 'refresh',
-    //         'source' => null,
-    //         'is_signal' => true,
-    //         'data' => [],
-    //         'destination' => 'all'
-    //     ]);
-    //     $this->isEnqueuedRefreshEvent = true;
-    // }
 
     private function enqueueRefreshForAliasEvent(string $strAlias)
     {
