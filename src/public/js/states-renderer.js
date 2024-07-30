@@ -57,11 +57,14 @@ function sendEvent(event, formData = {}) {
                     if (json['tree']) {
                         console.warn(json['tree']);
                     }
+                    rootId = json['root'];
+                    mainDiv = document.getElementById('main');
+                    mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
                     elementsUpdated = 0;
                     updated = "";
                     elementsNotFound = [];
                     for (const key in json) {
-                        if (key === 'tree') {
+                        if (key === 'tree' || key === 'root') {
                             continue;
                         }
                         const element = document.getElementById(key);

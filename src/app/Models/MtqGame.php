@@ -21,11 +21,6 @@ class MtqGame extends AStateModel
         'state_attributes',
     ];
 
-    public function getAlias(): string
-    {
-        return "main";
-    }
-
     public static function getInitialStateClass(): ReflectionClass
     {
         return Initial::StateClass();

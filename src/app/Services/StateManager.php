@@ -94,7 +94,7 @@ class StateManager
                     next($this->arrStatesMap);
                     continue;
                 }
-                $stateContext = $this->arrStatesMap[$strAlias]['context'];
+                $stateContext = $this->arrStatesMap[$strAlias]['context']; // TODO: reconstruir el contexto
                 $state = $stateContext->request($eventInfo);
                 $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel());
                 if (
@@ -110,7 +110,7 @@ class StateManager
             }
             next($this->eventQueue);
         }
-        $views = $this->getViewsForRender();
+        $views = $this->getViewsForRender($rootModel);
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
         //$this->log('StateManager ' . $elapsed . 'ms');
         $this->persistRenderingAliases();
@@ -118,9 +118,10 @@ class StateManager
         return $views;
     }
 
-    private function getViewsForRender(): array
+    private function getViewsForRender(IStateModel $rootModel): array
     {
         $arrViews = [];
+        $arrViews['root'] = $rootModel->getAlias();
         $tree = $this->getTree();
         foreach ($tree as $strAlias) {
             $view = $this->arrStatesMap[$strAlias]['view'];
@@ -165,7 +166,7 @@ class StateManager
         $strAlias = $model->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAlias]['children'] = [];
-            $this->log("Enqueued $strAlias");
+            //$this->log("Enqueued $strAlias");
             $this->enqueueRefreshForAliasEvent($strAlias);
         }
         $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
