@@ -6,7 +6,6 @@ use App\FSM\StateAbstractImpl;
 
 class MapDisplaying extends StateAbstractImpl
 {
-    use \App\Traits\DebugHelper;
     public int $width = 8;
     public int $height = 8;
     public array $strArrTilesVID = [];
@@ -18,10 +17,5 @@ class MapDisplaying extends StateAbstractImpl
         $this->width = $map->width;
         $this->height = $map->height;
         $this->strArrTilesVID = $this->addChilren($tiles);
-    }
-
-    public function onGameOverEvent()
-    {
-        $this->requireRefresh();
     }
 }

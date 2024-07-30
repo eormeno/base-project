@@ -85,17 +85,13 @@ class StateManager
             $this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
-                if ($eventInfo['destination'] != 'all') {
-                    //$eventInfo['destination'] = $strAlias;
-                }
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
                     next($this->arrStatesMap);
                     continue;
                 }
-                //$stateContext = $this->arrStatesMap[$strAlias]['context']; // TODO: reconstruir el contexto
                 $stateContext = $this->findContext($strAlias);
                 $state = $stateContext->request($eventInfo);
-                $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel());
+                $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel()); // phpcs:ignore
                 if (
                     $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
@@ -111,7 +107,7 @@ class StateManager
         }
         $views = $this->getViewsForRender($rootModel);
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-        //$this->log('StateManager ' . $elapsed . 'ms');
+        $this->log("StateManager {$elapsed}ms");
         $this->persistRenderingAliases();
         $this->eventQueue = [];
         return $views;

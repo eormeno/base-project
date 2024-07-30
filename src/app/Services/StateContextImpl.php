@@ -70,7 +70,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     public function request(array $eventInfo): IState
     {
-        $eventDestination = $eventInfo['destination'];
+        $destination = $eventInfo['destination'];
         $initialState = null;
         $currentState = null;
         $firstTime = true;
@@ -87,7 +87,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($currentState != $changedState);
         $this->isStateChanged = $initialState != $changedState || $hasIntermediateChange;
-        if ($eventDestination == $this->object->getAlias()) {
+        if ($destination == 'all' || $destination == $this->object->getAlias()) {
             $changedState->onRefresh();
         }
         return $changedState;
