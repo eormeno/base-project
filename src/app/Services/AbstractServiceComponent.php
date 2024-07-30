@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\FSM\IStateModel;
-use App\FSM\IStateContext;
 
 abstract class AbstractServiceComponent
 {
@@ -27,6 +26,7 @@ abstract class AbstractServiceComponent
         string|null $destination = null,
         array $data = []
     ) {
+        $destination = $destination ?? $modelAlias;
         $event = [
             'event' => $event,
             'source' => $modelAlias,

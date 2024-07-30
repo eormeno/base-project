@@ -7,12 +7,7 @@ use App\FSM\StateAbstractImpl;
 
 class Revealed extends StateAbstractImpl
 {
-    private MtqTile $tile;
-
-    protected function cast(): MtqTile
-    {
-        return $this->model;
-    }
+    public ?MtqTile $model = null;
 
     public function onGameOverEvent()
     {
@@ -21,6 +16,6 @@ class Revealed extends StateAbstractImpl
 
     public function onRefresh(): void
     {
-        $this->cast()->refresh();
+        //$this->cast()->refresh();
     }
 }

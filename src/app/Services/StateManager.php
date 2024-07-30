@@ -4,15 +4,12 @@ namespace App\Services;
 
 use App\FSM\IStateModel;
 use App\Models\AStateModel;
-use App\Services\StateContextImpl;
 use App\Traits\DebugHelper;
-
+use App\Services\StateContextImpl;
 class StateManager
 {
     use DebugHelper;
-
     private const RENDERING_ALIASES = 'rendering_aliases';
-
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
     protected array $clientRenderedAliases = [];
@@ -85,7 +82,7 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            //$this->logEvent($eventInfo);
+            $this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
@@ -170,7 +167,6 @@ class StateManager
         }
         if (!array_key_exists('model', $this->arrStatesMap[$strAlias])) {
             $this->arrStatesMap[$strAlias]['model'] = AStateModel::modelOf($strAlias);
-            $this->log("Restore model $strAlias");
         }
         if (!array_key_exists('context', $this->arrStatesMap[$strAlias])) {
             $model = $this->arrStatesMap[$strAlias]['model'];
