@@ -169,12 +169,12 @@ class StateManager
     {
         $strAlias = $model->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
             $this->arrStatesMap[$strAlias]['children'] = [];
-            $this->arrStatesMap[$strAlias]['view'] = null;
             $this->log("Enqueued $strAlias");
             $this->enqueueRefreshForAliasEvent($strAlias);
         }
+        $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
+        $this->arrStatesMap[$strAlias]['view'] = null;
         return $strAlias;
     }
 
@@ -193,6 +193,10 @@ class StateManager
 
     private final function persistRenderingAliases(): void
     {
+        foreach ($this->arrStatesMap as $strAlias => $arrState) {
+            unset($this->arrStatesMap[$strAlias]['context']);
+            unset($this->arrStatesMap[$strAlias]['view']);
+        }
         session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
     }
 

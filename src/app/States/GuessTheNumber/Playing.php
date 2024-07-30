@@ -39,5 +39,6 @@ class Playing extends StateAbstractImpl
             $this->warningToast($e->getMessage());
         }
         $this->notification = $this->context->messageService->remainingAttemptsMessage();
+        $this->requireRefresh();
     }
 }

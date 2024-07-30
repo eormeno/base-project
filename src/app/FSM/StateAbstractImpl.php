@@ -157,10 +157,6 @@ abstract class StateAbstractImpl implements IState
     {
         $view_name = CaseConverters::pascalToKebab(self::StateClass()->getShortName());
         //todo: check if view exists before returning and resolve the view name
-        // if ($view_name == 'hidden') {
-        //     $vars = json_encode($this->publicPropertiesToArray());
-        //     $this->log($vars);
-        // }
         $view = view("$controller_name.$view_name", $this->publicPropertiesToArray());
         return $view;
     }
