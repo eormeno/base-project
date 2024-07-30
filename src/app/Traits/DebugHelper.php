@@ -4,6 +4,8 @@ namespace App\Traits;
 
 trait DebugHelper
 {
+    const BASIC_INFO = ['source', 'data', 'is_signal', 'rendered'];
+
     public function log(string $message)
     {
         $events = session('events', []);
@@ -31,6 +33,14 @@ trait DebugHelper
             $stack[] = $fileName . ' (' . $caller['line'] . ')';
         }
         $this->log(json_encode($stack, JSON_PRETTY_PRINT));
+    }
+
+    public function logEvent(array $eventInfo, array $exclude = self::BASIC_INFO)
+    {
+        foreach ($exclude as $key) {
+            unset($eventInfo[$key]);
+        }
+        $this->log(json_encode($eventInfo));
     }
 
 }

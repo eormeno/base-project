@@ -78,7 +78,6 @@ class StateManager
 
     public final function getAllStatesViews2(IStateModel $rootModel)
     {
-        //$this->resetRenderedAliases();
         $this->readRenderingAliases();
         $currentTimestamp = microtime(true);
         $this->enqueueForRendering($rootModel);
@@ -92,15 +91,11 @@ class StateManager
                     //$eventInfo['destination'] = $strAlias;
                 }
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
-                    // if($event == 'select') {
-                    //     $this->log('Skipping ' . $strAlias);
-                    // }
                     next($this->arrStatesMap);
                     continue;
                 }
                 $stateContext = $this->arrStatesMap[$strAlias]['context'];
                 $state = $stateContext->request($eventInfo);
-                $this->log(get_class($state) . ' ' . $stateContext->isStateChanged);
                 $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel());
                 if (
                     $eventInfo['event'] == null ||
@@ -198,14 +193,5 @@ class StateManager
             unset($this->arrStatesMap[$strAlias]['view']);
         }
         session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
-    }
-
-    private function logEvent(array $eventInfo)
-    {
-        unset($eventInfo['source']);
-        unset($eventInfo['data']);
-        unset($eventInfo['is_signal']);
-        unset($eventInfo['rendered']);
-        $this->log(json_encode($eventInfo));
     }
 }
