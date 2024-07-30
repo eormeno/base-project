@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\FSM\IStateModel;
+use App\Models\AStateModel;
 use App\Services\StateContextImpl;
 use App\Traits\DebugHelper;
 
@@ -84,7 +85,7 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            $this->logEvent($eventInfo);
+            //$this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($eventInfo['destination'] != 'all') {
@@ -94,7 +95,8 @@ class StateManager
                     next($this->arrStatesMap);
                     continue;
                 }
-                $stateContext = $this->arrStatesMap[$strAlias]['context']; // TODO: reconstruir el contexto
+                //$stateContext = $this->arrStatesMap[$strAlias]['context']; // TODO: reconstruir el contexto
+                $stateContext = $this->findContext($strAlias);
                 $state = $stateContext->request($eventInfo);
                 $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel());
                 if (
@@ -129,7 +131,7 @@ class StateManager
                 $arrViews[$strAlias] = $view;
             }
         }
-        //$arrViews['tree'] = $tree;
+        // $arrViews['tree'] = $tree;
         return $arrViews;
     }
 
@@ -161,16 +163,32 @@ class StateManager
         return $strModelAlias;
     }
 
+    private function findContext(string $strAlias): StateContextImpl
+    {
+        if (!array_key_exists($strAlias, $this->arrStatesMap)) {
+            throw new \Exception("Alias $strAlias not found");
+        }
+        if (!array_key_exists('model', $this->arrStatesMap[$strAlias])) {
+            $this->arrStatesMap[$strAlias]['model'] = AStateModel::modelOf($strAlias);
+            $this->log("Restore model $strAlias");
+        }
+        if (!array_key_exists('context', $this->arrStatesMap[$strAlias])) {
+            $model = $this->arrStatesMap[$strAlias]['model'];
+            $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
+        }
+        return $this->arrStatesMap[$strAlias]['context'];
+    }
+
     private function findOrCreateContext(IStateModel $model): string
     {
         $strAlias = $model->getAlias();
         if (!array_key_exists($strAlias, $this->arrStatesMap)) {
             $this->arrStatesMap[$strAlias]['children'] = [];
-            //$this->log("Enqueued $strAlias");
+            $this->arrStatesMap[$strAlias]['view'] = null;
             $this->enqueueRefreshForAliasEvent($strAlias);
         }
         $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
-        $this->arrStatesMap[$strAlias]['view'] = null;
+        $this->arrStatesMap[$strAlias]['model'] = $model;
         return $strAlias;
     }
 
@@ -191,7 +209,7 @@ class StateManager
     {
         foreach ($this->arrStatesMap as $strAlias => $arrState) {
             unset($this->arrStatesMap[$strAlias]['context']);
-            unset($this->arrStatesMap[$strAlias]['view']);
+            unset($this->arrStatesMap[$strAlias]['model']);
         }
         session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
     }
