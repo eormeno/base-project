@@ -17,7 +17,7 @@ class MtqGameItem extends AStateModel
         'state',
         'entered_at',
         'children',
-        'attributes',
+        'view',
     ];
 
     public function mtqInventory(): BelongsTo

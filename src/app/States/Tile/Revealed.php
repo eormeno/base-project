@@ -13,9 +13,4 @@ class Revealed extends StateAbstractImpl
     {
         return GameOverTile::StateClass();
     }
-
-    public function onRefresh(): void
-    {
-        //$this->cast()->refresh();
-    }
 }

@@ -8,11 +8,11 @@ class Playing extends APlayingStates
 {
     public string $strInventoryVID = '';
 
-    public function onRefresh(): void
+    public function onEnter(): void
     {
-        parent::onRefresh();
+        parent::onEnter();
         $inventory = $this->context->inventoryService->getInventory();
-        $this->strInventoryVID = $this->addChild($inventory);
+        $this->strInventoryVID = $this->addChild($inventory, 'strInventoryVID');
     }
 
     public function onFlagEvent()

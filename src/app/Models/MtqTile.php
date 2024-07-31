@@ -19,7 +19,7 @@ class MtqTile extends AStateModel
         'state',
         'entered_at',
         'children',
-        'attributes',
+        'view',
         'has_trap',
         'has_flag',
         'marked_as_clue',

@@ -16,7 +16,7 @@ class GuessTheNumberGame extends AStateModel
         'state',
         'entered_at',
         'children',
-        'attributes',
+        'view',
         'min_number',
         'max_number',
         'max_attempts',

@@ -16,7 +16,6 @@ abstract class AStateModel extends Model implements IStateModel
 
     protected $casts = [
         'children' => 'array',
-        'attributes' => 'array',
     ];
 
     private static array $aliases = [];

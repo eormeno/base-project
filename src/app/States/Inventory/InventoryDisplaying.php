@@ -11,11 +11,11 @@ class InventoryDisplaying extends StateAbstractImpl
     public int $itemsCount = 0;
     public ?MtqInventory $model = null;
 
-    public function onRefresh(): void
+    public function onEnter(): void
     {
         $items = $this->filterAvailableItems();
         $this->itemsCount = count($items);
-        $this->items = $this->addChilren($items);
+        $this->items = $this->addChilren($items, 'items');
     }
 
     private function filterAvailableItems(): array

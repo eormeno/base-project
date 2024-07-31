@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('state')->nullable()->default(null);
             $table->dateTime('entered_at')->nullable()->default(null);
             $table->json('children')->nullable()->default(null);
-            $table->json('attributes')->nullable()->default(null);
+            $table->text('view')->nullable()->default(null);
             $table->foreignId('mtq_game_id')->constrained()->onDelete('cascade');
             $table->integer('width')->default(8);
             $table->integer('height')->default(8);

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('state')->nullable()->default(null);
             $table->dateTime('entered_at')->nullable()->default(null);
             $table->json('children')->nullable()->default(null);
-            $table->json('attributes')->nullable()->default(null);
+            $table->text('view')->nullable()->default(null);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('times_played')->default(0);
             $table->integer('max_attempts');

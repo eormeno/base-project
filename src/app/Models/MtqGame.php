@@ -18,7 +18,7 @@ class MtqGame extends AStateModel
         'state',
         'entered_at',
         'children',
-        'attributes',
+        'view',
     ];
 
     public static function getInitialStateClass(): ReflectionClass

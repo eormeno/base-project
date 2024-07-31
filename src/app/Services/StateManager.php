@@ -76,13 +76,13 @@ class StateManager
 
     public final function getAllStatesViews2(IStateModel $rootModel)
     {
-        $this->readRenderingAliases();
         $currentTimestamp = microtime(true);
-        $this->enqueueForRendering($rootModel);
+        $this->readRenderingAliases();
+        $this->register4Render($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            $this->logEvent($eventInfo);
+            //$this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
@@ -91,7 +91,8 @@ class StateManager
                 }
                 $stateContext = $this->findContext($strAlias);
                 $state = $stateContext->request($eventInfo);
-                $this->enqueueAllForRendering($state->getChildren(), $state->getStateModel());
+                //$this->enqueueAllForRendering($state->getChildren(), $state->getStateModel());
+                $this->register4Render($state->getChildren());
                 if (
                     $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
@@ -117,13 +118,19 @@ class StateManager
     {
         $arrViews = [];
         $arrViews['root'] = $rootModel->getAlias();
-        $tree = $this->getTree();
-        foreach ($tree as $strAlias) {
-            $view = $this->arrStatesMap[$strAlias]['view'];
+        foreach ($this->arrStatesMap as $strAlias => $arrState) {
+            $view = $arrState['view'];
             if ($view) {
                 $arrViews[$strAlias] = $view;
             }
         }
+        // $tree = $this->getTree();
+        // foreach ($tree as $strAlias) {
+        //     $view = $this->arrStatesMap[$strAlias]['view'];
+        //     if ($view) {
+        //         $arrViews[$strAlias] = $view;
+        //     }
+        // }
         // $arrViews['tree'] = $tree;
         return $arrViews;
     }
@@ -142,7 +149,26 @@ class StateManager
         return $enqueuedObjectAliases;
     }
 
-    // TODO: Espera model pero recibe un alias
+    public final function register4Render(IStateModel|array|string $models): void
+    {
+        if (is_array($models)) {
+            foreach ($models as $model) {
+                $this->register4Render($model);
+            }
+            return;
+        }
+        if (is_string($models)) {
+            $models = AStateModel::modelOf($models);
+        }
+        $alias = $models->getAlias();
+        if (!array_key_exists($alias, $this->arrStatesMap)) {
+            $this->arrStatesMap[$alias]['view'] = null;
+            $this->enqueueRefreshForAliasEvent($alias);
+        }
+        $this->arrStatesMap[$alias]['model'] = $models;
+        $this->arrStatesMap[$alias]['context'] = new StateContextImpl($this->serviceManager, $models);
+    }
+
     public final function enqueueForRendering(
         IStateModel $model,
         IStateModel $parentModel = null

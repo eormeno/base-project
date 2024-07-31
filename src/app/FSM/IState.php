@@ -11,6 +11,7 @@ interface IState
     public function setNeedRestoring(bool $value): void;
     public function setContext(IStateContext $content);
     public function setStateModel(IStateModel $model);
+    public function getStateModel(): IStateModel;
     public function onReload(): void;
     public function onSave(): void;
     public function onEnter(): void;
@@ -20,8 +21,8 @@ interface IState
     public function handleRequest(array $event): ReflectionClass;
     public function view(string $controllerKebabCaseName);
     public function reset(): void;
-    public function addChild(IStateModel $model): string;
+    public function addChild(IStateModel $model, string $viewId): string;
     public function removeChild(string $strAlias): void;
-    public function addChilren(array $models): array;
+    public function addChilren(array $models, string $viewId): array;
     public function getChildren(): array;
 }

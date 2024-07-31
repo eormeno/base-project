@@ -10,12 +10,12 @@ class MapDisplaying extends StateAbstractImpl
     public int $height = 8;
     public array $strArrTilesVID = [];
 
-    public function onRefresh(): void
+    public function onEnter(): void
     {
         $map = $this->context->mapService->getMap();
         $tiles = $this->context->mapService->getMap2Tiles();
         $this->width = $map->width;
         $this->height = $map->height;
-        $this->strArrTilesVID = $this->addChilren($tiles);
+        $this->strArrTilesVID = $this->addChilren($tiles, 'strArrTilesVID');
     }
 }

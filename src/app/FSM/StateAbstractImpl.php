@@ -49,6 +49,19 @@ abstract class StateAbstractImpl implements IState
             $this->model = $model;
         }
         $this->_model = $model;
+        $this->restoreChildren();
+    }
+
+    private function restoreChildren(): void
+    {
+        $children = $this->_model->children; // phpcs:ignore
+        if ($children) {
+            foreach ($children as $viewId => $strAlias) {
+                if (property_exists($this, $viewId)) {
+                    $this->$viewId = $strAlias;
+                }
+            }
+        }
     }
 
     public function getStateModel(): IStateModel
@@ -56,19 +69,25 @@ abstract class StateAbstractImpl implements IState
         return $this->_model;
     }
 
-    public function addChild(IStateModel $child): string
+    public function addChild(IStateModel $child, string $viewId): string
     {
         if (!($child instanceof IStateModel)) {
             throw new Exception('Model must be an instance of IStateModel');
         }
         $strAlias = $child->getAlias();
         $children = $this->_model->children; // phpcs:ignore
-        if (!$children) {
-            $children = [];
-            $children[] = $strAlias;
-        } else {
-            if (!in_array($strAlias, $children)) {
-                $children[] = $strAlias;
+        if (!$children || !array_key_exists($viewId, $children)) {
+            $children[$viewId] = $strAlias;
+        }
+        if (is_string($children[$viewId])) {
+            if ($children[$viewId] !== $strAlias) {
+                $children[$viewId] = [$children[$viewId]];
+                $children[$viewId][] = $strAlias;
+            }
+        }
+        if (is_array($children[$viewId])) {
+            if (!in_array($strAlias, $children[$viewId])) {
+                $children[$viewId][] = $strAlias;
             }
         }
         $this->_model->children = $children;
@@ -90,18 +109,32 @@ abstract class StateAbstractImpl implements IState
         }
     }
 
-    public function addChilren(array $models): array
+    public function addChilren(array $models, string $viewId): array
     {
         $arrStrChildrenVID = [];
         foreach ($models as $model) {
-            $arrStrChildrenVID[] = $this->addChild($model);
+            $arrStrChildrenVID[] = $this->addChild($model, $viewId);
         }
         return $arrStrChildrenVID;
     }
 
     public function getChildren(): array
     {
-        return $this->_model->children; // phpcs:ignore
+        $children = $this->_model->children; // phpcs:ignore
+        if (!$children) {
+            return [];
+        }
+        $ret = [];
+        foreach ($children as $viewId => $strAlias) {
+            if (is_array($strAlias)) {
+                foreach ($strAlias as $alias) {
+                    $ret[] = $alias;
+                }
+            } else {
+                $ret[] = $strAlias;
+            }
+        }
+        return $ret;
     }
 
     public function setContext(IStateContext $content)
