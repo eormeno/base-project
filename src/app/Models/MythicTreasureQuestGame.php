@@ -14,8 +14,8 @@ class MythicTreasureQuestGame extends AStateModel
     protected $fillable = [
         'state',
         'entered_at',
-        'state_children',
-        'state_attributes',
+        'children',
+        'attributes',
     ];
 
     protected $casts = [

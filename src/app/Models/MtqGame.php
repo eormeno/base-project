@@ -17,8 +17,8 @@ class MtqGame extends AStateModel
     protected $fillable = [
         'state',
         'entered_at',
-        'state_children',
-        'state_attributes',
+        'children',
+        'attributes',
     ];
 
     public static function getInitialStateClass(): ReflectionClass

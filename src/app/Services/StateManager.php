@@ -91,7 +91,7 @@ class StateManager
                 }
                 $stateContext = $this->findContext($strAlias);
                 $state = $stateContext->request($eventInfo);
-                $this->enqueueAllForRendering($state->getChildrenModels(), $state->getStateModel()); // phpcs:ignore
+                $this->enqueueAllForRendering($state->getChildren(), $state->getStateModel());
                 if (
                     $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
@@ -142,6 +142,7 @@ class StateManager
         return $enqueuedObjectAliases;
     }
 
+    // TODO: Espera model pero recibe un alias
     public final function enqueueForRendering(
         IStateModel $model,
         IStateModel $parentModel = null

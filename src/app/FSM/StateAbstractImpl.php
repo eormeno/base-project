@@ -4,19 +4,18 @@ namespace App\FSM;
 
 use Exception;
 use ReflectionClass;
-use App\Traits\DebugHelper;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class StateAbstractImpl implements IState
 {
     use ToastTrigger;
-    use DebugHelper;
 
     protected IStateContext $context;
-    protected array $arrStrChildrenVID = [];
+    //protected array $arrStrChildrenVID = [];
     private IStateModel $_model;
     public bool $need_restoring = false;
     public Carbon|null $enteredAt = null;
@@ -28,7 +27,8 @@ abstract class StateAbstractImpl implements IState
 
     public function reset(): void
     {
-        $this->arrStrChildrenVID = [];
+        $this->_model->children = [];
+        $this->_model->save(); // phpcs:ignore
     }
 
     public function isNeedRestoring(): bool
@@ -56,20 +56,41 @@ abstract class StateAbstractImpl implements IState
         return $this->_model;
     }
 
-    protected function addChild(IStateModel $model): string
+    public function addChild(IStateModel $child): string
     {
-        if (!($model instanceof IStateModel)) {
+        if (!($child instanceof IStateModel)) {
             throw new Exception('Model must be an instance of IStateModel');
         }
-        $strAlias = $model->getAlias();
-        if (array_key_exists($strAlias, $this->arrStrChildrenVID)) {
-            return $strAlias;
+        $strAlias = $child->getAlias();
+        $children = $this->_model->children; // phpcs:ignore
+        if (!$children) {
+            $children = [];
+            $children[] = $strAlias;
+        } else {
+            if (!in_array($strAlias, $children)) {
+                $children[] = $strAlias;
+            }
         }
-        $this->arrStrChildrenVID[$strAlias] = $model;
+        $this->_model->children = $children;
+        $this->_model->save();  // phpcs:ignore
         return $strAlias;
     }
 
-    protected function addChilren(array $models): array
+    public function removeChild(string $strAlias): void
+    {
+        $children = $this->_model->children; // phpcs:ignore
+        if (!$children) {
+            return;
+        }
+        $key = array_search($strAlias, $children);
+        if ($key !== false) {
+            unset($children[$key]);
+            $this->_model->children = $children;
+            $this->_model->save();  // phpcs:ignore
+        }
+    }
+
+    public function addChilren(array $models): array
     {
         $arrStrChildrenVID = [];
         foreach ($models as $model) {
@@ -78,19 +99,9 @@ abstract class StateAbstractImpl implements IState
         return $arrStrChildrenVID;
     }
 
-    public function getChildrenModels(): array
+    public function getChildren(): array
     {
-        return array_values($this->arrStrChildrenVID);
-    }
-
-    public function getChildModel(string $strAlias): IStateModel
-    {
-        return $this->arrStrChildrenVID[$strAlias];
-    }
-
-    public function hasChildren(): bool
-    {
-        return count($this->arrStrChildrenVID) > 0;
+        return $this->_model->children; // phpcs:ignore
     }
 
     public function setContext(IStateContext $content)

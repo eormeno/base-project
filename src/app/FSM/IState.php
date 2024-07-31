@@ -20,4 +20,8 @@ interface IState
     public function handleRequest(array $event): ReflectionClass;
     public function view(string $controllerKebabCaseName);
     public function reset(): void;
+    public function addChild(IStateModel $model): string;
+    public function removeChild(string $strAlias): void;
+    public function addChilren(array $models): array;
+    public function getChildren(): array;
 }

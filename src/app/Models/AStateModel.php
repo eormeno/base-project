@@ -15,8 +15,8 @@ abstract class AStateModel extends Model implements IStateModel
     use DebugHelper;
 
     protected $casts = [
-        'state_children' => 'array',
-        'state_attributes' => 'array',
+        'children' => 'array',
+        'attributes' => 'array',
     ];
 
     private static array $aliases = [];

@@ -16,8 +16,8 @@ class MtqInventory extends AStateModel
     protected $fillable = [
         'state',
         'entered_at',
-        'state_children',
-        'state_attributes',
+        'children',
+        'attributes',
     ];
 
     public function mtqGame() : BelongsTo
