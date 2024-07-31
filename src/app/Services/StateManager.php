@@ -82,7 +82,13 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            $this->logEvent($eventInfo);
+            //$this->logEvent($eventInfo);
+
+            // TODO: Testing this
+            if ($destination && $destination != 'all') {
+                $this->arrStatesMap[$destination]['view'] = null;
+            }
+
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
@@ -91,7 +97,6 @@ class StateManager
                 }
                 $stateContext = $this->findContext($strAlias);
                 $state = $stateContext->request($eventInfo);
-                //$this->enqueueAllForRendering($state->getChildren(), $state->getStateModel());
                 $this->register4Render($state->getChildren());
                 if (
                     $eventInfo['event'] == null ||

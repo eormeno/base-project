@@ -19,6 +19,7 @@ abstract class AStateModel extends Model implements IStateModel
     ];
 
     private static array $aliases = [];
+    private static array $states = [];
 
     public function __construct(array $attributes = [])
     {
@@ -66,8 +67,9 @@ abstract class AStateModel extends Model implements IStateModel
         $shortName = substr($alias, 0, strpos($alias, '_'));
         $aliasId = substr($alias, strpos($alias, '_') + 1);
         $rflClass = self::$aliases[$shortName];
-        $model = $rflClass->newInstance();
-        // invoke the find static method of the model
-        return $model->find($aliasId);
+        if (!isset(self::$states[$alias])) {
+            self::$states[$alias] = $rflClass->newInstance()->find($aliasId);
+        }
+        return self::$states[$alias];
     }
 }
