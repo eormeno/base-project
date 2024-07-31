@@ -40,10 +40,10 @@ class StateManager
 
     public final function requireRefresh(string $strAlias)
     {
-        $arrChildren = $this->findAllChildren($strAlias);
-        foreach ($arrChildren as $childAlias) {
-            $this->refreshRequiredAliases[] = $childAlias;
-        }
+        // $arrChildren = $this->findAllChildren($strAlias);
+        // foreach ($arrChildren as $childAlias) {
+        //     $this->refreshRequiredAliases[] = $childAlias;
+        // }
         $this->enqueueRefreshForAliasEvent($strAlias);
     }
 
@@ -82,7 +82,7 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            //$this->logEvent($eventInfo);
+            $this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($destination && $destination != 'all' && $destination != $strAlias) {

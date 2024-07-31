@@ -11,13 +11,12 @@ class GameOver extends StateAbstractImpl
     public int $height = 8;
     public string $strMapVID = '';
 
-    public function onRefresh(): void
+    public function onEnter(): void
     {
-        //$this->log("GameOver::onRefresh");
         $map = $this->context->mapService->getMap();
         $this->width = $map->width;
         $this->height = $map->height;
-        $this->strMapVID = $this->addChild($map);
+        $this->strMapVID = $this->addChild($map, 'strMapVID');
     }
 
     public function onRestartEvent()
