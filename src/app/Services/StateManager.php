@@ -40,11 +40,12 @@ class StateManager
 
     public final function requireRefresh(string $strAlias)
     {
+        $this->refreshRequiredAliases[] = $strAlias;
         // $arrChildren = $this->findAllChildren($strAlias);
         // foreach ($arrChildren as $childAlias) {
         //     $this->refreshRequiredAliases[] = $childAlias;
         // }
-        $this->enqueueRefreshForAliasEvent($strAlias);
+        //$this->enqueueRefreshForAliasEvent($strAlias);
     }
 
     private function getTree(): array
@@ -83,12 +84,6 @@ class StateManager
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
             //$this->logEvent($eventInfo);
-
-            // TODO: Testing this
-            if ($destination && $destination != 'all') {
-                $this->arrStatesMap[$destination]['view'] = null;
-            }
-
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
