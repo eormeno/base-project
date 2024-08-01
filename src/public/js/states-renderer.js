@@ -3,8 +3,9 @@ var currentMillis = 0;
 var arrObjects = [];
 
 window.onload = function () {
+    arrObjects = localStorage.getItem('rendered') || [];
     arrObjects = [];
-    sendEvent();
+    sendEvent('reload', {}, true);
 }
 
 function findParentWithKey(element) {
@@ -18,7 +19,7 @@ function findParentWithKey(element) {
     return null;
 }
 
-function sendEvent(event, formData = {}) {
+function sendEvent(event, formData = {}, signal = false) {
     if (eventSent) {
         return;
     }
@@ -26,6 +27,10 @@ function sendEvent(event, formData = {}) {
     currentMillis = Date.now();
     const keyParent = findParentWithKey(document.activeElement);
     const source = keyParent ? keyParent.getAttribute('key') : null;
+    let destination = source;
+    if (signal) {
+        destination = 'all';
+    }
 
     event = event || '';
     var routeDiv = document.getElementById('routeDiv')
@@ -40,8 +45,9 @@ function sendEvent(event, formData = {}) {
         },
         body: JSON.stringify({
             event: event,
+            is_signal: signal,
             source: source,
-            destination: source,
+            destination: destination,
             data: formData,
             rendered: arrObjects
         })
@@ -86,6 +92,9 @@ function sendEvent(event, formData = {}) {
                     }
                     eventSent = false;
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
+
+                    // store the array of objects in local storage
+                    localStorage.setItem('rendered', arrObjects);
                     //console.info('Current: ' + arrObjects);
                     if (elementsUpdated > 0 && elementsUpdated < 15) {
                         //console.info('Updated: ' + updated);
@@ -104,7 +113,7 @@ function sendEvent(event, formData = {}) {
 //todo: move to a helper file and optimize it
 function decodeBase64(data) {
     const binaryString = atob(data);
-    //return binaryString;
+    return binaryString;
     const bytes = new Uint8Array(binaryString.length);
     //console.log(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) {

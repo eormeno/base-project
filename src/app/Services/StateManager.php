@@ -6,6 +6,7 @@ use App\FSM\IStateModel;
 use App\Models\AStateModel;
 use App\Traits\DebugHelper;
 use App\Services\StateContextImpl;
+
 class StateManager
 {
     use DebugHelper;
@@ -75,15 +76,17 @@ class StateManager
         ]);
     }
 
-    public final function getAllStatesViews2(IStateModel $rootModel)
+    public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
-        $this->readRenderingAliases();
+        $this->readRenderingAliases($rootModel, $eventInfo);
+        $this->enqueueEvent($eventInfo);
+
         $this->register4Render($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            //$this->logEvent($eventInfo);
+            $this->logEvent($eventInfo);
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
@@ -112,6 +115,36 @@ class StateManager
         $this->persistRenderingAliases();
         $this->eventQueue = [];
         return $views;
+    }
+
+    private function activeStates(IStateModel $model): array
+    {
+        $activeStates[] = $model->getAlias();
+        $children = $this->getModelChildren($model);
+        foreach ($children as $childAlias) {
+            $childModel = AStateModel::modelOf($childAlias);
+            $activeStates = array_merge($activeStates, $this->activeStates($childModel));
+        }
+        return $activeStates;
+    }
+
+    private function getModelChildren(IStateModel $model): array
+    {
+        $children = $model->children; // phpcs:ignore
+        if (!$children) {
+            return [];
+        }
+        $ret = [];
+        foreach ($children as $viewId => $strAlias) {
+            if (is_array($strAlias)) {
+                foreach ($strAlias as $alias) {
+                    $ret[] = $alias;
+                }
+            } else {
+                $ret[] = $strAlias;
+            }
+        }
+        return $ret;
     }
 
     private function getViewsForRender(IStateModel $rootModel): array
@@ -216,12 +249,42 @@ class StateManager
         session()->forget(self::RENDERING_ALIASES);
     }
 
-    private final function readRenderingAliases(): void
+    /**
+     * Read the rendering aliases from the session, if they exist.
+     * If not, we obtain them from the root model.
+     *
+     * @param \App\FSM\IStateModel $rootModel
+     * @param array $eventInfo
+     * @return void
+     */
+    private final function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
     {
+        $event = $eventInfo['event'];
+        $clientRenderings = $eventInfo['rendered'] ?? [];
+        $serverRenderings = $this->restoreCachedRenderins();
+        $count1 = count($clientRenderings);
+        $count2 = count($serverRenderings);
+        $this->log("Client renderings: $count1, Server renderings: $count2");
+        if ($event == 'reload') {
+            if (count($clientRenderings) > 0 && count($serverRenderings) == count($clientRenderings)) {
+                $this->log("Client and server renderings are in sync");
+            }
+        }
+
+        if (empty($serverRenderings)) {
+            $serverRenderings = $this->activeStates($rootModel);
+        }
+    }
+
+    private final function restoreCachedRenderins(): array
+    {
+        $cachedRenderings = [];
         if (!session()->has(self::RENDERING_ALIASES)) {
             session()->put(self::RENDERING_ALIASES, []);
+        } else {
+            $cachedRenderings = session(self::RENDERING_ALIASES);
         }
-        $this->arrStatesMap = session(self::RENDERING_ALIASES);
+        return $cachedRenderings;
     }
 
     private final function persistRenderingAliases(): void
