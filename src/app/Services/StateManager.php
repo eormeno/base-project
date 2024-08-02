@@ -266,10 +266,6 @@ class StateManager
             return;
         }
 
-        // convert th eventInfo associative array to a echoable string
-        $this->log(print_r($eventInfo, true));
-
-
         $clientRenderings = $eventInfo['rendered'] ?? [];
         $serverRenderings = $this->restoreCachedRenderins();
         $count1 = count($clientRenderings);

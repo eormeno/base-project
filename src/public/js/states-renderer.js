@@ -1,21 +1,47 @@
 var eventSent = false;
 var currentMillis = 0;
-var arrObjects = [];
+var rootId = '';
+var arrClientRenderings = [];
+var arrCachedViews = {};
 
 window.onload = function () {
     // if the url contains a query parameter 'reset' then reload the page
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('reset')) {
+        localStorage.removeItem('rootId');
         localStorage.removeItem('rendered');
-        // remove the 'reset' query parameter from the url
+        localStorage.removeItem('cached');
         window.history.replaceState({}, document.title, window.location.pathname);
         location.reload();
     } else {
-        arrObjects = localStorage.getItem('rendered') || '{}';
-        //arrObjects = JSON.parse(arrObjects);
-        console.info(arrObjects);
-        // if the arrObjects is {} then reload the page
-        if (arrObjects === '{}') {
+        currentMillis = Date.now();
+        rootId = localStorage.getItem('rootId');
+        arrCachedViews = localStorage.getItem('cached') || '{}';
+        arrCachedViews = JSON.parse(arrCachedViews);
+        arrClientRenderings = localStorage.getItem('rendered') || '[]';
+        arrClientRenderings = JSON.parse(arrClientRenderings);
+        // if the arrCachedViews is not empty then render the cached views
+        if (Object.keys(arrCachedViews).length > 0) {
+            mainDiv = document.getElementById('main');
+            mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
+            elementsCached = 0;
+            for (const key in arrCachedViews) {
+                if (key === 'tree' || key === 'root') {
+                    continue;
+                }
+                const element = document.getElementById(key);
+                if (element) {
+                    $html = arrCachedViews[key];//decodeBase64(arrCachedViews[key]);
+                    $html = '<div key="' + key + '">' + $html + '</div>';
+                    element.innerHTML = $html;
+                    runScripts(element);
+                    elementsCached++;
+                } else {
+                    console.error('Element not found: ' + key);
+                }
+            }
+            console.info('Rendered ' + elementsCached + ' cached views' + " in " + (Date.now() - currentMillis) + 'ms');
+        } else {
             sendEvent('reload', {}, true);
         }
     }
@@ -62,7 +88,7 @@ function sendEvent(event, formData = {}, signal = false) {
             source: source,
             destination: destination,
             data: formData,
-            rendered: arrObjects
+            rendered: arrClientRenderings
         })
     })
         .then(response => response.text())
@@ -94,13 +120,10 @@ function sendEvent(event, formData = {}, signal = false) {
                             runScripts(element);
                             elementsUpdated++;
                             updated += key + ", ";
-                            //if (!arrObjects.includes(key)) {
-                                // pushes the key associated with the element to the array
-                                arrObjects = {};
-
-                                // pushes the key associated with the element to the array
-                                arrObjects[key] = json[key];
-                            //}
+                            if (!arrClientRenderings.includes(key)) {
+                                arrClientRenderings.push(key);
+                                arrCachedViews[key] = $html;// json[key];
+                            }
                         } else {
                             elementsNotFound.push(key);
                             // TODO: review this
@@ -111,8 +134,9 @@ function sendEvent(event, formData = {}, signal = false) {
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
 
                     // store the array of objects in local storage
-                    localStorage.setItem('rendered', arrObjects);
-                    //console.info('Current: ' + arrObjects);
+                    localStorage.setItem('rootId', rootId);
+                    localStorage.setItem('rendered', JSON.stringify(arrClientRenderings));
+                    localStorage.setItem('cached', JSON.stringify(arrCachedViews));
                     if (elementsUpdated > 0 && elementsUpdated < 15) {
                         //console.info('Updated: ' + updated);
                     }
