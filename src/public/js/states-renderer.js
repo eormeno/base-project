@@ -40,7 +40,7 @@ window.onload = function () {
                     console.error('Element not found: ' + key);
                 }
             }
-            console.info('Rendered ' + elementsCached + ' cached views' + " in " + (Date.now() - currentMillis) + 'ms');
+            console.info('Rendered ' + elementsCached + ' cached in ' + (Date.now() - currentMillis) + 'ms');
         } else {
             sendEvent('reload', {}, true);
         }
