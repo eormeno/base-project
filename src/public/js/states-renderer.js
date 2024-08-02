@@ -3,9 +3,19 @@ var currentMillis = 0;
 var arrObjects = [];
 
 window.onload = function () {
-    arrObjects = localStorage.getItem('rendered') || [];
-    arrObjects = [];
-    sendEvent('reload', {}, true);
+    // if the url contains a query parameter 'reset' then reload the page
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('reset')) {
+        localStorage.removeItem('rendered');
+        // remove the 'reset' query parameter from the url
+        window.history.replaceState({}, document.title, window.location.pathname);
+        location.reload();
+    } else {
+        arrObjects = localStorage.getItem('rendered') || '[]';
+        arrObjects = JSON.parse(arrObjects);
+        console.info(arrObjects);
+        sendEvent('reload', {}, true);
+    }
 }
 
 function findParentWithKey(element) {
@@ -94,7 +104,7 @@ function sendEvent(event, formData = {}, signal = false) {
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
 
                     // store the array of objects in local storage
-                    localStorage.setItem('rendered', arrObjects);
+                    localStorage.setItem('rendered', JSON.stringify(arrObjects));
                     //console.info('Current: ' + arrObjects);
                     if (elementsUpdated > 0 && elementsUpdated < 15) {
                         //console.info('Updated: ' + updated);

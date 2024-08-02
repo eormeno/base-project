@@ -36,6 +36,6 @@ abstract class BaseController extends Controller
     {
         $this->reset();
         $str_this_controller_kebab_name = $this->serviceManager->baseKebabName();
-        return redirect()->route($str_this_controller_kebab_name);
+        return redirect()->route($str_this_controller_kebab_name, ['reset' => 'true']);
     }
 }
