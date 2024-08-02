@@ -11,10 +11,13 @@ window.onload = function () {
         window.history.replaceState({}, document.title, window.location.pathname);
         location.reload();
     } else {
-        arrObjects = localStorage.getItem('rendered') || '[]';
-        arrObjects = JSON.parse(arrObjects);
+        arrObjects = localStorage.getItem('rendered') || '{}';
+        //arrObjects = JSON.parse(arrObjects);
         console.info(arrObjects);
-        sendEvent('reload', {}, true);
+        // if the arrObjects is {} then reload the page
+        if (arrObjects === '{}') {
+            sendEvent('reload', {}, true);
+        }
     }
 }
 
@@ -91,9 +94,13 @@ function sendEvent(event, formData = {}, signal = false) {
                             runScripts(element);
                             elementsUpdated++;
                             updated += key + ", ";
-                            if (!arrObjects.includes(key)) {
-                                arrObjects.push(key);
-                            }
+                            //if (!arrObjects.includes(key)) {
+                                // pushes the key associated with the element to the array
+                                arrObjects = {};
+
+                                // pushes the key associated with the element to the array
+                                arrObjects[key] = json[key];
+                            //}
                         } else {
                             elementsNotFound.push(key);
                             // TODO: review this
@@ -104,7 +111,7 @@ function sendEvent(event, formData = {}, signal = false) {
                     console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
 
                     // store the array of objects in local storage
-                    localStorage.setItem('rendered', JSON.stringify(arrObjects));
+                    localStorage.setItem('rendered', arrObjects);
                     //console.info('Current: ' + arrObjects);
                     if (elementsUpdated > 0 && elementsUpdated < 15) {
                         //console.info('Updated: ' + updated);
@@ -114,7 +121,7 @@ function sendEvent(event, formData = {}, signal = false) {
                     }
                 }
             } catch (error) {
-                document.write(data);
+                console.error(error);
                 eventSent = false;
             }
         });
@@ -123,7 +130,7 @@ function sendEvent(event, formData = {}, signal = false) {
 //todo: move to a helper file and optimize it
 function decodeBase64(data) {
     const binaryString = atob(data);
-    return binaryString;
+    //return binaryString;
     const bytes = new Uint8Array(binaryString.length);
     //console.log(binaryString.length);
     for (let i = 0; i < binaryString.length; i++) {

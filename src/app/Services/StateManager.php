@@ -80,9 +80,9 @@ class StateManager
     {
         $currentTimestamp = microtime(true);
         $this->readRenderingAliases($rootModel, $eventInfo);
-        $this->enqueueEvent($eventInfo);
+        // $this->enqueueEvent($eventInfo);
 
-        $this->register4Render($rootModel);
+        // $this->register4Render($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
@@ -260,15 +260,36 @@ class StateManager
     private final function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
     {
         $event = $eventInfo['event'];
+        if ($event != 'reload') {
+            // todo: acá hacer eso
+            $this->enqueueEvent($eventInfo);
+            return;
+        }
+
+        // convert th eventInfo associative array to a echoable string
+        $this->log(print_r($eventInfo, true));
+
+
         $clientRenderings = $eventInfo['rendered'] ?? [];
         $serverRenderings = $this->restoreCachedRenderins();
         $count1 = count($clientRenderings);
         $count2 = count($serverRenderings);
         $this->log("Client renderings: $count1, Server renderings: $count2");
-        if ($event == 'reload') {
-            if (count($clientRenderings) > 0 && count($serverRenderings) == count($clientRenderings)) {
-                $this->log("Client and server renderings are in sync");
+
+        if ($count2 == 0) {
+            //$this->enqueueEvent($eventInfo);
+            $this->register4Render($rootModel);
+            return;
+        }
+
+        if (count($clientRenderings) > 0 && count($serverRenderings) == count($clientRenderings)) {
+            // iterate all the serverRenderings, and if its view is null, we enqueue a refresh event
+            foreach ($serverRenderings as $strAlias => $arrState) {
+                if ($arrState['view'] == null) {
+                    $this->enqueueRefreshForAliasEvent($strAlias);
+                }
             }
+            $this->arrStatesMap = $serverRenderings;
         }
 
         if (empty($serverRenderings)) {
