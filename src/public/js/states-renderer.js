@@ -5,23 +5,14 @@ var arrClientRenderings = [];
 var arrCachedViews = {};
 
 window.onload = function () {
-    // if the url contains a query parameter 'reset' then reload the page
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('reset')) {
-        localStorage.removeItem('rootId');
-        localStorage.removeItem('rendered');
-        localStorage.removeItem('cached');
-        window.history.replaceState({}, document.title, window.location.pathname);
+    if (hasUrlParam('reset')) {
+        reset();
+        removeQueryParams();
         location.reload();
     } else {
-        currentMillis = Date.now();
-        rootId = localStorage.getItem('rootId');
-        arrCachedViews = localStorage.getItem('cached') || '{}';
-        arrCachedViews = JSON.parse(arrCachedViews);
-        arrClientRenderings = localStorage.getItem('rendered') || '[]';
-        arrClientRenderings = JSON.parse(arrClientRenderings);
-        // if the arrCachedViews is not empty then render the cached views
-        if (Object.keys(arrCachedViews).length > 0) {
+        restoreCachedValues();
+        if (hasCachedValues()) {
+            currentMillis = Date.now();
             mainDiv = document.getElementById('main');
             mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
             elementsCached = 0;
@@ -172,4 +163,31 @@ function runScripts(domElement) {
         newScript.appendChild(document.createTextNode(script.innerHTML));
         script.parentNode.replaceChild(newScript, script);
     });
+}
+
+function reset() {
+    localStorage.removeItem('rootId');
+    localStorage.removeItem('rendered');
+    localStorage.removeItem('cached');
+}
+
+function hasUrlParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.has(name);
+}
+
+function removeQueryParams() {
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
+
+function restoreCachedValues() {
+    rootId = localStorage.getItem('rootId');
+    arrCachedViews = localStorage.getItem('cached') || '{}';
+    arrCachedViews = JSON.parse(arrCachedViews);
+    arrClientRenderings = localStorage.getItem('rendered') || '[]';
+    arrClientRenderings = JSON.parse(arrClientRenderings);
+}
+
+function hasCachedValues() {
+    return Object.keys(arrCachedViews).length > 0;
 }

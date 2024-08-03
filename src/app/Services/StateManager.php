@@ -270,15 +270,14 @@ class StateManager
         $serverRenderings = $this->restoreCachedRenderins();
         $count1 = count($clientRenderings);
         $count2 = count($serverRenderings);
-        $this->log("Client renderings: $count1, Server renderings: $count2");
 
         if ($count2 == 0) {
-            //$this->enqueueEvent($eventInfo);
+            $this->log("No server renderings found");
             $this->register4Render($rootModel);
             return;
         }
 
-        if (count($clientRenderings) > 0 && count($serverRenderings) == count($clientRenderings)) {
+        if ($count1 > 0 && $count2 == $count1) {
             // iterate all the serverRenderings, and if its view is null, we enqueue a refresh event
             foreach ($serverRenderings as $strAlias => $arrState) {
                 if ($arrState['view'] == null) {
