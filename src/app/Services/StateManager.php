@@ -117,6 +117,49 @@ class StateManager
         return $views;
     }
 
+    /**
+     * Read the rendering aliases from the session, if they exist.
+     * If not, we obtain them from the root model.
+     *
+     * @param \App\FSM\IStateModel $rootModel
+     * @param array $eventInfo
+     * @return void
+     */
+    private final function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
+    {
+        $event = $eventInfo['event'];
+        if ($event != 'reload') {
+            // todo: acá hacer eso
+            $this->enqueueEvent($eventInfo);
+            return;
+        }
+
+        $clientRenderings = $eventInfo['rendered'] ?? [];
+        $serverRenderings = $this->restoreCachedRenderings();
+        $clientRenderingCount = count($clientRenderings);
+        $serverRenderingCount = count($serverRenderings);
+
+        if ($serverRenderingCount == 0) {
+            $this->log("No server renderings found");
+            $this->register4Render($rootModel);
+            return;
+        }
+
+        if ($clientRenderingCount > 0 && $serverRenderingCount == $clientRenderingCount) {
+            // iterate all the serverRenderings, and if its view is null, we enqueue a refresh event
+            foreach ($serverRenderings as $strAlias => $arrState) {
+                if ($arrState['view'] == null) {
+                    $this->enqueueRefreshForAliasEvent($strAlias);
+                }
+            }
+            $this->arrStatesMap = $serverRenderings;
+        }
+
+        if (empty($serverRenderings)) {
+            $serverRenderings = $this->activeStates($rootModel);
+        }
+    }
+
     private function activeStates(IStateModel $model): array
     {
         $activeStates[] = $model->getAlias();
@@ -249,50 +292,7 @@ class StateManager
         session()->forget(self::RENDERING_ALIASES);
     }
 
-    /**
-     * Read the rendering aliases from the session, if they exist.
-     * If not, we obtain them from the root model.
-     *
-     * @param \App\FSM\IStateModel $rootModel
-     * @param array $eventInfo
-     * @return void
-     */
-    private final function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
-    {
-        $event = $eventInfo['event'];
-        if ($event != 'reload') {
-            // todo: acá hacer eso
-            $this->enqueueEvent($eventInfo);
-            return;
-        }
-
-        $clientRenderings = $eventInfo['rendered'] ?? [];
-        $serverRenderings = $this->restoreCachedRenderins();
-        $count1 = count($clientRenderings);
-        $count2 = count($serverRenderings);
-
-        if ($count2 == 0) {
-            $this->log("No server renderings found");
-            $this->register4Render($rootModel);
-            return;
-        }
-
-        if ($count1 > 0 && $count2 == $count1) {
-            // iterate all the serverRenderings, and if its view is null, we enqueue a refresh event
-            foreach ($serverRenderings as $strAlias => $arrState) {
-                if ($arrState['view'] == null) {
-                    $this->enqueueRefreshForAliasEvent($strAlias);
-                }
-            }
-            $this->arrStatesMap = $serverRenderings;
-        }
-
-        if (empty($serverRenderings)) {
-            $serverRenderings = $this->activeStates($rootModel);
-        }
-    }
-
-    private final function restoreCachedRenderins(): array
+    private final function restoreCachedRenderings(): array
     {
         $cachedRenderings = [];
         if (!session()->has(self::RENDERING_ALIASES)) {

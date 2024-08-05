@@ -9,32 +9,31 @@ window.onload = function () {
         reset();
         removeQueryParams();
         location.reload();
-    } else {
-        restoreCachedValues();
-        if (hasCachedValues()) {
-            currentMillis = Date.now();
-            mainDiv = document.getElementById('main');
-            mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
-            elementsCached = 0;
-            for (const key in arrCachedViews) {
-                if (key === 'tree' || key === 'root') {
-                    continue;
-                }
-                const element = document.getElementById(key);
-                if (element) {
-                    $html = arrCachedViews[key];//decodeBase64(arrCachedViews[key]);
-                    $html = '<div key="' + key + '">' + $html + '</div>';
-                    element.innerHTML = $html;
-                    runScripts(element);
-                    elementsCached++;
-                } else {
-                    console.error('Element not found: ' + key);
-                }
+        return;
+    }
+    if (hasCachedValues()) {
+        currentMillis = Date.now();
+        mainDiv = document.getElementById('main');
+        mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
+        let cachedElementsCounter = 0;
+        for (const key in arrCachedViews) {
+            if (key === 'tree' || key === 'root') {
+                continue;
             }
-            console.info('Rendered ' + elementsCached + ' cached in ' + (Date.now() - currentMillis) + 'ms');
-        } else {
-            sendEvent('reload', {}, true);
+            const element = document.getElementById(key);
+            if (element) {
+                $html = arrCachedViews[key];//decodeBase64(arrCachedViews[key]);
+                $html = '<div key="' + key + '">' + $html + '</div>';
+                element.innerHTML = $html;
+                runScripts(element);
+                cachedElementsCounter++;
+            } else {
+                console.error('Element not found: ' + key);
+            }
         }
+        console.info('Rendered ' + cachedElementsCounter + ' cached in ' + (Date.now() - currentMillis) + 'ms');
+    } else {
+        sendEvent('reload', {}, true);
     }
 }
 
@@ -180,14 +179,11 @@ function removeQueryParams() {
     window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-function restoreCachedValues() {
+function hasCachedValues() {
     rootId = localStorage.getItem('rootId');
     arrCachedViews = localStorage.getItem('cached') || '{}';
     arrCachedViews = JSON.parse(arrCachedViews);
     arrClientRenderings = localStorage.getItem('rendered') || '[]';
     arrClientRenderings = JSON.parse(arrClientRenderings);
-}
-
-function hasCachedValues() {
     return Object.keys(arrCachedViews).length > 0;
 }
