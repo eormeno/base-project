@@ -112,8 +112,8 @@ function sendEvent(event, formData = {}, signal = false) {
                             updated += key + ", ";
                             if (!arrClientRenderings.includes(key)) {
                                 arrClientRenderings.push(key);
-                                arrCachedViews[key] = $html;// json[key];
                             }
+                            arrCachedViews[key] = $html;// json[key];
                         } else {
                             elementsNotFound.push(key);
                             // TODO: review this

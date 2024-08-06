@@ -79,10 +79,10 @@ class StateManager
     public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
-        $this->readRenderingAliases($rootModel, $eventInfo);
-        // $this->enqueueEvent($eventInfo);
+        //$this->readRenderingAliases($rootModel, $eventInfo);
+        $this->enqueueEvent($eventInfo);
 
-        // $this->register4Render($rootModel);
+        $this->register4Render($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
