@@ -76,13 +76,32 @@ class StateManager
         ]);
     }
 
+    public final function addToRenderQueue(IStateModel|array|string $models): void
+    {
+        if (is_array($models)) {
+            foreach ($models as $model) {
+                $this->addToRenderQueue($model); // recursive
+            }
+            return;
+        }
+        if (is_string($models)) {
+            $models = AStateModel::modelOf($models);
+        }
+        $alias = $models->getAlias();
+        if (!array_key_exists($alias, $this->arrStatesMap)) {
+            $this->arrStatesMap[$alias]['view'] = null;
+            // $this->enqueueRefreshForAliasEvent($alias);
+        }
+        $this->arrStatesMap[$alias]['model'] = $models;
+        $this->arrStatesMap[$alias]['context'] = new StateContextImpl($this->serviceManager, $models);
+    }
+
     public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
         //$this->readRenderingAliases($rootModel, $eventInfo);
         $this->enqueueEvent($eventInfo);
-
-        $this->register4Render($rootModel);
+        $this->addToRenderQueue($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
@@ -90,14 +109,16 @@ class StateManager
             reset($this->arrStatesMap);
             while ($strAlias = key($this->arrStatesMap)) {
                 if ($destination && $destination != 'all' && $destination != $strAlias) {
+                    $this->log("Skipping alias $strAlias");
                     next($this->arrStatesMap);
                     continue;
                 }
+                $this->log("Processing alias $strAlias");
                 $stateContext = $this->findContext($strAlias);
                 $state = $stateContext->request($eventInfo);
-                $this->register4Render($state->getChildren());
+                $this->addToRenderQueue($state->getChildren());
                 if (
-                    $eventInfo['event'] == null ||
+                    // $eventInfo['event'] == null ||
                     $stateContext->isStateChanged ||
                     $this->isRefreshRequired($strAlias)
                 ) {
@@ -141,7 +162,7 @@ class StateManager
 
         if ($serverRenderingCount == 0) {
             $this->log("No server renderings found");
-            $this->register4Render($rootModel);
+            $this->addToRenderQueue($rootModel);
             return;
         }
 
@@ -223,26 +244,6 @@ class StateManager
             $enqueuedObjectAliases[] = $this->enqueueForRendering($object, $parent);
         }
         return $enqueuedObjectAliases;
-    }
-
-    public final function register4Render(IStateModel|array|string $models): void
-    {
-        if (is_array($models)) {
-            foreach ($models as $model) {
-                $this->register4Render($model);
-            }
-            return;
-        }
-        if (is_string($models)) {
-            $models = AStateModel::modelOf($models);
-        }
-        $alias = $models->getAlias();
-        if (!array_key_exists($alias, $this->arrStatesMap)) {
-            $this->arrStatesMap[$alias]['view'] = null;
-            $this->enqueueRefreshForAliasEvent($alias);
-        }
-        $this->arrStatesMap[$alias]['model'] = $models;
-        $this->arrStatesMap[$alias]['context'] = new StateContextImpl($this->serviceManager, $models);
     }
 
     public final function enqueueForRendering(

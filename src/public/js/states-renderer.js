@@ -11,7 +11,7 @@ window.onload = function () {
         location.reload();
         return;
     }
-    if (hasCachedValues()) {
+    if (hasCachedViews()) {
         currentMillis = Date.now();
         mainDiv = document.getElementById('main');
         mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
@@ -179,11 +179,12 @@ function removeQueryParams() {
     window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-function hasCachedValues() {
+function hasCachedViews() {
     rootId = localStorage.getItem('rootId');
     arrCachedViews = localStorage.getItem('cached') || '{}';
     arrCachedViews = JSON.parse(arrCachedViews);
     arrClientRenderings = localStorage.getItem('rendered') || '[]';
     arrClientRenderings = JSON.parse(arrClientRenderings);
-    return Object.keys(arrCachedViews).length > 0;
+    //return Object.keys(arrCachedViews).length > 0;
+    return false;
 }
