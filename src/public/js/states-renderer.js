@@ -185,6 +185,6 @@ function hasCachedViews() {
     arrCachedViews = JSON.parse(arrCachedViews);
     arrClientRenderings = localStorage.getItem('rendered') || '[]';
     arrClientRenderings = JSON.parse(arrClientRenderings);
-    //return Object.keys(arrCachedViews).length > 0;
-    return false;
+    return Object.keys(arrCachedViews).length > 0;
+    //return false;
 }

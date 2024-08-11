@@ -29,7 +29,11 @@ class StateManager
         if (!empty($rendered)) {
             $this->clientRenderedAliases = $rendered;
         }
-        $this->eventQueue[] = $eventInfo;
+        // todo: mejorar esto urgente! un reload no debería ser encolado. Pero no me gusta
+        // que el StateManager tenga que saber qué eventos no encolar.
+        if ($eventInfo['event'] != 'reload') {
+            $this->eventQueue[] = $eventInfo;
+        }
     }
 
     private function isRefreshRequired(string $strAlias): bool
@@ -90,43 +94,66 @@ class StateManager
         $alias = $models->getAlias();
         if (!array_key_exists($alias, $this->arrStatesMap)) {
             $this->arrStatesMap[$alias]['view'] = null;
-            // $this->enqueueRefreshForAliasEvent($alias);
+            $this->enqueueRefreshForAliasEvent($alias);
         }
         $this->arrStatesMap[$alias]['model'] = $models;
         $this->arrStatesMap[$alias]['context'] = new StateContextImpl($this->serviceManager, $models);
+    }
+
+    private function doRequest(string $strAlias, array $eventInfo): void
+    {
+        // $destination = $eventInfo['destination'];
+        // if ($destination && $destination != 'all' && $destination != $strAlias) {
+        //     //next($this->arrStatesMap);
+        //     return;
+        // }
+        $this->logEvent($eventInfo);
+        $stateContext = $this->findContext($strAlias);
+        $state = $stateContext->request($eventInfo);
+        $changed = $stateContext->isStateChanged;
+        $refresh = $this->isRefreshRequired($strAlias);
+        // $this->log("State $strAlias changed: $changed, refresh: $refresh");
+        $this->addToRenderQueue($state->getChildren());
+        if ($changed || $refresh) {
+            $view = $state->view($this->serviceManager->baseKebabName());
+            $view = base64_encode($view);
+            $this->arrStatesMap[$strAlias]['view'] = $view;
+        }
     }
 
     public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
         //$this->readRenderingAliases($rootModel, $eventInfo);
+        $this->arrStatesMap = $this->restoreCachedRenderings();
         $this->enqueueEvent($eventInfo);
         $this->addToRenderQueue($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            $this->logEvent($eventInfo);
-            reset($this->arrStatesMap);
-            while ($strAlias = key($this->arrStatesMap)) {
-                if ($destination && $destination != 'all' && $destination != $strAlias) {
-                    $this->log("Skipping alias $strAlias");
+            if ($destination != 'all') {
+                $this->doRequest($destination, $eventInfo);
+            } else {
+                reset($this->arrStatesMap);
+                while ($strAlias = key($this->arrStatesMap)) {
+                    $this->doRequest($strAlias, $eventInfo);
+                    // if ($destination && $destination != 'all' && $destination != $strAlias) {
+                    //     next($this->arrStatesMap);
+                    //     continue;
+                    // }
+                    // $stateContext = $this->findContext($strAlias);
+                    // $state = $stateContext->request($eventInfo);
+                    // $this->addToRenderQueue($state->getChildren());
+                    // if (
+                    //     $stateContext->isStateChanged ||
+                    //     $this->isRefreshRequired($strAlias)
+                    // ) {
+                    //     $view = $state->view($this->serviceManager->baseKebabName());
+                    //     $view = base64_encode($view);
+                    //     $this->arrStatesMap[$strAlias]['view'] = $view;
+                    // }
                     next($this->arrStatesMap);
-                    continue;
                 }
-                $this->log("Processing alias $strAlias");
-                $stateContext = $this->findContext($strAlias);
-                $state = $stateContext->request($eventInfo);
-                $this->addToRenderQueue($state->getChildren());
-                if (
-                    // $eventInfo['event'] == null ||
-                    $stateContext->isStateChanged ||
-                    $this->isRefreshRequired($strAlias)
-                ) {
-                    $view = $state->view($this->serviceManager->baseKebabName());
-                    $view = base64_encode($view);
-                    $this->arrStatesMap[$strAlias]['view'] = $view;
-                }
-                next($this->arrStatesMap);
             }
             next($this->eventQueue);
         }
@@ -146,7 +173,7 @@ class StateManager
      * @param array $eventInfo
      * @return void
      */
-    private final function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
+    private function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
     {
         $event = $eventInfo['event'];
         if ($event != 'reload') {
@@ -293,7 +320,7 @@ class StateManager
         session()->forget(self::RENDERING_ALIASES);
     }
 
-    private final function restoreCachedRenderings(): array
+    private function restoreCachedRenderings(): array
     {
         $cachedRenderings = [];
         if (!session()->has(self::RENDERING_ALIASES)) {
@@ -304,7 +331,7 @@ class StateManager
         return $cachedRenderings;
     }
 
-    private final function persistRenderingAliases(): void
+    private function persistRenderingAliases(): void
     {
         foreach ($this->arrStatesMap as $strAlias => $arrState) {
             unset($this->arrStatesMap[$strAlias]['context']);
