@@ -22,8 +22,8 @@ window.onload = function () {
             }
             const element = document.getElementById(key);
             if (element) {
+                element.setAttribute('key', key);
                 $html = arrCachedViews[key];//decodeBase64(arrCachedViews[key]);
-                $html = '<div key="' + key + '">' + $html + '</div>';
                 element.innerHTML = $html;
                 runScripts(element);
                 cachedElementsCounter++;
@@ -92,13 +92,13 @@ function sendEvent(event, formData = {}, signal = false) {
                     if (json['tree']) {
                         console.warn(json['tree']);
                     }
-
-                    // TODO: acá hay que recuperar las vistas cacheadas!
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
-                    mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
+                    if (!document.getElementById(rootId)) {
+                        mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
+                    }
                     elementsUpdated = 0;
-                    updated = "";
+                    // updated = "";
                     elementsNotFound = [];
                     for (const key in json) {
                         if (key === 'tree' || key === 'root') {
@@ -106,12 +106,12 @@ function sendEvent(event, formData = {}, signal = false) {
                         }
                         const element = document.getElementById(key);
                         if (element) {
+                            element.setAttribute('key', key);
                             $html = decodeBase64(json[key]);
-                            $html = '<div key="' + key + '">' + $html + '</div>';
                             element.innerHTML = $html;
                             runScripts(element);
                             elementsUpdated++;
-                            updated += key + ", ";
+                            //updated += key + ", ";
                             if (!arrClientRenderings.includes(key)) {
                                 arrClientRenderings.push(key);
                             }
@@ -129,9 +129,9 @@ function sendEvent(event, formData = {}, signal = false) {
                     localStorage.setItem('rootId', rootId);
                     localStorage.setItem('rendered', JSON.stringify(arrClientRenderings));
                     localStorage.setItem('cached', JSON.stringify(arrCachedViews));
-                    if (elementsUpdated > 0 && elementsUpdated < 15) {
+                    //if (elementsUpdated > 0 && elementsUpdated < 15) {
                         //console.info('Updated: ' + updated);
-                    }
+                    //}
                     if (elementsNotFound.length > 0) {
                         console.error('Not found: ' + elementsNotFound);
                     }
