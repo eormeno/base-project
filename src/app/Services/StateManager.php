@@ -158,10 +158,11 @@ class StateManager
             next($this->eventQueue);
         }
         $views = $this->getViewsForRender($rootModel);
-        $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-        $this->log("StateManager {$elapsed}ms");
+        $viewsCount = count($views) - 1; // root is not a view
         $this->persistRenderingAliases();
         $this->eventQueue = [];
+        $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
+        $this->log("StateManager sent $viewsCount in $elapsed ms");
         return $views;
     }
 
@@ -243,10 +244,11 @@ class StateManager
         $arrViews = [];
         $arrViews['root'] = $rootModel->getAlias();
         foreach ($this->arrStatesMap as $strAlias => $arrState) {
-            $view = $arrState['view'];
-            if ($view) {
-                $arrViews[$strAlias] = $view;
+            // if view key is not set or is null, we don't render it
+            if (!array_key_exists('view', $arrState) || $arrState['view'] == null) {
+                continue;
             }
+            $arrViews[$strAlias] = $arrState['view'];
         }
         // $tree = $this->getTree();
         // foreach ($tree as $strAlias) {
@@ -336,6 +338,7 @@ class StateManager
         foreach ($this->arrStatesMap as $strAlias => $arrState) {
             unset($this->arrStatesMap[$strAlias]['context']);
             unset($this->arrStatesMap[$strAlias]['model']);
+            unset($this->arrStatesMap[$strAlias]['view']);
         }
         session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
     }

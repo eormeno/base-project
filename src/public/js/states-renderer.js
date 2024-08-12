@@ -92,6 +92,8 @@ function sendEvent(event, formData = {}, signal = false) {
                     if (json['tree']) {
                         console.warn(json['tree']);
                     }
+
+                    // TODO: acá hay que recuperar las vistas cacheadas!
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
                     mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
