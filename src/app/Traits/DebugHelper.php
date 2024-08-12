@@ -35,8 +35,11 @@ trait DebugHelper
         $this->log(json_encode($stack, JSON_PRETTY_PRINT));
     }
 
-    public function logEvent(array $eventInfo, array $exclude = self::BASIC_INFO)
+    public function logEvent(array $eventInfo, bool $excludeRefresh = true, array $exclude = self::BASIC_INFO)
     {
+        if ($excludeRefresh && $eventInfo['event'] === 'refresh') {
+            return;
+        }
         foreach ($exclude as $key) {
             unset($eventInfo[$key]);
         }

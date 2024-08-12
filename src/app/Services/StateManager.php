@@ -107,7 +107,7 @@ class StateManager
         //     //next($this->arrStatesMap);
         //     return;
         // }
-        $this->logEvent($eventInfo);
+        $this->logEvent($eventInfo, false);
         $stateContext = $this->findContext($strAlias);
         $state = $stateContext->request($eventInfo);
         $changed = $stateContext->isStateChanged;
@@ -125,7 +125,8 @@ class StateManager
     {
         $currentTimestamp = microtime(true);
         //$this->readRenderingAliases($rootModel, $eventInfo);
-        $this->arrStatesMap = $this->restoreCachedRenderings();
+        $this->arrStatesMap = $this->restoreCachedRenderings($rootModel);
+        $this->log("StateManager read " . count($this->arrStatesMap) . " cached renderings");
         $this->enqueueEvent($eventInfo);
         $this->addToRenderQueue($rootModel);
         reset($this->eventQueue);
@@ -166,52 +167,47 @@ class StateManager
         return $views;
     }
 
-    /**
-     * Read the rendering aliases from the session, if they exist.
-     * If not, we obtain them from the root model.
-     *
-     * @param \App\FSM\IStateModel $rootModel
-     * @param array $eventInfo
-     * @return void
-     */
-    private function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
-    {
-        $event = $eventInfo['event'];
-        if ($event != 'reload') {
-            // todo: acá hacer eso
-            $this->enqueueEvent($eventInfo);
-            return;
-        }
+    // private function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
+    // {
+    //     $event = $eventInfo['event'];
+    //     if ($event != 'reload') {
+    //         $this->enqueueEvent($eventInfo);
+    //         return;
+    //     }
 
-        $clientRenderings = $eventInfo['rendered'] ?? [];
-        $serverRenderings = $this->restoreCachedRenderings();
-        $clientRenderingCount = count($clientRenderings);
-        $serverRenderingCount = count($serverRenderings);
+    //     $clientRenderings = $eventInfo['rendered'] ?? [];
+    //     $serverRenderings = $this->restoreCachedRenderings($rootModel);
+    //     $clientRenderingCount = count($clientRenderings);
+    //     $serverRenderingCount = count($serverRenderings);
 
-        if ($serverRenderingCount == 0) {
-            $this->log("No server renderings found");
-            $this->addToRenderQueue($rootModel);
-            return;
-        }
+    //     if ($serverRenderingCount == 0) {
+    //         $this->log("No server renderings found");
+    //         $this->addToRenderQueue($rootModel);
+    //         return;
+    //     }
 
-        if ($clientRenderingCount > 0 && $serverRenderingCount == $clientRenderingCount) {
-            // iterate all the serverRenderings, and if its view is null, we enqueue a refresh event
-            foreach ($serverRenderings as $strAlias => $arrState) {
-                if ($arrState['view'] == null) {
-                    $this->enqueueRefreshForAliasEvent($strAlias);
-                }
-            }
-            $this->arrStatesMap = $serverRenderings;
-        }
+    //     if ($clientRenderingCount > 0 && $serverRenderingCount == $clientRenderingCount) {
+    //         // iterate all the serverRenderings, and if its view is null, we enqueue a refresh event
+    //         foreach ($serverRenderings as $strAlias => $arrState) {
+    //             if ($arrState['view'] == null) {
+    //                 $this->enqueueRefreshForAliasEvent($strAlias);
+    //             }
+    //         }
+    //         $this->arrStatesMap = $serverRenderings;
+    //     }
 
-        if (empty($serverRenderings)) {
-            $serverRenderings = $this->activeStates($rootModel);
-        }
-    }
+    //     if (empty($serverRenderings)) {
+    //         $serverRenderings = $this->activeStates($rootModel);
+    //     }
+    // }
 
     private function activeStates(IStateModel $model): array
     {
-        $activeStates[] = $model->getAlias();
+        $alias = $model->getAlias();
+        //$activeStates[$alias]['context'] = new StateContextImpl($this->serviceManager, $model);
+        $activeStates[$alias]['model'] = $model;
+        $activeStates[$alias]['view'] = null;
+        $this->enqueueRefreshForAliasEvent($alias);
         $children = $this->getModelChildren($model);
         foreach ($children as $childAlias) {
             $childModel = AStateModel::modelOf($childAlias);
@@ -223,7 +219,7 @@ class StateManager
     private function getModelChildren(IStateModel $model): array
     {
         $children = $model->children; // phpcs:ignore
-        if (!$children) {
+        if (!$children || empty($children) || !$model->getState()) {
             return [];
         }
         $ret = [];
@@ -322,19 +318,32 @@ class StateManager
         session()->forget(self::RENDERING_ALIASES);
     }
 
-    private function restoreCachedRenderings(): array
+    private function restoreCachedRenderings(IStateModel $rootModel): array
     {
         $cachedRenderings = [];
+
         if (!session()->has(self::RENDERING_ALIASES)) {
             session()->put(self::RENDERING_ALIASES, []);
         } else {
             $cachedRenderings = session(self::RENDERING_ALIASES);
         }
+
+        if (empty($cachedRenderings)) {
+            // Puede ocurrir que se haya cerrado la sesión y se haya perdido la lista de elementos
+            // renderizados. En ese caso deberíamos reconstruirla a partir de la raíz del modelo.
+            $cachedRenderings = $this->activeStates($rootModel);
+            $this->log("No cached renderings found. Rebuilding from root model");
+            $this->log(json_encode($cachedRenderings));
+        }
+
         return $cachedRenderings;
     }
 
     private function persistRenderingAliases(): void
     {
+        if (empty($this->arrStatesMap)) {
+            return;
+        }
         foreach ($this->arrStatesMap as $strAlias => $arrState) {
             unset($this->arrStatesMap[$strAlias]['context']);
             unset($this->arrStatesMap[$strAlias]['model']);
