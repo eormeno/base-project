@@ -69,8 +69,11 @@ class StateManager
         return $arrChildren;
     }
 
-    private function enqueueRefreshForAliasEvent(string $strAlias)
+    private function enqueueRefreshEvent(string $strAlias)
     {
+        if (!$this->isRefreshRequired($strAlias)) {
+            return;
+        }
         $this->enqueueEvent([
             'event' => 'refresh',
             'source' => null,
@@ -95,7 +98,7 @@ class StateManager
         if (!array_key_exists($alias, $this->arrStatesMap)) {
             $this->arrStatesMap[$alias]['view'] = null;
             // acá tampoco deberíamos encolar un refresh si el cliente ya lo renderizó
-            $this->enqueueRefreshForAliasEvent($alias);
+            $this->enqueueRefreshEvent($alias);
         }
         $this->arrStatesMap[$alias]['model'] = $models;
         $this->arrStatesMap[$alias]['context'] = new StateContextImpl($this->serviceManager, $models);
@@ -292,7 +295,7 @@ class StateManager
         $activeStates[$alias]['model'] = $model;
         $activeStates[$alias]['view'] = null;
         // Esto se debería hacer si el cliente no lo renderizó
-        $this->enqueueRefreshForAliasEvent($alias);
+        $this->enqueueRefreshEvent($alias);
         $children = $this->getModelChildren($model);
         foreach ($children as $childAlias) {
             $childModel = AStateModel::modelOf($childAlias);
