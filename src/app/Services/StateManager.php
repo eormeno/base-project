@@ -94,6 +94,7 @@ class StateManager
         $alias = $models->getAlias();
         if (!array_key_exists($alias, $this->arrStatesMap)) {
             $this->arrStatesMap[$alias]['view'] = null;
+            // acá tampoco deberíamos encolar un refresh si el cliente ya lo renderizó
             $this->enqueueRefreshForAliasEvent($alias);
         }
         $this->arrStatesMap[$alias]['model'] = $models;
@@ -124,7 +125,6 @@ class StateManager
     public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
-        //$this->readRenderingAliases($rootModel, $eventInfo);
         $this->arrStatesMap = $this->restoreCachedRenderings($rootModel);
         $this->log("StateManager read " . count($this->arrStatesMap) . " cached renderings");
         $this->enqueueEvent($eventInfo);
@@ -201,12 +201,97 @@ class StateManager
     //     }
     // }
 
+
+    private function getViewsForRender(IStateModel $rootModel): array
+    {
+        $arrViews = [];
+        $arrViews['root'] = $rootModel->getAlias();
+        foreach ($this->arrStatesMap as $strAlias => $arrState) {
+            // if view key is not set or is null, we don't render it
+            if (!array_key_exists('view', $arrState) || $arrState['view'] == null) {
+                continue;
+            }
+            $arrViews[$strAlias] = $arrState['view'];
+        }
+        // $tree = $this->getTree();
+        // foreach ($tree as $strAlias) {
+        //     $view = $this->arrStatesMap[$strAlias]['view'];
+        //     if ($view) {
+        //         $arrViews[$strAlias] = $view;
+        //     }
+        // }
+        // $arrViews['tree'] = $tree;
+        return $arrViews;
+    }
+
+    // public final function enqueueAllForRendering(
+    //     array $arrModels,
+    //     IStateModel $parent = null
+    // ): array {
+    //     $enqueuedObjectAliases = [];
+    //     if (count($arrModels) === 0) {
+    //         return $enqueuedObjectAliases;
+    //     }
+    //     foreach ($arrModels as $object) {
+    //         $enqueuedObjectAliases[] = $this->enqueueForRendering($object, $parent);
+    //     }
+    //     return $enqueuedObjectAliases;
+    // }
+
+    // public final function enqueueForRendering(
+    //     IStateModel $model,
+    //     IStateModel $parentModel = null
+    // ): string {
+    //     $strModelAlias = $this->findOrCreateContext($model);
+    //     if ($parentModel) {
+    //         $strParentModelAlias = $this->findOrCreateContext($parentModel);
+    //         if (!in_array($strModelAlias, $this->arrStatesMap[$strParentModelAlias]['children'])) {
+    //             $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
+    //         }
+    //     }
+    //     return $strModelAlias;
+    // }
+
+    private function findContext(string $strAlias): StateContextImpl
+    {
+        if (!array_key_exists($strAlias, $this->arrStatesMap)) {
+            throw new \Exception("Alias $strAlias not found");
+        }
+        if (!array_key_exists('model', $this->arrStatesMap[$strAlias])) {
+            $this->arrStatesMap[$strAlias]['model'] = AStateModel::modelOf($strAlias);
+        }
+        if (!array_key_exists('context', $this->arrStatesMap[$strAlias])) {
+            $model = $this->arrStatesMap[$strAlias]['model'];
+            $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
+        }
+        return $this->arrStatesMap[$strAlias]['context'];
+    }
+
+    // private function findOrCreateContext(IStateModel $model): string
+    // {
+    //     $strAlias = $model->getAlias();
+    //     if (!array_key_exists($strAlias, $this->arrStatesMap)) {
+    //         $this->arrStatesMap[$strAlias]['children'] = [];
+    //         $this->arrStatesMap[$strAlias]['view'] = null;
+    //         $this->enqueueRefreshForAliasEvent($strAlias);
+    //     }
+    //     $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
+    //     $this->arrStatesMap[$strAlias]['model'] = $model;
+    //     return $strAlias;
+    // }
+
+    public final function reset()
+    {
+        session()->forget(self::RENDERING_ALIASES);
+    }
+
     private function activeStates(IStateModel $model): array
     {
         $alias = $model->getAlias();
         //$activeStates[$alias]['context'] = new StateContextImpl($this->serviceManager, $model);
         $activeStates[$alias]['model'] = $model;
         $activeStates[$alias]['view'] = null;
+        // Esto se debería hacer si el cliente no lo renderizó
         $this->enqueueRefreshForAliasEvent($alias);
         $children = $this->getModelChildren($model);
         foreach ($children as $childAlias) {
@@ -235,106 +320,20 @@ class StateManager
         return $ret;
     }
 
-    private function getViewsForRender(IStateModel $rootModel): array
-    {
-        $arrViews = [];
-        $arrViews['root'] = $rootModel->getAlias();
-        foreach ($this->arrStatesMap as $strAlias => $arrState) {
-            // if view key is not set or is null, we don't render it
-            if (!array_key_exists('view', $arrState) || $arrState['view'] == null) {
-                continue;
-            }
-            $arrViews[$strAlias] = $arrState['view'];
-        }
-        // $tree = $this->getTree();
-        // foreach ($tree as $strAlias) {
-        //     $view = $this->arrStatesMap[$strAlias]['view'];
-        //     if ($view) {
-        //         $arrViews[$strAlias] = $view;
-        //     }
-        // }
-        // $arrViews['tree'] = $tree;
-        return $arrViews;
-    }
-
-    public final function enqueueAllForRendering(
-        array $arrModels,
-        IStateModel $parent = null
-    ): array {
-        $enqueuedObjectAliases = [];
-        if (count($arrModels) === 0) {
-            return $enqueuedObjectAliases;
-        }
-        foreach ($arrModels as $object) {
-            $enqueuedObjectAliases[] = $this->enqueueForRendering($object, $parent);
-        }
-        return $enqueuedObjectAliases;
-    }
-
-    public final function enqueueForRendering(
-        IStateModel $model,
-        IStateModel $parentModel = null
-    ): string {
-        $strModelAlias = $this->findOrCreateContext($model);
-        if ($parentModel) {
-            $strParentModelAlias = $this->findOrCreateContext($parentModel);
-            if (!in_array($strModelAlias, $this->arrStatesMap[$strParentModelAlias]['children'])) {
-                $this->arrStatesMap[$strParentModelAlias]['children'][] = $strModelAlias;
-            }
-        }
-        return $strModelAlias;
-    }
-
-    private function findContext(string $strAlias): StateContextImpl
-    {
-        if (!array_key_exists($strAlias, $this->arrStatesMap)) {
-            throw new \Exception("Alias $strAlias not found");
-        }
-        if (!array_key_exists('model', $this->arrStatesMap[$strAlias])) {
-            $this->arrStatesMap[$strAlias]['model'] = AStateModel::modelOf($strAlias);
-        }
-        if (!array_key_exists('context', $this->arrStatesMap[$strAlias])) {
-            $model = $this->arrStatesMap[$strAlias]['model'];
-            $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
-        }
-        return $this->arrStatesMap[$strAlias]['context'];
-    }
-
-    private function findOrCreateContext(IStateModel $model): string
-    {
-        $strAlias = $model->getAlias();
-        if (!array_key_exists($strAlias, $this->arrStatesMap)) {
-            $this->arrStatesMap[$strAlias]['children'] = [];
-            $this->arrStatesMap[$strAlias]['view'] = null;
-            $this->enqueueRefreshForAliasEvent($strAlias);
-        }
-        $this->arrStatesMap[$strAlias]['context'] = new StateContextImpl($this->serviceManager, $model);
-        $this->arrStatesMap[$strAlias]['model'] = $model;
-        return $strAlias;
-    }
-
-    public final function reset()
-    {
-        session()->forget(self::RENDERING_ALIASES);
-    }
-
     private function restoreCachedRenderings(IStateModel $rootModel): array
     {
         $cachedRenderings = [];
-
         if (!session()->has(self::RENDERING_ALIASES)) {
             session()->put(self::RENDERING_ALIASES, []);
         } else {
             $cachedRenderings = session(self::RENDERING_ALIASES);
         }
-
         if (empty($cachedRenderings)) {
             // Puede ocurrir que se haya cerrado la sesión y se haya perdido la lista de elementos
             // renderizados. En ese caso deberíamos reconstruirla a partir de la raíz del modelo.
             $cachedRenderings = $this->activeStates($rootModel);
             $this->log("No cached renderings found. Rebuilding from root model");
         }
-
         return $cachedRenderings;
     }
 
