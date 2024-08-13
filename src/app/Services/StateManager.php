@@ -333,7 +333,6 @@ class StateManager
             // renderizados. En ese caso deberíamos reconstruirla a partir de la raíz del modelo.
             $cachedRenderings = $this->activeStates($rootModel);
             $this->log("No cached renderings found. Rebuilding from root model");
-            $this->log(json_encode($cachedRenderings));
         }
 
         return $cachedRenderings;

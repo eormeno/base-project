@@ -66,7 +66,16 @@ abstract class AStateModel extends Model implements IStateModel
     {
         $shortName = substr($alias, 0, strpos($alias, '_'));
         $aliasId = substr($alias, strpos($alias, '_') + 1);
-        $rflClass = self::$aliases[$shortName];
+        $rflClass = null;
+        if (!isset(self::$aliases[$shortName])) {
+            // TODO: acá el problema es asumir que todos los modelos están en el mismo namespace
+            $rflClass = new ReflectionClass("App\\Models\\{$shortName}");
+            self::$aliases[$shortName] = $rflClass;
+        } else {
+            $rflClass = self::$aliases[$shortName];
+        }
+        // $rflClass = self::$aliases[$shortName];
+
         if (!isset(self::$states[$alias])) {
             self::$states[$alias] = $rflClass->newInstance()->find($aliasId);
         }
