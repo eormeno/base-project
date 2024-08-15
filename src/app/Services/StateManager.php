@@ -122,9 +122,10 @@ class StateManager
 
             // TODO: Ver acá qué pasa
             $previousChildren = $stateContext->arrPreviousChildren;
+            $this->log("Previous children: " . implode(', ', $previousChildren));
             // remove each child from previousChilddren from arrStatesMap
             foreach ($previousChildren as $childAlias) {
-                unset($this->arrStatesMap[$childAlias]);
+                //unset($this->arrStatesMap[$childAlias]);
             }
         }
         if ($changed || $refresh) {
@@ -145,7 +146,7 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            $this->logEvent($eventInfo, false);
+            $this->logEvent($eventInfo, true);
             if ($destination != 'all') {
                 $this->doRequest($destination, $eventInfo);
             } else {

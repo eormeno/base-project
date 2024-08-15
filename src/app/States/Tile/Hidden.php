@@ -24,7 +24,7 @@ class Hidden extends StateAbstractImpl
         return FlaggingTile::StateClass();
     }
 
-    public function onGameOverEvent()
+    public function _onGameOverEvent()
     {
         return GameOverTile::StateClass();
     }

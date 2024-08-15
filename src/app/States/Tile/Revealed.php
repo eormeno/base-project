@@ -9,7 +9,7 @@ class Revealed extends StateAbstractImpl
 {
     public ?MtqTile $model = null;
 
-    public function onGameOverEvent()
+    public function _onGameOverEvent()
     {
         return GameOverTile::StateClass();
     }
