@@ -3,14 +3,21 @@
 namespace App\States\MythicTreasureQuest;
 
 use App\States\MythicTreasureQuest\Flagging;
+use App\FSM\StateAbstractImpl;
 
-class Playing extends APlayingStates
+class Playing extends StateAbstractImpl
 {
+    public int $width = 8;
+    public int $height = 8;
+    public string $strMapVID = '';
     public string $strInventoryVID = '';
 
     public function onEnter(): void
     {
-        parent::onEnter();
+        $map = $this->context->mapService->getMap();
+        $this->width = $map->width;
+        $this->height = $map->height;
+        $this->strMapVID = $this->addChild($map, 'strMapVID');
         $inventory = $this->context->inventoryService->getInventory();
         $this->strInventoryVID = $this->addChild($inventory, 'strInventoryVID');
     }

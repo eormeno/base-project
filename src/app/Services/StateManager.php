@@ -118,6 +118,15 @@ class StateManager
         $refresh = $this->isRefreshRequired($strAlias);
         // $this->log("State $strAlias changed: $changed, refresh: $refresh");
         $this->addToRenderQueue($state->getChildren());
+        if ($changed) {
+
+            // TODO: Ver acá qué pasa
+            $previousChildren = $stateContext->arrPreviousChildren;
+            // remove each child from previousChilddren from arrStatesMap
+            foreach ($previousChildren as $childAlias) {
+                unset($this->arrStatesMap[$childAlias]);
+            }
+        }
         if ($changed || $refresh) {
             $view = $state->view($this->serviceManager->baseKebabName());
             $view = base64_encode($view);

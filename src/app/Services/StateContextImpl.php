@@ -24,6 +24,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
     protected IStateModel $object;
     protected int $id;
     public bool $isStateChanged = false;
+    public array $arrPreviousChildren = [];
 
     public function __construct(
         AbstractServiceManager $serviceManager,
@@ -72,6 +73,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
     {
         $stateWasNull = $this->object->getState() == null;
         $destination = $eventInfo['destination'];
+        $previousChildren = null;
         $initialState = null;
         $currentState = null;
         $firstTime = true;
@@ -81,6 +83,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             if ($firstTime) {
                 $firstTime = false;
                 $initialState = $currentState;
+                $previousChildren = $currentState->getChildren();
             }
             $changedState = $this->setState($currentState->handleRequest($eventInfo));
             $hasIntermediateChange |= $currentState != $changedState;
@@ -88,6 +91,9 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($currentState != $changedState);
         $this->isStateChanged = $initialState != $changedState || $hasIntermediateChange || $stateWasNull;
+        if ($this->isStateChanged) {
+            $this->arrPreviousChildren = $previousChildren;
+        }
         if ($destination == 'all' || $destination == $this->object->getAlias()) {
             $changedState->onRefresh();
         }
