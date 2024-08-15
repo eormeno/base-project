@@ -10,7 +10,7 @@ use App\Services\StateContextImpl;
 class StateManager
 {
     use DebugHelper;
-    private const RENDERING_ALIASES = 'rendering_aliases';
+    // private const RENDERING_ALIASES = 'rendering_aliases';
     protected array $arrStatesMap = [];
     protected array $eventQueue = [];
     protected array $clientRenderedAliases = [];
@@ -28,6 +28,7 @@ class StateManager
         $rendered = $eventInfo['rendered'] ?? [];
         if (!empty($rendered)) {
             $this->clientRenderedAliases = $rendered;
+            //$this->log("Client rendered: " . implode(', ', $this->clientRenderedAliases));
         }
         // todo: mejorar esto urgente! un reload no debería ser encolado. Pero no me gusta
         // que el StateManager tenga que saber qué eventos no encolar.
@@ -128,9 +129,10 @@ class StateManager
     public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
-        $this->arrStatesMap = $this->restoreCachedRenderings($rootModel);
-        $this->log("StateManager read " . count($this->arrStatesMap) . " cached renderings");
         $this->enqueueEvent($eventInfo);
+        $this->arrStatesMap = $this->activeStates($rootModel);
+        $this->log("Server had " . count($this->arrStatesMap) . " cached renderings");
+        //$this->arrStatesMap = $this->restoreCachedRenderings($rootModel);
         $this->addToRenderQueue($rootModel);
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
@@ -163,8 +165,8 @@ class StateManager
         }
         $views = $this->getViewsForRender($rootModel);
         $viewsCount = count($views) - 1; // root is not a view
-        $this->persistRenderingAliases();
-        $this->eventQueue = [];
+        //$this->persistRenderingAliases();
+        //$this->eventQueue = [];
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
         $this->log("StateManager sent $viewsCount in $elapsed ms");
         return $views;
@@ -285,16 +287,16 @@ class StateManager
 
     public final function reset()
     {
-        session()->forget(self::RENDERING_ALIASES);
+        // session()->forget(self::RENDERING_ALIASES);
     }
 
     private function activeStates(IStateModel $model): array
     {
         $alias = $model->getAlias();
+        // $this->log("Active state: $alias");
         //$activeStates[$alias]['context'] = new StateContextImpl($this->serviceManager, $model);
         $activeStates[$alias]['model'] = $model;
         $activeStates[$alias]['view'] = null;
-        // Esto se debería hacer si el cliente no lo renderizó
         $this->enqueueRefreshEvent($alias);
         $children = $this->getModelChildren($model);
         foreach ($children as $childAlias) {
@@ -323,33 +325,33 @@ class StateManager
         return $ret;
     }
 
-    private function restoreCachedRenderings(IStateModel $rootModel): array
-    {
-        $cachedRenderings = [];
-        if (!session()->has(self::RENDERING_ALIASES)) {
-            session()->put(self::RENDERING_ALIASES, []);
-        } else {
-            $cachedRenderings = session(self::RENDERING_ALIASES);
-        }
-        if (empty($cachedRenderings)) {
-            // Puede ocurrir que se haya cerrado la sesión y se haya perdido la lista de elementos
-            // renderizados. En ese caso deberíamos reconstruirla a partir de la raíz del modelo.
-            $cachedRenderings = $this->activeStates($rootModel);
-            $this->log("No cached renderings found. Rebuilding from root model");
-        }
-        return $cachedRenderings;
-    }
+    // private function restoreCachedRenderings(IStateModel $rootModel): array
+    // {
+    //     $cachedRenderings = [];
+    //     // if (!session()->has(self::RENDERING_ALIASES)) {
+    //     //     session()->put(self::RENDERING_ALIASES, []);
+    //     // } else {
+    //     //     $cachedRenderings = session(self::RENDERING_ALIASES);
+    //     // }
+    //     // if (empty($cachedRenderings)) {
+    //         // Puede ocurrir que se haya cerrado la sesión y se haya perdido la lista de elementos
+    //         // renderizados. En ese caso deberíamos reconstruirla a partir de la raíz del modelo.
+    //         $cachedRenderings = $this->activeStates($rootModel);
+    //         $this->log("Server had " . count($cachedRenderings) . " cached renderings");
+    //     // }
+    //     return $cachedRenderings;
+    // }
 
-    private function persistRenderingAliases(): void
-    {
-        if (empty($this->arrStatesMap)) {
-            return;
-        }
-        foreach ($this->arrStatesMap as $strAlias => $arrState) {
-            unset($this->arrStatesMap[$strAlias]['context']);
-            unset($this->arrStatesMap[$strAlias]['model']);
-            unset($this->arrStatesMap[$strAlias]['view']);
-        }
-        session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
-    }
+    // private function persistRenderingAliases(): void
+    // {
+    //     if (empty($this->arrStatesMap)) {
+    //         return;
+    //     }
+    //     foreach ($this->arrStatesMap as $strAlias => $arrState) {
+    //         unset($this->arrStatesMap[$strAlias]['context']);
+    //         unset($this->arrStatesMap[$strAlias]['model']);
+    //         unset($this->arrStatesMap[$strAlias]['view']);
+    //     }
+    //     session()->put(self::RENDERING_ALIASES, $this->arrStatesMap);
+    // }
 }

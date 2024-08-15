@@ -54,7 +54,7 @@ class GameService extends AbstractServiceComponent
 
     public function showClue(): bool
     {
-        $this->fillAvailableTiles();
+        $this->fillAvailableTiles(true);
         if (empty($this->availableTiles)) {
             return false;
         }
