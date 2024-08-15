@@ -112,7 +112,6 @@ class StateManager
         //     //next($this->arrStatesMap);
         //     return;
         // }
-        $this->logEvent($eventInfo, false);
         $stateContext = $this->findContext($strAlias);
         $state = $stateContext->request($eventInfo);
         $changed = $stateContext->isStateChanged;
@@ -137,11 +136,16 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
+            $this->logEvent($eventInfo, false);
             if ($destination != 'all') {
                 $this->doRequest($destination, $eventInfo);
             } else {
                 reset($this->arrStatesMap);
                 while ($strAlias = key($this->arrStatesMap)) {
+                    if (!$this->matchAliasName($strAlias, 'tile')) {
+                        next($this->arrStatesMap);
+                        continue;
+                    }
                     $this->doRequest($strAlias, $eventInfo);
                     // if ($destination && $destination != 'all' && $destination != $strAlias) {
                     //     next($this->arrStatesMap);
@@ -170,6 +174,11 @@ class StateManager
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
         $this->log("StateManager sent $viewsCount in $elapsed ms");
         return $views;
+    }
+
+    private function matchAliasName(string $strAlias, string $subString): bool
+    {
+        return stripos($strAlias, $subString) !== false;
     }
 
     // private function readRenderingAliases(IStateModel $rootModel, array $eventInfo): void
