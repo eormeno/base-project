@@ -116,18 +116,21 @@ class StateManager
         $state = $stateContext->request($eventInfo);
         $changed = $stateContext->isStateChanged;
         $refresh = $this->isRefreshRequired($strAlias);
+        if (!empty($stateContext->previousChildren)) {
+            $this->log("Previous children: " . implode(', ', $stateContext->previousChildren));
+        }
         // $this->log("State $strAlias changed: $changed, refresh: $refresh");
         $this->addToRenderQueue($state->getChildren());
-        if ($changed) {
+        // if ($changed) {
 
-            // TODO: Ver acá qué pasa
-            $previousChildren = $stateContext->arrPreviousChildren;
-            $this->log("Previous children: " . implode(', ', $previousChildren));
-            // remove each child from previousChilddren from arrStatesMap
-            foreach ($previousChildren as $childAlias) {
-                //unset($this->arrStatesMap[$childAlias]);
-            }
-        }
+        //     // TODOs: Ver acá qué pasa
+        //     $previousChildren = $stateContext->arrPreviousChildren;
+        //     $this->log("Previous children: " . implode(', ', $previousChildren));
+        //     // remove each child from previousChilddren from arrStatesMap
+        //     foreach ($previousChildren as $childAlias) {
+        //         //unset($this->arrStatesMap[$childAlias]);
+        //     }
+        // }
         if ($changed || $refresh) {
             $view = $state->view($this->serviceManager->baseKebabName());
             $view = base64_encode($view);
@@ -152,10 +155,10 @@ class StateManager
             } else {
                 reset($this->arrStatesMap);
                 while ($strAlias = key($this->arrStatesMap)) {
-                    if (!$this->matchAliasName($strAlias, 'tile')) {
-                        next($this->arrStatesMap);
-                        continue;
-                    }
+                    // if (!$this->matchAliasName($strAlias, 'tile')) {
+                    //     next($this->arrStatesMap);
+                    //     continue;
+                    // }
                     $this->doRequest($strAlias, $eventInfo);
                     // if ($destination && $destination != 'all' && $destination != $strAlias) {
                     //     next($this->arrStatesMap);
@@ -237,6 +240,8 @@ class StateManager
             }
             $arrViews[$strAlias] = $arrState['view'];
         }
+        // ACÁ ENVIARÁ TODOS LOS ELEMENTOS ACTIVOS AL CLIENTE
+        $arrViews['actives'] = $this->activeStates($rootModel, true);
         // $tree = $this->getTree();
         // foreach ($tree as $strAlias) {
         //     $view = $this->arrStatesMap[$strAlias]['view'];
@@ -309,18 +314,21 @@ class StateManager
         // session()->forget(self::RENDERING_ALIASES);
     }
 
-    private function activeStates(IStateModel $model): array
+    private function activeStates(IStateModel $model, bool $onlyAlias = false): array
     {
         $alias = $model->getAlias();
-        // $this->log("Active state: $alias");
-        //$activeStates[$alias]['context'] = new StateContextImpl($this->serviceManager, $model);
-        $activeStates[$alias]['model'] = $model;
-        $activeStates[$alias]['view'] = null;
-        $this->enqueueRefreshEvent($alias);
+        if (!$onlyAlias) {
+            $activeStates[$alias]['model'] = $model;
+            $activeStates[$alias]['view'] = null;
+            //$activeStates[$alias]['context'] = new StateContextImpl($this->serviceManager, $model);
+            $this->enqueueRefreshEvent($alias);
+        } else {
+            $activeStates[] = $alias;
+        }
         $children = $this->getModelChildren($model);
         foreach ($children as $childAlias) {
             $childModel = AStateModel::modelOf($childAlias);
-            $activeStates = array_merge($activeStates, $this->activeStates($childModel));
+            $activeStates = array_merge($activeStates, $this->activeStates($childModel, $onlyAlias));
         }
         return $activeStates;
     }

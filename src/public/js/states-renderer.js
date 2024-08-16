@@ -89,8 +89,8 @@ function sendEvent(event, formData = {}, signal = false) {
                     eventSent = false;
                 } else {
                     json = JSON.parse(data);
-                    if (json['tree']) {
-                        console.warn(json['tree']);
+                    if (json['actives']) {
+                        console.warn(json['actives']);
                     }
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
@@ -101,7 +101,7 @@ function sendEvent(event, formData = {}, signal = false) {
                     // updated = "";
                     elementsNotFound = [];
                     for (const key in json) {
-                        if (key === 'tree' || key === 'root') {
+                        if (key === 'root' || key == 'actives') {
                             continue;
                         }
                         const element = document.getElementById(key);
@@ -128,9 +128,10 @@ function sendEvent(event, formData = {}, signal = false) {
                     // store the array of objects in local storage
                     localStorage.setItem('rootId', rootId);
                     localStorage.setItem('rendered', JSON.stringify(arrClientRenderings));
+                    // TODO: ACÁ HAY QUE ELIMINAR LAS VISTAS CACHEADAS QUE YA NO SE VAN A RENDERIZAR
                     localStorage.setItem('cached', JSON.stringify(arrCachedViews));
                     //if (elementsUpdated > 0 && elementsUpdated < 15) {
-                        //console.info('Updated: ' + updated);
+                    //console.info('Updated: ' + updated);
                     //}
                     if (elementsNotFound.length > 0) {
                         console.error('Not found: ' + elementsNotFound);
