@@ -24,7 +24,6 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
     protected IStateModel $object;
     protected int $id;
     public bool $isStateChanged = false;
-    public array $previousChildren = [];
 
     public function __construct(
         AbstractServiceManager $serviceManager,
@@ -47,9 +46,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $stateInstance->reset();
             $stateInstance->onReload();
         }
-        //$this->previousChildren = [];
         if ($this->__state && $this->__state != $stateInstance) {
-            $this->previousChildren = $this->__state->getChildren();
             $this->__state->onExit();
             $this->stateUpdater->setEnteredAt(null);
         }

@@ -1,8 +1,8 @@
+var rootId = '';
 var eventSent = false;
 var currentMillis = 0;
-var rootId = '';
-var arrClientRenderings = [];
 var arrCachedViews = {};
+var arrClientRenderings = [];
 
 window.onload = function () {
     if (hasUrlParam('reset')) {
@@ -23,7 +23,7 @@ window.onload = function () {
             const element = document.getElementById(key);
             if (element) {
                 element.setAttribute('key', key);
-                $html = arrCachedViews[key];//decodeBase64(arrCachedViews[key]);
+                $html = arrCachedViews[key];
                 element.innerHTML = $html;
                 runScripts(element);
                 cachedElementsCounter++;
@@ -89,16 +89,13 @@ function sendEvent(event, formData = {}, signal = false) {
                     eventSent = false;
                 } else {
                     json = JSON.parse(data);
-                    if (json['actives']) {
-                        console.warn(json['actives']);
-                    }
+
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
                     if (!document.getElementById(rootId)) {
                         mainDiv.innerHTML = '<div id="' + rootId + '"></div>';
                     }
                     elementsUpdated = 0;
-                    // updated = "";
                     elementsNotFound = [];
                     for (const key in json) {
                         if (key === 'root' || key == 'actives') {
@@ -111,15 +108,12 @@ function sendEvent(event, formData = {}, signal = false) {
                             element.innerHTML = $html;
                             runScripts(element);
                             elementsUpdated++;
-                            //updated += key + ", ";
                             if (!arrClientRenderings.includes(key)) {
                                 arrClientRenderings.push(key);
                             }
-                            arrCachedViews[key] = $html;// json[key];
+                            arrCachedViews[key] = $html;
                         } else {
                             elementsNotFound.push(key);
-                            // TODO: review this
-                            //arrObjects = [];
                         }
                     }
                     eventSent = false;
@@ -128,11 +122,9 @@ function sendEvent(event, formData = {}, signal = false) {
                     // store the array of objects in local storage
                     localStorage.setItem('rootId', rootId);
                     localStorage.setItem('rendered', JSON.stringify(arrClientRenderings));
-                    // TODO: ACÁ HAY QUE ELIMINAR LAS VISTAS CACHEADAS QUE YA NO SE VAN A RENDERIZAR
+                    cleanUnusedViews(json['actives']);
                     localStorage.setItem('cached', JSON.stringify(arrCachedViews));
-                    //if (elementsUpdated > 0 && elementsUpdated < 15) {
-                    //console.info('Updated: ' + updated);
-                    //}
+
                     if (elementsNotFound.length > 0) {
                         console.error('Not found: ' + elementsNotFound);
                     }
@@ -143,6 +135,15 @@ function sendEvent(event, formData = {}, signal = false) {
             }
         });
 }
+
+function cleanUnusedViews(usedCachedViews) {
+    for (const key in arrCachedViews) {
+        if (!usedCachedViews.includes(key)) {
+            delete arrCachedViews[key];
+        }
+    }
+}
+
 
 //todo: move to a helper file and optimize it
 function decodeBase64(data) {

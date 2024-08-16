@@ -116,9 +116,6 @@ class StateManager
         $state = $stateContext->request($eventInfo);
         $changed = $stateContext->isStateChanged;
         $refresh = $this->isRefreshRequired($strAlias);
-        if (!empty($stateContext->previousChildren)) {
-            $this->log("Previous children: " . implode(', ', $stateContext->previousChildren));
-        }
         // $this->log("State $strAlias changed: $changed, refresh: $refresh");
         $this->addToRenderQueue($state->getChildren());
         // if ($changed) {
@@ -181,7 +178,7 @@ class StateManager
             next($this->eventQueue);
         }
         $views = $this->getViewsForRender($rootModel);
-        $viewsCount = count($views) - 1; // root is not a view
+        $viewsCount = count($views) - 2; // root and actives are not views
         //$this->persistRenderingAliases();
         //$this->eventQueue = [];
         $elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
