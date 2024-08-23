@@ -22,16 +22,13 @@ class StatesLocalCache
             $strShortName = $rflStateClass->getShortName();
             throw new \Exception("The state class [$strShortName] must implement the StateInterface.");
         }
-        $isNeedRestoring = false;
         if (!session()->has(self::INSTANCED_STATES_KEY)) {
             session()->put(self::INSTANCED_STATES_KEY, []);
-            $isNeedRestoring = true;
         }
         $strStateInstanceForObject = $rflStateClass->getName() . $id;
         $arrInstancedStates = session(self::INSTANCED_STATES_KEY);
         if (!array_key_exists($strStateInstanceForObject, $arrInstancedStates)) {
             $staNewInstance = $rflStateClass->newInstance();
-            $staNewInstance->setNeedRestoring($isNeedRestoring);
             $arrInstancedStates[$strStateInstanceForObject] = $staNewInstance;
             session()->put(self::INSTANCED_STATES_KEY, $arrInstancedStates);
         }

@@ -41,17 +41,11 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $stateInstance = StatesLocalCache::getStateInstance($rflStateClass, $this->id);
         $stateInstance->setContext($this);
         $stateInstance->setStateModel($this->object);
-        if ($stateInstance->isNeedRestoring()) {
-            $stateInstance->setNeedRestoring(false);
-            $stateInstance->reset();
-            $stateInstance->onReload();
-        }
         if ($this->__state && $this->__state != $stateInstance) {
             $this->__state->onExit();
             $this->stateUpdater->setEnteredAt(null);
         }
         if (!$this->stateUpdater->getEnteredAt()) {
-            $stateInstance->reset();
             $stateInstance->onEnter();
             $this->stateUpdater->setEnteredAt(Carbon::now());
         }

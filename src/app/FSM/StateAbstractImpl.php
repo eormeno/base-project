@@ -17,28 +17,11 @@ abstract class StateAbstractImpl implements IState
     protected IStateContext $context;
     //protected array $arrStrChildrenVID = [];
     private IStateModel $_model;
-    public bool $need_restoring = false;
     public Carbon|null $enteredAt = null;
 
     public static function StateClass(): ReflectionClass
     {
         return new ReflectionClass(static::class);
-    }
-
-    public function reset(): void
-    {
-        $this->_model->children = [];
-        $this->_model->save(); // phpcs:ignore
-    }
-
-    public function isNeedRestoring(): bool
-    {
-        return $this->need_restoring;
-    }
-
-    public function setNeedRestoring(bool $value): void
-    {
-        $this->need_restoring = $value;
     }
 
     public function setStateModel(IStateModel $model)
@@ -207,7 +190,7 @@ abstract class StateAbstractImpl implements IState
 
     private function publicPropertiesToArray(): array
     {
-        $exclude = ['context', 'arrStrChildrenVID', 'need_restoring'];
+        $exclude = ['context', 'arrStrChildrenVID'];
         $properties = get_object_vars($this);
         $array = [];
         foreach ($properties as $key => $value) {

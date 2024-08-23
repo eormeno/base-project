@@ -7,8 +7,6 @@ use ReflectionClass;
 interface IState
 {
     public static function StateClass(): ReflectionClass;
-    public function isNeedRestoring(): bool;
-    public function setNeedRestoring(bool $value): void;
     public function setContext(IStateContext $content);
     public function setStateModel(IStateModel $model);
     public function getStateModel(): IStateModel;
@@ -20,7 +18,6 @@ interface IState
     public function passTo();
     public function handleRequest(array $event): ReflectionClass;
     public function view(string $controllerKebabCaseName);
-    public function reset(): void;
     public function addChild(IStateModel $model, string $viewId): string;
     public function removeChild(string $strAlias): void;
     public function addChilren(array $models, string $viewId): array;

@@ -138,7 +138,6 @@ class StateManager
     public final function statesViews(IStateModel $rootModel, array $eventInfo)
     {
         $currentTimestamp = microtime(true);
-        $this->logEventRendered($eventInfo);
         $this->enqueueEvent($eventInfo);
         $this->arrStatesMap = $this->activeStates($rootModel);
         $this->log("Server had " . count($this->arrStatesMap) . " cached renderings");
@@ -147,7 +146,7 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            $this->logEvent($eventInfo, true);
+            // $this->logEvent($eventInfo, true);
             if ($destination != 'all') {
                 $this->doRequest($destination, $eventInfo);
             } else {
@@ -240,7 +239,7 @@ class StateManager
         }
         // ACÁ ENVIARÁ TODOS LOS ELEMENTOS ACTIVOS AL CLIENTE
         $arrViews['actives'] = $this->activeStates($rootModel, true);
-        // $this->log("Actives: " . implode(', ', $arrViews['actives']));
+        $this->log("Actives: " . implode(', ', $arrViews['actives']));
         // $tree = $this->getTree();
         // foreach ($tree as $strAlias) {
         //     $view = $this->arrStatesMap[$strAlias]['view'];
