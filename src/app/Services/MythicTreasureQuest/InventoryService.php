@@ -26,6 +26,13 @@ class InventoryService extends AbstractServiceComponent
         return $this->gameRepository->getGame()->mtqInventories()->first();
     }
 
+    public function availableItems(): array
+    {
+        return $this->getInventory()->mtqGameItems()->get()->filter(function ($item) {
+            return $item->quantity > 0;
+        })->all();
+    }
+
     public function decrementItemBySlug(string $slug): MtqGameItem | null
     {
         $itemTypeInfo = $this->mtqItemClassRepository->getItemInfoBySlug($slug);
