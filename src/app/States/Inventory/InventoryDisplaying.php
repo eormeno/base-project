@@ -8,7 +8,7 @@ use App\FSM\StateAbstractImpl;
 class InventoryDisplaying extends StateAbstractImpl
 {
     public array $items = [];
-    public int $itemsCount = 0;
+    public int $itemsCount = 3;
     public ?MtqInventory $model = null;
 
     public function onEnter(): void

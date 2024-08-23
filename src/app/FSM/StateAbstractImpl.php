@@ -125,6 +125,12 @@ abstract class StateAbstractImpl implements IState
         $this->context = $content;
     }
 
+    public function reset(): void
+    {
+        $this->_model->children = [];
+        $this->_model->save(); // phpcs:ignore
+    }
+
     #region Callbacks
     public function onReload(): void
     {

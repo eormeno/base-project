@@ -7,7 +7,6 @@ use ReflectionClass;
 use App\FSM\IStateModel;
 use App\Utils\Constants;
 use App\FSM\IStateContext;
-use App\Traits\DebugHelper;
 use Illuminate\Support\Carbon;
 use App\Helpers\StatesLocalCache;
 use App\Helpers\StateUpdateHelper;
@@ -16,7 +15,6 @@ use App\Services\AbstractServiceComponent;
 
 class StateContextImpl extends AbstractServiceComponent implements IStateContext
 {
-    use DebugHelper;
     protected ?IState $__state = null;
     protected AbstractServiceManager $serviceManager;
     protected StateUpdateHelper $stateUpdater;
@@ -46,6 +44,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $this->stateUpdater->setEnteredAt(null);
         }
         if (!$this->stateUpdater->getEnteredAt()) {
+            $stateInstance->reset();
             $stateInstance->onEnter();
             $this->stateUpdater->setEnteredAt(Carbon::now());
         }
