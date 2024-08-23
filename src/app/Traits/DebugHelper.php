@@ -46,4 +46,14 @@ trait DebugHelper
         $this->log(json_encode($eventInfo));
     }
 
+    public function logEventRendered(array $eventInfo)
+    {
+        $rendered = $eventInfo['rendered'] ?? [];
+        $strRenderedLog = 'empty';
+        if (!empty($rendered)) {
+            $strRenderedLog = implode(",", $rendered);
+        }
+        $this->log("Client rendered: $strRenderedLog");
+    }
+
 }

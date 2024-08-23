@@ -108,9 +108,9 @@ function sendEvent(event, formData = {}, signal = false) {
                             element.innerHTML = $html;
                             runScripts(element);
                             elementsUpdated++;
-                            if (!arrClientRenderings.includes(key)) {
-                                arrClientRenderings.push(key);
-                            }
+                            // if (!arrClientRenderings.includes(key)) {
+                            //     arrClientRenderings.push(key);
+                            // }
                             arrCachedViews[key] = $html;
                         } else {
                             elementsNotFound.push(key);
@@ -121,6 +121,7 @@ function sendEvent(event, formData = {}, signal = false) {
 
                     // store the array of objects in local storage
                     localStorage.setItem('rootId', rootId);
+                    arrClientRenderings = json['actives'];
                     localStorage.setItem('rendered', JSON.stringify(arrClientRenderings));
                     cleanUnusedViews(json['actives']);
                     localStorage.setItem('cached', JSON.stringify(arrCachedViews));
