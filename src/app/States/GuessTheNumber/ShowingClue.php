@@ -14,11 +14,6 @@ class ShowingClue extends StateAbstractImpl
     public string $yes_i_accept_the_challenge = "";
     public string $another_challenge = "";
 
-    public function onReload(): void
-    {
-        $this->onEnter();
-    }
-
     public function onRefresh(): void
     {
         $this->title = $this->context->messageService->title();

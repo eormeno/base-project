@@ -10,9 +10,7 @@ interface IState
     public function setContext(IStateContext $content);
     public function setStateModel(IStateModel $model);
     public function getStateModel(): IStateModel;
-    public function onReload(): void;
     public function reset(): void;
-    public function onSave(): void;
     public function onEnter(): void;
     public function onRefresh(): void;
     public function onExit(): void;

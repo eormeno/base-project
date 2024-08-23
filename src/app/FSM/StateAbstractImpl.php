@@ -132,14 +132,6 @@ abstract class StateAbstractImpl implements IState
     }
 
     #region Callbacks
-    public function onReload(): void
-    {
-    }
-
-    public function onSave(): void
-    {
-    }
-
     public function onEnter(): void
     {
     }

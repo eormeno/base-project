@@ -9,11 +9,6 @@ class GameOver extends StateAbstractImpl
     public string $notification = "";
     public string $subtitle = "";
 
-    public function onReload(): void
-    {
-        $this->onEnter();
-    }
-
     public function onEnter(): void
     {
         $this->notification = $this->context->messageService->gameOverMessage();

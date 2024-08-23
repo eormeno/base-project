@@ -11,11 +11,6 @@ class Success extends StateAbstractImpl
     public string $current_score = "";
     public string $historic_score = "";
 
-    public function onReload(): void
-    {
-        $this->onEnter();
-    }
-
     public function onEnter(): void
     {
         $this->notification = $this->context->messageService->successMessage();

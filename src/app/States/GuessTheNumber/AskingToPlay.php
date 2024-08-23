@@ -10,11 +10,6 @@ class AskingToPlay extends StateAbstractImpl
     public string $yes_i_accept_the_challenge = "";
     public array $ranking = [];
 
-    public function onReload(): void
-    {
-        $this->onEnter();
-    }
-
     public function onEnter(): void
     {
         $this->description = $this->context->messageService->welcomeMessage();
