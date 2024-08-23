@@ -5,6 +5,7 @@
 namespace App\Models;
 
 use ReflectionClass;
+use App\FSM\IStateModel;
 use App\States\Tile\Hidden;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,11 @@ class MtqTile extends AStateModel
     public function mtqMap(): BelongsTo
     {
         return $this->belongsTo(MtqMap::class);
+    }
+
+    public function parent(): IStateModel|null
+    {
+        return $this->mtqMap;
     }
 
     public function isRevealed(): bool

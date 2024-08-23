@@ -5,6 +5,7 @@
 namespace App\Models;
 
 use ReflectionClass;
+use App\FSM\IStateModel;
 use App\States\MythicTreasureQuest\Initial;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,11 @@ class MtqGame extends AStateModel
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function parent(): IStateModel | null
+    {
+        return null;
     }
 
     public function mtqMaps(): HasOne

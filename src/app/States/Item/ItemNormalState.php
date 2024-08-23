@@ -37,6 +37,11 @@ class ItemNormalState extends StateAbstractImpl
             $this->errorToast('No available clues!');
             return;
         }
+        if ($item->quantity === 0) {
+            $this->warningToast('No more clues!');
+            $this->requireRefresh();
+            return;
+        }
         if ($this->context->gameService->showClue() === false) {
             $this->errorToast('No available tiles to show clue!');
             return;

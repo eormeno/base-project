@@ -5,6 +5,7 @@
 namespace App\Models;
 
 use ReflectionClass;
+use App\FSM\IStateModel;
 use App\States\Inventory\InventoryDisplaying;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,11 @@ class MtqInventory extends AStateModel
     public function mtqGame() : BelongsTo
     {
         return $this->belongsTo(MtqGame::class);
+    }
+
+    public function parent(): IStateModel|null
+    {
+        return $this->mtqGame;
     }
 
     public function mtqGameItems(): HasMany

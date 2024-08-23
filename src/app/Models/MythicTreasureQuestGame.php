@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use ReflectionClass;
+use App\FSM\IStateModel;
 use App\States\MythicTreasureQuest\Initial;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,5 +32,10 @@ class MythicTreasureQuestGame extends AStateModel
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function parent(): IStateModel|null
+    {
+        return null;
     }
 }
