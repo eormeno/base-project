@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 # Check if docker is installed
 function check_docker() {
     if ! [ -x "$(command -v docker)" ]; then
