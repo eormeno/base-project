@@ -2,6 +2,7 @@
 
 namespace App\FSM;
 
+use App\Traits\DebugHelper;
 use Exception;
 use ReflectionClass;
 use App\Traits\ToastTrigger;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 abstract class StateAbstractImpl implements IState
 {
     use ToastTrigger;
+    use DebugHelper;
 
     protected IStateContext $context;
     //protected array $arrStrChildrenVID = [];
@@ -163,9 +165,13 @@ abstract class StateAbstractImpl implements IState
             }
             return $rfl_class;
         }
+        // TODO: REVIEW THIS PART
         if ($destination != 'all') {
             if ($source != $destination) {
-                return $this->passTo();
+                if ($event === 'refresh') {
+                    return $this->passTo();
+                }
+                // $this->log(">>> Event '$event' from $source to $destination");
             }
         }
         $method = 'on' . CaseConverters::snakeToPascal($event) . 'Event';
@@ -212,8 +218,24 @@ abstract class StateAbstractImpl implements IState
             $modelOrAlias = $modelOrAlias ?? $this->_model;
             $strAlias = $modelOrAlias->getAlias();
         }
-        // TODO: acá hay problemas con el stateManager porque hace referencia a un objeto diferente
         $this->context->stateManager->requireRefresh($strAlias);
+    }
+
+    protected function sendEventTo(string $event, IStateModel|string $destinationModelOrAlias, array $data = [])
+    {
+        $strDestinationAlias = '';
+        if (is_string($destinationModelOrAlias)) {
+            $strDestinationAlias = $destinationModelOrAlias;
+        } else {
+            $strDestinationAlias = $destinationModelOrAlias->getAlias();
+        }
+        $this->context->stateManager->enqueueEvent([
+            'event' => $event,
+            'is_signal' => false,
+            'source' => $this->_model->getAlias(),
+            'data' => $data,
+            'destination' => $strDestinationAlias
+        ]);
     }
 
     protected function sendSignal(string $event, array $data = [])

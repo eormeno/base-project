@@ -147,7 +147,7 @@ class StateManager
         reset($this->eventQueue);
         while ($eventInfo = current($this->eventQueue)) {
             $destination = $eventInfo['destination'];
-            // $this->logEvent($eventInfo, true);
+            $this->logEvent($eventInfo, true);
             if ($destination != 'all') {
                 $this->doRequest($destination, $eventInfo);
             } else {

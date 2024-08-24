@@ -4,6 +4,7 @@ namespace App\States\Item;
 
 use App\Models\MtqGameItem;
 use App\FSM\StateAbstractImpl;
+use App\Models\MtqInventory;
 use App\Traits\DebugHelper;
 
 class ItemNormalState extends StateAbstractImpl
@@ -33,21 +34,21 @@ class ItemNormalState extends StateAbstractImpl
     private function doClue(): void
     {
         $item = $this->context->inventoryService->decrementItemBySlug('clue');
+        $this->quantity = $item->quantity;
+        $this->requireRefresh();
         if (!$item) {
             $this->errorToast('No available clues!');
             return;
         }
+        if ($this->context->gameService->showClue() === false) {
+            $this->warningToast('No available tiles to show clue!');
+            return;
+        }
         if ($item->quantity === 0) {
             $this->warningToast('No more clues!');
-            $this->requireRefresh();
-            return;
+            $inventory = $this->context->inventoryService->getInventory();
+            $this->sendEventTo('modificado', $inventory);
         }
-        if ($this->context->gameService->showClue() === false) {
-            $this->errorToast('No available tiles to show clue!');
-            return;
-        }
-        $this->quantity = $item->quantity;
-        $this->requireRefresh();
     }
 
     public function onRefresh(): void
