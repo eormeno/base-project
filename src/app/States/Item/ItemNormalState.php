@@ -34,8 +34,6 @@ class ItemNormalState extends StateAbstractImpl
     private function doClue(): void
     {
         $item = $this->context->inventoryService->decrementItemBySlug('clue');
-        $this->quantity = $item->quantity;
-        $this->requireRefresh();
         if (!$item) {
             $this->errorToast('No available clues!');
             return;
@@ -49,6 +47,8 @@ class ItemNormalState extends StateAbstractImpl
             $inventory = $this->context->inventoryService->getInventory();
             $this->sendEventTo('modificado', $inventory);
         }
+        $this->quantity = $item->quantity;
+        $this->requireRefresh();
     }
 
     public function onRefresh(): void
