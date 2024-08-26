@@ -94,5 +94,10 @@ class Item implements JsonSerializable, IStateModel
     {
         $this->entered_at = $enteredAt;
     }
+
+    public function parent(): IStateModel|null
+    {
+        return null;
+    }
     #endregion
 }

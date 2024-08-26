@@ -154,4 +154,9 @@ class Map implements JsonSerializable, IStateModel
             'entered_at' => $this->enteredAt
         ];
     }
+
+    public function parent(): IStateModel|null
+    {
+        return null;
+    }
 }

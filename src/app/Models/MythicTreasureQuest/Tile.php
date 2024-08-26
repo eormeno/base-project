@@ -184,4 +184,9 @@ class Tile implements JsonSerializable, IStateModel
         ];
     }
 
+    public function parent(): IStateModel|null
+    {
+        return null;
+    }
+
 }
