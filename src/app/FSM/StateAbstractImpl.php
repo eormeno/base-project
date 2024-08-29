@@ -44,6 +44,8 @@ abstract class StateAbstractImpl implements IState
             foreach ($children as $viewId => $strAlias) {
                 if (property_exists($this, $viewId)) {
                     $this->$viewId = $strAlias;
+                    $str = is_array($strAlias) ? implode(',', $strAlias) : $strAlias;
+                    $this->log("Restored child $str to $viewId");
                 }
             }
         }
@@ -120,6 +122,11 @@ abstract class StateAbstractImpl implements IState
             }
         }
         return $ret;
+    }
+
+    public function getSubStates(): array
+    {
+        return [];
     }
 
     public function setContext(IStateContext $content)

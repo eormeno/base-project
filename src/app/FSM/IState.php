@@ -21,4 +21,5 @@ interface IState
     public function removeChild(string $strAlias): void;
     public function addChilren(array $models, string $viewId): array;
     public function getChildren(): array;
+    public function getSubStates(): array;
 }

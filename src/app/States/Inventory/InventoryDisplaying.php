@@ -14,6 +14,13 @@ class InventoryDisplaying extends StateAbstractImpl
         $this->items = $this->addChilren($items, 'items');
     }
 
+    public function getSubStates(): array
+    {
+        return [
+            'items' => $this->items,
+        ];
+    }
+
     public function onModificadoEvent()
     {
         // $this->reset();
