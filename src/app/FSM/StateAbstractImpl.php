@@ -2,14 +2,13 @@
 
 namespace App\FSM;
 
-use App\Traits\DebugHelper;
 use Exception;
 use ReflectionClass;
+use App\Traits\DebugHelper;
 use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
 abstract class StateAbstractImpl implements IState
 {
@@ -124,9 +123,8 @@ abstract class StateAbstractImpl implements IState
         return $ret;
     }
 
-    public function getSubStates(): array
+    public function defineSubStates(): void
     {
-        return [];
     }
 
     public function setContext(IStateContext $content)

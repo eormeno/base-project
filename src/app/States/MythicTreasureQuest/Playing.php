@@ -11,6 +11,8 @@ class Playing extends StateAbstractImpl
     public int $height = 8;
     public string $strMapVID = '';
     public string $strInventoryVID = '';
+    protected $subsMap;
+    protected $subsInventory;
 
     public function onEnter(): void
     {
@@ -20,6 +22,12 @@ class Playing extends StateAbstractImpl
         $this->strMapVID = $this->addChild($map, 'strMapVID');
         $inventory = $this->context->inventoryService->getInventory();
         $this->strInventoryVID = $this->addChild($inventory, 'strInventoryVID');
+    }
+
+    public function defineSubStates(): void
+    {
+        $this->subsMap = $this->context->mapService->getMap();
+        $this->subsInventory = $this->context->inventoryService->getInventory();
     }
 
     public function onFlagEvent()
