@@ -40,12 +40,12 @@ abstract class StateAbstractImpl implements IState
     private function restoreChildren(): void
     {
         $children = $this->_model->children; // phpcs:ignore
+        $modelName = $this->_model->getAlias();
         if ($children) {
             foreach ($children as $viewId => $strAlias) {
                 if (property_exists($this, $viewId)) {
                     $this->$viewId = $strAlias;
-                    $str = is_array($strAlias) ? implode(',', $strAlias) : $strAlias;
-                    $this->log("Restored child $str to $viewId");
+                    $this->log("Restored $modelName->$$viewId");
                 }
             }
         }

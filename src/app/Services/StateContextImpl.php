@@ -36,6 +36,9 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     private function setState(ReflectionClass $rflStateClass): IState
     {
+        if ($this->__state && $this->__state::StateClass() == $rflStateClass) {
+            return $this->__state;
+        }
         $stateInstance = StatesLocalCache::getStateInstance($rflStateClass, $this->id);
         $stateInstance->setContext($this);
         $stateInstance->setStateModel($this->object);
@@ -75,7 +78,8 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
                 $firstTime = false;
                 $initialState = $currentState;
             }
-            $changedState = $this->setState($currentState->handleRequest($eventInfo));
+            $newState = $currentState->handleRequest($eventInfo);
+            $changedState = $this->setState($newState);
             $hasIntermediateChange |= $currentState != $changedState;
             $this->stateUpdater->saveState($changedState::StateClass());
             $eventInfo = Constants::EMPTY_EVENT;
