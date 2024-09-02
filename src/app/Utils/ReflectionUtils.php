@@ -75,4 +75,10 @@ class ReflectionUtils
         $parametersValues = self::getMethodParametersValues($state_instance, $method, $data);
         return $reflection->getMethod($method)->invokeArgs($state_instance, $parametersValues);
     }
+
+    public static function getVariableName($variable) : string
+    {
+        $reflection = new ReflectionClass($variable);
+        return $reflection->getShortName();
+    }
 }
