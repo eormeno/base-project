@@ -7,6 +7,14 @@
   - [Windows *PowerShell* scripts](#windows-powershell-scripts)
   - [Linux docker scripts](#linux-scripts)
 
+## Introducción
+El framework **UIStates** es un proyecto de código abierto que busca facilitar la creación de interfaces de usuario en aplicaciones web.
+La idea es gestionar el estado y la persistencia de la UI en el servidor.
+Toda UI consiste en un árbol de componentes, cada uno con su propio estado y propiedades. 
+IStateModel le otorga a los objetos de un Modelo Eloquent la capacidad de gestionar sus estados y persistirlos en la base de datos.
+La gestión de estados se realiza aplicando el [Patrón de diseño State](https://blog.stackademic.com/state-pattern-in-php-1271069355e5). El cual permite a un objeto alterar su comportamiento cuando su estado interno cambia, de forma que en apariencia, el objeto cambió de clase.
+Cuando hablemos de IState (StateAbstractImpl), nos estamos refiriendo a una clase base que le permite a cada estado de un objeto, definir su comportamiento y transiciones, en respuesta a eventos.
+A su vez, cada estado de un objeto, es una vista de ese objeto. Es decir, que toma distinta información del mismo objeto UI y la muestra de forma distinta.
 ### Configuration
 This project can be configured to run in a local environment or in a production environment. The configuration is done through the `.env` file located in the `src` folder.
 The `.env` file is used to store environment variables for the project. It is used by the `docker-compose.yml` file to set the environment variables for the containers. The `.env` file is not included in the repository for security reasons. To set up the `.env` file, follow the steps below:

@@ -55,16 +55,6 @@ abstract class StateAbstractImpl implements IState
         return $this->_model;
     }
 
-    public function defineSubState(IStateModel $subState, &$localVariable): void
-    {
-        $localVariableName = ReflectionUtils::getVariableName($localVariable);
-        $this->log("Defining substate $localVariableName");
-    }
-
-    public function defineSubstates(): void
-    {
-    }
-
     public function addChild(IStateModel $child, string $viewId): string
     {
         if (!($child instanceof IStateModel)) {

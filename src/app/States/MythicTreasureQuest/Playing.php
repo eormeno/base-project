@@ -17,7 +17,6 @@ class Playing extends StateAbstractImpl
         $map = $this->context->mapService->getMap();
         $this->width = $map->width;
         $this->height = $map->height;
-        $this->defineSubState($map, $this->strMapVID);
         $this->strMapVID = $this->addChild($map, 'strMapVID');
         $inventory = $this->context->inventoryService->getInventory();
         $this->strInventoryVID = $this->addChild($inventory, 'strInventoryVID');
