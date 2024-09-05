@@ -11,6 +11,8 @@ class Playing extends StateAbstractImpl
     public int $height = 8;
     public string $strMapVID = '';
     public string $strInventoryVID = '';
+    protected string $mtqMaps;
+    protected string $mtqInventories;
 
     public function onEnter(): void
     {
