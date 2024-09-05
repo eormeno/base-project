@@ -2,14 +2,14 @@
 
 namespace App\States\GuessTheNumber;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 use App\Exceptions\GuessTheNumber\FailException;
 use App\Exceptions\GuessTheNumber\InfoException;
 use App\Exceptions\GuessTheNumber\SuccessException;
 use App\Exceptions\GuessTheNumber\GameOverException;
 use App\Exceptions\GuessTheNumber\NotInRangeException;
 
-class Playing extends StateAbstractImpl
+class Playing extends AState
 {
     public string $notification = "";
 

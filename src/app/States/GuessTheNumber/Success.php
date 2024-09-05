@@ -2,9 +2,9 @@
 
 namespace App\States\GuessTheNumber;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class Success extends StateAbstractImpl
+class Success extends AState
 {
     public string $notification = "";
     public string $subtitle = "";

@@ -2,9 +2,9 @@
 
 namespace App\States\MythicTreasureQuest;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class GameOver extends StateAbstractImpl
+class GameOver extends AState
 {
     public int $width = 8;
     public int $height = 8;

@@ -2,9 +2,9 @@
 
 namespace App\States\MythicTreasureQuest;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-abstract class APlayingStates extends StateAbstractImpl
+abstract class APlayingStates extends AState
 {
     public int $width = 8;
     public int $height = 8;

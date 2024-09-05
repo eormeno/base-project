@@ -2,9 +2,9 @@
 
 namespace App\States\GuessTheNumber;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class Preparing extends StateAbstractImpl
+class Preparing extends AState
 {
     public function onEnter(): void
     {

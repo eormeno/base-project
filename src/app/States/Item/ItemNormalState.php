@@ -3,11 +3,11 @@
 namespace App\States\Item;
 
 use App\Models\MtqGameItem;
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 use App\Models\MtqInventory;
 use App\Traits\DebugHelper;
 
-class ItemNormalState extends StateAbstractImpl
+class ItemNormalState extends AState
 {
     use DebugHelper;
 

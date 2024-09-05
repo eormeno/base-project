@@ -10,7 +10,7 @@ use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use Illuminate\Support\Carbon;
 
-abstract class StateAbstractImpl implements IState
+abstract class AState implements IState
 {
     use ToastTrigger;
     use DebugHelper;

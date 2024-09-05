@@ -2,9 +2,9 @@
 
 namespace App\States\Inventory;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class InventoryDisplaying extends StateAbstractImpl
+class InventoryDisplaying extends AState
 {
     public array $items = [];
 

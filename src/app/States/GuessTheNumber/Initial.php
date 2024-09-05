@@ -2,9 +2,9 @@
 
 namespace App\States\GuessTheNumber;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class Initial extends StateAbstractImpl
+class Initial extends AState
 {
     public function passTo()
     {

@@ -3,9 +3,9 @@
 namespace App\States\Tile;
 
 use App\Models\MtqTile;
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class Hidden extends StateAbstractImpl
+class Hidden extends AState
 {
     public ?MtqTile $model = null;
 

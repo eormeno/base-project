@@ -2,9 +2,9 @@
 
 namespace App\States\GuessTheNumber;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 
-class AskingToPlay extends StateAbstractImpl
+class AskingToPlay extends AState
 {
     public string $description = "";
     public string $yes_i_accept_the_challenge = "";

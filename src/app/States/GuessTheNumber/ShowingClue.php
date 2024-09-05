@@ -2,10 +2,10 @@
 
 namespace App\States\GuessTheNumber;
 
-use App\FSM\StateAbstractImpl;
+use App\FSM\AState;
 use App\Traits\DebugHelper;
 
-class ShowingClue extends StateAbstractImpl
+class ShowingClue extends AState
 {
     use DebugHelper;
     public string $title = "";
