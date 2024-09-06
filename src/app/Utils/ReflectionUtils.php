@@ -2,8 +2,10 @@
 
 namespace App\Utils;
 
+use Throwable;
 use ReflectionClass;
 use ReflectionMethod;
+use Illuminate\Database\Eloquent\Model;
 
 class ReflectionUtils
 {
@@ -76,9 +78,51 @@ class ReflectionUtils
         return $reflection->getMethod($method)->invokeArgs($state_instance, $parametersValues);
     }
 
-    public static function getVariableName($variable) : string
+    public static function getModelAttributeNames(Model $object)
     {
-        $reflection = new ReflectionClass($variable);
-        return $reflection->getShortName();
+        $attributeNames = [];
+        // add the accessor attributes
+        $accessors = $object->getMutatedAttributes();
+        foreach ($accessors as $accessor) {
+            $attributeNames[] = $accessor;
+        }
+        // add the appended attributes
+        $appends = $object->getAppends();
+        foreach ($appends as $append) {
+            $attributeNames[] = $append;
+        }
+        // add the fillable attributes
+        $fillable = $object->getFillable();
+        foreach ($fillable as $fill) {
+            $attributeNames[] = $fill;
+        }
+        // add the relations
+        $relations = self::getModelRelations($object);
+        foreach ($relations as $relation) {
+            $attributeNames[] = $relation;
+        }
+        return $attributeNames;
     }
+
+    public static function getModelRelations(Model $model)
+    {
+        $relations = [];
+        $reflection = new ReflectionClass($model);
+        $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
+        foreach ($methods as $method) {
+            if ($method->getNumberOfParameters() > 0) {
+                continue; // No queremos métodos con parámetros.
+            }
+            $returnType = $method->getReturnType();
+            if ($returnType === null) {
+                continue; // No queremos métodos sin tipo de retorno.
+            }
+            // Si el tipo de retorno es una subclase de Illuminate\Database\Eloquent\Relations\Relation
+            if (is_subclass_of($returnType->getName(), 'Illuminate\Database\Eloquent\Relations\Relation')) {
+                $relations[] = $method->name;
+            }
+        }
+        return $relations;
+    }
+
 }

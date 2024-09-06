@@ -29,10 +29,13 @@ abstract class AState implements IState
     {
         // search the 'model' property in the class
         $properties = get_object_vars($this);
+        $modelProperties = ReflectionUtils::getModelAttributeNames($model);
+        $this->log($model->getAlias() . ' ' . json_encode($modelProperties));
         if (array_key_exists('model', $properties)) {
             $this->model = $model;
         }
         $this->_model = $model;
+
         $this->restoreChildren();
     }
 

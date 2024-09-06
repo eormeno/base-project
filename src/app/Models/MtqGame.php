@@ -37,6 +37,16 @@ class MtqGame extends AStateModel
         return null;
     }
 
+    public function getWidthAttribute(): int
+    {
+        return $this->mtqMaps->width;
+    }
+
+    public function getHeightAttribute(): int
+    {
+        return $this->mtqMaps->height;
+    }
+
     public function mtqMaps(): HasOne
     {
         return $this->hasOne(MtqMap::class);

@@ -7,8 +7,8 @@ use App\FSM\AState;
 
 class Playing extends AState
 {
-    public int $width = 8;
-    public int $height = 8;
+    protected int $width = 8;
+    protected int $height = 8;
     public string $strMapVID = '';
     public string $strInventoryVID = '';
     protected string $mtqMaps;
