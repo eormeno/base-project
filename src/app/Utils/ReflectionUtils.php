@@ -2,10 +2,11 @@
 
 namespace App\Utils;
 
-use Throwable;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class ReflectionUtils
 {
@@ -96,12 +97,54 @@ class ReflectionUtils
         foreach ($fillable as $fill) {
             $attributeNames[] = $fill;
         }
-        // add the relations
-        $relations = self::getModelRelations($object);
-        foreach ($relations as $relation) {
-            $attributeNames[] = $relation;
-        }
         return $attributeNames;
+    }
+
+    public static function getShortClassName($object)
+    {
+        $reflection = new ReflectionClass($object);
+        return $reflection->getShortName();
+    }
+
+    /**
+     * Given a Model and an object, copy the values of the model's attributes attributes with the same name
+     * in the object.
+     */
+    public static function copyModelAttributes(Model $model, $object)
+    {
+        // copy the attributes
+        $attributeNames = self::getModelAttributeNames($model);
+        foreach ($attributeNames as $attribute) {
+            if (property_exists($object, $attribute)) {
+                $object->$attribute = $model->$attribute;
+            }
+        }
+        // copy the relations
+        $relations = self::getModelRelations($model);
+        foreach ($relations as $relation) {
+            if (property_exists($object, $relation)) {
+                $value = $model->$relation;
+                if ($value instanceof Model) {
+                    $object->$relation = $value->getAlias();
+                } else if ($value instanceof Collection) {
+                    $object->$relation = $value->map(function ($item) {
+                        return $item->getAlias();
+                    })->toArray();
+                }
+            }
+        }
+    }
+
+    public static function getProtectedProperties($object)
+    {
+        // get all the protected variables
+        $reflection = new ReflectionClass($object);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PROTECTED);
+        $protectedProperties = [];
+        foreach ($properties as $property) {
+            $protectedProperties[] = $property->name;
+        }
+        return $protectedProperties;
     }
 
     public static function getModelRelations(Model $model)

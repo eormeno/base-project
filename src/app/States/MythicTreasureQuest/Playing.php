@@ -7,22 +7,27 @@ use App\FSM\AState;
 
 class Playing extends AState
 {
-    protected int $width = 8;
-    protected int $height = 8;
+    public int $width;
+    public int $height;
     public string $strMapVID = '';
     public string $strInventoryVID = '';
-    protected string $mtqMaps;
-    protected string $mtqInventories;
+    public string $mtqMaps;
+    public string $mtqInventories;
 
     public function onEnter(): void
     {
         $map = $this->context->mapService->getMap();
-        $this->width = $map->width;
-        $this->height = $map->height;
+        //$this->width = $map->width;
+        //$this->height = $map->height;
         $this->strMapVID = $this->addChild($map, 'strMapVID');
         $inventory = $this->context->inventoryService->getInventory();
         $this->strInventoryVID = $this->addChild($inventory, 'strInventoryVID');
     }
+
+    // public function onRefresh(): void {
+    //     $this->log($this->strMapVID . ' ' . $this->strInventoryVID);
+    //     $this->log($this->mtqMaps . ' ' . $this->mtqInventories);
+    // }
 
     public function onFlagEvent()
     {
