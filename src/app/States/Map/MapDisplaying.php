@@ -6,8 +6,8 @@ use App\FSM\AState;
 
 class MapDisplaying extends AState
 {
-    public int $width;
-    public int $height;
+    public int $width = 8;
+    public int $height = 8;
     public array $strArrTilesVID = [];
     public array $tiles = [];
 

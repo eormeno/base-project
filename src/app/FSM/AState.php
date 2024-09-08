@@ -9,6 +9,7 @@ use App\Traits\ToastTrigger;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use Illuminate\Support\Carbon;
+use App\Helpers\StateModelReflect;
 
 abstract class AState implements IState
 {
@@ -27,9 +28,7 @@ abstract class AState implements IState
 
     public function setStateModel(IStateModel $model)
     {
-        //$protectedProperties = ReflectionUtils::getProtectedProperties($this);
-        //$modelProperties = ReflectionUtils::getModelAttributeNames($model);
-        ReflectionUtils::copyModelAttributes($model, $this);
+        StateModelReflect::copyModelAttributes($model, $this);
 
         // search the 'model' property in the class
         $properties = get_object_vars($this);
