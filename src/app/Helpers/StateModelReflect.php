@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use ReflectionClass;
 use ReflectionMethod;
+use App\FSM\IStateModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -34,12 +35,15 @@ class StateModelReflect
         }
     }
 
-    public static function treeOfChildren(Model $model, array &$tree = [])
+    public static function treeOfChildren(IStateModel $model, array &$tree = [])
     {
+        if (in_array($model->getAlias(), $tree)) {
+            return;
+        }
         $relations = self::getModelRelations($model);
         foreach ($relations as $relation) {
             $value = $model->$relation;
-            if ($value instanceof Model) {
+            if ($value instanceof IStateModel) {
                 $tree[] = $value->getAlias();
                 self::treeOfChildren($value, $tree);
             } else if ($value instanceof Collection) {

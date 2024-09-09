@@ -22,8 +22,8 @@ class MapDisplaying extends AState
 
     public function onRefresh(): void
     {
-        $this->log("MapDisplaying::onRefresh");
-        $this->log("width: $this->width, height: $this->height");
-        $this->log(json_encode($this->tiles));
+        // $this->log("MapDisplaying::onRefresh");
+        // $this->log("width: $this->width, height: $this->height");
+        // $this->log(json_encode($this->tiles));
     }
 }
