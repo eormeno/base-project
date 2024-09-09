@@ -21,14 +21,9 @@ class MtqInventory extends AStateModel
         'view',
     ];
 
-    public function mtqGame() : BelongsTo
+    public function mtqGame(): BelongsTo
     {
         return $this->belongsTo(MtqGame::class);
-    }
-
-    public function parent(): IStateModel|null
-    {
-        return $this->mtqGame;
     }
 
     public function mtqGameItems(): HasMany

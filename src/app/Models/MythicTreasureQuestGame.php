@@ -33,9 +33,4 @@ class MythicTreasureQuestGame extends AStateModel
     {
         return $this->belongsTo(User::class);
     }
-
-    public function parent(): IStateModel|null
-    {
-        return null;
-    }
 }

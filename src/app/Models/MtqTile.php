@@ -27,16 +27,6 @@ class MtqTile extends AStateModel
         'traps_around',
     ];
 
-    public function mtqMap(): BelongsTo
-    {
-        return $this->belongsTo(MtqMap::class);
-    }
-
-    public function parent(): IStateModel|null
-    {
-        return $this->mtqMap;
-    }
-
     public function isRevealed(): bool
     {
         return $this->state === 'revealed';

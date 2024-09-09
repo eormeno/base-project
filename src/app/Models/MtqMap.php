@@ -27,11 +27,6 @@ class MtqMap extends AStateModel
         return $this->belongsTo(MtqGame::class);
     }
 
-    public function parent(): IStateModel|null
-    {
-        return $this->mtqGame;
-    }
-
     public function tiles(): HasMany
     {
         return $this->hasMany(MtqTile::class);

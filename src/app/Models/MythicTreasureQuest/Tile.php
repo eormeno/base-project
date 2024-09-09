@@ -183,10 +183,4 @@ class Tile implements JsonSerializable, IStateModel
             'enteredAt' => $this->enteredAt,
         ];
     }
-
-    public function parent(): IStateModel|null
-    {
-        return null;
-    }
-
 }

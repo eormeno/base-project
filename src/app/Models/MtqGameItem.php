@@ -26,11 +26,6 @@ class MtqGameItem extends AStateModel
         return $this->belongsTo(MtqInventory::class);
     }
 
-    public function parent(): IStateModel|null
-    {
-        return $this->mtqInventory;
-    }
-
     public function mtqItemClass(): BelongsTo
     {
         return $this->belongsTo(MtqItemClass::class);

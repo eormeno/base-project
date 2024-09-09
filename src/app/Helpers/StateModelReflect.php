@@ -89,6 +89,10 @@ class StateModelReflect
             if ($returnType === null) {
                 continue; // No queremos métodos sin tipo de retorno.
             }
+            // Si el tipo de retorno es una relación BelongsTo, lo ignoramos.
+            if ($returnType->getName() === 'Illuminate\Database\Eloquent\Relations\BelongsTo') {
+                continue;
+            }
             // Si el tipo de retorno es una subclase de Illuminate\Database\Eloquent\Relations\Relation
             if (is_subclass_of($returnType->getName(), 'Illuminate\Database\Eloquent\Relations\Relation')) {
                 $relations[] = $method->name;

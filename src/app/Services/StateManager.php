@@ -326,14 +326,14 @@ class StateManager
             $activeStates[] = $alias;
         }
         $children = $this->getModelChildren($model);
-        $choldrens = [];
-        StateModelReflect::treeOfChildren($model, $choldrens);
-        if (!empty($choldrens)) {
-            $this->log("CHOLDREN of $alias: " . implode(', ', $choldrens));
-        }
-        if (!empty($children)) {
-            $this->log("Children of $alias: " . implode(', ', $children));
-        }
+        // $choldrens = [];
+        // StateModelReflect::treeOfChildren($model, $choldrens);
+        // if (!empty($choldrens)) {
+        //     $this->log("CHOLDREN of $alias: " . implode(', ', $choldrens));
+        // }
+        // if (!empty($children)) {
+        //     $this->log("Children of $alias: " . implode(', ', $children));
+        // }
         foreach ($children as $childAlias) {
             $childModel = AStateModel::modelOf($childAlias);
             $activeStates = array_merge($activeStates, $this->activeStates($childModel, $onlyAlias));

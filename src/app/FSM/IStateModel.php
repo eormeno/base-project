@@ -11,8 +11,6 @@ interface IStateModel
 
     public function getAlias(): string;
 
-    public function parent(): IStateModel | null;
-
     public static function getInitialStateClass(): ReflectionClass;
 
     public function getState(): string|null;
