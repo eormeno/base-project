@@ -34,6 +34,23 @@ class StateModelReflect
         }
     }
 
+    public static function treeOfChildren(Model $model, array &$tree = [])
+    {
+        $relations = self::getModelRelations($model);
+        foreach ($relations as $relation) {
+            $value = $model->$relation;
+            if ($value instanceof Model) {
+                $tree[] = $value->getAlias();
+                self::treeOfChildren($value, $tree);
+            } else if ($value instanceof Collection) {
+                $value->each(function ($item) use (&$tree) {
+                    $tree[] = $item->getAlias();
+                    self::treeOfChildren($item, $tree);
+                });
+            }
+        }
+    }
+
     public static function getModelAttributeNames(Model $object)
     {
         $attributeNames = [];
