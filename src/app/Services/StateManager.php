@@ -327,6 +327,7 @@ class StateManager
         }
         $children = $this->getModelChildren($model);
         // $choldrens = [];
+        // TODO: el problema es que los hijos del modelo dependen del estado del modelo
         // StateModelReflect::treeOfChildren($model, $choldrens);
         // if (!empty($choldrens)) {
         //     $this->log("CHOLDREN of $alias: " . implode(', ', $choldrens));
