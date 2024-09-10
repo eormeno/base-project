@@ -68,11 +68,6 @@ class User extends Authenticatable
         return $this->hasOne(GuessTheNumberGame::class);
     }
 
-    public function mythicTreasureQuestGames(): HasOne
-    {
-        return $this->hasOne(MythicTreasureQuestGame::class);
-    }
-
     public function mtqGames(): HasOne
     {
         return $this->hasOne(MtqGame::class);

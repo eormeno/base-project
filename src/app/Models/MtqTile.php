@@ -5,9 +5,11 @@
 namespace App\Models;
 
 use ReflectionClass;
-use App\FSM\IStateModel;
 use App\States\Tile\Hidden;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\States\Tile\Revealed;
+use App\States\Tile\FlaggedTile;
+use App\States\Tile\FlaggingTile;
+use App\States\Tile\GameOverTile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MtqTile extends AStateModel
@@ -26,6 +28,17 @@ class MtqTile extends AStateModel
         'marked_as_clue',
         'traps_around',
     ];
+
+    public static function states(): array
+    {
+        return [
+            Hidden::class,
+            FlaggedTile::class,
+            FlaggingTile::class,
+            GameOverTile::class,
+            Revealed::class,
+        ];
+    }
 
     public function isRevealed(): bool
     {

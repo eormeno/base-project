@@ -2,14 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\MtqMap;
 use App\Models\User;
 use App\Models\MtqGame;
 use App\Models\MtqItemClass;
 use Illuminate\Database\Seeder;
 use App\Models\GuessTheNumberGame;
-use App\Models\MythicTreasureQuestGame;
-use App\Models\MythicTreasureQuestItem;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,12 +20,10 @@ class DatabaseSeeder extends Seeder
             ['slug' => 'flag', 'name' => 'Flag', 'icon' => 'flag.svg', 'description' => 'Marking tool', 'default_quantity' => 8],
         ];
 
-        MythicTreasureQuestItem::factory()->createMany($items);
         MtqItemClass::factory()->createMany($items);
 
         User::factory()->adminUser()
             ->has(GuessTheNumberGame::factory())
-            ->has(MythicTreasureQuestGame::factory())
             ->has(MtqGame::factory())
             ->create();
 

@@ -22,6 +22,13 @@ class MtqMap extends AStateModel
         'view',
     ];
 
+    public static function states(): array
+    {
+        return [
+            MapDisplaying::class,
+        ];
+    }
+
     public function mtqGame(): BelongsTo
     {
         return $this->belongsTo(MtqGame::class);

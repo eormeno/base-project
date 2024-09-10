@@ -13,6 +13,8 @@ interface IStateModel
 
     public static function getInitialStateClass(): ReflectionClass;
 
+    public static function states(): array;
+
     public function getState(): string|null;
 
     public function updateState(string|null $state): void;

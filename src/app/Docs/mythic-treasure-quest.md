@@ -141,7 +141,6 @@ Implementación en HTML, CSS y JavaScript utilizanzo Laravel como backend.
 |health|int|Salud actual del jugador.|
 |is_finished|bool|Indica si la partida finalizó.|
 #### Modelo
-`App\Models\MythicTreasureQuestGame`
 #### Rutas
 **Rutas**: `routes/web.php`
 - **Ruta principal**: `/mythic-treasure-quest`

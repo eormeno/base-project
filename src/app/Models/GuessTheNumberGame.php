@@ -3,8 +3,13 @@
 namespace App\Models;
 
 use ReflectionClass;
-use App\FSM\IStateModel;
 use App\States\GuessTheNumber\Initial;
+use App\States\GuessTheNumber\Playing;
+use App\States\GuessTheNumber\Success;
+use App\States\GuessTheNumber\GameOver;
+use App\States\GuessTheNumber\Preparing;
+use App\States\GuessTheNumber\ShowingClue;
+use App\States\GuessTheNumber\AskingToPlay;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -24,6 +29,19 @@ class GuessTheNumberGame extends AStateModel
         'half_attempts',
         'remaining_attempts',
     ];
+
+    public static function states(): array
+    {
+        return [
+            Initial::class,
+            Preparing::class,
+            Playing::class,
+            GameOver::class,
+            AskingToPlay::class,
+            Success::class,
+            ShowingClue::class,
+        ];
+    }
 
     public static function getInitialStateClass(): ReflectionClass
     {
