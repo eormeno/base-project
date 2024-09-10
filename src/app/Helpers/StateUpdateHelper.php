@@ -5,7 +5,6 @@ namespace App\Helpers;
 use ReflectionClass;
 use App\FSM\IStateModel;
 use App\Utils\CaseConverters;
-use App\Services\EventManager;
 use Illuminate\Support\Carbon;
 use App\Services\AbstractServiceManager;
 
@@ -13,7 +12,6 @@ class StateUpdateHelper
 {
     protected IStateModel $model;
     protected AbstractServiceManager $serviceManager;
-    protected EventManager $eventManager;
 
     public function __construct(
         AbstractServiceManager $serviceManager,
@@ -21,12 +19,11 @@ class StateUpdateHelper
     ) {
         $this->model = $model;
         $this->serviceManager = $serviceManager;
-        $this->eventManager = $serviceManager->eventManager;
     }
 
     public function getInitialStateClass(): ReflectionClass
     {
-        return new ReflectionClass($this->model->states()[0]);
+        return $this->model->states()[0]::StateClass();
     }
 
     public function readState(): ReflectionClass|null
@@ -45,7 +42,6 @@ class StateUpdateHelper
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }
         $this->model->updateState($rfl_state);
-        $this->eventManager->notify($this->model, $oldState->getShortName(), $newState->getShortName());
     }
 
     public function getEnteredAt(): Carbon|null
