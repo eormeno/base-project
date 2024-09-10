@@ -62,7 +62,7 @@ abstract class AStateModel extends Model implements IStateModel
     private function findClassNameInClassesArray(string $dashed_state_name) : ReflectionClass
     {
         $short_class_name = CaseConverters::kebabToPascal($dashed_state_name);
-        $classes = $this->model->states();
+        $classes = $this->states();
         foreach ($classes as $class) {
             if ($class::StateClass()->getShortName() === $short_class_name) {
                 return $class::StateClass();
