@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Traits\DebugHelper;
 use ReflectionClass;
 use App\FSM\IStateModel;
 use App\Utils\CaseConverters;
@@ -12,28 +11,27 @@ use App\Services\AbstractServiceManager;
 
 class StateUpdateHelper
 {
-    use DebugHelper;
-    protected IStateModel $object;
+    protected IStateModel $model;
     protected AbstractServiceManager $serviceManager;
     protected EventManager $eventManager;
 
     public function __construct(
         AbstractServiceManager $serviceManager,
-        IStateModel $object
+        IStateModel $model
     ) {
-        $this->object = $object;
+        $this->model = $model;
         $this->serviceManager = $serviceManager;
         $this->eventManager = $serviceManager->eventManager;
     }
 
     public function getInitialStateClass(): ReflectionClass
     {
-        return $this->object->getInitialStateClass();
+        return new ReflectionClass($this->model->states()[0]);
     }
 
     public function readState(): ReflectionClass|null
     {
-        $kebab_state_name = $this->object->getState();
+        $kebab_state_name = $this->model->getState();
         $rfl_class = $this->stateNameToClass($kebab_state_name);
         return $rfl_class;
     }
@@ -46,19 +44,19 @@ class StateUpdateHelper
         if ($rfl_state) {
             $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
         }
-        $this->object->updateState($rfl_state);
-        $this->eventManager->notify($this->object, $oldState->getShortName(), $newState->getShortName());
+        $this->model->updateState($rfl_state);
+        $this->eventManager->notify($this->model, $oldState->getShortName(), $newState->getShortName());
     }
 
     public function getEnteredAt(): Carbon|null
     {
-        $enteredAt = $this->object->getEnteredAt();
+        $enteredAt = $this->model->getEnteredAt();
         return $enteredAt ? Carbon::parse($enteredAt) : null;
     }
 
     public function setEnteredAt(Carbon|string|null $enteredAt): void
     {
-        $this->object->setEnteredAt($enteredAt);
+        $this->model->setEnteredAt($enteredAt);
     }
 
     private function stateNameToClass(string|null $dashed_state_name): ReflectionClass
@@ -66,11 +64,19 @@ class StateUpdateHelper
         if (!$dashed_state_name) {
             return $this->getInitialStateClass();
         }
-        // todo: refactor this to a more generic method. because this class construction assumes
-        // that the state class is in the same namespace as the initial state class.
-        $namespace = $this->getInitialStateClass()->getNamespaceName();
+        return $this->findClassNameInClassesArray($dashed_state_name);
+    }
+
+    // TODO: Se podría evitar la búsqueda si utilizara un índice entero en lugar de una cadena.
+    private function findClassNameInClassesArray(string $dashed_state_name) : ReflectionClass
+    {
         $short_class_name = CaseConverters::kebabToPascal($dashed_state_name);
-        $full_class_name = $namespace . '\\' . $short_class_name;
-        return $full_class_name::StateClass();
+        $classes = $this->model->states();
+        foreach ($classes as $class) {
+            if ($class::StateClass()->getShortName() === $short_class_name) {
+                return $class::StateClass();
+            }
+        }
+        throw new \Exception("Class $short_class_name not found in the array of classes.");
     }
 }

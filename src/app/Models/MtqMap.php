@@ -1,11 +1,6 @@
 <?php
-
-// Path: src/app/Models/MtqMap.php
-
 namespace App\Models;
 
-use ReflectionClass;
-use App\FSM\IStateModel;
 use App\States\Map\MapDisplaying;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,10 +33,4 @@ class MtqMap extends AStateModel
     {
         return $this->hasMany(MtqTile::class);
     }
-
-    public static function getInitialStateClass(): ReflectionClass
-    {
-        return MapDisplaying::StateClass();
-    }
-
 }

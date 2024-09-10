@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Models;
 
-use ReflectionClass;
 use App\States\GuessTheNumber\Initial;
 use App\States\GuessTheNumber\Playing;
 use App\States\GuessTheNumber\Success;
@@ -41,11 +39,6 @@ class GuessTheNumberGame extends AStateModel
             Success::class,
             ShowingClue::class,
         ];
-    }
-
-    public static function getInitialStateClass(): ReflectionClass
-    {
-        return Initial::StateClass();
     }
 
     public function user(): BelongsTo

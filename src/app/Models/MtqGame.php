@@ -1,10 +1,6 @@
 <?php
-
-// Path: src/app/Models/MtqGame.php
-
 namespace App\Models;
 
-use ReflectionClass;
 use App\States\MythicTreasureQuest\Initial;
 use App\States\MythicTreasureQuest\Playing;
 use App\States\MythicTreasureQuest\Flagging;
@@ -33,12 +29,6 @@ class MtqGame extends AStateModel
             GameOver::class,
         ];
     }
-
-    public static function getInitialStateClass(): ReflectionClass
-    {
-        return Initial::StateClass();
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

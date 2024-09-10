@@ -1,10 +1,6 @@
 <?php
-
-// Path: src/app/Models/MtqTile.php
-
 namespace App\Models;
 
-use ReflectionClass;
 use App\States\Tile\Hidden;
 use App\States\Tile\Revealed;
 use App\States\Tile\FlaggedTile;
@@ -43,10 +39,5 @@ class MtqTile extends AStateModel
     public function isRevealed(): bool
     {
         return $this->state === 'revealed';
-    }
-
-    public static function getInitialStateClass(): ReflectionClass
-    {
-        return Hidden::StateClass();
     }
 }
