@@ -11,7 +11,6 @@ abstract class AbstractServiceManager
 {
     use DebugHelper;
     protected $services = [];
-    protected ?EventManager $eventManager = null;
     protected ?StateManager $stateManager = null;
     protected string $baseName = '';
     protected string $baseKebabName = '';
@@ -46,9 +45,6 @@ abstract class AbstractServiceManager
     public function __get($name)
     {
         if (property_exists($this, $name)) {
-            if ($name === 'eventManager' && $this->eventManager === null) {
-                $this->eventManager = new EventManager();
-            }
             if ($name === 'stateManager' && $this->stateManager === null) {
                 $this->stateManager = new StateManager($this);
             }
