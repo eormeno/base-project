@@ -55,6 +55,7 @@ class StateUpdateHelper
         $this->model->setEnteredAt($enteredAt);
     }
 
+    // TODO: Este código está duplicado en AStateModel
     private function stateNameToClass(string|null $dashed_state_name): ReflectionClass
     {
         if (!$dashed_state_name) {

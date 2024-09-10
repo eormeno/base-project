@@ -4,9 +4,10 @@
 
 namespace App\Models;
 
-use App\Traits\DebugHelper;
 use ReflectionClass;
 use App\FSM\IStateModel;
+use App\Traits\DebugHelper;
+use App\Utils\CaseConverters;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,6 +46,29 @@ abstract class AStateModel extends Model implements IStateModel
     public function getState(): string|null
     {
         return $this->state;
+    }
+
+    // TODO: Este método está duplicado en StateUpdateHelper
+    public function currentStateClass(): ReflectionClass
+    {
+        $dashed_state_name = $this->getState();
+        if (!$dashed_state_name) {
+            return $this->getInitialStateClass();
+        }
+        return $this->findClassNameInClassesArray($dashed_state_name);
+    }
+
+    // TODO: Se podría evitar la búsqueda si utilizara un índice entero en lugar de una cadena.
+    private function findClassNameInClassesArray(string $dashed_state_name) : ReflectionClass
+    {
+        $short_class_name = CaseConverters::kebabToPascal($dashed_state_name);
+        $classes = $this->model->states();
+        foreach ($classes as $class) {
+            if ($class::StateClass()->getShortName() === $short_class_name) {
+                return $class::StateClass();
+            }
+        }
+        throw new \Exception("Class $short_class_name not found in the array of classes.");
     }
 
     public function updateState(string|null $state): void
