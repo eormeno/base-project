@@ -11,7 +11,7 @@ abstract class AbstractServiceManager
 {
     use DebugHelper;
     protected $services = [];
-    protected ?StateManager $stateManager = null;
+    protected ?StateManager $_stateManager = null;
     protected string $baseName = '';
     protected string $baseKebabName = '';
 
@@ -45,10 +45,13 @@ abstract class AbstractServiceManager
     public function __get($name)
     {
         if (property_exists($this, $name)) {
-            if ($name === 'stateManager' && $this->stateManager === null) {
-                $this->stateManager = new StateManager($this);
-            }
             return $this->$name;
+        }
+        if ($name === 'stateManager') {
+            if ($this->_stateManager === null) {
+                $this->_stateManager = new StateManager($this);
+            }
+            return $this->_stateManager;
         }
         throw new Exception("Property $name does not exist");
     }
