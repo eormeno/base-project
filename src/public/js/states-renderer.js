@@ -3,6 +3,7 @@ var eventSent = false;
 var currentMillis = 0;
 var arrCachedViews = {};
 var arrClientRenderings = [];
+const disableCache = true;  // TODO: set to false in production
 
 window.onload = function () {
     if (hasUrlParam('reset')) {
@@ -11,7 +12,7 @@ window.onload = function () {
         location.reload();
         return;
     }
-    if (hasCachedViews()) {
+    if (!disableCache && hasCachedViews()) {
         currentMillis = Date.now();
         mainDiv = document.getElementById('main');
         mainDiv.innerHTML = '<div id="' + rootId + '"></div>';

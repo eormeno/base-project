@@ -1,24 +1,15 @@
 <?php
-
-// Path: src/app/Models/AStateModel.php
-
 namespace App\Models;
 
 use ReflectionClass;
 use App\FSM\IStateModel;
-use App\Traits\DebugHelper;
 use App\Utils\CaseConverters;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class AStateModel extends Model implements IStateModel
 {
-    use DebugHelper;
-
-    protected $casts = [
-        'children' => 'array',
-    ];
-
+    protected $casts = ['children' => 'array'];
     private static array $aliases = [];
     private static array $states = [];
 
@@ -29,7 +20,6 @@ abstract class AStateModel extends Model implements IStateModel
         if (!isset(self::$aliases[$shortName])) {
             self::$aliases[$shortName] = new ReflectionClass($this);
         }
-        //$this->log((new ReflectionClass($this))->getShortName());
     }
 
     public function getId(): int
@@ -59,7 +49,7 @@ abstract class AStateModel extends Model implements IStateModel
     }
 
     // TODO: Se podría evitar la búsqueda si utilizara un índice entero en lugar de una cadena.
-    private function findClassNameInClassesArray(string $dashed_state_name) : ReflectionClass
+    private function findClassNameInClassesArray(string $dashed_state_name): ReflectionClass
     {
         $short_class_name = CaseConverters::kebabToPascal($dashed_state_name);
         $classes = $this->states();
