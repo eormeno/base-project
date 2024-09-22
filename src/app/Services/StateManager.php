@@ -333,7 +333,7 @@ class StateManager
             $this->log("CHOLDREN of $alias: " . implode(', ', $choldrens));
         }
         if (!empty($children)) {
-            $this->log("Children of $alias: " . implode(', ', $children));
+            //$this->log("Children of $alias: " . implode(', ', $children));
         }
         foreach ($children as $childAlias) {
             $childModel = AStateModel::modelOf($childAlias);
