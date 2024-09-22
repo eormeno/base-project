@@ -38,12 +38,17 @@ abstract class AStateModel extends Model implements IStateModel
         return $this->state;
     }
 
-    // TODO: Este método está duplicado en StateUpdateHelper
-    public function currentStateClass(): ReflectionClass
+    public function initialState(): ReflectionClass
     {
-        $dashed_state_name = $this->getState();
+        return $this->states()[0]::StateClass();
+    }
+
+    // TODO: Este método está duplicado en StateUpdateHelper
+    public function currentState(): ReflectionClass
+    {
+        $dashed_state_name = $this->state;
         if (!$dashed_state_name) {
-            return $this->getInitialStateClass();
+            return $this->initialState();
         }
         return $this->findClassNameInClassesArray($dashed_state_name);
     }

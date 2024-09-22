@@ -2,6 +2,7 @@
 
 namespace App\FSM;
 
+use ReflectionClass;
 use Illuminate\Support\Carbon;
 
 interface IStateModel
@@ -13,6 +14,10 @@ interface IStateModel
     public static function states(): array;
 
     public function getState(): string|null;
+
+    public function initialState(): ReflectionClass;
+
+    public function currentState(): ReflectionClass;
 
     public function updateState(string|null $state): void;
 
