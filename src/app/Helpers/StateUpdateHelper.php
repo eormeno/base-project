@@ -29,7 +29,7 @@ class StateUpdateHelper
 
     public function readState(): ReflectionClass|null
     {
-        // $kebab_state_name = $this->model->getState();
+        // $kebab_state_name = $this->model->_getState();
         // $rfl_class = $this->stateNameToClass($kebab_state_name);
         // return $rfl_class;
         return $this->model->currentState();

@@ -66,7 +66,7 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     public function request(array $eventInfo): IState
     {
-        // $stateWasNull = $this->stateModel->getState() == null;
+        // $stateWasNull = $this->stateModel->_getState() == null;
         $stateFirstTime = $this->stateModel->getEnteredAt() == null;
         $destination = $eventInfo['destination'];
         $initialState = null;

@@ -13,7 +13,7 @@ interface IStateModel
 
     public static function states(): array;
 
-    public function getState(): string|null;
+    // public function _getState(): string|null;
 
     public function initialState(): ReflectionClass;
 

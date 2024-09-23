@@ -345,7 +345,8 @@ class StateManager
     private function getModelChildren(IStateModel $model): array
     {
         $children = $model->children; // phpcs:ignore
-        if (!$children || empty($children) || !$model->getState()) {
+        //if (!$children || empty($children) || !$model->_getState()) {  // que _getState no tenga valor no significa que no tenga hijos
+        if (!$children || empty($children)) {
             return [];
         }
         $ret = [];

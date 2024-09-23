@@ -33,10 +33,10 @@ abstract class AStateModel extends Model implements IStateModel
         return "{$shortName}_{$this->id}";
     }
 
-    public function getState(): string|null
-    {
-        return $this->state;
-    }
+    // public function _getState(): string|null
+    // {
+    //     return $this->state;
+    // }
 
     public function initialState(): ReflectionClass
     {
