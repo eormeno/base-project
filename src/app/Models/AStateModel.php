@@ -6,6 +6,7 @@ use App\FSM\IStateModel;
 use App\Utils\CaseConverters;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 abstract class AStateModel extends Model implements IStateModel
 {
@@ -66,20 +67,44 @@ abstract class AStateModel extends Model implements IStateModel
         throw new \Exception("Class $short_class_name not found in the array of classes.");
     }
 
-    public function updateState(string|null $state): void
+    public function updateState(ReflectionClass|null $rfl_state): void
     {
-        $this->update(['state' => $state]);
+        if ($rfl_state) {
+            $rfl_state = CaseConverters::pascalToKebab($rfl_state->getShortName());
+        }
+
+        $this->update(['state' => $rfl_state]);
     }
 
-    public function getEnteredAt(): string|null
+    public function enteredAt(): Attribute | null
     {
-        return $this->entered_at;
+        return Attribute::make(
+            get: fn (string | null $value) => $value ? Carbon::parse($value) : null,
+            set: fn (Carbon|string|null $value) => $value ? $value->toDateTimeString() : null
+        );
     }
 
-    public function setEnteredAt(Carbon|string|null $enteredAt): void
-    {
-        $this->update(['entered_at' => $enteredAt]);
-    }
+    // public function getEnteredAtAttribute(): Carbon|null
+    // {
+    //     $enteredAt = $this->entered_at;
+    //     return $enteredAt ? Carbon::parse($enteredAt) : null;
+    // }
+
+    // public function setEnteredAtAttribute(Carbon|string|null $enteredAt): void
+    // {
+    //     $this->entered_at = $enteredAt;
+    //     $this->update(['entered_at' => $enteredAt]);
+    // }
+
+    // public function getEnteredAt(): string|null
+    // {
+    //     return $this->entered_at;
+    // }
+
+    // public function setEnteredAt(Carbon|string|null $enteredAt): void
+    // {
+    //     $this->update(['entered_at' => $enteredAt]);
+    // }
 
     public static function modelOf(string $alias): IStateModel
     {

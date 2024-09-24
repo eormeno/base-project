@@ -19,10 +19,10 @@ interface IStateModel
 
     public function currentState(): ReflectionClass;
 
-    public function updateState(string|null $state): void;
+    public function updateState(ReflectionClass|null $state): void;
 
-    public function getEnteredAt(): string|null;
+    // public function getEnteredAt(): string|null;
 
-    public function setEnteredAt(Carbon|string|null $enteredAt): void;
+    // public function setEnteredAt(Carbon|string|null $enteredAt): void;
 
 }
