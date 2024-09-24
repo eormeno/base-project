@@ -6,8 +6,6 @@ use ReflectionClass;
 
 interface IStateModel
 {
-    public function getId(): int;
-
     public function getAlias(): string;
 
     public static function states(): array;

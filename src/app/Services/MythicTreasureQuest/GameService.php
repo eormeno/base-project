@@ -48,7 +48,7 @@ class GameService extends AbstractServiceComponent
     private function isTileAvailable(MtqTile $tile): bool
     {
         $this->fillAvailableTiles();
-        $ret = in_array($tile->getId(), $this->availableTiles);
+        $ret = in_array($tile->id, $this->availableTiles);
         return $ret;
     }
 
@@ -101,12 +101,12 @@ class GameService extends AbstractServiceComponent
 
     private function isTileTested(MtqTile $tile): bool
     {
-        return array_key_exists($tile->getId(), $this->testedTiles);
+        return array_key_exists($tile->id, $this->testedTiles);
     }
 
     private function setTileAsTested(MtqTile $tile): void
     {
-        $this->testedTiles[$tile->getId()] = true;
+        $this->testedTiles[$tile->id] = true;
     }
 
 }

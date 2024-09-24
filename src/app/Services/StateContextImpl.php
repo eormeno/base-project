@@ -26,12 +26,12 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     public function __construct(
         AbstractServiceManager $serviceManager,
-        IStateModel $stateModel
+        AStateModel $stateModel
     ) {
         $this->serviceManager = $serviceManager;
         $this->stateManager = $serviceManager->stateManager;
         $this->stateModel = $stateModel;
-        $this->id = $stateModel->getId();
+        $this->id = $stateModel->id;
         // $this->stateUpdater = new StateUpdateHelper($serviceManager, $stateModel);
     }
 

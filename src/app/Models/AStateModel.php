@@ -23,11 +23,6 @@ abstract class AStateModel extends Model implements IStateModel
         }
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public function getAlias(): string
     {
         $shortName = (new ReflectionClass($this))->getShortName();

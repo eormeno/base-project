@@ -54,7 +54,7 @@ class ItemNormalState extends AState
     public function onRefresh(): void
     {
         $this->model->refresh();
-        $this->id = $this->model->getId();
+        $this->id = $this->model->id;
         $itemId = $this->model->mtqItemClass()->first()->id;
         $this->itemInfo = $this->context->mtqItemClassRepository->getItemInfo($itemId);
         $this->slug = $this->itemInfo['slug'];
