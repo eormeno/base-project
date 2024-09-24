@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Utils\FakeUtils;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,10 +17,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $env_fake_users_password = env('FAKE_USERS_PASSWORD');
+        $fake_first = fake()->firstName();
+        $fake_last = fake()->lastName();
+        $fake_name = "$fake_first $fake_last";
+        $fake_email = FakeUtils::email($fake_first, $fake_last);
 
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $fake_name,
+            'email' => $fake_email,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make($env_fake_users_password),
             'two_factor_secret' => null,
