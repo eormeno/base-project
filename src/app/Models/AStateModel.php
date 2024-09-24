@@ -34,17 +34,11 @@ abstract class AStateModel extends Model implements IStateModel
         return "{$shortName}_{$this->id}";
     }
 
-    // public function _getState(): string|null
-    // {
-    //     return $this->state;
-    // }
-
     public function initialState(): ReflectionClass
     {
         return $this->states()[0]::StateClass();
     }
 
-    // TODO: Este método está duplicado en StateUpdateHelper
     public function currentState(): ReflectionClass
     {
         $dashed_state_name = $this->state;
@@ -83,28 +77,6 @@ abstract class AStateModel extends Model implements IStateModel
             set: fn (Carbon|string|null $value) => $value ? $value->toDateTimeString() : null
         );
     }
-
-    // public function getEnteredAtAttribute(): Carbon|null
-    // {
-    //     $enteredAt = $this->entered_at;
-    //     return $enteredAt ? Carbon::parse($enteredAt) : null;
-    // }
-
-    // public function setEnteredAtAttribute(Carbon|string|null $enteredAt): void
-    // {
-    //     $this->entered_at = $enteredAt;
-    //     $this->update(['entered_at' => $enteredAt]);
-    // }
-
-    // public function getEnteredAt(): string|null
-    // {
-    //     return $this->entered_at;
-    // }
-
-    // public function setEnteredAt(Carbon|string|null $enteredAt): void
-    // {
-    //     $this->update(['entered_at' => $enteredAt]);
-    // }
 
     public static function modelOf(string $alias): IStateModel
     {
