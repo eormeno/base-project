@@ -29,6 +29,13 @@ abstract class AStateModel extends Model implements IStateModel
         return "{$shortName}_{$this->id}";
     }
 
+    public function uid(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => (new ReflectionClass($this))->getShortName() . '_' . $this->id,
+        );
+    }
+
     public function initialState(): ReflectionClass
     {
         return $this->states()[0]::StateClass();
