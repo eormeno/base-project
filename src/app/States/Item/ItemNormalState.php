@@ -4,14 +4,10 @@ namespace App\States\Item;
 
 use App\Models\MtqGameItem;
 use App\FSM\AState;
-use App\Models\MtqInventory;
-use App\Traits\DebugHelper;
 
 class ItemNormalState extends AState
 {
-    use DebugHelper;
-
-    public ?MtqGameItem $model = null;
+    public ?MtqGameItem $parentModel = null;
     public int $id;
     public string $slug;
     public string $icon;
@@ -53,13 +49,13 @@ class ItemNormalState extends AState
 
     public function onRefresh(): void
     {
-        $this->model->refresh();
-        $this->id = $this->model->id;
-        $itemId = $this->model->mtqItemClass()->first()->id;
+        $this->parentModel->refresh();
+        $this->id = $this->parentModel->id;
+        $itemId = $this->parentModel->mtqItemClass()->first()->id;
         $this->itemInfo = $this->context->mtqItemClassRepository->getItemInfo($itemId);
         $this->slug = $this->itemInfo['slug'];
         $this->icon = $this->itemInfo['icon'];
         $this->name = $this->itemInfo['name'];
-        $this->quantity = $this->model->quantity;
+        $this->quantity = $this->parentModel->quantity;
     }
 }

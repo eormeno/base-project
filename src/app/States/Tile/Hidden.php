@@ -7,16 +7,16 @@ use App\FSM\AState;
 
 class Hidden extends AState
 {
-    public ?MtqTile $model = null;
+    public ?MtqTile $parentModel = null;
 
     public function onRefresh(): void
     {
-        $this->model->refresh();
+        $this->parentModel->refresh();
     }
 
     public function onClueMarkedEvent()
     {
-        $this->model->refresh();
+        $this->parentModel->refresh();
     }
 
     public function onFlagEvent()
@@ -36,10 +36,10 @@ class Hidden extends AState
 
     public function onTileClickedEvent()
     {
-        if ($this->model->has_trap) {
+        if ($this->parentModel->has_trap) {
             $this->sendSignal('game_over');
             return;
         }
-        $this->context->gameService->revealTile($this->model);
+        $this->context->gameService->revealTile($this->parentModel);
     }
 }

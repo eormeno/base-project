@@ -7,7 +7,7 @@ use App\FSM\AState;
 
 class Revealed extends AState
 {
-    public ?MtqTile $model = null;
+    public ?MtqTile $parentModel = null;
 
     public function _onGameOverEvent()
     {

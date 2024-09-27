@@ -10,8 +10,9 @@ use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use Illuminate\Support\Carbon;
 use App\Helpers\StateModelReflect;
+use Illuminate\Database\Eloquent\Model;
 
-abstract class AState implements IState
+abstract class AState extends Model implements IState
 {
     use ToastTrigger;
     use DebugHelper;
@@ -30,10 +31,10 @@ abstract class AState implements IState
     {
         StateModelReflect::copyModelAttributes($model, $this);
 
-        // search the 'model' property in the class
+        // search the 'parentModel' property in the class
         $properties = get_object_vars($this);
-        if (array_key_exists('model', $properties)) {
-            $this->model = $model;
+        if (array_key_exists('parentModel', $properties)) {
+            $this->parentModel = $model;
         }
         $this->_model = $model;
 
