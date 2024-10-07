@@ -10,6 +10,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/marketing', function () {
+    return view('marketing.banner');
+})->middleware('auth:sanctum');
+
 // una ruta que recibe como parametro el nombre de usuario y una clave, si es correcta retorna el un json con mensaje "Bienvenido" de lo contrario retorna "Usuario o clave incorrecta"
 Route::get('/entrar/{username}/{password}', function ($username, $password) {
     if ($username == 'admin' && $password == '1234') {
