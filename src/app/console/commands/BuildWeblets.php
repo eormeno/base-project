@@ -2,36 +2,44 @@
 
 namespace App\Console\Commands;
 
+use ArrayIterator;
 use Illuminate\Console\Command;
 
 class BuildWeblets extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'build-weblets';
+    protected $signature = 'make:weblets';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    protected $description = 'Build weblets from configuration.';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $this->info('Building weblets...');
-        $weblets = json_encode($this->getWeblets(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $this->info($weblets);
+        $weblets = $this->getWeblets();
+        foreach ($weblets as $weblet) {
+            $this->buildWeblet($weblet);
+        }
     }
 
-    private function getWeblets() : array
+    private function getWeblets(): ArrayIterator
     {
-        return require config_path('weblets.php');
+        $weblets = config('weblets');
+        return new ArrayIterator($weblets);
     }
+
+    private function buildWeblet(array $weblet)
+    {
+        $this->info('Building weblet: ' . $weblet['title']);
+        foreach ($weblet as $key => $value) {
+            if ($key === 'title' || $key === 'root') {
+                continue;
+            }
+            $this->buildComponent($key, $value);
+        }
+    }
+
+    private function buildComponent(string $component, array $properties)
+    {
+        $this->info('Building component: ' . $component);
+    }
+
 }
