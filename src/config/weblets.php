@@ -10,18 +10,20 @@ return [
                 'flagging' => [],
                 'game-over' => [],
                 'initial' => [],
-                'playing' => ['map', 'inventory'],
-            ],
-            'map' => ['map'],
-            'inventory' => ['inventory'],
+                'playing' => [
+                    'map' => ['map'],
+                    'inventory' => ['inventory'],
+                ],
+            ]
         ],
         'map' => [
             'states' => [
-                'map-displaying' => ['width', 'height', 'tiles'],
+                'map-displaying' => [
+                    'w' => ['integer', 'default' => 8],
+                    'h' => ['integer', 'default' => 8],
+                    'tiles' => ['tile', 'many']
+                ],
             ],
-            'tiles' => ['tile', 'many'],
-            'width' => ['integer', 'min' => 8, 'max' => 16, 'default' => 8],
-            'height' => ['integer', 'min' => 8, 'max' => 16, 'default' => 8],
         ],
         'inventory' => [
             'states' => [
