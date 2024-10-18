@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\GuessTheNumberGame;
 use Illuminate\Support\Facades\Artisan;
 
 Artisan::command('fresh', function () {
@@ -17,3 +18,23 @@ Artisan::command('user:list', function () {
     });
     $this->table(['id', 'name', 'email'], $users);
 })->purpose('Display users');
+
+// List all the guess_the_number_games
+Artisan::command('guess_the_number_game:list', function () {
+    $games = GuessTheNumberGame::all()->map(function ($game) {
+        return [
+            'id' => $game->id,
+            'user_id' => $game->user_id,
+            'remaining_attempts' => $game->remaining_attempts,
+            'random_number' => $game->random_number,
+            'score' => $game->score,
+        ];
+    });
+    $this->table([
+        'id',
+        'user_id',
+        'remaining_attempts',
+        'random_number',
+        'score',
+    ], $games);
+})->purpose('Display guess_the_number_games');
