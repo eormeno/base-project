@@ -7,36 +7,29 @@ return [
         'root' => 'game',
         'game' => [
             'states' => [
-                'flagging' => [],
-                'game-over' => [],
-                'initial' => [],
-                'playing' => [
-                    'map' => ['map'],
-                    'inventory' => ['inventory'],
-                ],
+                'flagging',
+                'game-over',
+                'initial',
+                'playing',
             ]
         ],
         'map' => [
             'states' => [
-                'map-displaying' => [
-                    'w' => ['integer', 'default' => 8],
-                    'h' => ['integer', 'default' => 8],
-                    'tiles' => ['tile', 'many']
-                ],
+                'map-displaying',
             ],
         ],
         'inventory' => [
             'states' => [
-                'inventory-displaying' => ['items', 'many'],
+                'inventory-displaying',
             ],
         ],
         'tile' => [
             'states' => [
-                'flagged-tile' => [],
-                'flagging-tile' => [],
-                'gameOver-tile' => [],
-                'hidden' => ['marked_as_clue', 'marked_as_flag'],
-                'revealed' => ['has_trap', 'traps_around'],
+                'hidden',
+                'flagged-tile',
+                'flagging-tile',
+                'gameOver-tile',
+                'revealed',
             ],
             'x' => ['integer'],
             'y' => ['integer'],
@@ -59,16 +52,15 @@ return [
     'gtn' => [
         'title' => 'Guess The Number',
         'root' => 'game',
-
         'game' => [
             'states' => [
-                'asking-to-play' => [],
-                'game-over' => [],
-                'initial' => [],
-                'playing' => [],
-                'preparing' => [],
-                'showing-clue' => [],
-                'success' => [],
+                'initial',
+                'asking-to-play',
+                'game-over',
+                'playing',
+                'preparing',
+                'showing-clue',
+                'success',
             ],
         ],
     ],
