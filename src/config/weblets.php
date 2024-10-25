@@ -7,9 +7,9 @@ return [
         'root' => 'game',
         'game' => [
             'states' => [
+                'initial',
                 'flagging',
                 'game-over',
-                'initial',
                 'playing',
             ]
         ],
@@ -55,13 +55,21 @@ return [
         'game' => [
             'states' => [
                 'initial',
-                'asking-to-play',
-                'game-over',
+                'asking_to_play',
+                'game_over',
                 'playing',
                 'preparing',
-                'showing-clue',
+                'showing_clue',
                 'success',
             ],
+            'times_played' => ['integer'],
+            'max_attempts' => ['integer'],
+            'half_attempts' => ['integer'],
+            'min_number' => ['integer'],
+            'max_number' => ['integer'],
+            'remaining_attempts' => ['integer'],
+            'random_number' => ['integer'],
+            'score' => ['integer'],
         ],
     ],
 ];

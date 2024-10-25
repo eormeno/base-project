@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Weblets\Collections\WebletsCollection;
+use Arr;
 use ArrayIterator;
 use Illuminate\Console\Command;
 
@@ -15,20 +17,20 @@ class BuildWeblets extends Command
     {
         $this->info('Building weblets...');
         $weblets = $this->getWeblets();
-        foreach ($weblets as $weblet) {
-            $this->buildWeblet($weblet);
+        foreach ($weblets as $key => $weblet) {
+            $this->buildWeblet($key, $weblet);
         }
     }
 
-    private function getWeblets(): ArrayIterator
+    private function getWeblets(): WebletsCollection
     {
         $weblets = config('weblets');
-        return new ArrayIterator($weblets);
+        return new WebletsCollection($weblets);
     }
 
-    private function buildWeblet(array $weblet)
+    private function buildWeblet(string $prefix, array $weblet)
     {
-        $this->info('Building weblet: ' . $weblet['title']);
+        $this->info("Building weblet: $prefix {$weblet['title']}");
         foreach ($weblet as $key => $value) {
             if ($key === 'title' || $key === 'root') {
                 continue;
