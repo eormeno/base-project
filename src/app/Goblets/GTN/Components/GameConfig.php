@@ -2,7 +2,10 @@
 
 namespace App\Goblets\GTN\Components;
 
-class GameConfig {
+use App\Goblets\Base\Component;
+
+class GameConfig extends Component
+{
     public int $times_played = 0;
     public int $max_attempts;
     public int $half_attempts;
