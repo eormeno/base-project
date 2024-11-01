@@ -25,14 +25,17 @@ return [
         'mines' => ['type' => 'integer'],
         'tiles' => ['type' => 'game_object', 'multiple' => true],
     ],
-    'tile_config' => [
-        'x' => ['type' => 'integer', 'default' => 0],
-        'y' => ['type' => 'integer', 'default' => 0],
-        'has_trap' => ['type' => 'boolean', 'default' => false],
-        'traps_around' => ['type' => 'integer', 'default' => 0],
-        'marked_as_clue' => ['type' => 'boolean', 'default' => false],
-        'marked_as_flag' => ['type' => 'boolean', 'default' => false],
-    ],
+
+    // 'tile_config' => [
+    //     'x' => ['type' => 'integer', 'default' => 0],
+    //     'y' => ['type' => 'integer', 'default' => 0],
+    //     'has_trap' => ['type' => 'boolean', 'default' => false],
+    //     'traps_around' => ['type' => 'integer', 'default' => 0],
+    //     'marked_as_clue' => ['type' => 'boolean', 'default' => false],
+    //     'marked_as_flag' => ['type' => 'boolean', 'default' => false],
+    // ],
+
+
     'inventory_config' => [
         'selected_item' => ['type' => 'game_object'],
         'items' => ['type' => 'game_object', 'multiple' => true],

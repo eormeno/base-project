@@ -2,6 +2,8 @@
 
 namespace App\Goblets\MTQ\Prefabs;
 
-class Item
+use App\Goblets\Base\GameObject;
+
+class Item extends GameObject
 {
 }

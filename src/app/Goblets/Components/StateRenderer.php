@@ -2,7 +2,9 @@
 
 namespace App\Goblets\Components;
 
-class StateRenderer {
+use App\Goblets\Base\Component;
+
+class StateRenderer extends Component {
     public string $on_state;
 
     public function __construct(string $on_state)

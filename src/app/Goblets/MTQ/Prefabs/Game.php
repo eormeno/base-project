@@ -2,18 +2,18 @@
 
 namespace App\Goblets\MTQ\Prefabs;
 
+use App\Goblets\Base\GameObject;
 use App\Goblets\Components\StateRenderer;
 use App\Goblets\MTQ\Components\PlayingStateRenderer;
 
-class Game
+class Game extends GameObject
 {
     public string $sate = 'initial';
-    private array $components = [];
 
     public function __construct()
     {
-        $this->components[] = new StateRenderer('initial');
-        $this->components[] = new StateRenderer('game_over');
-        $this->components[] = new PlayingStateRenderer('playing');
+        $this->addComponent(new StateRenderer('initial'));
+        $this->addComponent(new StateRenderer('game_over'));
+        $this->addComponent(new PlayingStateRenderer('playing'));
     }
 }
