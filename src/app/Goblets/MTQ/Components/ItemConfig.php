@@ -4,7 +4,7 @@ namespace App\Goblets\MTQ\Components;
 
 use App\Goblets\Base\Component;
 
-abstract class ItemConfig extends Component
+class ItemConfig extends Component
 {
     public $slug;
     public $icon;

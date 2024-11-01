@@ -10,4 +10,7 @@ class GameObject {
         $this->components[] = $component;
     }
 
+    public function destroy() {
+    }
+
 }
