@@ -9,6 +9,15 @@
     4. [Prefab](#prefab)
     5. [Script](#script)
     6. [Relaciones](#relaciones)
+3. [Godot](#godot)
+    1. [Node](#node)
+    2. [Scene](#scene)
+    3. [Scripts](#scripts)
+    4. [Recursos](#recursos)
+    5. [Proyecto](#proyecto)
+    6. [Relaciones entre los elementos](#relaciones-entre-los-elementos)
+4. [Comparación](#comparación)
+5. [Conclusión](#conclusión)
 
 ## Introducción
 Este documento presenta una descripción detallada de la arquitectura de componentes de dos motores de videojuegos: Unity y Godot, desde la perspectiva de un programador. Se analizan los componentes principales de cada motor y sus interrelaciones. Además, se comparan las similitudes y diferencias entre ambos motores.
@@ -222,3 +231,48 @@ classDiagram
     Project -- "1..*" Script : scripts
     Project -- "1..*" Resource : resources
 ```
+
+## Comparación
+A continuación, se presentan las similitudes y diferencias entre la arquitectura de componentes de Unity y Godot:
+
+### Estructura de Datos
+
+**Unity**:
+- Unity utiliza una estructura de datos basada en GameObjects.
+- Cada GameObject puede contener múltiples Componentes que le agregan funcionalidad.
+- Los Componentes están desacoplados entre sí y se pueden agregar, eliminar o modificar de forma independiente.
+- Las Escenas de Unity contienen múltiples GameObjects organizados jerárquicamente.
+- Las Escenas requieren de una Cámara para poder ser renderizadas.
+
+**Godot**:
+- Godot usa una estructura de datos basada en Nodos organizados jerárquicamente en un Árbol de Escena.
+- Cada Nodo puede tener Propiedades y Scripts asociados.
+- Los Nodos pueden ser de diferentes tipos (Sprites, Áreas, Cámaras, etc.) y se pueden combinar para crear Escenas complejas.
+- A diferencia de Unity, en Godot cualquier Nodo que sea visible puede ser renderizado sin necesidad de una Cámara.
+
+### Patrones de Diseño
+
+**Unity**:
+- Unity promueve el uso del patrón de diseño Componentes, donde la lógica se divide en Componentes independientes y reutilizables.
+- La comunicación entre Componentes se realiza a través de Mensajes, Eventos y Interfaces.
+- Unity también utiliza el patrón Observador para implementar la comunicación entre Componentes.
+
+**Godot**:
+- Godot sigue un paradigma orientado a Nodos, donde la lógica se organiza en Scripts asociados a cada Nodo.
+- La comunicación entre Nodos se realiza a través de Señales (Signals), que permiten implementar patrones como Observador y Mediador.
+- Godot también permite el uso de Grupos de Nodos, lo que facilita la organización y comunicación entre elementos de la escena.
+
+### Arquitectura
+
+**Unity**:
+- Unity tiene una arquitectura monolítica, donde todo el motor de juego se ejecuta en un solo proceso.
+- La renderización, física, audio y otros subsistemas están fuertemente acoplados dentro del motor.
+- Unity proporciona herramientas y utilidades integradas para facilitar el desarrollo, como el Editor, Asset Store, etc.
+
+**Godot**:
+- Godot tiene una arquitectura más modular, donde los diferentes subsistemas (renderizado, física, audio, etc.) están más desacoplados.
+- Godot permite la extensión y personalización del motor a través de módulos y plugins, lo que facilita la integración con tecnologías externas.
+- El motor de Godot está escrito en C++ y C#, lo que permite una mayor flexibilidad y rendimiento en comparación con su contraparte scripting.
+
+### Conclusión
+En resumen, tanto Unity como Godot son motores de videojuegos poderosos y ampliamente utilizados, pero presentan diferencias significativas en su estructura de datos, patrones de diseño y arquitectura interna. Mientras que Unity se enfoca en un enfoque basado en Componentes y una arquitectura más monolítica, Godot adopta un paradigma orientado a Nodos y una estructura más modular. Estas diferencias se traducen en ventajas y desventajas que los desarrolladores deben considerar al elegir la plataforma más adecuada para sus proyectos.
