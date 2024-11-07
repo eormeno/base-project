@@ -6,18 +6,9 @@ class Component {
 
     protected bool $enabled = true;
 
-    protected array $attributes = [];
-
-    protected const INTEGER = 'integer';
-    protected const STRING = 'string';
-    protected const BOOLEAN = 'boolean';
-
-    protected function addAttribute(string $name, mixed $value, string $type = self::INTEGER): void
+    public function __get($name)
     {
-        $this->attributes[$name] = [
-            'value' => $value,
-            'type' => $type
-        ];
+        return $this->$name;
     }
 
 }
