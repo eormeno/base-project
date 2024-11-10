@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class GameObject extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'is_active', 'transform', 'parent_id'];
+    protected $fillable = ['name', 'is_active', 'state', 'parent_id'];
 
     public function components(): MorphMany
     {

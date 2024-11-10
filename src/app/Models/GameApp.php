@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\GTN;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GameDataComponent extends Model
+class GameApp extends Model
 {
+    /** @use HasFactory<\Database\Factories\GameAppFactory> */
     use HasFactory;
 }
