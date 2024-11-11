@@ -1,13 +1,17 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Components;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Component extends Model
 {
-    protected $fillable = ['active_on_state'];
+    protected $fillable = ['active', 'properties'];
+    protected $casts = [
+        'properties' => 'array',
+        'active' => 'boolean'
+    ];
 
     public function componentable(): MorphTo
     {

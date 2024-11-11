@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,13 +20,13 @@ class GameObject extends Model
 
     public function getComponent($componentType)
     {
-        $componentModel = "App\\Models\\" . Str::studly_case($componentType) . "Component";
+        $componentModel = "App\\Models\\Components\\" . Str::studly($componentType) . "Component";
         return $this->morphOne($componentModel, 'componentable')->first();
     }
 
     public function addComponent($componentType, array $properties = [])
     {
-        $componentModel = "App\\Models\\" . Str::studly_case($componentType) . "Component";
+        $componentModel = "App\\Models\\Components\\" . Str::studly($componentType) . "Component";
         return $this->morphOne($componentModel, 'componentable')->create($properties);
     }
 }
