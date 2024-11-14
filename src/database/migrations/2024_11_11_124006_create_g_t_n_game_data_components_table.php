@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('g_t_n_game_data_components', function (Blueprint $table) {
+        Schema::create('gtn_game_data_components', function (Blueprint $table) {
             $table->id();
             $table->boolean('active')->default(true);
             $table->morphs('componentable');
+            $table->morphs('parentable');
+            $table->integer('number_to_guess')->nullable();
             $table->integer('times_played')->default(0);
-            $table->integer('half_attempts');
             $table->integer('score')->default(0);
             $table->integer('max_attempts');
             $table->integer('min_number');
             $table->integer('max_number');
             $table->integer('attempts')->default(0);
-            $table->integer('number_to_guess')->nullable();
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('g_t_n_game_data_components');
+        Schema::dropIfExists('gtn_game_data_components');
     }
 };

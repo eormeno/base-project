@@ -1,28 +1,41 @@
-# Diagramas de clase de la aplicación
+# Diagramas de clases
 El siguiente diagrama muestra la relación entre las clases GameApplet, GameObject, Component y User.
 
 ```mermaid
 classDiagram
+    direction LR
     class User {
     }
-    class GameApplet {
+    class GameApp {
         +string prefix
         +string name
-        +string description
         +string icon
     }
-    class Game {
+    class GameInstance {
+    }
+    class Prefab {
+        +string slug
+        +json structure
+        +GameObject instantiate()
     }
     class GameObject {
-        <<abstract>>
+        +string name
+        +bool active
         +string state
     }
     class Component {
-        <<abstract>>
+        +bool active
+        +string componentType
+        +onStart()
+        +onUpdate()
+        +onDestroy()
+        +onStateChanged()
     }
-    GameApplet .. "1" GameObject : rootGameObject
-    Game -- "1..*" User
-    Game *-- "1" GameObject : root
-    GameObject o-- "0..n" Component : components
+    GameInstance *-- "1" GameObject : root
+    GameObject o-- "n" Component : components
+    Component *-- "n" GameObject : parent
+    GameApp "1" -- "n" GameInstance
+    GameInstance "n" -- "1..n" User
+    GameApp "n" -- "1" Prefab : prefab
 ```
 

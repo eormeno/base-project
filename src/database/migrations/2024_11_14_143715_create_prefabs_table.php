@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_objects', function (Blueprint $table) {
+        Schema::create('prefabs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('active')->default(true);
-            $table->string('state')->default('initial');
+            $table->text('description')->nullable();
+            $table->json('structure');
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_objects');
+        Schema::dropIfExists('prefabs');
     }
 };
