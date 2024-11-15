@@ -13,21 +13,28 @@ class GameAppSeeder extends Seeder
      */
     public function run(): void
     {
-        GameApp::factory()->create([
+        GameApp::factory()->image('guess-the-number.jpeg')->create([
             'prefix' => 'GTN',
-            'name' => 'Guess The Number',
-            'description' => 'A simple game where you guess a number between 1 and 1024.',
-            'image' => 'images/guess-the-number.jpeg',
+            'name' => 'Adivina el número',
+            'description' => 'Un simple juego donde adivinas un número entre 1 y 1024.',
         ]);
-        GameApp::factory()->create([
+        GameApp::factory()->image('mythic-treasure-quest.jpeg')->create([
             'prefix' => 'MTQ',
-            'name' => 'Mithic Treasure Quest',
-            'description' => 'A game where you explore a world and find treasures using the mechanics of minesweeper.',
-            'image' => 'images/mythic-treasure-quest.jpeg',
+            'active' => false,
+            'name' => 'Buscador de Tesoros',
+            'description' => 'Un juego donde exploras templos antiguos y encuentras tesoros y posiones usando las mecánicas de buscaminas. Pero ten cuidado! También hay trampas, monstruos y maldiciones.'
         ]);
-        GameApp::factory()->fakeImage()->create([
+        GameApp::factory()->image('tic-tac-toe.jpeg')->create([
+            'prefix' => 'TTT',
             'name' => 'Tic Tac Toe',
-            'description' => 'A simple game of Tic Tac Toe.'
+            'active' => false,
+            'description' => 'Un simple juego de Tic Tac Toe.'
+        ]);
+        GameApp::factory()->image('rock-paper-scissors.jpeg')->create([
+            'prefix' => 'RPS',
+            'name' => 'Piedra, Papel, Tijera',
+            'active' => false,
+            'description' => 'Un simple juego de Piedra, Papel o Tijera.'
         ]);
     }
 }

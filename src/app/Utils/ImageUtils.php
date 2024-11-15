@@ -24,8 +24,11 @@ class ImageUtils
     public static function saveImage(int $width, int $height, string $filename): string
     {
         try {
+            if (Storage::disk('public')->exists($filename)) {
+                return $filename;
+            }
             $response = Http::get("https://picsum.photos/{$width}/{$height}");
-            Storage::disk('public')->put("{$filename}", $response->body());
+            Storage::disk('public')->put($filename, $response->body());
             return $filename;
         } catch (\Exception $e) {
             // Log error by console

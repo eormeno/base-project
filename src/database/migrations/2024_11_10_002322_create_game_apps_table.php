@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('game_apps', function (Blueprint $table) {
             $table->id();
             $table->string('prefix', 3)->unique();
+            $table->boolean('active')->default(true);
             $table->string('name');
             $table->text('description');
             $table->string('image')->nullable();
