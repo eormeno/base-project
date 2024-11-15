@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Utils\ImageUtils;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,17 +17,22 @@ class GameAppFactory extends Factory
      */
     public function definition(): array
     {
-        $threeLetterCode = $this->faker->unique()->regexify('[A-Z]{3}');
-        $fakeSvg = <<<SVG
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon feather feather-activity">
-  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-</svg>
-SVG;
         return [
-            'prefix' => $threeLetterCode,
             'name' => $this->faker->sentence(4),
-            'description' => $this->faker->text,
-            'icon' => $fakeSvg,
+            'description' => $this->faker->text
         ];
+    }
+
+    // a factory with a fake image
+    public function fakeImage(): static
+    {
+        return $this->state(function (array $attributes) {
+            $threeLetterCode = $this->faker->unique()->regexify('[A-Z]{3}');
+            $fakeImage = ImageUtils::saveImage(640, 480, "images/$threeLetterCode-fake.jpg");
+            return [
+                'prefix' => $threeLetterCode,
+                'image' => $fakeImage,
+            ];
+        });
     }
 }

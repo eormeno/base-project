@@ -3,6 +3,7 @@
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GameAppController;
 use App\Http\Controllers\GuessTheNumberController;
 use App\Http\Controllers\MythicTreasureQuestController;
 
@@ -30,15 +31,17 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $gameApps = \App\Models\GameApp::all();
+        return view('dashboard', compact('gameApps'));
     })->name('dashboard');
-
 
     buildRoutes('guess-the-number', GuessTheNumberController::class);
     buildRoutes('mythic-treasure-quest', MythicTreasureQuestController::class);
 
     Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
+
+    Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'show'])->name('play');
 
 });
 

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GameApp extends Model
 {
-    /** @use HasFactory<\Database\Factories\GameAppFactory> */
     use HasFactory;
+    public $timestamps = false;
 }

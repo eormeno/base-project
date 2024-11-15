@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('prefix', 3)->unique();
             $table->string('name');
-            $table->string('icon');
-            $table->timestamps();
+            $table->text('description');
+            $table->string('image')->nullable();
         });
     }
 

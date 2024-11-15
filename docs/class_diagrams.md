@@ -9,7 +9,8 @@ classDiagram
     class GameApp {
         +string prefix
         +string name
-        +string icon
+        +string description
+        +string image
     }
     class GameInstance {
     }
