@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
@@ -33,9 +34,14 @@ class GameObject extends Model
         return $this->morphMany(Component::class, 'componentable');
     }
 
-    public function parent(): MorphOne
+    public function groups() : HasMany
     {
-        return $this->morphOne(Component::class, 'parentable');
+        return $this->hasMany(Group::class);
+    }
+
+    public function parent() : BelongsTo
+    {
+        return $this->belongsTo(Group::class);
     }
 
     public function getComponent($componentType)
@@ -48,7 +54,8 @@ class GameObject extends Model
     {
         $componentModel = "App\\Models\\Components\\" . Str::studly($componentType) . "Component";
         $newComponent = $this->morphOne($componentModel, 'componentable')->create($properties);
-        $this->morphOne(Component::class, 'parentable')->save($newComponent);
+        $newComponent->gameObject()->associate($this);
+        $newComponent->save();
         return $newComponent;
     }
 }

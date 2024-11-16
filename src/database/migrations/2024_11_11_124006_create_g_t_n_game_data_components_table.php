@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->boolean('active')->default(true);
             $table->morphs('componentable');
-            $table->morphs('parentable');
             $table->integer('number_to_guess')->nullable();
             $table->integer('times_played')->default(0);
             $table->integer('score')->default(0);
