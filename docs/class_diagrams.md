@@ -20,7 +20,8 @@ classDiagram
     class Game {
         +string invitation_code
     }
-    class Player {
+    class game_user {
+        <<Table>>
     }
     class Prefab {
         +string name
@@ -45,8 +46,8 @@ classDiagram
     GameObject -- "n" Component : components
     Component -- "n" GameObject : parent
     GameApp "1" -- "n" Game : games
-    Game "1" -- "1..n" Player : players
+    Game "1" -- "1..n" game_user : players
     GameApp "n" -- "1" Prefab : prefab
-    Player "0..n" -- "1" User : user
+    game_user "0..n" -- "1" User : games
 ```
 
