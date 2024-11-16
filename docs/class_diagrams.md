@@ -1,6 +1,11 @@
 ### Diagrama de clases
 
 ```mermaid
+---
+  config:
+    class:
+      hideEmptyMembersBox: true
+---
 classDiagram
     direction LR
     class User {
@@ -21,33 +26,38 @@ classDiagram
         +string invitation_code
     }
     class game_user {
-        <<Table>>
+        <<pivot>>
     }
     class Prefab {
         +string name
         +string description
         +json structure
-        +GameObject instantiate()
+        +GameObject instantiate(place)
     }
     class GameObject {
         +string name
         +bool active
         +string state
+        +json place
+    }
+    class Group {
+        +string name
+        +bool active
     }
     class Component {
         +bool active
-        +string componentType
-        +onStart()
-        +onUpdate()
-        +onDestroy()
-        +onStateChanged()
+        +string component_type
+        +start()
+        +update(delta)
+        +stateChanged()
     }
-    Game -- "1" GameObject : root
-    GameObject -- "n" Component : components
-    Component -- "n" GameObject : parent
-    GameApp "1" -- "n" Game : games
+    Game --> "1" GameObject : root_game_object
+    GameObject "1" -- "n" Component : components
+    GameObject -- "n" Group : groups
+    Group -- "1..n" GameObject : game_objects
+    GameApp "1" -- "0..n" Game : game_app
     Game "1" -- "1..n" game_user : players
-    GameApp "n" -- "1" Prefab : prefab
+    GameApp "0..n" -- "1" Prefab : prefab
     game_user "0..n" -- "1" User : games
 ```
 
