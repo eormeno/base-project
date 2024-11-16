@@ -17,6 +17,7 @@ class GameAppSeeder extends Seeder
             'prefix' => 'GTN',
             'name' => 'Adivina el número',
             'description' => 'Un simple juego donde adivinas un número entre 1 y 1024.',
+            'prefab' => 'guess-the-number'
         ]);
         GameApp::factory()->image('mythic-treasure-quest.jpeg')->create([
             'prefix' => 'MTQ',

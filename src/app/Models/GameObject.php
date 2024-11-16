@@ -12,7 +12,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class GameObject extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
     protected $fillable = ['name', 'active', 'state', 'parent_id'];
+
+    /**
+     * Mutator for the 'name' attribute that slugifies it.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setNameAttribute(string $value): void
+    {
+        $this->attributes['name'] = Str::slug($value);
+    }
 
     public function components(): MorphMany
     {
