@@ -20,8 +20,13 @@ class GameAppFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence(4),
+            'description' => $this->faker->text,
+            'min_age' => 18,
+            'max_instances_per_user' => 1,
+            'min_users_per_instance' => 1,
+            'max_users_per_instance' => 1,
             'active' => true,
-            'description' => $this->faker->text
+            'version' => '1.0.0',
         ];
     }
 

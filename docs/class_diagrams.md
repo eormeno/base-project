@@ -1,5 +1,4 @@
-# Diagramas de clases
-El siguiente diagrama muestra la relación entre las clases GameApplet, GameObject, Component y User.
+### Diagrama de clases
 
 ```mermaid
 classDiagram
@@ -9,13 +8,23 @@ classDiagram
     class GameApp {
         +string prefix
         +string name
-        +string description
         +string image
+        +string description
+        +string version
+        +int min_age
+        +bool active
+        +int max_instances_per_user
+        +int min_users_per_instance
+        +int max_users_per_instance
     }
-    class GameInstance {
+    class Game {
+        +string invitation_code
+    }
+    class Player {
     }
     class Prefab {
-        +string slug
+        +string name
+        +string description
         +json structure
         +GameObject instantiate()
     }
@@ -32,11 +41,12 @@ classDiagram
         +onDestroy()
         +onStateChanged()
     }
-    GameInstance *-- "1" GameObject : root
-    GameObject o-- "n" Component : components
-    Component *-- "n" GameObject : parent
-    GameApp "1" -- "n" GameInstance
-    GameInstance "n" -- "1..n" User
+    Game -- "1" GameObject : root
+    GameObject -- "n" Component : components
+    Component -- "n" GameObject : parent
+    GameApp "1" -- "n" Game : games
+    Game "1" -- "1..n" Player : players
     GameApp "n" -- "1" Prefab : prefab
+    Player "0..n" -- "1" User : user
 ```
 

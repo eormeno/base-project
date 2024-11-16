@@ -14,11 +14,16 @@ return new class extends Migration
         Schema::create('game_apps', function (Blueprint $table) {
             $table->id();
             $table->string('prefix', 3)->unique();
-            $table->boolean('active')->default(true);
             $table->string('name');
             $table->text('description');
+            $table->integer('min_age')->default(18);
             $table->string('image')->nullable();
             $table->string('prefab')->nullable();
+            $table->string('version')->nullable();
+            $table->integer('max_instances_per_user')->default(1);
+            $table->integer('min_users_per_instance')->default(1);
+            $table->integer('max_users_per_instance')->default(1);
+            $table->boolean('active')->default(true);
         });
     }
 

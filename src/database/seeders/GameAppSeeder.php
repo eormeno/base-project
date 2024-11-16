@@ -29,13 +29,17 @@ class GameAppSeeder extends Seeder
             'prefix' => 'TTT',
             'name' => 'Tic Tac Toe',
             'active' => false,
-            'description' => 'Un simple juego de Tic Tac Toe.'
+            'description' => 'Un simple juego de Tic Tac Toe.',
+            'max_users_per_instance' => 2,
+            'min_users_per_instance' => 2
         ]);
         GameApp::factory()->image('rock-paper-scissors.jpeg')->create([
             'prefix' => 'RPS',
             'name' => 'Piedra, Papel, Tijera',
             'active' => false,
-            'description' => 'Un simple juego de Piedra, Papel o Tijera.'
+            'description' => 'Un simple juego de Piedra, Papel o Tijera.',
+            'max_users_per_instance' => 2,
+            'min_users_per_instance' => 2
         ]);
     }
 }
