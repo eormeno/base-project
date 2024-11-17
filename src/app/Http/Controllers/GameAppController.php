@@ -17,6 +17,11 @@ class GameAppController extends Controller
         $gameApp->prefab; // eager loading the prefab
         // add the $count to the gameApp object for the response
         $gameApp->user_instances = $count;
+        // add a new Game instance to the current user
+        auth()->user()->games()->create([
+            'game_app_id' => $gameApp->id,
+            'game_object_id' => $gameApp->prefab->id,
+        ]);
 
         return response()->json($gameApp);
     }

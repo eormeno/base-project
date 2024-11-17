@@ -2,7 +2,7 @@
 
 namespace App\Models\Components\GTN;
 
-use App\Models\Components\Component;
+use App\Models\Component;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GTNGameDataComponent extends Component

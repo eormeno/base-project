@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models\Components;
+namespace App\Models;
 
-use App\Models\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-abstract class Component extends Model
+class Component extends Model
 {
     public $timestamps = false;
     protected $fillable = ['component_type', 'game_object_id', 'active', 'properties'];
