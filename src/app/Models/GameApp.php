@@ -18,7 +18,7 @@ class GameApp extends Model
         'image',
         'description',
         'min_age',
-        'prefab',
+        'prefab_name',
         'active',
         'version',
         'max_instances',
@@ -32,6 +32,6 @@ class GameApp extends Model
     }
 
     public function prefab(): HasOne {
-        return $this->hasOne(Prefab::class, 'name', 'prefab');
+        return $this->hasOne(Prefab::class, 'name', 'prefab_name');
     }
 }

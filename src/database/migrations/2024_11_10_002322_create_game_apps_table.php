@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('min_age')->default(18);
             $table->string('image')->nullable();
-            $table->string('prefab')->nullable();
+            $table->string('prefab_name')->nullable();
             $table->string('version')->nullable();
             $table->integer('max_instances_per_user')->default(1);
             $table->integer('min_users_per_instance')->default(1);

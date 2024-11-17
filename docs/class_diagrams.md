@@ -7,7 +7,7 @@
       hideEmptyMembersBox: true
 ---
 classDiagram
-    direction LR
+    direction TD
     class User {
     }
     class GameApp {
@@ -55,7 +55,7 @@ classDiagram
     GameObject "1" -- "n" Component : components
     GameObject -- "n" Group : groups
     Group -- "1..n" GameObject : game_objects
-    GameApp "1" -- "0..n" Game : game_app
+    GameApp "1" -- "0..n" Game : games
     Game "1" -- "1..n" game_user : players
     GameApp "0..n" -- "1" Prefab : prefab
     game_user "0..n" -- "1" User : games

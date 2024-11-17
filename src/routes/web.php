@@ -41,7 +41,7 @@ Route::middleware([
     Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
 
-    Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'show'])->name('play');
+    Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'play'])->name('play');
 
 });
 
