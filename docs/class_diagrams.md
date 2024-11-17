@@ -75,6 +75,7 @@ erDiagram
     Group ||--o{ GameObject : "has"
     Prefab one or zero --o{ GameApp : ""
     User ||--o{ game_user : "plays"
+    Game one or zero -- 1 GameObject : "has"
 
     GameApp {
         int id PK
@@ -93,8 +94,9 @@ erDiagram
 
     Game {
         int id PK
-        string invitation_code
         int game_app_id FK
+        int root_game_object_id FK
+        string invitation_code
     }
 
     game_user {
