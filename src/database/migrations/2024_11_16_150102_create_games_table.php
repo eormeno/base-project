@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('invitation_code')->nullable();
             $table->foreignId('game_app_id')->constrained();
-            $table->foreignId('game_object_id')->constrained();
+            $table->foreignId('game_object_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Game;
 use App\Models\GameApp;
+use Illuminate\Http\Request;
 
 class GameAppController extends Controller
 {
@@ -17,11 +18,14 @@ class GameAppController extends Controller
         $gameApp->prefab; // eager loading the prefab
         // add the $count to the gameApp object for the response
         $gameApp->user_instances = $count;
-        // add a new Game instance to the current user
-        auth()->user()->games()->create([
+
+        $newGameInstance = Game::create([
             'game_app_id' => $gameApp->id,
-            'game_object_id' => $gameApp->prefab->id,
+            'invitation_code' => uniqid(),
         ]);
+
+        $newGameInstance->players()->attach(auth()->user());
+
 
         return response()->json($gameApp);
     }
