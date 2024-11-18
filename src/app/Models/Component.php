@@ -11,7 +11,8 @@ class Component extends Model
     public $timestamps = false;
     protected $fillable = ['component_type', 'game_object_id', 'active', 'properties'];
     protected $casts = [
-        'properties' => 'array'
+        'properties' => 'array',
+        'active' => 'boolean',
     ];
 
     public function gameObject(): BelongsTo

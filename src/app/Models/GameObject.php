@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Component;
+use App\Utils\ReflectionUtils;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,11 +17,10 @@ class GameObject extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'active', 'state', 'group_id', 'place'];
+    protected $fillable = ['name', 'active', 'state', 'group_id'];
 
     protected $casts = [
         'active' => 'boolean',
-        'state' => 'array',
     ];
 
     /**
@@ -51,13 +51,14 @@ class GameObject extends Model
 
     public function getComponent($componentType)
     {
-        $componentModel = "App\\Models\\Components\\" . Str::studly($componentType) . "Component";
+        $componentModel = ReflectionUtils::componentClass($componentType);
         return $this->morphOne($componentModel, 'componentable')->first();
     }
 
     public function addComponent($componentType, array $properties = [])
     {
-        $componentModel = "App\\Models\\Components\\" . Str::studly($componentType) . "Component";
+        $componentModel = ReflectionUtils::componentClass($componentType);
+        $properties['game_object_id'] = $this->id;
         $newComponent = $this->morphOne($componentModel, 'componentable')->create($properties);
         $newComponent->gameObject()->associate($this);
         $newComponent->save();

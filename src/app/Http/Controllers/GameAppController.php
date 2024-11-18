@@ -22,8 +22,20 @@ class GameAppController extends Controller
         }
 
         if ($gameApp->max_instances_per_user === 1) {
-            $gameApp->prefab; // eager loading the prefab
-            return response()->json($gameApp);
+            // $gameApp->prefab;
+            $currentGame = $gameApp->games->first();
+            $gameObject = $currentGame->gameObject;
+            // iterate over the components of the gameObject
+            foreach ($gameObject->components as $component) {
+                // get the component type
+                $componentType = $component->componentable_type;
+                $gameObject->elements[] = [
+                    'type' => $componentType,
+                    'properties' => $component->componentable->toArray(),
+                ];
+            }
+
+            return response()->json($gameObject);
         }
 
         return response()->json([

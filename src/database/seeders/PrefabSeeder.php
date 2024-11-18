@@ -15,12 +15,22 @@ class PrefabSeeder extends Seeder
     {
         $guessTheNumberPrefabStructure = [
             'name' => 'root',
+            'state' => 'initial',
             'components' => [
-                'type'=> 'guess-the-number-data',
-                'properties' => [
-                    'min' => 1,
-                    'max' => 1024,
-                    'attempts' => 10
+                [
+                    'type' => 'gtn.game-data',
+                    'properties' => [
+                        'min' => 1,
+                        'max' => 1024,
+                        'attempts' => 10
+                    ]
+                ],
+                [
+                    'type' => 'state-web-renderer',
+                    'properties' => [
+                        'rendered_state' => 'initial',
+                        'slot' => 'main',
+                    ]
                 ]
             ]
         ];

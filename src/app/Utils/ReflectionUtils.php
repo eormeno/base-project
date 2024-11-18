@@ -5,6 +5,7 @@ namespace App\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -166,6 +167,24 @@ class ReflectionUtils
             }
         }
         return $relations;
+    }
+
+    public static function componentClass(string $componentType): string
+    {
+        $onlyType = $componentType;
+        $path = '';
+        if (Str::contains($componentType, '.')) {
+            $onlyType = Str::afterLast($componentType, '.');
+            $path = self::dotsToPath(Str::beforeLast($componentType, '.')) . '\\';
+        }
+        $studly = Str::studly($onlyType);
+        $componentModel = "App\\Models\\Components\\$path{$studly}Component";
+        return $componentModel;
+    }
+
+    private static function dotsToPath($dots)
+    {
+        return str_replace('.', '\\', $dots);
     }
 
 }

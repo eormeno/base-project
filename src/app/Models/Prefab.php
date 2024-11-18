@@ -46,13 +46,13 @@ class Prefab extends Model
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
             'name' => $this->structure['name'],
-            'place' => json_encode($place),
+            'state' => $this->structure['state'],
         ]);
 
-        // // Crear los componentes definidos en la estructura
-        // foreach ($this->structure['components'] as $componentData) {
-        //     $this->createComponent($gameObject, $componentData);
-        // }
+        // Crear los componentes definidos en la estructura
+        foreach ($this->structure['components'] as $componentData) {
+            $this->createComponent($gameObject, $componentData);
+        }
 
         // // Si hay un TransformComponent, establecer la posición
         // if ($transform = $gameObject->getComponent('transform')) {
@@ -92,10 +92,8 @@ class Prefab extends Model
         return $child;
     }
 
-    protected function createComponent(
-        GameObject $gameObject,
-        array $componentData
-    ): Component {
+    protected function createComponent(GameObject $gameObject, array $componentData): Component
+    {
         return $gameObject->addComponent($componentData['type'], $componentData['properties']);
     }
 }

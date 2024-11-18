@@ -20,7 +20,7 @@ class Game extends Model
 
     public function gameObject(): HasOne
     {
-        return $this->hasOne(GameObject::class);
+        return $this->hasOne(GameObject::class, 'id', 'game_object_id');
     }
 
     public function players(): BelongsToMany
