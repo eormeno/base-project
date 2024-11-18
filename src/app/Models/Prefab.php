@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Log;
 use Str;
 use Illuminate\Support\Facades\DB;
-use App\Models\Components\Component;
+use App\Models\Component;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
