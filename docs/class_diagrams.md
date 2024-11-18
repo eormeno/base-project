@@ -53,7 +53,7 @@ classDiagram
         +update(delta)
         +stateChanged()
     }
-    Game --> "1" GameObject : root_game_object
+    Game --> "1" GameObject : game_object
     GameObject "1" -- "n" Component : components
     GameObject -- "n" Group : groups
     Group -- "1..n" GameObject : game_objects
@@ -95,7 +95,7 @@ erDiagram
     Game {
         int id PK
         int game_app_id FK
-        int root_game_object_id FK
+        int game_object_id FK
         string invitation_code
     }
 

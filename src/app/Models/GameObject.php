@@ -16,7 +16,12 @@ class GameObject extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'active', 'state', 'parent_id'];
+    protected $fillable = ['name', 'active', 'state', 'group_id', 'place'];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'state' => 'array',
+    ];
 
     /**
      * Mutator for the 'name' attribute that slugifies it.

@@ -10,23 +10,29 @@ class GameAppController extends Controller
 {
     public function play(GameApp $gameApp)
     {
-        // count from the current user, the number of games that it has playing
-        $count = auth()->user()->games()->where('game_app_id', $gameApp->id)->count();
-        if ($count >= $gameApp->max_instances_per_user) {
-            return response()->json(['message' => 'You have reached the maximum number of instances']);
+        $count = $this->countGameInstances($gameApp);
+
+        if ($count < $gameApp->max_instances_per_user) {
+            $newGameInstance = Game::create([
+                'game_app_id' => $gameApp->id,
+                'game_object_id' => $gameApp->prefab->instantiate()->id,
+                'invitation_code' => uniqid(),
+            ]);
+            $newGameInstance->players()->attach(auth()->user());
         }
-        $gameApp->prefab; // eager loading the prefab
-        // add the $count to the gameApp object for the response
-        $gameApp->user_instances = $count;
 
-        $newGameInstance = Game::create([
-            'game_app_id' => $gameApp->id,
-            'invitation_code' => uniqid(),
+        if ($gameApp->max_instances_per_user === 1) {
+            $gameApp->prefab; // eager loading the prefab
+            return response()->json($gameApp);
+        }
+
+        return response()->json([
+            'message' => 'Should be able to select a game instance',
         ]);
+    }
 
-        $newGameInstance->players()->attach(auth()->user());
-
-
-        return response()->json($gameApp);
+    private function countGameInstances(GameApp $gameApp)
+    {
+        return auth()->user()->games()->where('game_app_id', $gameApp->id)->count();
     }
 }

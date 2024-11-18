@@ -26,6 +26,10 @@ class GameApp extends Model
         'max_players_per_instance',
     ];
 
+    protected $casts = [
+        'active' => 'boolean',
+    ];
+
     public function games() : HasMany
     {
         return $this->hasMany(Game::class);

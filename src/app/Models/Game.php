@@ -18,7 +18,7 @@ class Game extends Model
         return $this->belongsTo(GameApp::class);
     }
 
-    public function rootGameObject(): HasOne
+    public function gameObject(): HasOne
     {
         return $this->hasOne(GameObject::class);
     }

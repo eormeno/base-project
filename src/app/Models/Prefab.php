@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Log;
 use Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Components\Component;
@@ -46,26 +47,25 @@ class Prefab extends Model
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
             'name' => $this->structure['name'],
-            'prefab_id' => $this->id,
-            'parent_id' => $parent?->id
+            'place' => json_encode($place),
         ]);
 
-        // Crear los componentes definidos en la estructura
-        foreach ($this->structure['components'] as $componentData) {
-            $this->createComponent($gameObject, $componentData);
-        }
+        // // Crear los componentes definidos en la estructura
+        // foreach ($this->structure['components'] as $componentData) {
+        //     $this->createComponent($gameObject, $componentData);
+        // }
 
-        // Si hay un TransformComponent, establecer la posición
-        if ($transform = $gameObject->getComponent('transform')) {
-            $transform->update(['position' => $place]);
-        }
+        // // Si hay un TransformComponent, establecer la posición
+        // if ($transform = $gameObject->getComponent('transform')) {
+        //     $transform->update(['position' => $place]);
+        // }
 
-        // Crear los hijos recursivamente
-        if (isset($this->structure['children'])) {
-            foreach ($this->structure['children'] as $childData) {
-                $this->createChildFromStructure($gameObject, $childData);
-            }
-        }
+        // // Crear los hijos recursivamente
+        // if (isset($this->structure['children'])) {
+        //     foreach ($this->structure['children'] as $childData) {
+        //         $this->createChildFromStructure($gameObject, $childData);
+        //     }
+        // }
 
         return $gameObject;
     }
