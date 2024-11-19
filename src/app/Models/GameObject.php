@@ -16,11 +16,10 @@ class GameObject extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'active', 'state', 'group_id', 'place'];
+    protected $fillable = ['name', 'active', 'state', 'game_object_id'];
 
     protected $casts = [
         'active' => 'boolean',
-        'place' => 'array',
     ];
 
     /**
@@ -39,14 +38,14 @@ class GameObject extends Model
         return $this->hasMany(Component::class);
     }
 
-    public function groups(): HasMany
+    public function children(): HasMany
     {
-        return $this->hasMany(Group::class);
+        return $this->hasMany(GameObject::class);
     }
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Group::class);
+        return $this->belongsTo(GameObject::class);
     }
 
     /**
@@ -95,20 +94,4 @@ class GameObject extends Model
         }
         return false;
     }
-
-    // public function getComponent($componentType)
-    // {
-    //     $componentModel = ReflectionUtils::componentClass($componentType);
-    //     return $this->morphOne($componentModel, 'componentable')->first();
-    // }
-
-    // public function addComponent($componentType, array $properties = [])
-    // {
-    //     $componentModel = ReflectionUtils::componentClass($componentType);
-    //     $properties['game_object_id'] = $this->id;
-    //     $newComponent = $this->morphOne($componentModel, 'componentable')->create($properties);
-    //     $newComponent->gameObject()->associate($this);
-    //     $newComponent->save();
-    //     return $newComponent;
-    // }
 }

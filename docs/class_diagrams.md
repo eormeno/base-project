@@ -3,7 +3,7 @@
 title: Diagrama de clases
 config:
     class:
-      hideEmptyMembersBox: true
+        hideEmptyMembersBox: true
 ---
 classDiagram
     direction TD
@@ -37,30 +37,28 @@ classDiagram
         +string name
         +bool active
         +string state
-        +json place
-    }
-    class Group {
-        +string name
-        +bool active
+        +GameObject parent
+        +GameObject[] children
     }
     class Component {
-        +int componentable_type
-        +int componentable_id
-        +string component_type
-        +json properties
+        +string type
         +bool active
-        +start()
-        +update(delta)
-        +stateChanged()
+        +onStart()
+        +onUpdate(delta)
+        +onStateChanged(old, new)
+    }
+    class StateWebRendererComponent {
+        +string rendered_state
+        +string slot
+        +string view
     }
     Game --> "1" GameObject : game_object
     GameObject "1" -- "n" Component : components
-    GameObject -- "n" Group : groups
-    Group -- "1..n" GameObject : game_objects
     GameApp "1" -- "0..n" Game : games
     Game "1" -- "1..n" game_user : players
     GameApp "0..n" -- "1" Prefab : prefab
     game_user "0..n" -- "1" User : games
+    StateWebRendererComponent --|> Component
 ```
 
 ```mermaid
@@ -68,16 +66,16 @@ classDiagram
 title: Diagrama de entidad relación
 ---
 erDiagram
-    GameApp ||--o{ Game : "has"
-    Game ||--o{ game_user : "played by"
-    GameObject ||--o{ Component : "has"
-    GameObject ||--o{ Group : "belongs"
-    Group ||--o{ GameObject : "has"
-    Prefab one or zero --o{ GameApp : ""
-    User ||--o{ game_user : "plays"
-    Game one or zero -- 1 GameObject : "has"
+    game_apps ||--o{ games : "has"
+    games ||--o{ game_user : "played by"
+    game_objects ||--o{ components : "has"
+    game_objects one or zero -- zero or many game_objects : "children"
+    prefabs one or zero --o{ game_apps : ""
+    users ||--o{ game_user : "plays"
+    games one or zero -- 1 game_objects : "has"
+    state_web_renderer_components ||--|| components : "is a"
 
-    GameApp {
+    game_apps {
         int id PK
         string prefix
         string name
@@ -92,7 +90,7 @@ erDiagram
         bool active
     }
 
-    Game {
+    games {
         int id PK
         int game_app_id FK
         int game_object_id FK
@@ -103,44 +101,43 @@ erDiagram
         int id PK
         int game_id FK
         int user_id FK
+        datetime created_at
+        datetime updated_at
     }
 
-    Prefab {
+    prefabs {
         int id PK
         string name UK
         string description
         json structure
     }
 
-    GameObject {
-        int id PK
-        int group_id FK
-        string name
-        bool active
-        string state
-        json place
-    }
-
-    Group {
+    game_objects {
         int id PK
         int game_object_id FK
         string name
         bool active
+        string state
     }
 
-    Component {
+    components {
         int id PK
-        string component_type
-        int componentable_id FK
-        int componentable_type
-        json properties
+        int game_object_id FK
+        string type
         bool active
     }
 
-    User {
+    users {
         int id PK
         string name
         string email
+    }
+
+    state_web_renderer_components {
+        int id PK,FK
+        string rendered_state
+        string slot
+        string view
     }
 ```
 

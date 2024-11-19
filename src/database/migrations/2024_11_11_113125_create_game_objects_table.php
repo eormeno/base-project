@@ -12,11 +12,10 @@ return new class extends Migration {
     {
         Schema::create('game_objects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('game_object_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name')->index();
             $table->boolean('active')->default(true);
             $table->string('state')->default('initial');
-            $table->json('place')->nullable();
         });
     }
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\GameApp;
-use Illuminate\Http\Request;
+use App\Models\Components\WebRenderizable;
 
 class GameAppController extends Controller
 {
@@ -22,14 +22,18 @@ class GameAppController extends Controller
         }
 
         if ($gameApp->max_instances_per_user === 1) {
-            // $gameApp->prefab;
             $currentGame = $gameApp->games->first();
             $gameObject = $currentGame->gameObject;
             foreach ($gameObject->components as $component) {
-                $component->subclass()->onStart();
+                $subclass = $component->subclass();
+                if ($subclass instanceof WebRenderizable) {
+                    $component->view = $subclass->view();
+                }
             }
 
-            return response()->json($gameObject);
+            //return response()->json($gameObject);
+            $routeName = 'guess-the-number';
+            return view('guess-the-number.index', compact('gameObject', 'routeName'));
         }
 
         return response()->json([

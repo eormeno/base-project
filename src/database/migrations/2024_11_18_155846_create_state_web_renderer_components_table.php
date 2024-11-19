@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
             $table->string('rendered_state');
             $table->string('slot');
-            $table->json('provided_slots')->nullable();
             $table->string('view')->default('default');
         });
     }

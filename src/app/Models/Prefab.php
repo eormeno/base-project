@@ -31,31 +31,25 @@ class Prefab extends Model
         $this->attributes['name'] = Str::slug($value);
     }
 
-    public function instantiate(array $place = ['slot' => 'main']): GameObject
+    public function instantiate(): GameObject
     {
-        return DB::transaction(function () use ($place) {
-            return $this->createGameObjectHierarchy(null, $place);
+        return DB::transaction(function () {
+            return $this->createGameObjectHierarchy(null);
         });
     }
 
-    protected function createGameObjectHierarchy(?GameObject $parent = null, array $place = ['slot' => 'main']): GameObject
+    protected function createGameObjectHierarchy(?GameObject $parent = null): GameObject
     {
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
             'name' => $this->structure['name'],
             'state' => $this->structure['state'],
-            'place' => $place,
         ]);
 
         // Crear los componentes definidos en la estructura
         foreach ($this->structure['components'] as $slug_type => $attributes) {
             $this->createComponent($gameObject, $slug_type, $attributes);
         }
-
-        // // Si hay un TransformComponent, establecer la posición
-        // if ($transform = $gameObject->getComponent('transform')) {
-        //     $transform->update(['position' => $place]);
-        // }
 
         // Crear los hijos recursivamente
         if (isset($this->structure['children'])) {
