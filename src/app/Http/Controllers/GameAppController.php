@@ -25,14 +25,8 @@ class GameAppController extends Controller
             // $gameApp->prefab;
             $currentGame = $gameApp->games->first();
             $gameObject = $currentGame->gameObject;
-            // iterate over the components of the gameObject
             foreach ($gameObject->components as $component) {
-                // get the component type
-                $componentType = $component->componentable_type;
-                $gameObject->elements[] = [
-                    'type' => $componentType,
-                    'properties' => $component->componentable->toArray(),
-                ];
+                $component->subclass()->onStart();
             }
 
             return response()->json($gameObject);

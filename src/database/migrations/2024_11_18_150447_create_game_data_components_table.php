@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('game_data_components', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('game_object_id')->constrained()->onDelete('cascade');
-            $table->string('component_type')->unique()->index();
-            $table->morphs('componentable');
-            $table->json('properties')->nullable();
-            $table->boolean('active')->default(true);
+            $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
+            $table->integer('random_number')->nullable();
+            $table->integer('min_number')->default(1);
+            $table->integer('max_number')->default(1024);
+            $table->integer('attempts')->default(0);
+            $table->integer('max_attempts')->default(10);
+            $table->integer('score')->default(0);
         });
     }
 

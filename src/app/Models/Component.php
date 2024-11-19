@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Component extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['component_type', 'game_object_id', 'active', 'properties'];
+    protected $fillable = ['type', 'game_object_id', 'active'];
     protected $casts = [
-        'properties' => 'array',
         'active' => 'boolean',
     ];
 
@@ -20,20 +19,20 @@ class Component extends Model
         return $this->belongsTo(GameObject::class);
     }
 
-    public function componentable(): MorphTo
+    public function subclass()
     {
-        return $this->morphTo();
+        return $this->type::find($this->id);
     }
 
-    protected function onStart(): void
-    {
-    }
-
-    protected function onUpdate(float $delta): void
+    public function onStart(): void
     {
     }
 
-    protected function onStateChange(string $oldState, string $newState): void
+    public function onUpdate(float $delta): void
+    {
+    }
+
+    public function onStateChange(string $oldState, string $newState): void
     {
     }
 }

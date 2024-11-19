@@ -3,20 +3,21 @@
 namespace App\Models\Components;
 
 use App\Models\Component;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StateWebRendererComponent extends Component
 {
-    use HasFactory;
+    protected $fillable = ['id', 'rendered_state', 'slot', 'provided_slots', 'view'];
+    protected $casts = [
+        'provided_slots' => 'array',
+    ];
 
-    public function __construct(array $attributes = [])
+    public function super() : BelongsTo
     {
-        parent::__construct($attributes);
-        $this->component_type = 'state-web-renderer';
-        $this->properties = [
-            'rendered_state' => 'initial',
-            'slot' => 'main',
-            'provided_slots' => [],
-        ];
+        return $this->belongsTo(Component::class, 'id', 'id');
+    }
+
+    public function onStart(): void
+    {
     }
 }

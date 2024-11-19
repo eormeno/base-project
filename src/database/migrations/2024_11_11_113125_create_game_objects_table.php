@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('name')->index();
             $table->boolean('active')->default(true);
             $table->string('state')->default('initial');
+            $table->json('place')->nullable();
         });
     }
 

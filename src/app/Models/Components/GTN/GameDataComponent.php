@@ -3,19 +3,14 @@
 namespace App\Models\Components\GTN;
 
 use App\Models\Component;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GameDataComponent extends Component
 {
+    protected $fillable = ['id', 'score', 'max_attempts', 'min_number', 'max_number', 'attempts', 'random_number'];
 
-    public function __construct(array $attributes = [])
+    public function super() : BelongsTo
     {
-        parent::__construct($attributes);
-        $this->component_type = 'gtn.game-data';
-        $this->properties = [
-            'score' => 0,
-            'max_attempts' => 10,
-            'min_number' => 1,
-            'max_number' => 1024,
-        ];
+        return $this->belongsTo(Component::class, 'id', 'id');
     }
 }

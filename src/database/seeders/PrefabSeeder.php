@@ -8,29 +8,23 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PrefabSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $guessTheNumberPrefabStructure = [
             'name' => 'root',
             'state' => 'initial',
             'components' => [
-                [
-                    'type' => 'gtn.game-data',
-                    'properties' => [
-                        'min' => 1,
-                        'max' => 1024,
-                        'attempts' => 10
-                    ]
+                'gtn.game-data' => [
+                    'min_number' => 1,
+                    'max_number' => 1024,
+                    'attempts' => 0,
+                    'max_attempts' => 10,
+                    'score' => 0,
                 ],
-                [
-                    'type' => 'state-web-renderer',
-                    'properties' => [
-                        'rendered_state' => 'initial',
-                        'slot' => 'main',
-                    ]
+                'state-web-renderer' => [
+                    'rendered_state' => 'initial',
+                    'slot' => 'main',
+                    'view' => 'main.view',
                 ]
             ]
         ];

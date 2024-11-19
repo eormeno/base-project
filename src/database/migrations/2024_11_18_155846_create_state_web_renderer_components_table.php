@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('state_web_renderer_components', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('game_object_id')->constrained()->onDelete('cascade');
-            $table->string('component_type')->unique()->index();
-            $table->morphs('componentable');
-            $table->json('properties')->nullable();
-            $table->boolean('active')->default(true);
+            $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
+            $table->string('rendered_state');
+            $table->string('slot');
+            $table->json('provided_slots')->nullable();
+            $table->string('view')->default('default');
         });
     }
 
