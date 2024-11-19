@@ -33,7 +33,7 @@ class GameAppController extends Controller
 
             //return response()->json($gameObject);
             $routeName = 'guess-the-number';
-            return view('guess-the-number.index', compact('gameObject', 'routeName'));
+            return view('game-app.index', compact('gameObject', 'routeName'));
         }
 
         return response()->json([
