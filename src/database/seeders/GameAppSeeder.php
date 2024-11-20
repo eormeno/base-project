@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Game;
 use App\Models\GameApp;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -14,19 +15,21 @@ class GameAppSeeder extends Seeder
     public function run(): void
     {
         GameApp::factory()->image('guess-the-number.jpeg')->create([
-            'prefix' => 'GTN',
+            'prefix' => 'gtn',
             'name' => 'Adivina el número',
             'description' => 'Un simple juego donde adivinas un número entre 1 y 1024.',
             'prefab_name' => 'guess-the-number'
         ]);
+        Game::factory()->forGameApp('gtn')->forUser('eormeno@gmail.com')->create();
+
         GameApp::factory()->image('mythic-treasure-quest.jpeg')->create([
-            'prefix' => 'MTQ',
+            'prefix' => 'mtq',
             'active' => false,
             'name' => 'Buscador de Tesoros',
             'description' => 'Un juego donde exploras templos antiguos y encuentras tesoros y posiones usando las mecánicas de buscaminas. Pero ten cuidado! También hay trampas, monstruos y maldiciones.'
         ]);
         GameApp::factory()->image('tic-tac-toe.jpeg')->create([
-            'prefix' => 'TTT',
+            'prefix' => 'ttt',
             'name' => 'Tic Tac Toe',
             'active' => false,
             'description' => 'Un simple juego de Tic Tac Toe.',
@@ -34,7 +37,7 @@ class GameAppSeeder extends Seeder
             'min_users_per_instance' => 2
         ]);
         GameApp::factory()->image('rock-paper-scissors.jpeg')->create([
-            'prefix' => 'RPS',
+            'prefix' => 'rps',
             'name' => 'Piedra, Papel, Tijera',
             'active' => false,
             'description' => 'Un simple juego de Piedra, Papel o Tijera.',
