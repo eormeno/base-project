@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventRequestFilter;
 use App\Models\Game;
 use App\Models\GameApp;
 use App\Models\Components\WebRenderizable;
@@ -10,39 +11,38 @@ class GameAppController extends Controller
 {
     public function play(GameApp $gameApp)
     {
-        $count = $this->countGameInstances($gameApp);
+        $currentGame = $this->lastGameInstanceOfUser($gameApp);
+        return view('game-app.index', compact('currentGame'));
+    }
 
-        if ($count < $gameApp->max_instances_per_user) {
-            $newGameInstance = Game::create([
-                'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->instantiate()->id,
-                'invitation_code' => uniqid(),
-            ]);
-            $newGameInstance->players()->attach(auth()->user());
-        }
-
-        if ($gameApp->max_instances_per_user === 1) {
-            $currentGame = $gameApp->games->first();
-            $gameObject = $currentGame->gameObject;
-            foreach ($gameObject->components as $component) {
-                $subclass = $component->subclass();
-                if ($subclass instanceof WebRenderizable) {
-                    $component->view = $subclass->view();
-                }
-            }
-
-            //return response()->json($gameObject);
-            $routeName = 'guess-the-number';
-            return view('game-app.index', compact('gameObject', 'routeName'));
-        }
-
+    public function event(Game $game, EventRequestFilter $request)
+    {
         return response()->json([
-            'message' => 'Should be able to select a game instance',
+            'game' => $game->id,
+            'event' => $request->eventInfo(),
         ]);
     }
 
-    private function countGameInstances(GameApp $gameApp)
+    private function countUserGameInstances(GameApp $gameApp)
     {
         return auth()->user()->games()->where('game_app_id', $gameApp->id)->count();
+    }
+
+    private function lastGameInstanceOfUser(GameApp $gameApp): Game
+    {
+        $count = $this->countUserGameInstances($gameApp);
+
+        if ($count < $gameApp->max_instances_per_user) {
+            Game::create([
+                'game_app_id' => $gameApp->id,
+                'game_object_id' => $gameApp->prefab->instantiate()->id,
+                'invitation_code' => uniqid(),
+            ])->players()->attach(auth()->user());
+        }
+        $currentGame = auth()->user()->games()->where('game_app_id', $gameApp->id)->first();
+        $currentGame->title = $gameApp->name;
+        $currentGame->description = $gameApp->description;
+
+        return $currentGame;
     }
 }

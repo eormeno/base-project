@@ -91,6 +91,8 @@ function sendEvent(event, formData = {}, signal = false) {
                 } else {
                     json = JSON.parse(data);
 
+                    console.info(json);
+
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
                     if (!document.getElementById(rootId)) {
@@ -114,7 +116,7 @@ function sendEvent(event, formData = {}, signal = false) {
                             // }
                             arrCachedViews[key] = $html;
                         } else {
-                            elementsNotFound.push(key);
+                            //elementsNotFound.push(key);
                         }
                     }
                     eventSent = false;

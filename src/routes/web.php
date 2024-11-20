@@ -42,6 +42,7 @@ Route::middleware([
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
 
     Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'play'])->name('play');
+    Route::post('/game-app/{game}', [GameAppController::class, 'event'])->name('event');
 
 });
 

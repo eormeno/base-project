@@ -1,10 +1,10 @@
 <x-guess-the-number-layout>
-    <div id="routeDiv" route="{{ route($routeName) }}" token="{{ csrf_token() }}"></div>
+    <div id="routeDiv" route="{{ route('event', $currentGame->id) }}" token="{{ csrf_token() }}"></div>
 
     <script src="{{ asset('js/go-renderer.js') }}"></script>
 
     <x-slot name="title">
-        {{ __("$routeName.title") }}
+        {{ __("$currentGame->title") }}
     </x-slot>
 
     <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-2 max-w-md bg-slate-200">
@@ -36,8 +36,10 @@
                     </div>
                 </x-toast>
             </div>
+            {{-- Reset button
             <a href="{{ route($routeName) }}/reset"
                 class="absolute top-1 right-1 text-white bg-gray-600 px-2 py-1 rounded-full hover:bg-gray-700 text-xs">R</a>
+            --}}
         </div>
 
         <div id="main" class="bg-slate-200">
