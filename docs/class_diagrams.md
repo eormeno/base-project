@@ -47,10 +47,9 @@ classDiagram
         +onUpdate(delta)
         +onStateChanged(old, new)
     }
-    class StateWebRendererComponent {
-        +string rendered_state
-        +string slot
-        +string view
+    class WebRendererComponent {
+        #string view_name
+        +view()
     }
     Game --> "1" GameObject : game_object
     GameObject "1" -- "n" Component : components
@@ -58,7 +57,7 @@ classDiagram
     Game "1" -- "1..n" game_user : players
     GameApp "0..n" -- "1" Prefab : prefab
     game_user "0..n" -- "1" User : games
-    StateWebRendererComponent --|> Component
+    WebRendererComponent --|> Component
 ```
 
 ```mermaid
@@ -73,7 +72,6 @@ erDiagram
     prefabs one or zero --o{ game_apps : ""
     users ||--o{ game_user : "plays"
     games one or zero -- 1 game_objects : "has"
-    state_web_renderer_components ||--|| components : "is a"
 
     game_apps {
         int id PK
@@ -131,13 +129,6 @@ erDiagram
         int id PK
         string name
         string email
-    }
-
-    state_web_renderer_components {
-        int id PK,FK
-        string rendered_state
-        string slot
-        string view
     }
 ```
 
