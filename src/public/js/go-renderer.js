@@ -91,8 +91,8 @@ function sendEvent(event, formData = {}, signal = false) {
                 } else {
                     json = JSON.parse(data);
 
-                    console.info(json);
-
+                    stringified = JSON.stringify(json, null, 2);
+                    console.log(stringified);
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
                     if (!document.getElementById(rootId)) {

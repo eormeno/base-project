@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EventRequestFilter;
 use App\Models\Game;
 use App\Models\GameApp;
+use App\Http\Requests\EventRequestFilter;
 use App\Models\Components\WebRenderizable;
 
 class GameAppController extends Controller
