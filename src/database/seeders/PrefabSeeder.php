@@ -21,11 +21,7 @@ class PrefabSeeder extends Seeder
                     'max_attempts' => 10,
                     'score' => 0,
                 ],
-                'state-web-renderer' => [
-                    'rendered_state' => 'initial',
-                    'slot' => 'main',
-                    'view' => 'main.view',
-                ]
+                'gtn.asking-to-play' => [],
             ]
         ];
 
