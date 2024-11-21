@@ -85,14 +85,14 @@ function sendEvent(event, formData = {}, signal = false) {
         .then(response => response.text())
         .then(data => {
             try {
-                if (data.startsWith('<!DOCTYPE html>')) {
+                if (data.startsWith('<')) {
                     document.write(data);
                     eventSent = false;
                 } else {
                     json = JSON.parse(data);
 
-                    stringified = JSON.stringify(json, null, 2);
-                    console.log(stringified);
+                    // stringified = JSON.stringify(json, null, 2);
+                    // console.log(stringified);
                     rootId = json['root'];
                     mainDiv = document.getElementById('main');
                     if (!document.getElementById(rootId)) {

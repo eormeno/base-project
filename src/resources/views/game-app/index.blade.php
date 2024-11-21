@@ -1,7 +1,7 @@
 <x-guess-the-number-layout>
     <div id="routeDiv"
-        route_x="{{ route('event', $currentGame->id) }}"
-        route="{{ route('guess-the-number') }}"
+        route="{{ route('event', $currentGame->id) }}"
+        route_x="{{ route('guess-the-number') }}"
         token="{{ csrf_token() }}"></div>
 
     <script src="{{ asset('js/go-renderer.js') }}"></script>
