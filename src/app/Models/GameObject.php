@@ -6,6 +6,7 @@ use App\Models\Component;
 use Illuminate\Support\Str;
 use App\Utils\ReflectionUtils;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Components\WebRendererComponent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -93,5 +94,20 @@ class GameObject extends Model
             return $component->delete(); // Esto elimina tanto el componente base como el específico por la relación
         }
         return false;
+    }
+
+    public function view() {
+        $components = $this->components()->get();
+        foreach ($components as $component) {
+            if ($component->active == false) {
+                continue;
+            }
+            $subclass = $component->subclass();
+            if (is_subclass_of($subclass, WebRendererComponent::class)) {
+                return $subclass->view();
+            }
+        }
+        $html = "<h4>View not found</h4>";
+        return $html;
     }
 }

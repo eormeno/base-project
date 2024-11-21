@@ -11,13 +11,15 @@ class WebRendererComponent extends Component
 
     protected $view_name = 'web-renderer.default';
 
-    public function super() : BelongsTo
+    public function super(): BelongsTo
     {
         return $this->belongsTo(Component::class, 'id', 'id');
     }
 
     public function view()
     {
+        $view = view($this->view_name, $this->publicPropertiesToArray());
+        return $view;
     }
 
     private function publicPropertiesToArray(): array

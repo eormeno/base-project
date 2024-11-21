@@ -11,7 +11,9 @@ class GameAppController extends Controller
     public function play(GameApp $gameApp)
     {
         $currentGame = $this->lastGameInstanceOfUser($gameApp);
-        return view('game-app.index', compact('currentGame'));
+        // return response()->json(['game' => $currentGame,]);
+        // return view('game-app.index', compact('currentGame'));
+        return $currentGame->gameObject->view();
     }
 
     public function event(Game $game, EventRequestFilter $request)
@@ -32,6 +34,7 @@ class GameAppController extends Controller
         $count = $this->countUserGameInstances($gameApp);
 
         if ($count < $gameApp->max_instances_per_user) {
+            dd("Creating new game instance");
             Game::create([
                 'game_app_id' => $gameApp->id,
                 'game_object_id' => $gameApp->prefab->instantiate()->id,
@@ -39,6 +42,7 @@ class GameAppController extends Controller
             ])->players()->attach(auth()->user());
         }
         $currentGame = auth()->user()->games()->where('game_app_id', $gameApp->id)->first();
+        $currentGame->gameObject;
         $currentGame->title = $gameApp->name;
         $currentGame->description = $gameApp->description;
 

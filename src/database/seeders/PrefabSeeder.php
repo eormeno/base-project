@@ -12,7 +12,7 @@ class PrefabSeeder extends Seeder
     {
         $guessTheNumberPrefabStructure = [
             'name' => 'root',
-            'state' => 'initial',
+            'state' => 'asking-to-play',
             'components' => [
                 'gtn.game-data' => [
                     'min_number' => 1,
