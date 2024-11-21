@@ -7,6 +7,7 @@ config:
 ---
 classDiagram
     direction TD
+    note for WebStateRendererComponent "Base de componentes visuales que se activan según el estado del GameObject"
     class User {
     }
     class GameApp {
@@ -43,6 +44,7 @@ classDiagram
     class Component {
         +string type
         +bool active
+        +datetime started_at
         +onStart()
         +onUpdate(delta)
         +onStateChanged(old, new)
@@ -51,6 +53,15 @@ classDiagram
         #string view_name
         +view()
     }
+    class WebStateRendererComponent {
+        #string state
+    }
+    class IState {
+        <<interface>>
+        +state()
+        +onEnter()
+        +onExit()
+    }
     Game --> "1" GameObject : game_object
     GameObject "1" -- "n" Component : components
     GameApp "1" -- "0..n" Game : games
@@ -58,6 +69,8 @@ classDiagram
     GameApp "0..n" -- "1" Prefab : prefab
     game_user "0..n" -- "1" User : games
     WebRendererComponent --|> Component
+    WebStateRendererComponent --|> WebRendererComponent
+    WebStateRendererComponent ..|> IState : implements
 ```
 
 ```mermaid
