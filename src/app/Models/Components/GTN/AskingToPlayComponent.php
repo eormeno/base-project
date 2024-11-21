@@ -2,12 +2,12 @@
 
 namespace App\Models\Components\GTN;
 
-use App\Models\Components\IState;
-use App\Models\Components\WebRendererComponent;
+use App\Models\Components\WebStateRendererComponent;
 
-class AskingToPlayComponent extends WebRendererComponent implements IState
+class AskingToPlayComponent extends WebStateRendererComponent
 {
     protected $view_name = 'guess-the-number.asking-to-play';
+    protected $state = 'asking-to-play';
 
     public string $description = "Esta es la descripción.";
     public string $yes_i_accept_the_challenge = "Si acepto";
