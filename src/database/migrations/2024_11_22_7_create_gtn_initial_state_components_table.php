@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gtn_initial_state_components', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // PK and FK to components
+            $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
         });
     }
 

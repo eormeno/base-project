@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gtn_game_data_components', function (Blueprint $table) {
-            $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
+            $table->id(); // PK and FK to components
+            $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
             $table->integer('random_number')->nullable();
             $table->integer('min_number')->default(1);
             $table->integer('max_number')->default(1024);

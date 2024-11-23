@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gtn_showing_clue_state_components', function (Blueprint $table) {
-            $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
+            $table->id(); // PK and FK to components
+            $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
         });
     }
 
