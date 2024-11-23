@@ -13,7 +13,17 @@ class WebRendererComponent extends Component
 
     public function super(): BelongsTo
     {
-        return $this->belongsTo(Component::class, 'id', 'id');
+        return $this->belongsTo(Component::class, 'id');
+    }
+
+    public function getActiveAttribute()
+    {
+        return $this->super->active;
+    }
+
+    public function setActiveAttribute($value)
+    {
+        $this->super->update(['active' => $value]);
     }
 
     public function view()
