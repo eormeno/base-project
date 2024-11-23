@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_data_components', function (Blueprint $table) {
+        Schema::create('gtn_playing_state_components', function (Blueprint $table) {
             $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
-            $table->integer('random_number')->nullable();
-            $table->integer('min_number')->default(1);
-            $table->integer('max_number')->default(1024);
-            $table->integer('attempts')->default(0);
-            $table->integer('max_attempts')->default(10);
-            $table->integer('score')->default(0);
         });
     }
 
@@ -27,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_data_components');
+        Schema::dropIfExists('gtn_playing_state_components');
     }
 };

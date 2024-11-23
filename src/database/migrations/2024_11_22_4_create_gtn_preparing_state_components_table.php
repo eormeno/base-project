@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('asking_to_play_components', function (Blueprint $table) {
+        Schema::create('gtn_preparing_state_components', function (Blueprint $table) {
             $table->foreignId('id')->nullable()->constrained('components')->onDelete('cascade');
         });
     }
@@ -21,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asking_to_play_components');
+        Schema::dropIfExists('gtn_preparing_state_components');
     }
 };

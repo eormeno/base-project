@@ -4,8 +4,9 @@ namespace App\Models\Components\GTN;
 
 use App\Models\Components\WebStateRendererComponent;
 
-class AskingToPlayComponent extends WebStateRendererComponent
+class AskingToPlayStateComponent extends WebStateRendererComponent
 {
+    protected $table = 'gtn_asking_to_play_state_components';
     protected $view_name = 'guess-the-number.asking-to-play';
     protected $state = 'asking-to-play';
 

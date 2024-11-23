@@ -47,7 +47,6 @@ classDiagram
         +datetime started_at
         +onStart()
         +onUpdate(delta)
-        +onStateChanged(old, new)
     }
     class WebRendererComponent {
         #string view_name
