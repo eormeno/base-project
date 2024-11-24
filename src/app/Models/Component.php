@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Component extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['type', 'game_object_id', 'active'];
+    protected $fillable = ['type', 'game_object_id', 'active', 'awoke'];
     protected $casts = [
         'active' => 'boolean',
     ];
@@ -22,6 +22,10 @@ class Component extends Model
     public function subclass()
     {
         return $this->type::find($this->id);
+    }
+
+    public function awake(): void
+    {
     }
 
     public function onStart(): void

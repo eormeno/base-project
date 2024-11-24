@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Component;
 use Illuminate\Support\Str;
 use App\Utils\ReflectionUtils;
+use App\Models\Components\IState;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Components\WebRendererComponent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -59,10 +60,12 @@ class GameObject extends Model
     public function addComponent(string $slug_type, array $attributes = [])
     {
         $type = ReflectionUtils::componentClass($slug_type);
+        // the component will be inative if implements the IState interface
+        $default_active_state = !ReflectionUtils::implementsInterface($type, IState::class);
         // Crear el componente base
         $component = $this->components()->create([
             'type' => $type,
-            'active' => $attributes['active'] ?? true,
+            'active' => $attributes['active'] ?? $default_active_state,
         ]);
 
         // Crear el componente específico asociado

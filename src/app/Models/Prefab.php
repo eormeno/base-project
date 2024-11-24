@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Console\OutputStyle;
 use Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Component;
@@ -33,9 +34,19 @@ class Prefab extends Model
 
     public function instantiate(): GameObject
     {
-        return DB::transaction(function () {
+        $gameObject = DB::transaction(function () {
             return $this->createGameObjectHierarchy(null);
         });
+        // iterate all the game object's components and execute the 'awake' method and set the 'awoke' attribute to true
+        $gameObject->components->each(function (Component $component) {
+            $subclass = $component->type::find($component->id);
+            if (!$subclass) {
+                throw new \Exception("Component subclass not found for component with id {$component->id} and type {$component->type}");
+            }
+            $subclass->awake();
+            $component->update(['awoke' => true]);
+        });
+        return $gameObject;
     }
 
     protected function createGameObjectHierarchy(?GameObject $parent = null): GameObject

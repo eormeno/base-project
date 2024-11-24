@@ -23,6 +23,13 @@ class ReflectionUtils
         return CaseConverters::pascalToKebab($short_class_name);
     }
 
+    // return true if the class implements an interface
+    public static function implementsInterface($class, $interface): bool
+    {
+        $reflection = new ReflectionClass($class);
+        return $reflection->implementsInterface($interface);
+    }
+
     public static function getMethods($class)
     {
         $reflection = new ReflectionClass($class);
