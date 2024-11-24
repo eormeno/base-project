@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Console\OutputStyle;
 use Str;
-use Illuminate\Support\Facades\DB;
 use App\Models\Component;
+use App\Services\MessageService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -43,6 +44,8 @@ class Prefab extends Model
             if (!$subclass) {
                 throw new \Exception("Component subclass not found for component with id {$component->id} and type {$component->type}");
             }
+            $messageService = app(MessageService::class);
+            $subclass->setMessageServiceAttribute($messageService);
             $subclass->awake();
             $component->update(['awoke' => true]);
         });

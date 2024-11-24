@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\MessageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Component extends Model
 {
@@ -13,6 +13,13 @@ class Component extends Model
     protected $casts = [
         'active' => 'boolean',
     ];
+    protected $messageService;
+
+    // a setter for message service
+    public function setMessageServiceAttribute(MessageService $messageService): void
+    {
+        $this->messageService = $messageService;
+    }
 
     public function gameObject(): BelongsTo
     {

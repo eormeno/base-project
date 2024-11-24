@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('gtn_asking_to_play_state_components', function (Blueprint $table) {
             $table->id(); // PK and FK to components
             $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
+            $table->json('messages')->nullable();
         });
     }
 

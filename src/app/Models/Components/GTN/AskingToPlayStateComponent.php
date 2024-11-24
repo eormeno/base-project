@@ -10,9 +10,22 @@ class AskingToPlayStateComponent extends WebStateRendererComponent
     protected $view_name = 'guess-the-number.asking-to-play';
     protected $state = 'asking-to-play';
 
-    public string $description = "Esta es la descripción.";
-    public string $yes_i_accept_the_challenge = "Si acepto";
+    protected $fillable=[
+        'messages',
+    ];
+    protected $casts = [
+        'messages' => 'array',
+    ];
+
+    public string $description = "";
+    public string $yes_i_accept_the_challenge = "";
     public array $ranking = [];
+
+    public function awake(): void
+    {
+        $this->messages = $this->messageService->getMessages('asking-to-play');
+        $this->save();
+    }
 
     public function onWantToPlayEvent()
     {
