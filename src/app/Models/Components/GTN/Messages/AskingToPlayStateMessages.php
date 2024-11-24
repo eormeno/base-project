@@ -2,14 +2,14 @@
 
 namespace App\Models\Components\GTN\Messages;
 
-use App\Contracts\MessageProviderInterface;
+use App\Contracts\IMessageProvider;
 
-class AskingToPlayStateMessages implements MessageProviderInterface
+class AskingToPlayStateMessages implements IMessageProvider
 {
     public function getMessages(array $parameters): array
     {
         return [
-            'description' => "Esta es la descripción.",
+            'description' => "BIENVENIDO A GUESS THE NUMBER!",
             'yes_button' => "Si acepto",
             'ranking' => [
                 ['name' => 'Jugador 1', 'score' => 100],

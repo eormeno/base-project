@@ -23,7 +23,7 @@ class AskingToPlayStateComponent extends WebStateRendererComponent
 
     public function awake(): void
     {
-        $this->messages = $this->messageService->getMessages('asking-to-play');
+        $this->messages = $this->messageService->getMessages(self::class);
         $this->save();
     }
 

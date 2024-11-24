@@ -1,7 +1,7 @@
 <?php
 namespace App\Contracts;
 
-interface MessageProviderInterface
+interface IMessageProvider
 {
     public function getMessages(array $parameters): array;
 }
