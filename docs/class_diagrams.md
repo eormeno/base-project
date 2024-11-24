@@ -44,8 +44,8 @@ classDiagram
     class Component {
         +string type
         +bool active
-        +datetime started_at
-        +onStart()
+        +bool awoke
+        +awake()
         +onUpdate(delta)
     }
     class WebRendererComponent {
@@ -135,6 +135,7 @@ erDiagram
         int game_object_id FK
         string type
         bool active
+        bool awoke
     }
 
     users {
