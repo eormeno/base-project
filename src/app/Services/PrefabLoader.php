@@ -27,72 +27,66 @@ class PrefabLoader
                 File::makeDirectory($this->basePath, 0755, true);
                 Log::info("Created prefabs directory at: $this->basePath");
             }
-            return $this->scanDirectory($this->basePath);
+            $prefabsConfig = $this->scanDirectory($this->basePath);
+            Log::info("Found " . count($prefabsConfig) . " prefabs in directory: $this->basePath");
+
+            $result = $this->savePrefabs($prefabsConfig);
+            return $result;
         } catch (\Exception $e) {
             Log::error('Error loading prefabs: ' . $e->getMessage());
             return [];
         }
     }
 
-    /**
-     * Escanea un directorio recursivamente
-     *
-     * @param string $directory
-     * @param string $prefix
-     * @return array
-     */
-    protected function scanDirectory($directory, $prefix = '')
+    protected function savePrefabs(array $prefabs): array
     {
-        $results = [];
-
-        foreach (File::allFiles($directory) as $file) {
-            if ($file->getExtension() !== 'php') {
-                continue;
-            }
-
-            try {
-                // Obtener el path relativo desde la carpeta prefabs
-                $relativePath = substr($file->getPath(), strlen($this->basePath) + 1);
-                $dotPath = str_replace('/', '.', $relativePath);
-                $dotPath = $dotPath ? $dotPath . '.' : '';
-
-                // Obtener el nombre del archivo sin extensión
-                $fileName = $file->getFilenameWithoutExtension();
-
-                // Cargar la estructura del archivo
-                $prefabStructure = require $file->getRealPath();
-
-                // Crear o actualizar el registro en la base de datos
-                $identifier = "$dotPath.$fileName";
-
-                Prefab::updateOrCreate(
-                    ['name' => $identifier],
-                    ['name' => $identifier, 'structure' => $prefabStructure]
-                );
-
-                $results[] = [
-                    'identifier' => $identifier,
-                    'structure' => $prefabStructure,
-                    'path' => $dotPath,
-                    'fileName' => $fileName
-                ];
-
-                Log::info("Loaded prefab: {$identifier}");
-            } catch (\Exception $e) {
-                Log::error("Error processing prefab file {$file->getRealPath()} for {$identifier}" . $e->getMessage());
+        $result = ['created' => 0, 'updated' => 0];
+        foreach ($prefabs as $name => $prefab) {
+            $p = Prefab::find($name);
+            if ($p) {
+                $p->update(['structure' => $prefab]);
+                $result['updated']++;
+            } else {
+                $p = Prefab::create(['name' => $name, 'structure' => $prefab]);
+                $result['created']++;
             }
         }
-
-        // Procesar subdirectorios
-        foreach (File::directories($directory) as $subDirectory) {
-            $dirName = basename($subDirectory);
-            $newPrefix = $prefix ? $prefix . '.' . $dirName : $dirName;
-            $results = array_merge(
-                $results,
-                $this->scanDirectory($subDirectory, $newPrefix)
-            );
-        }
-
-        return $results;
+        return $result;
     }
+
+    // Escanea recursivamente un directorio en busca de documentos php y retorna una lista de nombres de archivos con su ruta relativa al directorio base
+    protected function scanDirectory($directory)
+    {
+        $prefabs = [];
+        $files = File::files($directory);
+        foreach ($files as $file) {
+            $path = $file->getPath() . '/' . $file->getFilename();
+            if (File::extension($path) === 'php') {
+                $prefab = require $path;
+                $prefabs[$this->getPrefabName($path)] = $prefab;
+            }
+        }
+        $directories = File::directories($directory);
+        foreach ($directories as $dir) {
+            $prefabs = array_merge($prefabs, $this->scanDirectory($dir));
+        }
+        return $prefabs;
+    }
+
+    // Rename the path to the prefab file to the prefab name
+    protected function getPrefabName($path)
+    {
+        $name = str_replace($this->basePath, '', $path);
+        $name = str_replace('.php', '', $name);
+        // Remove leading slash or backslash
+        $name = ltrim($name, '/');
+        $name = ltrim($name, '\\');
+        // replace slashes or backslashes with dots
+        $name = str_replace('/', '.', $name);
+        $name = str_replace('\\', '.', $name);
+        return $name;
+    }
+
+
+
 }

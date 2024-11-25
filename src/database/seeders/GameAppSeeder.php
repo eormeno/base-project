@@ -18,7 +18,7 @@ class GameAppSeeder extends Seeder
             'prefix' => 'gtn',
             'name' => 'Adivina el número',
             'description' => 'Un simple juego donde adivinas un número entre 1 y 1024.',
-            'prefab_name' => 'guess-the-number'
+            'prefab_name' => 'gtn.root'
         ]);
         Game::factory()->forGameApp('gtn')->forUser('eormeno@gmail.com')->create();
 

@@ -14,6 +14,7 @@ class ReloadPrefabsCommand extends Command
     {
         $this->info('Reloading prefabs...');
         $prefabs = $loader->loadAllPrefabs();
-        $this->info('Loaded ' . count($prefabs) . ' prefabs successfully.');
+        $this->info($prefabs['created'] . ' prefabs created.');
+        $this->info($prefabs['updated'] . ' prefabs updated.');
     }
 }

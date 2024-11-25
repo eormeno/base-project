@@ -24,17 +24,6 @@ class GameObject extends Model
         'active' => 'boolean',
     ];
 
-    /**
-     * Mutator for the 'name' attribute that slugifies it.
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setNameAttribute(string $value): void
-    {
-        $this->attributes['name'] = Str::slug($value);
-    }
-
     public function components(): HasMany
     {
         return $this->hasMany(Component::class);

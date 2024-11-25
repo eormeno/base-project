@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Str;
 use App\Models\Component;
 use App\Services\MessageService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Console\OutputStyle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,12 +12,9 @@ class Prefab extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string'; // PK es un string
-
-    public $incrementing = false; // PK no es autoincremental
-
+    protected $keyType = 'string';  // PK es un string
+    public $incrementing = false;   // PK no es autoincremental
     protected $primaryKey = 'name'; // PK es 'name'
-
     public $timestamps = false;
 
     protected $fillable = ['name', 'structure'];
@@ -27,17 +22,6 @@ class Prefab extends Model
     protected $casts = [
         'structure' => 'array',
     ];
-
-    /**
-     * Mutator that slugifies the 'name' attribute.
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setNameAttribute(string $value): void
-    {
-        $this->attributes['name'] = Str::slug($value);
-    }
 
     public function instantiate(): GameObject
     {
@@ -62,7 +46,7 @@ class Prefab extends Model
     {
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
-            'name' => $this->structure['name'],
+            'name' => $this->name,
             'state' => $this->structure['state'],
         ]);
 
