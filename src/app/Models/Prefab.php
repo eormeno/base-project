@@ -14,9 +14,15 @@ class Prefab extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string'; // PK es un string
+
+    public $incrementing = false; // PK no es autoincremental
+
+    protected $primaryKey = 'name'; // PK es 'name'
+
     public $timestamps = false;
 
-    protected $fillable = ['name', 'description', 'structure'];
+    protected $fillable = ['name', 'structure'];
 
     protected $casts = [
         'structure' => 'array',

@@ -9,9 +9,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         fake()->seed(10);
-        $this->call(MtqItemClassesSeeder::class);
+        //$this->call(MtqItemClassesSeeder::class);
         $this->call(UsersSeeder::class);
-        $this->call(PrefabSeeder::class);
-        $this->call(GameAppSeeder::class);
+        //$this->call(PrefabSeeder::class);
+        //$this->call(GameAppSeeder::class);
     }
 }

@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('prefabs', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique()->index();
-            $table->text('description')->nullable();
+            $table->string('name')->primary();
             $table->json('structure');
         });
     }
