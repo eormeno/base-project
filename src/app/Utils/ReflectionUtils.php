@@ -11,6 +11,13 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ReflectionUtils
 {
+
+    public static function short($class) : string
+    {
+        $reflection = new ReflectionClass($class);
+        return $reflection->getShortName();
+    }
+
     public static function getKebabClassName($gen_instance, string $suffix_to_remove = ""): string
     {
         if (!$gen_instance instanceof ReflectionClass) {

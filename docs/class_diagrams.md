@@ -30,9 +30,8 @@ classDiagram
     }
     class Prefab {
         +string name
-        +string description
         +json structure
-        +GameObject instantiate(place)
+        +GameObject instantiate()
     }
     class GameObject {
         +string name
@@ -116,9 +115,7 @@ erDiagram
     }
 
     prefabs {
-        int id PK
-        string name UK
-        string description
+        string name FK
         json structure
     }
 

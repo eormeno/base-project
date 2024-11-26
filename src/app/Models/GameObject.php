@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Models\Component;
-use Illuminate\Support\Str;
+use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
-use App\Models\Components\IState;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Components\WebRendererComponent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class GameObject extends Model
 {
     use HasFactory;
+    use DebugHelper;
 
     public $timestamps = false;
 
@@ -50,7 +50,8 @@ class GameObject extends Model
     {
         $type = ReflectionUtils::componentClass($slug_type);
         // the component will be inative if implements the IState interface
-        $default_active_state = !ReflectionUtils::implementsInterface($type, IState::class);
+        // $default_active_state = !ReflectionUtils::implementsInterface($type, IState::class);
+        $default_active_state = true;
         // Crear el componente base
         $component = $this->components()->create([
             'type' => $type,
@@ -96,7 +97,9 @@ class GameObject extends Model
             }
             $subclass = $component->subclass();
             if (is_subclass_of($subclass, WebRendererComponent::class)) {
-                return $subclass->view();
+                $subclassShortName = ReflectionUtils::short($subclass);
+                $this->log("Rendering component {$subclassShortName} {$this->state}");
+                //return $subclass->view();
             }
         }
         $html = "<h4>View not found</h4>";
