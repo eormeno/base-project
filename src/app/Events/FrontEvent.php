@@ -3,23 +3,22 @@
 namespace App\Events;
 
 use App\Models\Game;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameEvent
+class FrontEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Game $game;
-
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(Game $game)
-    {
-        $this->game = $game;
+    public function __construct(
+        public Game $game,
+        public array $event
+    ) {
     }
 
     /**

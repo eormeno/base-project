@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\ComponentEvent;
+use App\Events\FrontEvent;
 use App\Models\Component;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
@@ -13,8 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GameObject extends Model
 {
-    use HasFactory;
-    use DebugHelper;
+    use HasFactory, DebugHelper;
 
     public $timestamps = false;
 
@@ -23,6 +24,15 @@ class GameObject extends Model
     protected $casts = [
         'active' => 'boolean',
     ];
+
+    public function handle(FrontEvent $event)
+    {
+        if (!$this->active) {
+            return;
+        }
+        $this->log("GameObject ($this->name) handling event '{$event->event['event']}'");
+        // TODO: Implementar el manejo de eventos en los componentes Y en los hijos
+    }
 
     public function components(): HasMany
     {
@@ -89,7 +99,8 @@ class GameObject extends Model
         return false;
     }
 
-    public function view() {
+    public function view()
+    {
         $components = $this->components()->get();
         foreach ($components as $component) {
             if ($component->active == false) {

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\FrontEvent;
+use App\Traits\DebugHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,8 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Game extends Model
 {
-    use HasFactory;
+    use HasFactory, DebugHelper;
     protected $fillable = ['invitation_code', 'game_app_id', 'game_object_id'];
+
+    public function handle(FrontEvent $event)
+    {
+        $this->log("Game $this->invitation_code handling event '{$event->event['event']}'");
+    }
 
     public function gameApp(): BelongsTo
     {

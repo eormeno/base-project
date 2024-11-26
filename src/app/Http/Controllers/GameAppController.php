@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\GameApp;
+use App\Events\FrontEvent;
 use App\Services\GameInstanceService;
-use App\Http\Requests\EventRequestFilter;
 use App\Services\StateContextService;
+use App\Http\Requests\EventRequestFilter;
 
 class GameAppController extends Controller
 {
@@ -23,6 +24,7 @@ class GameAppController extends Controller
         EventRequestFilter $request,
         StateContextService $context
     ) {
+        event(new FrontEvent($game, $request->eventInfo()));
         return response()->json(
             $context->request($game, $request->eventInfo())
         );

@@ -12,16 +12,10 @@ class ComponentEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $component;
-    public $payload;
-
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(Component $component, array $payload = [])
-    {
-        $this->component = $component;
-        $this->payload = $payload;
+    public function __construct(
+        public Component $component,
+        public array $payload = []
+    ) {
     }
 
     /**
