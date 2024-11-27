@@ -5,7 +5,6 @@ namespace App\Helpers;
 use App\Models\Prefab;
 use App\Models\GameObject;
 use App\Utils\ReflectionUtils;
-use App\Services\MessageService;
 use App\Models\Components\IState;
 use Illuminate\Support\Facades\DB;
 use App\Models\Components\Component;
@@ -17,17 +16,19 @@ class InstantiateHelper
         $gameObject = DB::transaction(function () use ($prefab) {
             return self::createGameObjectHierarchy(null, $prefab);
         });
-        // iterate all the game object's components and execute the 'onAwake()' and set 'awoke' attribute to true
-        $gameObject->components->each(function (Component $component) {
-            $subclass = $component->type::find($component->id);
-            if (!$subclass) {
-                throw new \Exception("Component subclass not found for component {$component->type}");
-            }
-            $messageService = app(MessageService::class);
-            $subclass->setMessageServiceAttribute($messageService);
+        $gameObject->componentsIterator(function (Component $component, Component $subclass) {
             $subclass->onAwake();
             $component->update(['awoke' => true]);
         });
+        // // iterate all the game object's components and execute the 'onAwake()' and set 'awoke' attribute to true
+        // $gameObject->components->each(function (Component $component) {
+        //     $subclass = $component->type::find($component->id);
+        //     if (!$subclass) {
+        //         throw new \Exception("Component subclass not found for component {$component->type}");
+        //     }
+        //     $subclass->onAwake();
+        //     $component->update(['awoke' => true]);
+        // });
         return $gameObject;
     }
 

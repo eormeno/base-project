@@ -2,6 +2,7 @@
 
 namespace App\Models\Components\GTN;
 
+use App\Services\MessageService;
 use App\Models\Components\WebStateRendererComponent;
 
 class InitialStateViewComponent extends WebStateRendererComponent
@@ -23,7 +24,7 @@ class InitialStateViewComponent extends WebStateRendererComponent
 
     public function onAwake(): void
     {
-        $this->messages = $this->messageService->getMessages(self::class);
+        $this->messages = app(MessageService::class)->getMessages(self::class);
         $this->save();
     }
 

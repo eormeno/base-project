@@ -60,6 +60,15 @@ class GameObject extends Model
         return $this->belongsTo(GameObject::class);
     }
 
+    public function componentsIterator(callable $callback)
+    {
+        $components = $this->components()->get();
+        foreach ($components as $component) {
+            $subclass = $component->subclass();
+            $callback($component, $subclass);
+        }
+    }
+
     /**
      * Agregar un componente al GameObject.
      *

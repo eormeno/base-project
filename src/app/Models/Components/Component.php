@@ -3,7 +3,6 @@
 namespace App\Models\Components;
 
 use App\Models\GameObject;
-use App\Services\MessageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,19 +13,18 @@ class Component extends Model
     protected $casts = [
         'enabled' => 'boolean',
     ];
-    protected $messageService;
-
-    public function setMessageServiceAttribute(MessageService $messageService): void
-    {
-        $this->messageService = $messageService;
-    }
 
     public function gameObject(): BelongsTo
     {
         return $this->belongsTo(GameObject::class);
     }
 
-    public function subclass()
+    public function superclass() : BelongsTo
+    {
+        return $this->belongsTo(Component::class);
+    }
+
+    public function subclass() : Component
     {
         return $this->type::find($this->id);
     }
