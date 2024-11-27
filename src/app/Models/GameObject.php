@@ -7,9 +7,9 @@ use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
 use App\Helpers\InstantiateHelper;
+use App\Models\Components\IView;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Components\WebRendererComponent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -118,10 +118,10 @@ class GameObject extends Model
                 continue;
             }
             $subclass = $component->subclass();
-            if (is_subclass_of($subclass, WebRendererComponent::class)) {
+            if (is_subclass_of($subclass, IView::class)) {
                 $subclassShortName = ReflectionUtils::short($subclass);
                 $this->log("Rendering component {$subclassShortName} {$this->state}");
-                //return $subclass->view();
+                return $subclass->view();
             }
         }
         $html = "<h4>View not found</h4>";

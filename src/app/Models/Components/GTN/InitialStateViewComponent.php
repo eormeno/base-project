@@ -3,9 +3,9 @@
 namespace App\Models\Components\GTN;
 
 use App\Services\MessageService;
-use App\Models\Components\WebStateRendererComponent;
+use App\Models\Components\StateViewComponent;
 
-class InitialStateViewComponent extends WebStateRendererComponent
+class InitialStateViewComponent extends StateViewComponent
 {
     protected $table = 'gtn_initial_state_view_components';
     protected $view_name = 'guess-the-number.asking-to-play';

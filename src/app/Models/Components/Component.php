@@ -19,11 +19,6 @@ class Component extends Model
         return $this->belongsTo(GameObject::class);
     }
 
-    public function superclass() : BelongsTo
-    {
-        return $this->belongsTo(Component::class);
-    }
-
     public function subclass() : Component
     {
         return $this->type::find($this->id);

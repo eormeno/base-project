@@ -17,18 +17,10 @@ class InstantiateHelper
             return self::createGameObjectHierarchy(null, $prefab);
         });
         $gameObject->componentsIterator(function (Component $component, Component $subclass) {
+
             $subclass->onAwake();
             $component->update(['awoke' => true]);
         });
-        // // iterate all the game object's components and execute the 'onAwake()' and set 'awoke' attribute to true
-        // $gameObject->components->each(function (Component $component) {
-        //     $subclass = $component->type::find($component->id);
-        //     if (!$subclass) {
-        //         throw new \Exception("Component subclass not found for component {$component->type}");
-        //     }
-        //     $subclass->onAwake();
-        //     $component->update(['awoke' => true]);
-        // });
         return $gameObject;
     }
 
@@ -56,7 +48,8 @@ class InstantiateHelper
     {
         $child = GameObject::create([
             'name' => $childData['name'],
-            'parent_id' => $parent->id
+            'active' => $childData['active'] ?? true,
+            'game_object_id' => $parent->id
         ]);
         foreach ($childData['components'] as $slug_type => $attributes) {
             self::createComponent($child, $slug_type, $attributes);
@@ -79,9 +72,7 @@ class InstantiateHelper
             'type' => $type,
             'enabled' => $attributes['enabled'] ?? $default_enabled,
         ]);
-
         // Crear el componente específico asociado
         return $type::create(array_merge(['id' => $component->id], $attributes));
-        //return $gameObject->addComponent($slug_type, $attributes);
     }
 }

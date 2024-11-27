@@ -4,11 +4,11 @@ namespace App\Models\Components;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class WebRendererComponent extends Component
+class StateViewComponent extends Component implements IState, IView
 {
     protected $fillable = ['id'];
-
     protected $view_name = 'web-renderer.default';
+    protected $state = null;
 
     public function super(): BelongsTo
     {
@@ -23,6 +23,24 @@ class WebRendererComponent extends Component
     public function setEnabledAttribute($value)
     {
         $this->super->update(['enabled' => $value]);
+    }
+
+    public function handle(array $event): string
+    {
+        return $this->state;
+    }
+
+    public function state(): string
+    {
+        return $this->state;
+    }
+
+    public function onEnter(): void
+    {
+    }
+
+    public function onExit(): void
+    {
     }
 
     public function view()
