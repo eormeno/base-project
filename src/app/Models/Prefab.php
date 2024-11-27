@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Component;
 use App\Services\MessageService;
 use Illuminate\Support\Facades\DB;
+use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

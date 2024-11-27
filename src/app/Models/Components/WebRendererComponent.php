@@ -2,7 +2,6 @@
 
 namespace App\Models\Components;
 
-use App\Models\Component;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WebRendererComponent extends Component

@@ -2,7 +2,7 @@
 
 namespace App\Models\Components\GTN;
 
-use App\Models\Component;
+use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GameDataComponent extends Component

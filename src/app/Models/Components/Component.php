@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Components;
 
+use App\Models\GameObject;
 use App\Services\MessageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

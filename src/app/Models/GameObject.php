@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Component;
 use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
+use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Components\WebRendererComponent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,7 +31,17 @@ class GameObject extends Model
             return;
         }
         $this->log("GameObject ($this->name) handling event '{$event->event['event']}'");
-        // TODO: Implementar el manejo de eventos en los componentes Y en los hijos
+        // itera todos los componentes del GameObject
+        $components = $this->components()->get();
+        foreach ($components as $component) {
+            if ($component->enabled == false) {
+                continue;
+            }
+            $subclass = $component->subclass();
+            if (is_subclass_of($subclass, IState::class)) {
+                $subclass->handle($event);
+            }
+        }
     }
 
     public function components(): HasMany
