@@ -4,13 +4,11 @@ namespace App\Services;
 
 use App\FSM\IState;
 use ReflectionClass;
-use App\FSM\IStateModel;
 use App\Utils\Constants;
 use App\FSM\IStateContext;
 use App\Models\AStateModel;
 use Illuminate\Support\Carbon;
 use App\Helpers\StatesLocalCache;
-// use App\Helpers\StateUpdateHelper;
 use App\Services\AbstractServiceManager;
 use App\Services\AbstractServiceComponent;
 
@@ -18,7 +16,6 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 {
     protected ?IState $__state = null;
     protected AbstractServiceManager $serviceManager;
-    // protected StateUpdateHelper $stateUpdater;
     protected StateManager $stateManager;
     protected AStateModel $stateModel;
     protected int $id;
@@ -32,7 +29,6 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $this->stateManager = $serviceManager->stateManager;
         $this->stateModel = $stateModel;
         $this->id = $stateModel->id;
-        // $this->stateUpdater = new StateUpdateHelper($serviceManager, $stateModel);
     }
 
     private function setState(ReflectionClass $rflStateClass): IState
@@ -45,17 +41,13 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
         $stateInstance->setStateModel($this->stateModel);
         if ($this->__state && $this->__state != $stateInstance) {
             $this->__state->onExit();
-            //$this->stateUpdater->setEnteredAt(null);
             $this->stateModel->entered_at = null;
         }
-        //if (!$this->stateUpdater->getEnteredAt()) {
         if (!$this->stateModel->entered_at) {
             $stateInstance->reset();
             $stateInstance->onEnter();
-            //$this->stateUpdater->setEnteredAt(Carbon::now());
             $this->stateModel->entered_at = Carbon::now();
         }
-        //$stateInstance->enteredAt = $this->stateUpdater->getEnteredAt();
         $stateInstance->enteredAt = $this->stateModel->entered_at;
         $this->__state = $stateInstance;
         return $stateInstance;
@@ -71,7 +63,6 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     public function request(array $eventInfo): IState
     {
-        // $stateWasNull = $this->stateModel->_getState() == null;
         $stateFirstTime = $this->stateModel->entered_at == null;
         $destination = $eventInfo['destination'];
         $initialState = null;
@@ -87,13 +78,11 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
             $newState = $currentState->handleRequest($eventInfo);
             $changedState = $this->setState($newState);
             $hasIntermediateChange |= $currentState != $changedState;
-            //$this->stateUpdater->saveState($changedState::StateClass());
             $this->stateModel->updateState($changedState::StateClass());
             $eventInfo = Constants::EMPTY_EVENT;
         } while ($currentState != $changedState);
         $this->isStateChanged = $initialState != $changedState ||
             $hasIntermediateChange ||
-            //$stateWasNull ||
             $stateFirstTime;
         if ($destination == 'all' || $destination == $this->stateModel->getAlias()) {
             $changedState->onRefresh();
@@ -103,10 +92,8 @@ class StateContextImpl extends AbstractServiceComponent implements IStateContext
 
     protected function restoreState(): IState
     {
-        //$rflState = $this->stateUpdater->readState();
         $rflState = $this->stateModel->currentState();
         $staRegistered = StatesLocalCache::findRegisteredStateInstance($rflState, $this->id);
-        //$this->stateUpdater->saveState($rflState);
         $this->stateModel->updateState($rflState);
         return $this->setState($staRegistered::StateClass());
     }
