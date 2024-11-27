@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('gtn_asking_to_play_state_components', function (Blueprint $table) {
-            $table->id(); // PK and FK to components
+        Schema::create('gtn_initial_state_view_components', function (Blueprint $table) {
+            $table->id();
             $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
             $table->json('messages')->nullable();
         });
@@ -22,6 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('gtn_asking_to_play_state_components');
+        Schema::dropIfExists('gtn_initial_state_view_components');
     }
 };

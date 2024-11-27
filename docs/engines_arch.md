@@ -101,7 +101,7 @@ El siguiente diagrama muestra la estructura de un Component en Unity:
 ```mermaid
 classDiagram
     class Component {
-        +bool active
+        +bool enabled
         +string name
         +Dictionary properties
     }

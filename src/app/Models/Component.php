@@ -9,13 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Component extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['type', 'game_object_id', 'active', 'awoke'];
+    protected $fillable = ['type', 'game_object_id', 'enabled', 'awoke'];
     protected $casts = [
-        'active' => 'boolean',
+        'enabled' => 'boolean',
     ];
     protected $messageService;
 
-    // a setter for message service
     public function setMessageServiceAttribute(MessageService $messageService): void
     {
         $this->messageService = $messageService;
@@ -31,7 +30,7 @@ class Component extends Model
         return $this->type::find($this->id);
     }
 
-    public function awake(): void
+    public function onAwake(): void
     {
     }
 
@@ -40,10 +39,6 @@ class Component extends Model
     }
 
     public function onUpdate(float $delta): void
-    {
-    }
-
-    public function onStateChange(string $oldState, string $newState): void
     {
     }
 }

@@ -16,14 +16,14 @@ class WebRendererComponent extends Component
         return $this->belongsTo(Component::class, 'id');
     }
 
-    public function getActiveAttribute()
+    public function getEnabledAttribute()
     {
-        return $this->super->active;
+        return $this->super->enabled;
     }
 
-    public function setActiveAttribute($value)
+    public function setEnabledAttribute($value)
     {
-        $this->super->update(['active' => $value]);
+        $this->super->update(['enabled' => $value]);
     }
 
     public function view()

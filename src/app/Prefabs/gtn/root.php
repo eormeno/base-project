@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'state' => 'asking-to-play',
+    'state' => null,
     'components' => [
         'gtn.game-data' => [
             'min_number' => 1,
@@ -10,8 +10,7 @@ return [
             'max_attempts' => 10,
             'score' => 0,
         ],
-        'gtn.initial-state' => [],
-        'gtn.asking-to-play-state' => [],
+        'gtn.initial-state-view' => [],
         'gtn.game-over-state' => [],
         'gtn.playing-state' => [],
         'gtn.preparing-state' => [],

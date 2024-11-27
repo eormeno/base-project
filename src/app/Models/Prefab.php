@@ -36,7 +36,7 @@ class Prefab extends Model
             }
             $messageService = app(MessageService::class);
             $subclass->setMessageServiceAttribute($messageService);
-            $subclass->awake();
+            $subclass->onAwake();
             $component->update(['awoke' => true]);
         });
         return $gameObject;

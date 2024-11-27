@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Events\ComponentEvent;
-use App\Events\FrontEvent;
 use App\Models\Component;
+use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
+use App\Models\Components\IState;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Components\WebRendererComponent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -60,12 +60,11 @@ class GameObject extends Model
     {
         $type = ReflectionUtils::componentClass($slug_type);
         // the component will be inative if implements the IState interface
-        // $default_active_state = !ReflectionUtils::implementsInterface($type, IState::class);
-        $default_active_state = true;
+        $default_enabled = !ReflectionUtils::implementsInterface($type, IState::class);
         // Crear el componente base
         $component = $this->components()->create([
             'type' => $type,
-            'active' => $attributes['active'] ?? $default_active_state,
+            'enabled' => $attributes['enabled'] ?? $default_enabled,
         ]);
 
         // Crear el componente específico asociado
@@ -103,7 +102,7 @@ class GameObject extends Model
     {
         $components = $this->components()->get();
         foreach ($components as $component) {
-            if ($component->active == false) {
+            if ($component->enabled == false) {
                 continue;
             }
             $subclass = $component->subclass();

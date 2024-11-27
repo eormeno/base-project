@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('game_object_id')->constrained()->onDelete('cascade');
             $table->string('type');
-            $table->boolean('active')->default(true);
+            $table->boolean('enabled')->default(true);
             $table->boolean('awoke')->default(false);
         });
     }

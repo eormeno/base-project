@@ -42,9 +42,10 @@ classDiagram
     }
     class Component {
         +string type
-        +bool active
+        +bool enabled
         +bool awoke
-        +awake()
+        +onAwake()
+        +onStart()
         +onUpdate(delta)
     }
     class WebRendererComponent {
@@ -131,7 +132,7 @@ erDiagram
         int id PK
         int game_object_id FK
         string type
-        bool active
+        bool enabled
         bool awoke
     }
 

@@ -4,7 +4,7 @@ namespace App\Models\Components\GTN\Messages;
 
 use App\Contracts\IMessageProvider;
 
-class AskingToPlayStateMessages implements IMessageProvider
+class InitialStateViewMessages implements IMessageProvider
 {
     public function getMessages(array $parameters): array
     {
