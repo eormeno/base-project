@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'state' => null,
     'components' => [
         'gtn.game-data' => [
             'min_number' => 1,

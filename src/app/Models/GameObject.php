@@ -6,6 +6,7 @@ use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
+use App\Helpers\InstantiateHelper;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Components\WebRendererComponent;
@@ -66,41 +67,33 @@ class GameObject extends Model
      * @param array $attributes Atributos específicos del componente
      * @return mixed El modelo del componente específico
      */
-    public function addComponent(string $slug_type, array $attributes = [])
+    public function addComponent(string $slug_type, array $attributes = []) : Component
     {
-        $type = ReflectionUtils::componentClass($slug_type);
-        // the component will be inative if implements the IState interface
-        $default_enabled = !ReflectionUtils::implementsInterface($type, IState::class);
-        // Crear el componente base
-        $component = $this->components()->create([
-            'type' => $type,
-            'enabled' => $attributes['enabled'] ?? $default_enabled,
-        ]);
-
-        // Crear el componente específico asociado
-        return $type::create(array_merge(['id' => $component->id], $attributes));
+        return InstantiateHelper::createComponent($this, $slug_type, $attributes);
     }
 
     /**
-     * Obtener un componente específico del GameObject.
+     * Obtener un componente del GameObject.
      *
-     * @param string $type Clase del componente a obtener
+     * @param string $slug_type Clase del componente a obtener (slug)
      * @return mixed|null El componente específico o null si no existe
      */
-    public function getComponent(string $type)
+    public function getComponent(string $slug_type) : ?Component
     {
+        $type = ReflectionUtils::componentClass($slug_type);
         $component = $this->components()->where('type', $type)->first();
         return $component ? $type::find($component->id) : null;
     }
 
     /**
-     * Eliminar un componente específico del GameObject.
+     * Eliminar un componente del GameObject.
      *
-     * @param string $type Clase del componente a eliminar
+     * @param string $slug_type Clase del componente a eliminar (slug)
      * @return bool Indica si se eliminó correctamente
      */
-    public function removeComponent(string $type)
+    public function removeComponent(string $slug_type): bool
     {
+        $type = ReflectionUtils::componentClass($slug_type);
         $component = $this->components()->where('type', $type)->first();
         if ($component) {
             return $component->delete(); // Esto elimina tanto el componente base como el específico por la relación
@@ -112,7 +105,7 @@ class GameObject extends Model
     {
         $components = $this->components()->get();
         foreach ($components as $component) {
-            if ($component->enabled == false) {
+            if (!$component->enabled) {
                 continue;
             }
             $subclass = $component->subclass();

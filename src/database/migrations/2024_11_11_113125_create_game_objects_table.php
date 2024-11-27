@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('game_object_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('name')->index();
             $table->boolean('active')->default(true);
-            $table->string('state')->nullable();
+            $table->string('state')->nullable()->default('initial');
         });
     }
 
