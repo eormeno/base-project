@@ -2,12 +2,15 @@
 
 namespace App\Models\Components;
 
+use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Component extends Model
 {
+    use DebugHelper;
+
     public $timestamps = false;
     protected $fillable = ['type', 'game_object_id', 'enabled', 'awoke'];
     protected $casts = [

@@ -2,10 +2,8 @@
 
 namespace App\Models\GameObject;
 
-use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
-use App\Models\Components\IState;
 use App\Helpers\InstantiateHelper;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
@@ -25,25 +23,6 @@ class GameObjectBase extends Model
         'active' => 'boolean',
     ];
 
-    public function handle(FrontEvent $event)
-    {
-        if (!$this->active) {
-            return;
-        }
-        $this->log("GameObject ($this->name) handling event '{$event->event['event']}'");
-        // itera todos los componentes del GameObject
-        $components = $this->components()->get();
-        foreach ($components as $component) {
-            if ($component->enabled == false) {
-                continue;
-            }
-            $subclass = $component->subclass();
-            if (is_subclass_of($subclass, IState::class)) {
-                $subclass->handle($event);
-            }
-        }
-    }
-
     public function components(): HasMany
     {
         return $this->hasMany(Component::class);
@@ -59,33 +38,29 @@ class GameObjectBase extends Model
         return $this->belongsTo(GameObjectBase::class);
     }
 
-    public function componentsIterator(callable $callback)
-    {
+    public function componentsIterator(
+        callable $callback,
+        ?string $type = null,
+        ?bool $enabled = null
+    ): void {
         $components = $this->components()->get();
         foreach ($components as $component) {
+            if ($enabled !== null && $component->enabled !== $enabled) {
+                continue;
+            }
             $subclass = $component->subclass();
+            if ($type !== null && !is_subclass_of($subclass, $type)) {
+                continue;
+            }
             $callback($component, $subclass);
         }
     }
 
-    /**
-     * Agregar un componente al GameObject.
-     *
-     * @param string $slug_type Nombre slug del componente a agregar. Por ejemplo: 'gtn.game-data'
-     * @param array $attributes Atributos específicos del componente
-     * @return mixed El modelo del componente específico
-     */
     public function addComponent(string $slug_type, array $attributes = []): Component
     {
         return InstantiateHelper::createComponent($this, $slug_type, $attributes);
     }
 
-    /**
-     * Obtener un componente del GameObject.
-     *
-     * @param string $slug_type Clase del componente a obtener (slug)
-     * @return mixed|null El componente específico o null si no existe
-     */
     public function getComponent(string $slug_type): ?Component
     {
         $type = ReflectionUtils::componentClass($slug_type);
@@ -93,12 +68,6 @@ class GameObjectBase extends Model
         return $component ? $type::find($component->id) : null;
     }
 
-    /**
-     * Eliminar un componente del GameObject.
-     *
-     * @param string $slug_type Clase del componente a eliminar (slug)
-     * @return bool Indica si se eliminó correctamente
-     */
     public function removeComponent(string $slug_type): bool
     {
         $type = ReflectionUtils::componentClass($slug_type);
@@ -108,5 +77,4 @@ class GameObjectBase extends Model
         }
         return false;
     }
-
 }
