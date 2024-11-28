@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
+use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

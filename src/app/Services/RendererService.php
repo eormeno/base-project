@@ -3,11 +3,18 @@
 namespace App\Services;
 
 use App\Models\Game;
-use App\Models\GameObject;
+use App\Events\FrontEvent;
+use App\Contracts\IRenderer;
 
-class StateContextService
+class RendererService implements IRenderer
 {
-    public function request(Game $game, array $event): array
+    public function render(Game $game, array $eventInfo): array
+    {
+        event(new FrontEvent($game, $eventInfo));
+        return $this->request($game, $eventInfo);
+    }
+
+    private function request(Game $game, array $event): array
     {
         $ret = [
             'root' => 'info',

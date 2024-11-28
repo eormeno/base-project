@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\GameObject;
 
 use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
 use App\Helpers\InstantiateHelper;
-use App\Models\Components\IView;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class GameObject extends Model
+class GameObjectBase extends Model
 {
     use HasFactory, DebugHelper;
 
@@ -52,12 +51,12 @@ class GameObject extends Model
 
     public function children(): HasMany
     {
-        return $this->hasMany(GameObject::class);
+        return $this->hasMany(GameObjectBase::class);
     }
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(GameObject::class);
+        return $this->belongsTo(GameObjectBase::class);
     }
 
     public function componentsIterator(callable $callback)
@@ -76,7 +75,7 @@ class GameObject extends Model
      * @param array $attributes Atributos específicos del componente
      * @return mixed El modelo del componente específico
      */
-    public function addComponent(string $slug_type, array $attributes = []) : Component
+    public function addComponent(string $slug_type, array $attributes = []): Component
     {
         return InstantiateHelper::createComponent($this, $slug_type, $attributes);
     }
@@ -87,7 +86,7 @@ class GameObject extends Model
      * @param string $slug_type Clase del componente a obtener (slug)
      * @return mixed|null El componente específico o null si no existe
      */
-    public function getComponent(string $slug_type) : ?Component
+    public function getComponent(string $slug_type): ?Component
     {
         $type = ReflectionUtils::componentClass($slug_type);
         $component = $this->components()->where('type', $type)->first();
@@ -110,21 +109,4 @@ class GameObject extends Model
         return false;
     }
 
-    public function view()
-    {
-        $components = $this->components()->get();
-        foreach ($components as $component) {
-            if (!$component->enabled) {
-                continue;
-            }
-            $subclass = $component->subclass();
-            if (is_subclass_of($subclass, IView::class)) {
-                $subclassShortName = ReflectionUtils::short($subclass);
-                $this->log("Rendering component {$subclassShortName} {$this->state}");
-                return $subclass->view();
-            }
-        }
-        $html = "<h4>View not found</h4>";
-        return $html;
-    }
 }

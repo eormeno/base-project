@@ -3,11 +3,12 @@
 namespace App\Helpers;
 
 use App\Models\Prefab;
-use App\Models\GameObject;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
 use Illuminate\Support\Facades\DB;
 use App\Models\Components\Component;
+use App\Models\GameObject\GameObject;
+use App\Models\GameObject\GameObjectBase;
 
 class InstantiateHelper
 {
@@ -17,15 +18,16 @@ class InstantiateHelper
             return self::createGameObjectHierarchy(null, $prefab);
         });
         $gameObject->componentsIterator(function (Component $component, Component $subclass) {
-
             $subclass->onAwake();
             $component->update(['awoke' => true]);
         });
         return $gameObject;
     }
 
-    protected static function createGameObjectHierarchy(?GameObject $parent = null, Prefab $prefab): GameObject
-    {
+    protected static function createGameObjectHierarchy(
+        ?GameObject $parent = null,
+        Prefab $prefab
+    ): GameObject {
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
             'name' => $prefab->name,
@@ -44,8 +46,10 @@ class InstantiateHelper
         return $gameObject;
     }
 
-    protected static function createChildFromStructure(GameObject $parent, array $childData): GameObject
-    {
+    protected static function createChildFromStructure(
+        GameObject $parent,
+        array $childData
+    ): GameObject {
         $child = GameObject::create([
             'name' => $childData['name'],
             'active' => $childData['active'] ?? true,
@@ -62,8 +66,11 @@ class InstantiateHelper
         return $child;
     }
 
-    protected static function createComponent(GameObject $gameObject, string $slug_type, array $attributes): Component
-    {
+    protected static function createComponent(
+        GameObjectBase $gameObject,
+        string $slug_type,
+        array $attributes
+    ): Component {
         $type = ReflectionUtils::componentClass($slug_type);
         // the component will be inative if implements the IState interface
         $default_enabled = !ReflectionUtils::implementsInterface($type, IState::class);

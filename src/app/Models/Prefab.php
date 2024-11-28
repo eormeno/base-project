@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\InstantiateHelper;
+use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

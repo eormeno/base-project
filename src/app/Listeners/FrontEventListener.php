@@ -3,8 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\FrontEvent;
+use App\Contracts\IFrontEventListener;
 
-class FrontEventListener
+class FrontEventListener implements IFrontEventListener
 {
 
     public function handle(FrontEvent $event): void

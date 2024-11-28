@@ -2,7 +2,7 @@
 
 namespace App\Models\Components;
 
-use App\Models\GameObject;
+use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

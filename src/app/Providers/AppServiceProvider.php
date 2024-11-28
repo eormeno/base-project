@@ -2,24 +2,19 @@
 
 namespace App\Providers;
 
+use App\Contracts\IRenderer;
+use App\Services\RendererService;
 use Illuminate\Support\ServiceProvider;
-use App\Repositories\CurrentUserRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+
     public function register(): void
     {
-
+        $this->app->bind(IRenderer::class, RendererService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
     }
 }
