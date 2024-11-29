@@ -25,7 +25,7 @@ class InitialStateViewMessages implements IMessageProvider
     private function descriptionMessage()
     {
         return __('guess-the-number.description', [
-            'user_name' => auth()->user()->name, //$this->userRepository->name(),
+            'user_name' => 'auth()->user()->name', //$this->userRepository->name(),
             'remaining_attemts' => 10, //$this->gameConfigService->getMaxAttempts(),
             'min_number' => 1, //$this->gameConfigService->getMinNumber(),
             'max_number' => 1024, //$this->gameConfigService->getMaxNumber()

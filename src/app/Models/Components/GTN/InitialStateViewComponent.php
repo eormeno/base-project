@@ -24,12 +24,6 @@ class InitialStateViewComponent extends StateViewComponent
         $this->save();
     }
 
-    public function onEnter(): void
-    {
-        $this->messages = app(MessageService::class)->getMessages(self::class);
-        $this->save();
-    }
-
     public function onWantToPlayEvent()
     {
     }

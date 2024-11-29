@@ -52,16 +52,6 @@ classDiagram
         #string view_name
         +view()
     }
-    class IState {
-        <<interface>>
-        +state()
-        +onEnter()
-        +onExit()
-    }
-    class IView {
-        <<interface>>
-        +view()
-    }
     Game --> "1" GameObject : game_object
     GameObject "1" -- "n" Component : components
     GameApp "1" -- "0..n" Game : games
@@ -69,8 +59,45 @@ classDiagram
     GameApp "0..n" -- "1" Prefab : prefab
     game_user "0..n" -- "1" User : games
     StateViewComponent --|> Component
-    StateViewComponent ..|> IState : implements
-    StateViewComponent ..|> IView : implements
+```
+
+#### Diagrama de StateViewComponent
+```mermaid
+classDiagram
+    direction LR
+    class IState {
+        <<interface>>
+        +state()
+        +handle(event)
+        +onEnter()
+        +onExit()
+    }
+    class IView {
+        <<interface>>
+        +view()
+    }
+    class StateViewComponent {
+        #string state
+        #string view_name
+        +view()
+    }
+    StateViewComponent ..|> IState
+    StateViewComponent ..|> IView
+```
+
+#### Sistema de mensajes
+El sistema de mensajes consta de un servicio que busca en tiempo de ejecución un proveedor de mensajes para la clase actual.
+```mermaid
+classDiagram
+    direction LR
+    class IMessageProvider {
+        <<interface>>
+        +getMessages(parameters)
+    }
+    class MessageService {
+        +getMessages(parameters)
+    }
+    MessageService --> "n" IMessageProvider : providers
 ```
 
 ```mermaid
