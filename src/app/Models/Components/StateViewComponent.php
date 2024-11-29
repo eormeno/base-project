@@ -28,10 +28,9 @@ class StateViewComponent extends Component implements IState, IView
 
     public function handle(array $event): string
     {
-        $className = ReflectionUtils::short($this);
-        $eventName = $event['event'];
-        $this->log("Event '$eventName' is beign handled by '$className'.");
-
+        //$className = ReflectionUtils::short($this);
+        //$eventName = $event['event'];
+        //$this->log("Event '$eventName' is beign handled by '$className'.");
         return $this->state;
     }
 
@@ -50,8 +49,18 @@ class StateViewComponent extends Component implements IState, IView
 
     public function view()
     {
-        $view = view($this->view_name, $this->publicPropertiesToArray());
+        $view = view($this->view_name, $this->modelAttributesToArray());
         return $view;
+    }
+
+    private function modelAttributesToArray(): array
+    {
+        $attributes = $this->getAttributes();
+        $array = [];
+        foreach ($attributes as $key => $value) {
+            $array[$key] = json_decode($value);
+        }
+        return $array;
     }
 
     private function publicPropertiesToArray(): array

@@ -8,7 +8,7 @@ use App\Models\Components\StateViewComponent;
 class InitialStateViewComponent extends StateViewComponent
 {
     protected $table = 'gtn_initial_state_view_components';
-    protected $view_name = 'guess-the-number.asking-to-play';
+    protected $view_name = 'guess-the-number.initial';
     protected $state = 'initial';
 
     protected $fillable=[
@@ -17,10 +17,6 @@ class InitialStateViewComponent extends StateViewComponent
     protected $casts = [
         'messages' => 'array',
     ];
-
-    public string $description = "";
-    public string $yes_i_accept_the_challenge = "";
-    public array $ranking = [];
 
     public function onAwake(): void
     {

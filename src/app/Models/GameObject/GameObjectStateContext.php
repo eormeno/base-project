@@ -11,6 +11,13 @@ class GameObjectStateContext extends GameObjectBase implements IStateContext
     {
         $this->componentsIterator(
             function ($component, $subclass) use ($event) {
+                if ($subclass->state() !== $this->state) {
+                    return;
+                }
+                if ($subclass->enabled === false) {
+                    $subclass->enabled = true;
+                    $subclass->onEnter();
+                }
                 $subclass->handle($event);
             },
             IState::class

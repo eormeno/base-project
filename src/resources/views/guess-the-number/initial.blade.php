@@ -7,11 +7,11 @@
     </div>
 
     <div class="mt-3 text-lg text-gray-900 dark:text-white text-center">
-        {{ $description }}
+        {{ $messages->description }}
     </div>
 
     <x-button class="mt-4" type="button" onclick="sendEvent('want_to_play')">
-        {{ $yes_i_accept_the_challenge }}
+        {{ $messages->yes_button }}
     </x-button>
 
     <div class="mt-4">
@@ -19,9 +19,9 @@
             {{ __('guess-the-number.best-scores') }}
         </h2>
         <ul class="mt-2 text-sm text-gray-900 dark:text-white">
-            @foreach ($ranking as $name => $score)
+            @foreach ($messages->ranking as $player)
                 <li>
-                    {{ $name }} : {{ $score }}
+                    {{ $player->name }} : {{ $player->score }}
                 </li>
             @endforeach
         </ul>
