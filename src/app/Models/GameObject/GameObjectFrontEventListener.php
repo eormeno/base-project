@@ -3,7 +3,6 @@
 namespace App\Models\GameObject;
 
 use App\Events\FrontEvent;
-use App\Models\Components\IState;
 use App\Contracts\IFrontEventListener;
 
 class GameObjectFrontEventListener extends GameObjectStateContext implements IFrontEventListener

@@ -19,6 +19,7 @@ class GameObjectStateContext extends GameObjectBase implements IStateContext
                     $subclass->onEnter();
                 }
                 $subclass->handle($event);
+                return;
             },
             IState::class
         );
