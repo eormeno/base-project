@@ -16,7 +16,7 @@
 
     <div class="mt-4">
         <h2 class="text-xl text-gray-900 dark:text-white text-center">
-            {{ __('guess-the-number.best-scores') }}
+            {{ $messages->ranking_title }}
         </h2>
         <ul class="mt-2 text-sm text-gray-900 dark:text-white">
             @foreach ($messages->ranking as $player)
