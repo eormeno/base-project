@@ -7,7 +7,6 @@ use App\Contracts\IFrontEventListener;
 
 class GameObjectFrontEventListener extends GameObjectStateContext implements IFrontEventListener
 {
-
     public function handle(FrontEvent $event): void
     {
         if (!$this->active) {
@@ -16,5 +15,4 @@ class GameObjectFrontEventListener extends GameObjectStateContext implements IFr
         $this->log("GameObject ($this->name) handling event '{$event->event['event']}'");
         $this->request($event->event);
     }
-
 }

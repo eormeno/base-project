@@ -11,6 +11,7 @@ return new class extends Migration {
         Schema::create('components', function (Blueprint $table) {
             $table->id();
             $table->foreignId('game_object_id')->constrained()->onDelete('cascade');
+            $table->string('state')->nullable();
             $table->string('type');
             $table->boolean('enabled')->default(true);
             $table->boolean('awoke')->default(false);

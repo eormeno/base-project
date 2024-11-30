@@ -8,5 +8,9 @@ class PreparingStateComponent extends StateViewComponent
 {
     protected $table = 'gtn_preparing_state_components';
     protected $view_name = 'guess-the-number.preparing';
-    protected $state = 'preparing';
+
+    public static function state(): string | null
+    {
+        return 'preparing';
+    }
 }

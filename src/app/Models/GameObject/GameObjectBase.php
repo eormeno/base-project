@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class GameObjectBase extends Model
 {
@@ -17,11 +18,22 @@ class GameObjectBase extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'active', 'state', 'game_object_id'];
+    protected $fillable = ['name', 'active', 'state_component_id', 'game_object_id'];
 
     protected $casts = [
         'active' => 'boolean',
     ];
+
+    public function getCurrentStateAttribute(): HasOne
+    {
+        return $this->hasOne(Component::class, 'id', 'state_component_id');
+    }
+
+    public function setCurrentStateAttribute(Component $state): void
+    {
+        $this->update(['state_component_id' => $state->id]);
+    }
+
 
     public function components(): HasMany
     {

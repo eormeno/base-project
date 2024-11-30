@@ -9,7 +9,6 @@ class InitialStateViewComponent extends StateViewComponent
 {
     protected $table = 'gtn_initial_state_view_components';
     protected $view_name = 'guess-the-number.initial';
-    protected $state = 'initial';
 
     protected $fillable=[
         'messages',
@@ -17,6 +16,11 @@ class InitialStateViewComponent extends StateViewComponent
     protected $casts = [
         'messages' => 'array',
     ];
+
+    public static function state(): string | null
+    {
+        return 'initial';
+    }
 
     public function onAwake(): void
     {

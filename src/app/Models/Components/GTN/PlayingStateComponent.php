@@ -8,5 +8,9 @@ class PlayingStateComponent extends StateViewComponent
 {
     protected $table = 'gtn_playing_state_components';
     protected $view_name = 'guess-the-number.playing';
-    protected $state = 'playing';
+
+    public static function state(): string | null
+    {
+        return 'playing';
+    }
 }

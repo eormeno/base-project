@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use ReflectionClass;
 use App\Models\Prefab;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
@@ -30,8 +31,7 @@ class InstantiateHelper
     ): GameObject {
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
-            'name' => $prefab->name,
-            'state' => $prefab->structure['state'] ?? 'initial',
+            'name' => $prefab->name
         ]);
         // Crear los componentes definidos en la estructura
         foreach ($prefab->structure['components'] as $slug_type => $attributes) {
@@ -72,14 +72,17 @@ class InstantiateHelper
         array $attributes
     ): Component {
         $type = ReflectionUtils::componentClass($slug_type);
-        // the component will be inative if implements the IState interface
-        $default_enabled = !ReflectionUtils::implementsInterface($type, IState::class);
-        // Crear el componente base
-        $component = $gameObject->components()->create([
-            'type' => $type,
-            'enabled' => $attributes['enabled'] ?? $default_enabled,
-        ]);
-        // Crear el componente específico asociado
+        $component = $gameObject->components()->create(self::stateComponentConfig($type));
         return $type::create(array_merge(['id' => $component->id], $attributes));
+    }
+
+    protected static function stateComponentConfig($type): array
+    {
+        $attributes = ['type' => $type, 'enabled' => true];
+        $class = new ReflectionClass($type);
+        if ($class->implementsInterface(IState::class)) {
+            return array_merge($attributes, ['enabled' => false, 'state' => $type::state()]);
+        }
+        return $attributes;
     }
 }

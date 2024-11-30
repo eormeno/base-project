@@ -8,5 +8,9 @@ class SuccessStateComponent extends StateViewComponent
 {
     protected $table = 'gtn_success_state_components';
     protected $view_name = 'guess-the-number.success';
-    protected $state = 'success';
+
+    public static function state(): string | null
+    {
+        return 'success';
+    }
 }

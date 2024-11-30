@@ -8,5 +8,9 @@ class GameOverStateComponent extends StateViewComponent
 {
     protected $table = 'gtn_game_over_state_components';
     protected $view_name = 'guess-the-number.game-over';
-    protected $state = 'game-over';
+
+    public static function state(): string | null
+    {
+        return 'game-over';
+    }
 }

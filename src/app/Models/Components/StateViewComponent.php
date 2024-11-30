@@ -5,11 +5,15 @@ namespace App\Models\Components;
 use App\Utils\ReflectionUtils;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class StateViewComponent extends Component implements IState, IView
+abstract class StateViewComponent extends Component implements IState, IView
 {
     protected $fillable = ['id'];
     protected $view_name = 'web-renderer.default';
-    protected $state = null;
+
+    public static function state(): string | null
+    {
+        return null;
+    }
 
     public function super(): BelongsTo
     {
@@ -31,11 +35,6 @@ class StateViewComponent extends Component implements IState, IView
         //$className = ReflectionUtils::short($this);
         //$eventName = $event['event'];
         //$this->log("Event '$eventName' is beign handled by '$className'.");
-        return $this->state;
-    }
-
-    public function state(): string
-    {
         return $this->state;
     }
 

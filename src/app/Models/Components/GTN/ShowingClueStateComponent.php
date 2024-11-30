@@ -9,5 +9,9 @@ class ShowingClueStateComponent extends StateViewComponent
 {
     protected $table = 'gtn_showing_clue_state_components';
     protected $view_name = 'guess-the-number.showing-clue';
-    protected $state = 'showing-clue';
+
+    public static function state(): string | null
+    {
+        return 'showing-clue';
+    }
 }
