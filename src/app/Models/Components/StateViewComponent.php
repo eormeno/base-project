@@ -16,11 +16,6 @@ abstract class StateViewComponent extends Component implements IState, IView
         return null;
     }
 
-    public function super(): BelongsTo
-    {
-        return $this->belongsTo(Component::class, 'id');
-    }
-
     public function getEnabledAttribute()
     {
         return $this->super->enabled;

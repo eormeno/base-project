@@ -9,7 +9,7 @@ class InitialStateViewMessages implements IMessageProvider
     public function getMessages(array $parameters): array
     {
         return [
-            'description' => $this->descriptionMessage(),
+            'description' => $this->descriptionMessage($parameters),
             'yes_button' => $this->yesButton(),
             'ranking_title' => $this->rankingTitle(),
             'ranking' => [
@@ -22,13 +22,13 @@ class InitialStateViewMessages implements IMessageProvider
         ];
     }
 
-    private function descriptionMessage()
+    private function descriptionMessage($parameters)
     {
         return __('guess-the-number.description', [
-            'user_name' => auth()->user()->name, //$this->userRepository->name(),
-            'remaining_attemts' => 10, //$this->gameConfigService->getMaxAttempts(),
-            'min_number' => 1, //$this->gameConfigService->getMinNumber(),
-            'max_number' => 1024, //$this->gameConfigService->getMaxNumber()
+            'user_name' => auth()->user()->name,
+            'remaining_attemts' => $parameters['max_attempts'],
+            'min_number' => $parameters['min_number'],
+            'max_number' => $parameters['max_number'],
         ]);
     }
 

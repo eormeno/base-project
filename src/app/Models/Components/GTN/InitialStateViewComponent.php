@@ -24,8 +24,8 @@ class InitialStateViewComponent extends StateViewComponent
 
     public function onStart(): void
     {
-        $this->log('Starting InitialStateViewComponent...');
-        $this->messages = app(MessageService::class)->getMessages(self::class);
+        $gameDataComponent = $this->findComponent('gtn.game-data')->toArray();
+        $this->messages = app(MessageService::class)->getMessages(self::class, $gameDataComponent);
         $this->save();
     }
 
