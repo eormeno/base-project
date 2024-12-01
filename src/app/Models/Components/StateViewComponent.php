@@ -2,6 +2,7 @@
 
 namespace App\Models\Components;
 
+use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -30,12 +31,29 @@ abstract class StateViewComponent extends Component implements IState, IView
         $this->super->update(['enabled' => $value]);
     }
 
-    public function handle(array $event): ?string
+    public function handleStateEvent(array $event): string | null
     {
-        $className = ReflectionUtils::short($this);
         $eventName = $event['event'];
+        $eventData = $event['data'];
+        $source = $event['source'];
+        $destination = $event['destination'];
+
+        $className = ReflectionUtils::short($this);
         $this->log("Event '$eventName' is beign handled by '$className'.");
-        return self::state();
+
+        if ($eventName === null || $eventName === '' || $eventName === 'reload') {
+            return $this->passTo();
+        }
+
+        $method = 'on' . CaseConverters::snakeToPascal($eventName) . 'Event';
+        if (method_exists($this, $method)) {
+            $ref_cls = ReflectionUtils::invokeMethod($this, $method, $eventData);
+            if ($ref_cls) {
+                return $ref_cls;
+            }
+        }
+
+        return $this->passTo();
     }
 
     public function onEnter(): void
@@ -44,6 +62,11 @@ abstract class StateViewComponent extends Component implements IState, IView
 
     public function onExit(): void
     {
+    }
+
+    public function passTo(): string
+    {
+        return get_class($this)::state();
     }
 
     public function view()

@@ -22,13 +22,15 @@ class InitialStateViewComponent extends StateViewComponent
         return 'initial';
     }
 
-    public function onAwake(): void
+    public function onStart(): void
     {
+        $this->log('Starting InitialStateViewComponent...');
         $this->messages = app(MessageService::class)->getMessages(self::class);
         $this->save();
     }
 
     public function onWantToPlayEvent()
     {
+        return PreparingStateComponent::state();
     }
 }

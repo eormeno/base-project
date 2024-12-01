@@ -15,6 +15,13 @@ class GameObjectStateContext extends GameObjectBase implements IStateContext
         if ($current === null) {
             return;
         }
-        $current->handle($event);
+        $current->onStart();
+        $current_state = $current::state();
+        $next_state = $current->handleStateEvent($event);
+        if ($next_state !== $current_state) {
+            $this->log("State must change to: '$next_state'");
+        } else {
+            $this->log("State remains the same: '$current_state'");
+        }
     }
 }
