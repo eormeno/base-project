@@ -13,14 +13,16 @@ class PrefabServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(PrefabLoader::class, function ($app) {
-            return new PrefabLoader();
+            $prefabLoader = new PrefabLoader();
+            $prefabLoader->loadAllPrefabs();
+            return $prefabLoader;
         });
     }
 
     /**
      * Bootstrap services.
      */
-    public function boot(): void
+    public function _boot(): void
     {
         // Solo cargar los prefabs si no estamos en consola o si estamos ejecutando ciertos comandos
         if (!$this->app->runningInConsole() ||

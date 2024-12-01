@@ -4,6 +4,7 @@ namespace App\Models\Components\GTN;
 
 use App\Services\MessageService;
 use App\Models\Components\StateViewComponent;
+use App\Services\ServiceService;
 
 class InitialStateViewComponent extends StateViewComponent
 {
@@ -24,6 +25,8 @@ class InitialStateViewComponent extends StateViewComponent
 
     public function onStart(): void
     {
+        //$gameConfigService = app(ServiceService::class)->getService('game-config');
+        //$this-log('Game Config Service: ' . $gameConfigService->min_number);
         $gameDataComponent = $this->findComponent('gtn.game-data')->toArray();
         $this->messages = app(MessageService::class)->getMessages(self::class, $gameDataComponent);
         $this->save();
