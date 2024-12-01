@@ -32,9 +32,9 @@ abstract class StateViewComponent extends Component implements IState, IView
 
     public function handle(array $event): ?string
     {
-        //$className = ReflectionUtils::short($this);
-        //$eventName = $event['event'];
-        //$this->log("Event '$eventName' is beign handled by '$className'.");
+        $className = ReflectionUtils::short($this);
+        $eventName = $event['event'];
+        $this->log("Event '$eventName' is beign handled by '$className'.");
         return self::state();
     }
 

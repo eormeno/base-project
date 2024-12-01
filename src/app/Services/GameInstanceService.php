@@ -16,12 +16,7 @@ class GameInstanceService
     {
         $count = $this->countUserGameInstances($gameApp);
         if ($count < $gameApp->max_instances_per_user) {
-            dd("Creating new game instance");
-            Game::create([
-                'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->instantiate()->id,
-                'invitation_code' => uniqid(),
-            ])->players()->attach(auth()->user());
+            Game::factory()->forGameApp($gameApp)->forAuthUser()->create();
         }
         $currentGame = auth()->user()->games()->where('game_app_id', $gameApp->id)->first();
         $currentGame->gameObject;

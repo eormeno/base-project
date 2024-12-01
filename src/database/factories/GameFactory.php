@@ -22,7 +22,18 @@ class GameFactory extends Factory
         ];
     }
 
-    public function forGameApp(string $prefix): static
+    public function forGameApp(GameApp $gameApp): static
+    {
+        return $this->state(function (array $attributes) use ($gameApp) {
+            return [
+                'game_app_id' => $gameApp->id,
+                'game_object_id' => $gameApp->prefab->instantiate()->id,
+                'invitation_code' => uniqid(),
+            ];
+        });
+    }
+
+    public function forGameAppPrefix(string $prefix): static
     {
         $gameApp = GameApp::where('prefix', $prefix)->first();
         return $this->state(function (array $attributes) use ($gameApp) {
@@ -34,7 +45,15 @@ class GameFactory extends Factory
         });
     }
 
-    public function forUser(string $email): static
+    public function forAuthUser(): static
+    {
+        $user = auth()->user();
+        return $this->afterCreating(function ($game) use ($user) {
+            $game->players()->attach($user);
+        });
+    }
+
+    public function forUserEmail(string $email): static
     {
         $user = User::where('email', $email)->first();
         return $this->afterCreating(function ($game) use ($user) {

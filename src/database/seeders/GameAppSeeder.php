@@ -20,7 +20,7 @@ class GameAppSeeder extends Seeder
             'description' => 'Un simple juego donde adivinas un número entre 1 y 1024.',
             'prefab_name' => 'gtn.root'
         ]);
-        Game::factory()->forGameApp('gtn')->forUser('eormeno@gmail.com')->create();
+        // Game::factory()->forGameAppPrefix('gtn')->forUserEmail('eormeno@gmail.com')->create();
 
         GameApp::factory()->image('mythic-treasure-quest.jpeg')->create([
             'prefix' => 'mtq',
