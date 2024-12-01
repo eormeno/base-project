@@ -71,9 +71,10 @@ classDiagram
     class IState {
         <<interface>>
         +static state()
-        +handle(event)
+        +handleStateEvent(event)
         +onEnter()
         +onExit()
+        +passTo()
     }
     class IView {
         <<interface>>
