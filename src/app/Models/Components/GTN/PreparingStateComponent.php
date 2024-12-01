@@ -13,4 +13,15 @@ class PreparingStateComponent extends StateViewComponent
     {
         return 'preparing';
     }
+
+    public function onStart(): void
+    {
+        $gameDataComponent = $this->findComponent('gtn.game-data');
+
+    }
+
+    public function passTo(): string
+    {
+        return ShowingClueStateComponent::state();
+    }
 }

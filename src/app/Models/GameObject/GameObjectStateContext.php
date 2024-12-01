@@ -11,17 +11,15 @@ class GameObjectStateContext extends GameObjectBase implements IStateContext
 {
     public function request(array $event)
     {
-        $current = $this->currentStateComponent();
-        if ($current === null) {
-            return;
-        }
-        $current->onStart();
-        $current_state = $current::state();
-        $next_state = $current->handleStateEvent($event);
-        if ($next_state !== $current_state) {
-            $this->log("State must change to: '$next_state'");
-        } else {
-            $this->log("State remains the same: '$current_state'");
-        }
+        do {
+            $current_state_component = $this->currentStateComponent();
+            $current_state_name = $current_state_component::state();
+            $current_state_component->onStart();
+            $next_state_name = $current_state_component->handleStateEvent($event);
+            $next_state_component = $this->findComponentForState($next_state_name);
+            $this->current_state = $next_state_component;
+            $this->log("Transitioning from $current_state_name to $next_state_name");
+        } while ($next_state_name !== $current_state_name);
+
     }
 }
