@@ -8,17 +8,10 @@ class GameObjectViewProvider extends GameObjectFrontEventListener implements IVi
 {
     public function view()
     {
-        $components = $this->components()->get();
-        foreach ($components as $component) {
-            if (!$component->enabled) {
-                continue;
-            }
-            $subclass = $component->subclass();
-            if (is_subclass_of($subclass, IView::class)) {
-                return $subclass->view();
-            }
+        $currentStateViewComponent = $this->currentStateComponent();
+        if ($currentStateViewComponent === null) {
+            return "<h4>State View not found</h4>";
         }
-        $html = "<h4>View not found</h4>";
-        return $html;
+        return $currentStateViewComponent->view();
     }
 }

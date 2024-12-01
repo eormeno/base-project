@@ -35,14 +35,16 @@ classDiagram
     class GameObject {
         +string name
         +bool active
-        +string state
         +GameObject parent
         +GameObject[] children
+        +request(event)
+        +view()
     }
     class Component {
         +string type
         +bool enabled
         +bool awoke
+        +static state()
         +onAwake()
         +onStart()
         +onUpdate(delta)
@@ -53,7 +55,8 @@ classDiagram
         +view()
     }
     Game --> "1" GameObject : game_object
-    GameObject "1" -- "n" Component : components
+    GameObject "1" -- "0..n" Component : components
+    GameObject --> "0..1" Component : state_component
     GameApp "1" -- "0..n" Game : games
     Game "1" -- "1..n" game_user : players
     GameApp "0..n" -- "1" Prefab : prefab
@@ -67,7 +70,7 @@ classDiagram
     direction LR
     class IState {
         <<interface>>
-        +state()
+        +static state()
         +handle(event)
         +onEnter()
         +onExit()
@@ -151,15 +154,16 @@ erDiagram
     game_objects {
         int id PK
         int game_object_id FK
+        int state_component_id FK
         string name
         bool active
-        string state
     }
 
     components {
         int id PK
         int game_object_id FK
         string type
+        string state
         bool enabled
         bool awoke
     }

@@ -30,12 +30,12 @@ abstract class StateViewComponent extends Component implements IState, IView
         $this->super->update(['enabled' => $value]);
     }
 
-    public function handle(array $event): string
+    public function handle(array $event): ?string
     {
         //$className = ReflectionUtils::short($this);
         //$eventName = $event['event'];
         //$this->log("Event '$eventName' is beign handled by '$className'.");
-        return $this->state;
+        return self::state();
     }
 
     public function onEnter(): void

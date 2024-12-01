@@ -12,7 +12,7 @@ class Component extends Model
     use DebugHelper;
 
     public $timestamps = false;
-    protected $fillable = ['type', 'game_object_id', 'enabled', 'awoke'];
+    protected $fillable = ['type', 'game_object_id', 'enabled', 'awoke', 'state'];
     protected $casts = [
         'enabled' => 'boolean',
     ];

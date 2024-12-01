@@ -16,6 +16,8 @@ class GameObjectBase extends Model
 {
     use HasFactory, DebugHelper;
 
+    protected const INITIAL_STATE = 'initial';
+
     public $timestamps = false;
 
     protected $fillable = ['name', 'active', 'state_component_id', 'game_object_id'];
@@ -34,7 +36,6 @@ class GameObjectBase extends Model
         $this->update(['state_component_id' => $state->id]);
     }
 
-
     public function components(): HasMany
     {
         return $this->hasMany(Component::class);
@@ -48,6 +49,31 @@ class GameObjectBase extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(GameObjectBase::class);
+    }
+
+    protected function findComponentForState(string $state): ?Component
+    {
+        $stateComponent = $this->components()->where('state', $state)->first();
+        if (!$stateComponent) {
+            return null;
+        }
+        return $stateComponent->subclass();
+    }
+
+    protected function currentStateComponent(): ?Component
+    {
+        $current = $this->current_state->first();
+        if ($current !== null) {
+            return $current->subclass();
+        }
+        $initialStateComponent = $this->findComponentForState(self::INITIAL_STATE);
+        if ($initialStateComponent === null) {
+            return null;
+        }
+        $initialStateComponent->enabled = true;
+        $initialStateComponent->onEnter();
+        $this->current_state = $initialStateComponent;
+        return $initialStateComponent;
     }
 
     public function componentsIterator(
