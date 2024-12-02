@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'image' => 'tic-tac-toe',
+    'image' => 'tic-tac-toe.jpeg',
     'name' => 'Tic Tac Toe',
     'active' => false,
     'description' => 'Un simple juego de Tic Tac Toe.',

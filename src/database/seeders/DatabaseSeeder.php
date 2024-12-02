@@ -12,6 +12,6 @@ class DatabaseSeeder extends Seeder
         //$this->call(MtqItemClassesSeeder::class);
         $this->call(UsersSeeder::class);
         $this->call(PrefabSeeder::class);
-        $this->call(GameAppSeeder::class);
+        //$this->call(GameAppSeeder::class);
     }
 }

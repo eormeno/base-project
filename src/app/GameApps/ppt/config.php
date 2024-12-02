@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'image' => 'rock-paper-scissors',
+    'image' => 'rock-paper-scissors.jpeg',
     'name' => 'Piedra, Papel, Tijera',
     'active' => false,
     'description' => 'Un simple juego de Piedra, Papel o Tijera.',

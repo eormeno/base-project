@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('game_apps', function (Blueprint $table) {
             $table->id();
-            $table->string('prefix', 3)->unique();
+            $table->string('prefix', 3)->unique()->index();
             $table->string('name');
             $table->text('description');
             $table->integer('min_age')->default(18);

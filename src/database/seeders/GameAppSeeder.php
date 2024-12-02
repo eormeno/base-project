@@ -14,7 +14,8 @@ class GameAppSeeder extends Seeder
      */
     public function run(): void
     {
-        GameApp::factory()->image('guess-the-number.jpeg')->create([
+        $resources_folder = 'database/seeders/resources';
+        GameApp::factory()->image($resources_folder, 'guess-the-number.jpeg')->create([
             'prefix' => 'gtn',
             'name' => 'Adivina el número',
             'description' => 'Un simple juego donde adivinas un número entre 1 y 1024.',
@@ -22,13 +23,13 @@ class GameAppSeeder extends Seeder
         ]);
         // Game::factory()->forGameAppPrefix('gtn')->forUserEmail('eormeno@gmail.com')->create();
 
-        GameApp::factory()->image('mythic-treasure-quest.jpeg')->create([
+        GameApp::factory()->image($resources_folder, 'mythic-treasure-quest.jpeg')->create([
             'prefix' => 'mtq',
             'active' => false,
             'name' => 'Buscador de Tesoros',
             'description' => 'Un juego donde exploras templos antiguos y encuentras tesoros y posiones usando las mecánicas de buscaminas. Pero ten cuidado! También hay trampas, monstruos y maldiciones.'
         ]);
-        GameApp::factory()->image('tic-tac-toe.jpeg')->create([
+        GameApp::factory()->image($resources_folder, 'tic-tac-toe.jpeg')->create([
             'prefix' => 'ttt',
             'name' => 'Tic Tac Toe',
             'active' => false,
@@ -36,7 +37,7 @@ class GameAppSeeder extends Seeder
             'max_users_per_instance' => 2,
             'min_users_per_instance' => 2
         ]);
-        GameApp::factory()->image('rock-paper-scissors.jpeg')->create([
+        GameApp::factory()->image($resources_folder, 'rock-paper-scissors.jpeg')->create([
             'prefix' => 'rps',
             'name' => 'Piedra, Papel, Tijera',
             'active' => false,

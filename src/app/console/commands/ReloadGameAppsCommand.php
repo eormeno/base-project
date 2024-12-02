@@ -14,6 +14,6 @@ class ReloadGameAppsCommand extends Command
     {
         $this->info('Reloading game apps...');
         $game_apps = $loader->loadAllGameApps($this);
-        //$this->info(json_encode($game_apps, JSON_PRETTY_PRINT));
+        $this->info(json_encode($game_apps, JSON_PRETTY_PRINT));
     }
 }
