@@ -6,4 +6,5 @@ use App\Models\GameService;
 
 class GtnService extends GameService
 {
+    protected $table = null;
 }

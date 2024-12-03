@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class GameService extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['type', 'game_app_id'];
+    protected $fillable = ['type', 'game_id'];
 
-    public function gameApp(): BelongsTo
+    public function game(): BelongsTo
     {
-        return $this->belongsTo(GameApp::class);
+        return $this->belongsTo(Game::class);
     }
 
     public function subclass() : GameService

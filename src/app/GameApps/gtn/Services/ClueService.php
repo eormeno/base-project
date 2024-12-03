@@ -6,4 +6,5 @@ use App\Models\GameService;
 
 class ClueService extends GameService
 {
+    protected $table = null;
 }

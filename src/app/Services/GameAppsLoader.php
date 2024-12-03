@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Prefab;
 use App\Models\GameApp;
+use App\Utils\CaseConverters;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -38,6 +39,13 @@ class GameAppsLoader
             $fileName = $file->getFilename();
             if ($extension === 'php') {
                 $fileName = $this->nameToSlug($file->getFilename());
+                if ($this->isPhpFileAClass($file->getPathname())) {
+                    $class_name = Str::before($file->getPathname(), '.php');
+                    // remove app_path from the beginning
+                    $class_name = substr($class_name, strlen(app_path()) + 1);
+                    $result[$fileName] = $class_name;
+                    continue;
+                }
                 $fileContent = include $file->getPathname();
                 $result[$fileName] = $fileContent;
             } elseif ($extension === 'jpeg' || $extension === 'jpg') {
@@ -52,6 +60,22 @@ class GameAppsLoader
         return $result;
     }
 
+    private function isPhpFileAClass($file): bool
+    {
+        $content = file_get_contents($file);
+        $tokens = token_get_all($content);
+        $class_token = false;
+        foreach ($tokens as $token) {
+            if ($token[0] === T_CLASS) {
+                $class_token = true;
+            }
+            if ($class_token && $token[0] === T_STRING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function updateGameApps(array $gameApps): array
     {
         $result = ['apps_created' => 0, 'apps_updated' => 0, 'prefabs_created' => 0, 'prefabs_updated' => 0];
@@ -61,6 +85,10 @@ class GameAppsLoader
             $image_name = $config['image'];
             $image_path = $info['resources'][$image_name];
             unset($config['image']);
+            $services = isset($info['Services']) ? $info['Services'] : [];
+            if (count($services) > 0) {
+                $this->command->info(json_encode($services, JSON_PRETTY_PRINT));
+            }
             $game_app = GameApp::where('prefix', $prefix)->first();
             if ($game_app) {
                 $game_app->update($config);
@@ -95,8 +123,8 @@ class GameAppsLoader
         return $result;
     }
 
-    protected function nameToSlug(string $name) : string
+    protected function nameToSlug(string $name): string
     {
-        return Str::slug(preg_replace('/\.[^.]*$/', '', $name));
+        return CaseConverters::camelToKebab(preg_replace('/\.[^.]*$/', '', $name));
     }
 }
