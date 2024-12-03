@@ -54,7 +54,7 @@ class GameAppsLoader
 
     protected function updateGameApps(array $gameApps): array
     {
-        $result = ['created' => 0, 'updated' => 0];
+        $result = ['apps_created' => 0, 'apps_updated' => 0, 'prefabs_created' => 0, 'prefabs_updated' => 0];
         foreach ($gameApps as $prefix => $info) {
             $config = $info['config'];
             $config['prefix'] = $prefix;
@@ -64,19 +64,25 @@ class GameAppsLoader
             $game_app = GameApp::where('prefix', $prefix)->first();
             if ($game_app) {
                 $game_app->update($config);
-                $result['updated']++;
+                $result['apps_updated']++;
             } else {
                 GameApp::factory()->image($image_path, $image_name)->create($config);
-                $result['created']++;
+                $result['apps_created']++;
+            }
+            if (isset($info['prefabs'])) {
+                $result_prefabs = $this->updatePrefabs($prefix, $info['prefabs']);
+                $result['prefabs_created'] += $result_prefabs['created'];
+                $result['prefabs_updated'] += $result_prefabs['updated'];
             }
         }
         return $result;
     }
 
-    protected function saveGameApps(array $gameApps): array
+    protected function updatePrefabs(string $prefix, array $prefabs): array
     {
         $result = ['created' => 0, 'updated' => 0];
-        foreach ($gameApps as $name => $prefab) {
+        foreach ($prefabs as $name => $prefab) {
+            $name = "$prefix.$name";
             $p = Prefab::find($name);
             if ($p) {
                 $p->update(['structure' => $prefab]);
