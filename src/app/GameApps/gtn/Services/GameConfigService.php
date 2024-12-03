@@ -1,24 +1,14 @@
 <?php
 
-namespace App\Services\GTN;
+namespace App\GameApps\gtn\Services;
 
-use App\Contracts\IServiceProvider;
+use App\Models\GameService;
 
-class GameConfigService implements IServiceProvider
+class GameConfigService extends GameService
 {
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 1024;
     const CHEAT_NUMBER = 55555;
-
-    public function __get($name)
-    {
-        return $this->$name;
-    }
-
-    public function __set($name, $value)
-    {
-        $this->$name = $value;
-    }
 
     private function min_number(): int
     {
