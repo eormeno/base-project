@@ -6,9 +6,8 @@
         </h2>
     </x-slot>
 
-    <x-event-listener />
-
     <div class="text-center p-4 relative">
+        <x-event-listener />
         {{ $slot }}
     </div>
 

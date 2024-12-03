@@ -134,9 +134,12 @@ function sendEvent(event, formData = {}, signal = false) {
                     }
                 }
             } catch (error) {
-                console.error(error);
+                //console.error(error);
                 eventSent = false;
             }
+        }).catch(error => {
+            console.error(error);
+            eventSent = false;
         });
 }
 
