@@ -61,4 +61,16 @@ class GameFactory extends Factory
         });
     }
 
+    // after creating the Game, create a GameService for each service in the GameApp
+    public function withServices(): static
+    {
+        return $this->afterCreating(function ($game) {
+            $services = $game->gameApp->game_services;
+            foreach ($services as $slug => $class_name) {
+
+                $game->addService(new $class_name());
+            }
+        });
+    }
+
 }

@@ -41,8 +41,8 @@ class GameAppsLoader
                 $fileName = $this->nameToSlug($file->getFilename());
                 if ($this->isPhpFileAClass($file->getPathname())) {
                     $class_name = Str::before($file->getPathname(), '.php');
-                    // remove app_path from the beginning
-                    $class_name = substr($class_name, strlen(app_path()) + 1);
+                    $class_name = 'App' . Str::after($class_name, app_path());
+                    $class_name = str_replace('/', '\\', $class_name);
                     $result[$fileName] = $class_name;
                     continue;
                 }
@@ -85,10 +85,7 @@ class GameAppsLoader
             $image_name = $config['image'];
             $image_path = $info['resources'][$image_name];
             unset($config['image']);
-            $services = isset($info['Services']) ? $info['Services'] : [];
-            if (count($services) > 0) {
-                $this->command->info(json_encode($services, JSON_PRETTY_PRINT));
-            }
+            $config['game_services'] = isset($info['Services']) ? $info['Services'] : [];
             $game_app = GameApp::where('prefix', $prefix)->first();
             if ($game_app) {
                 $game_app->update($config);
