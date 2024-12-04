@@ -120,7 +120,11 @@ function sendEvent(event, formData = {}, signal = false) {
                         }
                     }
                     eventSent = false;
-                    console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
+                    debugConsole = document.getElementById('debug-console');
+                    if (debugConsole) {
+                        debugConsole.innerHTML += 'Front Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms'
+                    }
+                    //console.info('Rendered: ' + elementsUpdated + " in " + (Date.now() - currentMillis) + 'ms');
 
                     // store the array of objects in local storage
                     localStorage.setItem('rootId', rootId);
