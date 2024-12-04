@@ -6,14 +6,29 @@ trait DebugHelper
 {
     const BASIC_INFO = ['source', 'data', 'is_signal', 'rendered'];
 
-    public function log(string $message)
+    public function log(string $message, string $type = 'log')
     {
         $events = session('events', []);
         $events[] = [
             'name' => 'log',
-            'data' => $message,
+            'data' => ['message' => $message, 'time' => date('H:i:s'), 'type' => $type],
         ];
         session(['events' => $events]);
+    }
+
+    public function warn(string $message)
+    {
+        $this->log($message, 'warn');
+    }
+
+    public function error(string $message)
+    {
+        $this->log($message, 'error');
+    }
+
+    public function success(string $message)
+    {
+        $this->log($message, 'success');
     }
 
     public function logBacktrace()

@@ -1,12 +1,14 @@
 <div>
 
+    {{--
     <div class="h-6">
         <span class="text-xs text-gray-500 dark:text-gray-400">
             <x-event-renderer event="server_time_changed" />
         </span>
     </div>
+    --}}
 
-    <div class="mt-3 text-lg text-gray-900 dark:text-white text-center">
+    <div class="mt-3 text-pretty text-gray-900 dark:text-white text-center">
         {{ $messages->description }}
     </div>
 

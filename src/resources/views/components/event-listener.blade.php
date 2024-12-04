@@ -76,7 +76,29 @@
 
     function displayLogEvent(event) {
         if (event.name === 'log') {
-            console.log(event.data);
+            message = event.data.message;
+            time = event.data.time;
+            type = event.data.type;
+            info_color = 'text-gray-200';
+            time_color = 'text-gray-400';
+            switch (type) {
+                case 'info':
+                    info_color = 'text-blue-300';
+                    break;
+                case 'error':
+                    info_color = 'text-red-300';
+                    break;
+                case 'warn':
+                    info_color = 'text-yellow-300';
+                    break;
+                case 'success':
+                    info_color = 'text-green-300';
+                    break;
+            }
+            debugConsole = document.getElementById('debug-console');
+            debugConsole.innerHTML += `<p class="${time_color}">${time}: <span class="${info_color}">${message}</span></p>`;
+            debugConsole.scrollTop = debugConsole.scrollHeight;
+            //console.log(event.data);
         }
     }
 </script>

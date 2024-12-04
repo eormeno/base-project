@@ -3,7 +3,7 @@
 return [
 
     'title' => '¡Adivina el número!',
-    'description' => "Hola :user_name. He pensado un número entre :min_number y :max_number. Tienes :remaining_attemts intentos para adivinarlo. ¿Aceptas el reto?",
+    'description' => "¡Hola :user_name! Pensaré un número entre :min_number y :max_number. Tienes :remaining_attemts intentos para adivinarlo. ¿Aceptas el reto?",
     'another-challenge' => 'No, quiero otro reto',
     'remaining' => 'Te quedan :remaining_attemts intentos.',
     'last_attempt' => '¡Último intento! ¡Buena suerte!',
