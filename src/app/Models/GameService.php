@@ -19,4 +19,9 @@ class GameService extends Model
     {
         return $this->type::find($this->id);
     }
+
+    public function getService(string $slug): GameService
+    {
+        return $this->game->getService($slug);
+    }
 }

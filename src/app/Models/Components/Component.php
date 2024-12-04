@@ -2,9 +2,10 @@
 
 namespace App\Models\Components;
 
+use App\Models\GameService;
 use App\Traits\DebugHelper;
-use App\Models\GameObject\GameObject;
 use App\Utils\ReflectionUtils;
+use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -40,6 +41,11 @@ class Component extends Model
     public function subclass() : Component
     {
         return $this->type::find($this->id);
+    }
+
+    public function getService(string $slug_type): GameService
+    {
+        return $this->super->gameObject->game->getService($slug_type);
     }
 
     public function onAwake(): void

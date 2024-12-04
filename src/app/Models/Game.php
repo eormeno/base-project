@@ -53,6 +53,7 @@ class Game extends Model
 
     public function getService(string $slug): GameService
     {
-        return $this->services->firstWhere('slug', $slug);
+        $service = $this->services->firstWhere('slug', $slug);
+        return new $service->type();
     }
 }

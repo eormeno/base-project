@@ -16,6 +16,11 @@ trait DebugHelper
         session(['events' => $events]);
     }
 
+    public function info(string $message)
+    {
+        $this->log($message, 'info');
+    }
+
     public function warn(string $message)
     {
         $this->log($message, 'warn');
