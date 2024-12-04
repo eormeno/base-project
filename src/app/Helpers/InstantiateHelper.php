@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Game;
 use ReflectionClass;
 use App\Models\Prefab;
 use App\Utils\ReflectionUtils;
@@ -31,7 +32,7 @@ class InstantiateHelper
     ): GameObject {
         // Crear el GameObject raíz del prefab
         $gameObject = GameObject::create([
-            'name' => $prefab->name
+            'name' => $prefab->name,
         ]);
         // Crear los componentes definidos en la estructura
         foreach ($prefab->structure['components'] as $slug_type => $attributes) {

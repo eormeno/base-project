@@ -42,11 +42,17 @@ class Game extends Model
         return $this->hasMany(GameService::class);
     }
 
-    public function addService(GameService $service): void
+    public function addService(string $slug, GameService $service): void
     {
         $this->services()->create([
             'game_id' => $this->id,
-            'type' => (new \ReflectionClass($service))->getName()
+            'type' => (new \ReflectionClass($service))->getName(),
+            'slug' => $slug,
         ]);
+    }
+
+    public function getService(string $slug): GameService
+    {
+        return $this->services->firstWhere('slug', $slug);
     }
 }

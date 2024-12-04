@@ -2,15 +2,16 @@
 
 namespace App\Models\GameObject;
 
+use App\Models\Game;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Helpers\InstantiateHelper;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class GameObjectBase extends Model
 {
@@ -20,11 +21,16 @@ class GameObjectBase extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'active', 'state_component_id', 'game_object_id'];
+    protected $fillable = ['name', 'active', 'state_component_id', 'game_object_id', 'game_id'];
 
     protected $casts = [
         'active' => 'boolean',
     ];
+
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(Game::class);
+    }
 
     public function getCurrentStateAttribute(): HasOne
     {
