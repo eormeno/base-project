@@ -24,10 +24,12 @@ class GameApp extends Model
         'max_instances',
         'min_players_per_instance',
         'max_players_per_instance',
+        'game_services',
     ];
 
     protected $casts = [
         'active' => 'boolean',
+        'game_services' => 'array',
     ];
 
     public function games() : HasMany

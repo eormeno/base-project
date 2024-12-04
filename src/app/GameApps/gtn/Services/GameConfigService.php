@@ -6,6 +6,7 @@ use App\Models\GameService;
 
 class GameConfigService extends GameService
 {
+    protected $table = null;
     const MIN_NUMBER = 1;
     const MAX_NUMBER = 1024;
     const CHEAT_NUMBER = 55555;

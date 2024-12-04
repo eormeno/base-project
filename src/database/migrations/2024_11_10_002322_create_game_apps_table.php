@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('min_users_per_instance')->default(1);
             $table->integer('max_users_per_instance')->default(1);
             $table->boolean('active')->default(true);
+            $table->json('game_services')->nullable();
         });
     }
 

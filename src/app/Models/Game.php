@@ -6,6 +6,7 @@ use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,5 +35,24 @@ class Game extends Model
     public function players(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    public function services(): HasMany
+    {
+        return $this->hasMany(GameService::class);
+    }
+
+    public function addService(string $slug, GameService $service): void
+    {
+        $this->services()->create([
+            'game_id' => $this->id,
+            'type' => (new \ReflectionClass($service))->getName(),
+            'slug' => $slug,
+        ]);
+    }
+
+    public function getService(string $slug): GameService
+    {
+        return $this->services->firstWhere('slug', $slug);
     }
 }

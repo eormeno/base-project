@@ -45,6 +45,7 @@ class GameFactory extends Factory
         });
     }
 
+    // After creating the Game, attach the authenticated User
     public function forAuthUser(): static
     {
         $user = auth()->user();
@@ -53,11 +54,31 @@ class GameFactory extends Factory
         });
     }
 
+    // After creating the Game, attach the User with the given email
     public function forUserEmail(string $email): static
     {
         $user = User::where('email', $email)->first();
         return $this->afterCreating(function ($game) use ($user) {
             $game->players()->attach($user);
+        });
+    }
+
+    // After creating the Game, create a GameService for each service in the GameApp
+    public function withServices(): static
+    {
+        return $this->afterCreating(function ($game) {
+            $services = $game->gameApp->game_services;
+            foreach ($services as $slug => $class_name) {
+                $game->addService($slug, new $class_name());
+            }
+        });
+    }
+
+    // After creating the Game, update the GameObject game_id to the Game id
+    public function withGameObject(): static
+    {
+        return $this->afterCreating(function ($game) {
+            $game->gameObject->update(['game_id' => $game->id]);
         });
     }
 
