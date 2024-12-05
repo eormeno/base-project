@@ -32,6 +32,8 @@ class InitialStateViewComponent extends StateViewComponent
 
         $gameConfigService = $this->getService('game-config-service');
         $this->info($gameConfigService);
+        $gtnService = $this->getService('gtn-service');
+        $this->info($gtnService);
     }
 
     public function onWantToPlayEvent()

@@ -2,11 +2,28 @@
 
 namespace App\GameApps\gtn\Services;
 
+use App\Contracts\IPersistent;
 use App\Models\GameService;
 
-class GtnService extends GameService
+class GtnService extends GameService implements IPersistent
 {
-    protected $table = null;
+    public const TABLE = 'gtn_services';
+
+    protected $fillable = [
+        'min_number',
+        'max_number',
+        'max_attempts',
+        'half_attempts',
+        'remaining_attempts',
+        'random_number',
+        'score',
+        'times_played',
+    ];
+
+    public function getTable(): string
+    {
+        return self::TABLE;
+    }
 
     public function startGame()
     {

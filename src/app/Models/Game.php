@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\IPersistent;
 use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use ReflectionClass;
 
 class Game extends Model
 {
@@ -44,16 +46,29 @@ class Game extends Model
 
     public function addService(string $slug, GameService $service): void
     {
-        $this->services()->create([
+        $reflection_class = new ReflectionClass($service);
+        $new_service = $this->services()->create([
             'game_id' => $this->id,
-            'type' => (new \ReflectionClass($service))->getName(),
+            'type' => $reflection_class->getName(),
             'slug' => $slug,
         ]);
+        // If the service is persistent, create a record in the services table
+        if ($reflection_class->implementsInterface(IPersistent::class)) {
+            $service::create(['id' => $new_service->id]);
+        }
     }
 
     public function getService(string $slug): GameService
     {
         $service = $this->services->firstWhere('slug', $slug);
-        return new $service->type();
+        $type = $service->type;
+        // Check the service inherits from GameService and implements IPersistent interface
+        if (
+            !is_subclass_of($type, GameService::class) ||
+            !in_array(IPersistent::class, class_implements($type))
+        ) {
+            return new $type();
+        }
+        return $type::find($service->id);
     }
 }

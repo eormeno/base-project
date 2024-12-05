@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class GameService extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['slug', 'type', 'game_id'];
+    protected $fillable = ['id', 'slug', 'type', 'game_id'];
 
     public function game(): BelongsTo
     {
