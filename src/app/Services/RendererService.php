@@ -23,12 +23,13 @@ class RendererService implements IRenderer
 
     private function request(Game $game, array $event): array
     {
+        // TODO Eliminar la inicialización de este array
         $ret = [
             'root' => 'info',
             'info' => base64_encode(json_encode($event)),
             'actives' => []
         ];
-        if ($event['event'] === 'reload') {
+        //if ($event['event'] === 'reload') {
             $gameObject = $game->gameObject;
             $base64View = base64_encode($gameObject->view());
             $ret = [
@@ -36,7 +37,7 @@ class RendererService implements IRenderer
                 $gameObject->id => $base64View,
                 'actives' => [$gameObject->id]
             ];
-        }
+        //}
         return $ret;
     }
 }
