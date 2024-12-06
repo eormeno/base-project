@@ -16,10 +16,7 @@ class PreparingStateComponent extends StateViewComponent
 
     public function onStart(): void
     {
-        //$gameDataComponent = $this->findComponent('gtn.game-data');
-        $gameConfigService = $this->getService('game-config-service');
-        $this->info('PreparingStateComponent::onStart()');
-
+        $this->getService('gtn-service')->startGame();
     }
 
     public function passTo(): string

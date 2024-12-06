@@ -24,16 +24,10 @@ class InitialStateViewComponent extends StateViewComponent
 
     public function onStart(): void
     {
-        //$gameConfigService = app(ServiceService::class)->getService('game-config');
-        //$this-log('Game Config Service: ' . $gameConfigService->min_number);
-        $gameDataComponent = $this->findComponent('gtn.game-data')->toArray();
-        $this->messages = app(MessageService::class)->getMessages(self::class, $gameDataComponent);
+        //$gameDataComponent = $this->findComponent('gtn.game-data')->toArray();
+        $gtnService = $this->getService('gtn-service')->toArray();
+        $this->messages = app(MessageService::class)->getMessages(self::class, $gtnService);
         $this->save();
-
-        $gameConfigService = $this->getService('game-config-service');
-        $this->info($gameConfigService);
-        $gtnService = $this->getService('gtn-service');
-        $this->info($gtnService);
     }
 
     public function onWantToPlayEvent()
