@@ -28,6 +28,11 @@ class GtnService extends GameService implements IPersistent
         return self::TABLE;
     }
 
+    public function getFillable(): array
+    {
+        return array_merge(array_keys(self::config()), ['id']);
+    }
+
     public function startGame()
     {
         $game = $this->getGame();

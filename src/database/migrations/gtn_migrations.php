@@ -1,63 +1,62 @@
 <?php
 
-use App\Contracts\IPersistent;
 use App\Models\GameService;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Contracts\IPersistent;
+use App\Utils\ReflectionUtils;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
-
-        $app_folder = app_path('GameApps/gtn/Services') . '/*.php';
-        $services_in_folder = glob($app_folder);
-        // only interested in classes that extend GameService and implement IPersistent
-        $services = array_filter($services_in_folder, function ($file) {
-            if ($this->isPhpFileAClass($file->getPathname())) {
-                $class_name = Str::before($file->getPathname(), '.php');
-                $class_name = 'App' . Str::after($class_name, app_path());
-                $class_name = str_replace('/', '\\', $class_name);
-                $class = new ReflectionClass($class_name);
-                return $class->isSubclassOf(GameService::class) && $class->implementsInterface(IPersistent::class);
-            }
-            return false;
-        });
-
-        //if (isset($this->command)) {
-        echo 'Creating tables for ' . count($services) . ' services';
-        //}
-
-        // Schema::create('gtn_services', function (Blueprint $table) {
-        //     $table->id(); // PK and FK to components
-        //     $table->foreign('id')->references('id')->on('game_services')->onDelete('cascade');
+        // collect(File::allFiles(app_path('GameApps/gtn/Services')))->each(function ($file) {
+        //     $class_name = Str::before($file->getPathname(), '.php');
+        //     $class_name = 'App' . Str::after($class_name, app_path());
+        //     $class_name = str_replace('/', '\\', $class_name);
+        //     $class = new ReflectionClass($class_name);
+        //     if (
+        //         $class->isSubclassOf(GameService::class) &&
+        //         $class->implementsInterface(IPersistent::class)
+        //     ) {
+        //         $table_name = $class->getMethod('getTable')->invoke(new $class_name);
+        //         $config = $class->getMethod('config')->invoke(null);
+        //         Schema::create($table_name, function (Blueprint $table) use ($config) {
+        //             $table->id(); // PK and FK to components
+        //             $table->foreign('id')->references('id')->on('game_services')->onDelete('cascade');
+        //             foreach ($config as $column => $type) {
+        //                 $macro = $type[0];
+        //                 $default = $type[1];
+        //                 $table->$macro($column)->default($default);
+        //             }
+        //         });
+        //     }
         // });
+        $tables = 0;
+        ReflectionUtils::findClassesInPath('GameApps/gtn/Services', function ($class) use (&$tables) {
+            $table_name = $class->getMethod('getTable')->invoke(new $class->name);
+            $config = $class->getMethod('config')->invoke(null);
+            Schema::create($table_name, function (Blueprint $table) use ($config, &$tables) {
+                $table->id(); // PK and FK to components
+                $table->foreign('id')->references('id')->on('game_services')->onDelete('cascade');
+                foreach ($config as $column => $type) {
+                    $macro = $type[0];
+                    $default = $type[1];
+                    $table->$macro($column)->default($default)->nullable();
+                }
+                $tables++;
+            });
+        }, GameService::class, IPersistent::class);
+
+        print "Created {$tables} tables";
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        // Schema::dropIfExists('gtn_services');
-    }
-
-    private function isPhpFileAClass($file): bool
-    {
-        $content = file_get_contents($file);
-        $tokens = token_get_all($content);
-        $class_token = false;
-        foreach ($tokens as $token) {
-            if ($token[0] === T_CLASS) {
-                $class_token = true;
-            }
-            if ($class_token && $token[0] === T_STRING) {
-                return true;
-            }
-        }
-        return false;
+        ReflectionUtils::findClassesInPath('GameApps/gtn/Services', function ($class) {
+            $table_name = $class->getMethod('getTable')->invoke(new $class->name);
+            Schema::dropIfExists($table_name);
+        }, GameService::class, IPersistent::class);
     }
 };

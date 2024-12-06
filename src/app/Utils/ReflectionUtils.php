@@ -6,13 +6,14 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 
 class ReflectionUtils
 {
 
-    public static function short($class) : string
+    public static function short($class): string
     {
         $reflection = new ReflectionClass($class);
         return $reflection->getShortName();
@@ -201,4 +202,21 @@ class ReflectionUtils
         return str_replace('.', '\\', $dots);
     }
 
+    public static function findClassesInPath($directory, callable $callback, $inheritsFrom = null, $implements = null)
+    {
+        collect(File::allFiles(app_path($directory)))->each(
+            function ($file) use ($callback, $inheritsFrom, $implements) {
+                $class_name = Str::before($file->getPathname(), '.php');
+                $class_name = 'App' . Str::after($class_name, app_path());
+                $class_name = str_replace('/', '\\', $class_name);
+                $class = new ReflectionClass($class_name);
+                if (
+                    ($inheritsFrom === null || $class->isSubclassOf($inheritsFrom)) &&
+                    ($implements === null || $class->implementsInterface($implements))
+                ) {
+                    $callback($class);
+                }
+            }
+        );
+    }
 }
