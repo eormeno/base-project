@@ -11,7 +11,7 @@ class ShowingClueStateMessages implements IMessageProvider
         return [
             'title' => $this->titleMessage(),
             'good_luck' => $this->goodLuckMessage(),
-            'clues' => $this->cluesMessage(),
+            'clues' => $this->clues($parameters),
             'yes_i_accept_the_challenge' => $this->yesIAcceptTheChallengeMessage(),
             'another_challenge' => $this->anotherChallengeMessage(),
         ];
@@ -27,14 +27,30 @@ class ShowingClueStateMessages implements IMessageProvider
         return __('guess-the-number.good-luck');
     }
 
-    private function cluesMessage()
+    public function clueMessageFor(array $clue): string
     {
-        return __('guess-the-number.clues');
+        $clueKey = 'guess-the-number.clue-' . $clue['clue'];
+        $clueData = '';
+        if (is_array($clue['data'])) {
+            $clueData = implode(', ', $clue['data']);
+        } else {
+            $clueData = $clue['data'];
+        }
+        return __($clueKey, ['data' => $clueData]);
+    }
+
+    public function clues(array $clues): array
+    {
+        $ret = [];
+        foreach ($clues as $clue) {
+            $ret[] = $this->clueMessageFor($clue);
+        }
+        return $ret;
     }
 
     private function yesIAcceptTheChallengeMessage()
     {
-        return __('guess-the-number.yes-i-accept-the-challenge');
+        return __('guess-the-number.want-to-play');
     }
 
     private function anotherChallengeMessage()

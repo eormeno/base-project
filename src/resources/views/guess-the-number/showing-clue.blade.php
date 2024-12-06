@@ -15,7 +15,7 @@
     </div>
 
     <div class="mt-4 text-lg text-gray-900 dark:text-white text-center">
-        {{ $goodLuck }}
+        {{ $good_luck }}
     </div>
 
     <x-button class="mt-4" type="button" onclick="sendEvent('want_to_play')">

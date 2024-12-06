@@ -67,7 +67,7 @@ class Game extends Model
             !is_subclass_of($type, GameService::class) ||
             !in_array(IPersistent::class, class_implements($type))
         ) {
-            return new $type();
+            return new $type(['id' => $service->id]);
         }
         return $type::find($service->id);
     }

@@ -37,8 +37,8 @@ class GtnService extends GameService implements IPersistent
 
     public function startGame()
     {
-        //$random_number = $this->calculateRandomNumber();
-        $random_number = 512;
+        $clueService = $this->getService('clue-service');
+        $random_number = $clueService->findRandomNumber($this);
         $this->times_played++;
         $this->remaining_attempts = $this->max_attempts;
         $this->random_number = $random_number;
@@ -60,15 +60,5 @@ class GtnService extends GameService implements IPersistent
         $this->finished = true;
         $this->score = $this->calculateScore() + $this->score;
         $this->save();
-    }
-
-    public function getRandomNumber(): int
-    {
-        return $this->random_number;
-    }
-
-    private function calculateRandomNumber(): int
-    {
-        return $this->clueService->findRandomNumber();
     }
 }

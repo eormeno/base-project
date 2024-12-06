@@ -13,4 +13,9 @@ class GameOverStateComponent extends StateViewComponent
     {
         return 'game-over';
     }
+
+    public function messages(): array
+    {
+        return [];
+    }
 }

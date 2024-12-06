@@ -11,7 +11,7 @@ abstract class StateViewComponent extends Component implements IState, IView
     protected $fillable = ['id'];
     protected $view_name = 'web-renderer.default';
 
-    public static function state(): string | null
+    public static function state(): string|null
     {
         return null;
     }
@@ -26,7 +26,7 @@ abstract class StateViewComponent extends Component implements IState, IView
         $this->super->update(['enabled' => $value]);
     }
 
-    public function handleStateEvent(array $event): string | null
+    public function handleStateEvent(array $event): string|null
     {
         $eventName = $event['event'];
         $eventData = $event['data'];
@@ -63,7 +63,8 @@ abstract class StateViewComponent extends Component implements IState, IView
 
     public function view()
     {
-        $view = view($this->view_name, $this->modelAttributesToArray());
+        $data = $this->messages();
+        $view = view($this->view_name, $data);
         return $view;
     }
 
@@ -73,6 +74,10 @@ abstract class StateViewComponent extends Component implements IState, IView
         $array = [];
         foreach ($attributes as $key => $value) {
             $array[$key] = json_decode($value);
+        }
+        $properties = get_object_vars($this);
+        foreach ($properties as $key => $value) {
+            $array[$key] = $value;
         }
         return $array;
     }

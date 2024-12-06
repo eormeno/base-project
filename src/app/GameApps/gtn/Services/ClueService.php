@@ -8,30 +8,23 @@ class ClueService extends GameService
 {
     protected $table = null;
 
-    private function gtnGameService(): GameService
+    public function getClues(GtnService $gtnService = null): array
     {
-        return $this->getService('gtn-service');
-    }
-
-    public function getClues(): array
-    {
+        if ($gtnService === null) {
+            $gtnService = $this->getService('gtn-service');
+        }
         $ret = [];
-        $number = $this->gameService->getRandomNumber();
+        $number = $gtnService->random_number;
+        $min = $gtnService->min_number;
+        $max = $gtnService->max_number;
 
-        $minIterations = $this->getMinimalIterations($number);
+        $minIterations = $this->getMinimalIterations($number, $min, $max);
         $ret[] = ['clue' => 'iterations', 'data' => $minIterations];
 
         if ($this->isPrime($number)) {
             $ret[] = ['clue' => 'prime', 'data' => 'is-prime'];
             return $ret;
         }
-
-        // if ($this->isEven($number)) {
-        //     $ret[] = ['clue' => 'even', 'data' => 'is-even'];
-        // } else {
-        //     $ret[] = ['clue' => 'odd', 'data' => 'is-odd'];
-        // }
-
         //$multiples = $this->getMultiples($number);
         $factors = $this->getPrimeFactors($number);
         $ret[] = ['clue' => 'multiples', 'data' => $factors];
@@ -39,20 +32,18 @@ class ClueService extends GameService
         return $ret;
     }
 
-    public function findRandomNumber(): int
+    public function findRandomNumber(GtnService $gtnService): int
     {
-        $min = $this->gameConfigService->getMinNumber();
-        $max = $this->gameConfigService->getMaxNumber();
+        $min = $gtnService->min_number;
+        $max = $gtnService->max_number;
         do {
             $number = random_int($min, $max);
-        } while ($this->getMinimalIterations($number) > 6);
+        } while ($this->getMinimalIterations($number, $min, $max) > 6);
         return $number;
     }
 
-    public function getMinimalIterations(int $number): int
+    public function getMinimalIterations(int $number, int $min, int $max): int
     {
-        $min = $this->gameConfigService->getMinNumber();
-        $max = $this->gameConfigService->getMaxNumber();
         return $this->binarySearchIterations($min, $max, $number);
     }
 
@@ -86,11 +77,6 @@ class ClueService extends GameService
             }
         }
         return true;
-    }
-
-    private function isEven(int $number): bool
-    {
-        return $number % 2 == 0;
     }
 
     public function getPrimeFactors(int $number): array

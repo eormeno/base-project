@@ -9,21 +9,21 @@
     --}}
 
     <div class="mt-3 text-pretty text-gray-900 dark:text-white text-center">
-        {{ $messages->description }}
+        {{ $description }}
     </div>
 
     <x-button class="mt-4" type="button" onclick="sendEvent('want_to_play')">
-        {{ $messages->yes_button }}
+        {{ $yes_button }}
     </x-button>
 
     <div class="mt-4">
         <h2 class="text-xl text-gray-900 dark:text-white text-center">
-            {{ $messages->ranking_title }}
+            {{ $ranking_title }}
         </h2>
         <ul class="mt-2 text-sm text-gray-900 dark:text-white">
-            @foreach ($messages->ranking as $player)
+            @foreach ($ranking as $player)
                 <li>
-                    {{ $player->name }} : {{ $player->score }}
+                    {{ $player['name'] }} : {{ $player['score'] }}
                 </li>
             @endforeach
         </ul>

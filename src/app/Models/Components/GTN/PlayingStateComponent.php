@@ -13,4 +13,9 @@ class PlayingStateComponent extends StateViewComponent
     {
         return 'playing';
     }
+
+    public function messages(): array
+    {
+        return [];
+    }
 }

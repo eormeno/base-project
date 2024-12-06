@@ -15,6 +15,11 @@ class GameService extends Model
         return $this->belongsTo(Game::class);
     }
 
+    public function super(): BelongsTo
+    {
+        return $this->belongsTo(GameService::class, 'id');
+    }
+
     public function subclass() : GameService
     {
         return $this->type::find($this->id);
@@ -22,6 +27,12 @@ class GameService extends Model
 
     public function getService(string $slug): GameService
     {
-        return $this->game->getService($slug);
+        $parent = $this->super;
+        if ($parent === null) {
+            dd("No parent found for $slug");
+        }
+        $_game = $parent->game;
+        //dd($_game);
+        return $_game->getService($slug);
     }
 }
