@@ -61,4 +61,16 @@ class GtnService extends GameService implements IPersistent
         $this->score = $this->calculateScore() + $this->score;
         $this->save();
     }
+
+    public function cheat()
+    {
+        $this->remaining_attempts = 1;
+        $this->save();
+    }
+
+    public function decreaseRemainingAttempts()
+    {
+        $this->remaining_attempts--;
+        $this->save();
+    }
 }
