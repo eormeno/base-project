@@ -17,8 +17,8 @@ class PlayingStateComponent extends StateViewComponent
 
     public function onGuessEvent(?int $number = -1)
     {
-        //$this->getService('gtn-service')->guess($number);
-        $this->log('Guess event ' . $number);
+        $result = $this->getService('guess-service')->guess($number);
+        $this->log(json_encode($result));
     }
 
     public function messages(): array

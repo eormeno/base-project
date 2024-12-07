@@ -8,68 +8,75 @@ class GuessService extends GameService
 {
     protected $table = null;
 
-    protected GtnService $gtnService;
-
     public function guess($number): array
     {
         $ret = [];
-        $this->gtnService = $this->getService('gtn-service');
-        $random_number = $this->gtnService->random_number;
-        $remaining_attempts = $this->gtnService->remaining_attempts;
-        $min_number = $this->gtnService->min_number;
-        $max_number = $this->gtnService->max_number;
-        $cheat_number = $this->gtnService->cheat_number;
-        $this->checkNumberIsCheat($number, $cheat_number, $ret);
-        $this->checkNumberOutOfRange($number, $min_number, $max_number, $ret);
-        $this->checkNumberIsGuessed($number, $random_number, $ret);
-        $this->checkNumberIsLowerThanRandomNumber($number, $ret);
-        $this->checkNumberIsGreaterThanRandomNumber($number, $ret);
+        $gtnService = $this->getService('gtn-service');
+        $this->checkNumberIsCheat($number, $gtnService, $ret);
+        $this->checkNumberIsGuessed($number, $gtnService, $ret);
+        $this->checkNumberIsLowerThanRandomNumber($number, $gtnService, $ret);
+        $this->checkNumberIsGreaterThanRandomNumber($number, $gtnService, $ret);
         return $ret;
     }
 
-    private function checkNumberIsCheat($number, $cheat_number, array &$ret): void
+    private function checkNumberIsCheat($number, GtnService $gtnService, array &$ret): void
     {
-        if ($number == $cheat_number) {
-            $ret['cheat'] = [$number];
-            $this->gtnService->cheat();
+        if ($number == $gtnService->cheat_number) {
+            $ret['cheat'] = [$gtnService->random_number];
+            $gtnService->cheat();
         }
     }
 
-    private function checkNumberOutOfRange($number, $min, $max, array &$ret): void
+    private function checkNumberIsGuessed($number, GtnService $gtnService, array &$ret)
     {
-        if ($number < $min || $number > $max) {
-            $ret['out_of_range'] = [$number, $min, $max];
-        }
-    }
-
-    private function checkNumberIsGuessed($number, $random_number, array &$ret)
-    {
-        if ($number == $random_number) {
+        if ($number == $gtnService->random_number) {
             $ret['success'] = [$number];
+            $gtnService->endGame();
         }
     }
 
-    private function checkNoEnoughAttempts(array &$ret)
+    private function checkNoEnoughAttempts(GtnService $gtnService, array &$ret)
     {
-        if ($this->gtnService->remaining_attempts == 0) {
-            $ret['game_over'] = [];
+        if ($gtnService->remaining_attempts == 0) {
+            $ret['game_over'] = [$gtnService->random_number];
+            $gtnService->endGame();
         }
     }
 
-    protected function checkNumberIsLowerThanRandomNumber($number, $random_number, $remaining_attempts, array &$ret)
+    protected function checkNumberIsLowerThanRandomNumber($number, GtnService $gtnService, array &$ret)
     {
-        if ($number < $this->gtnService->random_number) {
-            $this->gtnService->decreaseRemainingAttempts();
-            $this->checkNoEnoughAttempts($noEnoughAttemptsCallback);
+        if ($number === $gtnService->cheat_number || $gtnService->finished) {
+            return;
+        }
+        if ($number < $gtnService->random_number) {
+            if ($number < $gtnService->min_number) {
+                $ret['out_of_range'] = [$number, $gtnService->min_number, $gtnService->max_number];
+                return;
+            }
+            $gtnService->decreaseRemainingAttempts();
+            $this->checkNoEnoughAttempts($gtnService, $ret);
+            if ($gtnService->finished) {
+                return;
+            }
             $ret['greater'] = [$number];
         }
     }
 
-    protected function checkNumberIsGreaterThanRandomNumber($number, array &$ret)
+    protected function checkNumberIsGreaterThanRandomNumber($number, GtnService $gtnService, array &$ret)
     {
-        if ($number > $this->gtnService->random_number) {
-            $this->gtnService->decreaseRemainingAttempts();
-            $this->checkNoEnoughAttempts($noEnoughAttemptsCallback);
+        if ($number === $gtnService->cheat_number || $gtnService->finished) {
+            return;
+        }
+        if ($number > $gtnService->random_number) {
+            if ($number > $gtnService->max_number) {
+                $ret['out_of_range'] = [$number, $gtnService->min_number, $gtnService->max_number];
+                return;
+            }
+            $gtnService->decreaseRemainingAttempts();
+            $this->checkNoEnoughAttempts($gtnService, $ret);
+            if ($gtnService->finished) {
+                return;
+            }
             $ret['lower'] = [$number];
         }
     }
