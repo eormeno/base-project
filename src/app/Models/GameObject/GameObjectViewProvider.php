@@ -6,11 +6,6 @@ use App\Models\Components\IView;
 
 class GameObjectViewProvider extends GameObjectFrontEventListener implements IView
 {
-    // TODO Cambiar esto urgente!
-    public function messages(): array {
-        return [];
-    }
-
     public function view()
     {
         $currentStateViewComponent = $this->currentStateComponent();

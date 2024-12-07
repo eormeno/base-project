@@ -23,10 +23,4 @@ class PreparingStateComponent extends StateViewComponent
     {
         return ShowingClueStateComponent::state();
     }
-
-    public function messages(): array
-    {
-        // TODO Esto no me gusta, esta clase no debería necesitar implementar este método
-        return [];
-    }
 }

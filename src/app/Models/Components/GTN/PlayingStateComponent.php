@@ -10,21 +10,29 @@ class PlayingStateComponent extends StateViewComponent
     protected $table = 'gtn_playing_state_components';
     protected $view_name = 'guess-the-number.playing';
 
-    public static function state(): string | null
+    public static function state(): string|null
     {
         return 'playing';
+    }
+
+    public function onStart(): void
+    {
+        $gtn_data = $this->getService('gtn-service')->toArray();
+        $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
+        $this->updateView($messages);
     }
 
     public function onGuessEvent(?int $number = -1)
     {
         $result = $this->getService('guess-service')->guess($number);
-        $this->log(json_encode($result));
+        $this->updateView(['result' => json_encode($result, JSON_PRETTY_PRINT)]);
+        //        $this->log(json_encode($result));
     }
 
-    public function messages(): array
-    {
-        $gtn_data = $this->getService('gtn-service')->toArray();
-        $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
-        return $messages;
-    }
+    // public function messages(): array
+    // {
+    //     $gtn_data = $this->getService('gtn-service')->toArray();
+    //     $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
+    //     return $messages;
+    // }
 }

@@ -13,9 +13,4 @@ class SuccessStateComponent extends StateViewComponent
     {
         return 'success';
     }
-
-    public function messages(): array
-    {
-        return [];
-    }
 }

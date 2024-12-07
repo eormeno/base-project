@@ -20,13 +20,15 @@
         <h2 class="text-xl text-gray-900 dark:text-white text-center">
             {{ $ranking_title }}
         </h2>
-        <ul class="mt-2 text-sm text-gray-900 dark:text-white">
-            @foreach ($ranking as $player)
-                <li>
-                    {{ $player['name'] }} : {{ $player['score'] }}
-                </li>
-            @endforeach
-        </ul>
+        @isset($ranking)
+            <ul class="mt-2 text-sm text-gray-900 dark:text-white">
+                @foreach ($ranking as $player)
+                    <li>
+                        {{ $player['name'] }} : {{ $player['score'] }}
+                    </li>
+                @endforeach
+            </ul>
+        @endisset
     </div>
 
     <div class="mt-4 flex justify-center bg-white p-3 items-center">

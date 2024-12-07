@@ -10,6 +10,14 @@
                 <x-input id="number" class="block mt-1 w-full" type="number" name="number" :value="old('number')"
                     autofocus />
             </div>
+            {{-- Display the result --}}
+            @if (isset($result))
+                <div class="mt-4 text-center">
+                    <p class="text-lg text-gray-900 dark:text-white">
+                        {{ $result }}
+                    </p>
+                </div>
+            @endif
             <x-button class="mt-4" type="button"
                 onclick="sendEvent('guess', {
                 number: document.getElementById('number').value

@@ -19,15 +19,15 @@ class ClueService extends GameService
         $max = $gtnService->max_number;
 
         $minIterations = $this->getMinimalIterations($number, $min, $max);
-        $ret[] = ['clue' => 'iterations', 'data' => $minIterations];
+        $ret['clue.iterations'] = ['data' => $minIterations];
 
         if ($this->isPrime($number)) {
-            $ret[] = ['clue' => 'prime', 'data' => 'is-prime'];
+            $ret['clue.prime'] = ['data' => 'is-prime'];
             return $ret;
         }
         //$multiples = $this->getMultiples($number);
-        $factors = $this->getPrimeFactors($number);
-        $ret[] = ['clue' => 'multiples', 'data' => $factors];
+        $factors = implode(', ', $this->getPrimeFactors($number));
+        $ret['clue.multiples'] = ['data' => $factors];
 
         return $ret;
     }

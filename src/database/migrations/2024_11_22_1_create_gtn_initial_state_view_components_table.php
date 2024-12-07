@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('gtn_initial_state_view_components', function (Blueprint $table) {
             $table->id();
             $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
-            $table->json('messages')->nullable();
         });
     }
 
