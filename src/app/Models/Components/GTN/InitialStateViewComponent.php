@@ -17,19 +17,23 @@ class InitialStateViewComponent extends StateViewComponent
 
     public function onStart(): void
     {
-        $gtnService = $this->getService('gtn-service');
-        //$messages = app(MessageService::class)->getMessages(self::class, $gtnService);
-        $messages = [
-            'description' => [
-                'user_name' => auth()->user()->name,
-                'remaining_attemts' => $gtnService->max_attempts,
-                'min_number' => $gtnService->min_number,
-                'max_number' => $gtnService->max_number,
-            ],
-            'yes_button' => [],
-            'ranking_title' => []
+        $gtn_service = $this->getService('gtn-service');
+        $description_params = $gtn_service->toArray();
+        $description_params['user_name'] = auth()->user()->name;
+        $ranking = [
+            ['name' => 'Jugador 1', 'score' => 100],
+            ['name' => 'Jugador 2', 'score' => 90],
+            ['name' => 'Jugador 3', 'score' => 80],
+            ['name' => 'Jugador 4', 'score' => 70],
+            ['name' => 'Jugador 5', 'score' => 60],
         ];
-        $this->updateView($messages);
+
+        $this->updateView([
+            'description' => $description_params,
+            'yes_button' => null,
+            'ranking_title' => null,
+            'ranking' => $ranking
+        ]);
     }
 
     public function onWantToPlayEvent()

@@ -4,12 +4,12 @@
         {{ $title }}
     </div>
 
-    @isset($clues_array)
+    @isset($clues)
         <div class="mt-4 text-lg text-gray-900 dark:text-white text-left">
             <div class="text-left items-start">
                 <ul class="list-disc list-inside">
-                    @foreach ($clues_array as $clue => $params)
-                        <li>{{ __("guess-the-number.$clue", $params) }}</li>
+                    @foreach ($clues as $clue)
+                        <li>{{ $clue }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -20,7 +20,7 @@
         {{ $good_luck }}
     </div>
 
-    <div class="mt-4 text-lg text-gray-900 dark:text-white text-center">
+    <div class="mt-4 text-lg text-gray-900 text-center">
         <x-button class="mt-4 bg-transparent text-cyan-900" type="button" onclick="sendEvent('another_challenge')">
             {{ $another_challenge }}
         </x-button>

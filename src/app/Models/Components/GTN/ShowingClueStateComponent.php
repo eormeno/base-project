@@ -25,7 +25,7 @@ class ShowingClueStateComponent extends StateViewComponent
             'good_luck' => [],
             'yes_button' => [],
             'another_challenge' => [],
-            'clues_array' => $clues
+            'clues' => $clues
         ];
         $this->updateView($messages);
     }
