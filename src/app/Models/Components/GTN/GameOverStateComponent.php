@@ -13,4 +13,25 @@ class GameOverStateComponent extends StateViewComponent
     {
         return 'game-over';
     }
+
+    public function onEnter(): void
+    {
+        $gtn_service = $this->getService('gtn_service');
+        $this->updateView([
+            'notification_txt' => $gtn_service->user->name,
+            'subtitle_txt' => $gtn_service->random_number,
+            'play_again_txt' => null,
+            'exit_txt' => null,
+        ]);
+    }
+
+    public function onPlayAgainEvent()
+    {
+        return PreparingStateComponent::state();
+    }
+
+    public function onExitEvent()
+    {
+        return InitialStateViewComponent::state();
+    }
 }

@@ -32,13 +32,24 @@ class Component extends Model
         return $this->belongsTo(Component::class, 'id');
     }
 
-    public function updateView(array $attributes): void
+    public function updateView(array $attributes): bool
     {
         $view_name = $this->view_name ?? '';
         $messages = $this->super->messages ?? [];
-        $this->recurseAttrs($attributes, $view_name);
+        // si está la clave i18n, entonces se debe traducir
+        if (array_key_exists('i18n', $attributes)) {
+            $result = $this->recurseAttrs($attributes['i18n'], $view_name);
+            if (!$result) {
+                return false;
+            }
+            // copia los valores de i18n a messages
+            $messages = array_merge($messages, $attributes['i18n']);
+            unset($attributes['i18n']);
+        }
+        //$this->recurseAttrs($attributes, $view_name);
         $this->super->messages = array_merge($messages, $attributes);
         $this->super->save();
+        return true;
     }
 
     private function recurseAttrs(array &$array, string $prefijo = ''): bool
@@ -49,7 +60,7 @@ class Component extends Model
                 return false;
             }
             if (is_scalar($valor)) {
-                continue;
+                $valor = ['value' => $valor];
             }
             // Concatena las claves para formar la ruta actual
             $rutaBase = $prefijo === '' ? (string) $clave : $prefijo;

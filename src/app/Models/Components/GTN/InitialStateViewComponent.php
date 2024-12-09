@@ -18,8 +18,12 @@ class InitialStateViewComponent extends StateViewComponent
     public function onStart(): void
     {
         $gtn_service = $this->getService('gtn-service');
-        $description_params = $gtn_service->toArray();
-        $description_params['user_name'] = auth()->user()->name;
+        $description_params = [
+            'user_name' => $gtn_service->user->name,
+            'min_number' => $gtn_service->min_number,
+            'max_number' => $gtn_service->max_number,
+            'max_attempts' => $gtn_service->max_attempts,
+        ];
         $ranking = [
             ['name' => 'Jugador 1', 'score' => 100],
             ['name' => 'Jugador 2', 'score' => 90],
@@ -28,12 +32,17 @@ class InitialStateViewComponent extends StateViewComponent
             ['name' => 'Jugador 5', 'score' => 60],
         ];
 
-        $this->updateView([
-            'description' => $description_params,
-            'yes_button' => null,
-            'ranking_title' => null,
+        $result = $this->updateView([
+            'i18n' => [
+                'description' => $description_params,
+                'yes_button' => null,
+                'ranking_title' => null,
+            ],
             'ranking' => $ranking
         ]);
+        if (!$result) {
+            $this->view_name = 'debug';
+        }
     }
 
     public function onWantToPlayEvent()

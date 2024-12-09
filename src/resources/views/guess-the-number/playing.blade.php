@@ -7,11 +7,13 @@
 
     <div class="mt-4 w-5/6 p-3 mx-auto">
         <div>
-            <div>
-                <x-label for="number" value="{{ $enter_number_message }}" />
-                <x-input id="number" class="block mt-1 w-full" type="number" name="number" :value="old('number')"
-                    autofocus />
-            </div>
+            @if (!$finished)
+                <div>
+                    <x-label for="number" value="{{ $enter_number_message }}" />
+                    <x-input id="number" class="block mt-1 w-full" type="number" name="number" value="{{$last_number}}"
+                         autofocus />
+                </div>
+            @endif
             <div class="mt-4 text-center">
                 <p class="text-lg text-gray-900 dark:text-white">
                     @isset($results)
@@ -21,12 +23,14 @@
                     @endisset
                 </p>
             </div>
-            <x-button class="mt-4" type="button"
-                onclick="sendEvent('guess', {
+            @if (!$finished)
+                <x-button class="mt-4" type="button"
+                    onclick="sendEvent('guess', {
                 number: document.getElementById('number').value
                 })">
-                {{ $enter_number_button }}
-            </x-button>
+                    {{ $enter_number_button }}
+                </x-button>
+            @endif
         </div>
     </div>
 </div>

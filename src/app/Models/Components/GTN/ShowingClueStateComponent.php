@@ -21,11 +21,13 @@ class ShowingClueStateComponent extends StateViewComponent
         $clues = $this->getService('clue-service')->getClues();
         //$messages = app(MessageService::class)->getMessages(self::class, $clues);
         $messages = [
-            'title' => [],
-            'good_luck' => [],
-            'yes_button' => [],
-            'another_challenge' => [],
-            'clues' => $clues
+            'i18n' => [
+                'title' => null,
+                'good_luck' => null,
+                'yes_button' => null,
+                'another_challenge' => null,
+                'clues' => $clues
+            ]
         ];
         $this->updateView($messages);
     }

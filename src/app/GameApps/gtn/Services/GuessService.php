@@ -54,6 +54,7 @@ class GuessService extends GameService
                 return;
             }
             $gtnService->decreaseRemainingAttempts();
+            $gtnService->setLastNumberAttribute($number);
             $this->checkNoEnoughAttempts($gtnService, $ret);
             if ($gtnService->finished) {
                 return;
@@ -73,6 +74,7 @@ class GuessService extends GameService
                 return;
             }
             $gtnService->decreaseRemainingAttempts();
+            $gtnService->setLastNumberAttribute($number);
             $this->checkNoEnoughAttempts($gtnService, $ret);
             if ($gtnService->finished) {
                 return;

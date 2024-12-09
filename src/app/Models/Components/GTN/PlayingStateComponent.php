@@ -20,9 +20,13 @@ class PlayingStateComponent extends StateViewComponent
         $gtn_data = $this->getService('gtn-service')->toArray();
         //        $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
         $messages = [
-            "remaining_attempts_message" => $gtn_data['remaining_message'],
-            'enter_number_message' => null,
-            'enter_number_button' => null,
+            'i18n' => [
+                "remaining_attempts_message" => $gtn_data['remaining_message'],
+                'enter_number_message' => null,
+                'enter_number_button' => null,
+            ],
+            'finished' => $gtn_data['finished'],
+            'last_number' => $gtn_data['last_number'],
         ];
         $this->updateView($messages);
     }
@@ -30,7 +34,7 @@ class PlayingStateComponent extends StateViewComponent
     public function onGuessEvent(?int $number = -1)
     {
         $result = $this->getService('guess-service')->guess($number);
-        $this->updateView(['results' => $result]);
+        $this->updateView(['i18n' => ['results' => $result]]);
         //        $this->log(json_encode($result));
     }
 

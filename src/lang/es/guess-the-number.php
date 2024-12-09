@@ -28,6 +28,7 @@ return [
             'remaining' => 'Te quedan :remaining_attempts intentos.',
             'half' => '¡Tienes menos de la mitad! Te quedan :remaining_attempts intentos.',
             'last' => '¡Último intento! ¡Buena suerte!',
+            'finished' => 'Fin del juego',
         ],
         'guess_result' => [
             'greater' => 'El número es mayor que :0',
@@ -38,15 +39,18 @@ return [
             'game_over' => '¡Game Over! ¡Se acabaron los intentos! El número era :0',
         ]
     ],
+    'game-over' => [
+        'notification_txt' => '¡Game Over! ¡Se acabaron los intentos :user_name!',
+        'subtitle_txt' => 'El número secreto era :random_number',
+        'play_again_txt' => '¡Quiero jugar de nuevo!',
+        'exit_txt' => 'Salir al menú principal',
+    ],
 
     'message' => 'Mensaje',
     'success' => '¡Has adivinado el número :user_name!',
-    'game-over' => '¡Game Over! ¡Se acabaron los intentos :user_name!',
     'play-again' => '¡Quiero jugar de nuevo!',
     'reset' => 'Reiniciar',
-    'game-over-subtitle' => 'El número secreto era :random_number',
     'success-subtitle' => 'Lo adivinaste en :attempts intentos.',
     'current-score' => 'Tu puntuación actual es :score',
     'historic-score' => 'Tu puntuación histórica es :score',
-    'exit' => 'Salir al menú principal',
 ];

@@ -8,7 +8,7 @@
         <div class="mt-4 text-lg text-gray-900 dark:text-white text-left">
             <div class="text-left items-start">
                 <ul class="list-disc list-inside">
-                    @foreach ($clues as $clue)
+                    @foreach ($clues as $key => $clue)
                         <li>{{ $clue }}</li>
                     @endforeach
                 </ul>
