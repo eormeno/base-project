@@ -2,7 +2,6 @@
 
 namespace App\Models\Components\GTN;
 
-use App\Services\MessageService;
 use App\Models\Components\StateViewComponent;
 
 class PlayingStateComponent extends StateViewComponent
@@ -34,14 +33,14 @@ class PlayingStateComponent extends StateViewComponent
     public function onGuessEvent(?int $number = -1)
     {
         $result = $this->getService('guess-service')->guess($number);
-        $this->updateView(['i18n' => ['results' => $result]]);
-        //        $this->log(json_encode($result));
-    }
 
-    // public function messages(): array
-    // {
-    //     $gtn_data = $this->getService('gtn-service')->toArray();
-    //     $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
-    //     return $messages;
-    // }
+        if (array_key_exists('guess_result.success', $result)) {
+            return SuccessStateComponent::state();
+        } else if (array_key_exists('guess_result.game_over', $result)) {
+            return GameOverStateComponent::state();
+        }
+
+        $this->onStart();
+        $this->updateView(['i18n' => ['results' => $result]]);
+    }
 }

@@ -18,10 +18,10 @@
 
     <div class="mt-6 flex">
         <x-button class="m-2 flex" type="button" onclick="sendEvent('play_again')">
-            {{ __('guess-the-number.play-again') }}
+            {{ $play_again }}
         </x-button>
         <x-button class="m-2 flex" type="button" onclick="sendEvent('exit')">
-            {{ __('guess-the-number.exit') }}
+            {{ $exit }}
         </x-button>
     </div>
 </div>

@@ -10,7 +10,7 @@
             @if (!$finished)
                 <div>
                     <x-label for="number" value="{{ $enter_number_message }}" />
-                    <x-input id="number" class="block mt-1 w-full" type="number" name="number" value="{{$last_number}}"
+                    <x-input id="number" class="block mt-1 w-full" type="number" name="number" placeholder="{{$last_number}}"
                          autofocus />
                 </div>
             @endif

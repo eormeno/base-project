@@ -40,17 +40,20 @@ return [
         ]
     ],
     'game-over' => [
-        'notification_txt' => '¡Game Over! ¡Se acabaron los intentos :user_name!',
-        'subtitle_txt' => 'El número secreto era :random_number',
-        'play_again_txt' => '¡Quiero jugar de nuevo!',
-        'exit_txt' => 'Salir al menú principal',
+        'notification' => '¡Game Over! ¡Se acabaron los intentos :user_name!',
+        'subtitle' => 'El número secreto era :random_number',
+        'play_again' => '¡Quiero jugar de nuevo!',
+        'exit' => 'Salir al menú principal',
+    ],
+    'success'=>[
+        'notification' => '¡Has adivinado el número :user_name!',
+        'subtitle' => 'Lo adivinaste en :attempts intentos.',
+        'play_again' => '¡Quiero jugar de nuevo!',
+        'current_score' => 'Tu puntuación actual es :score',
+        'historic_score' => 'Tu puntuación histórica es :hscore',
+        'exit' => 'Salir al menú principal',
     ],
 
     'message' => 'Mensaje',
-    'success' => '¡Has adivinado el número :user_name!',
-    'play-again' => '¡Quiero jugar de nuevo!',
     'reset' => 'Reiniciar',
-    'success-subtitle' => 'Lo adivinaste en :attempts intentos.',
-    'current-score' => 'Tu puntuación actual es :score',
-    'historic-score' => 'Tu puntuación histórica es :score',
 ];

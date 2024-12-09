@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\DebugHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GameService extends Model
 {
+    use DebugHelper;
     public $timestamps = false;
     protected $fillable = ['id', 'slug', 'type', 'game_id'];
 

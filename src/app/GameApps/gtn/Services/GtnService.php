@@ -10,7 +10,7 @@ class GtnService extends GameService implements IPersistent
 {
     public const TABLE = 'gtn_services';
 
-    protected $appends = ['remaining_message', 'user'];
+    protected $appends = ['remaining_message', 'user', 'remaining_free_attempts'];
     protected $casts = [
         'finished' => 'boolean',
     ];
@@ -22,7 +22,7 @@ class GtnService extends GameService implements IPersistent
             'min_number' => ['integer', 1],
             'max_number' => ['integer', 1024],
             'max_attempts' => ['integer', 10],
-            'last_number' => ['integer', null],
+            'last_number' => ['integer', 0],
             'remaining_attempts' => ['integer', 10],
             'random_number' => ['integer', null],
             'score' => ['integer', 0],
@@ -69,6 +69,8 @@ class GtnService extends GameService implements IPersistent
         $this->times_played++;
         $this->remaining_attempts = $this->max_attempts;
         $this->random_number = $random_number;
+        $this->last_number = 0;
+        $this->finished = false;
         $this->save();
     }
 
@@ -101,9 +103,14 @@ class GtnService extends GameService implements IPersistent
         $this->save();
     }
 
-    public function setLastNumberAttribute(int $value)
+    public function setLastNumber(int $value)
     {
         $this->last_number = $value;
         $this->save();
+    }
+
+    public function getRemainingFreeAttemptsAttribute(): int
+    {
+        return ($this->max_attempts - $this->remaining_attempts) + 1;
     }
 }
