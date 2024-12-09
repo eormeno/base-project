@@ -18,14 +18,19 @@ class PlayingStateComponent extends StateViewComponent
     public function onStart(): void
     {
         $gtn_data = $this->getService('gtn-service')->toArray();
-        $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
+        //        $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
+        $messages = [
+            "remaining_attempts_message" => $gtn_data['remaining_message'],
+            'enter_number_message' => null,
+            'enter_number_button' => null,
+        ];
         $this->updateView($messages);
     }
 
     public function onGuessEvent(?int $number = -1)
     {
         $result = $this->getService('guess-service')->guess($number);
-        $this->updateView(['result' => json_encode($result, JSON_PRETTY_PRINT)]);
+        $this->updateView(['results' => $result]);
         //        $this->log(json_encode($result));
     }
 

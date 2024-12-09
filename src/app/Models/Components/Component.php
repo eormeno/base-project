@@ -48,6 +48,9 @@ class Component extends Model
             if (!is_scalar($clave) && $clave !== null) {
                 return false;
             }
+            if (is_scalar($valor)) {
+                continue;
+            }
             // Concatena las claves para formar la ruta actual
             $rutaBase = $prefijo === '' ? (string) $clave : $prefijo;
             $rutaClave = "$rutaBase.$clave";

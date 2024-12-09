@@ -84,21 +84,24 @@
             switch (type) {
                 case 'info':
                     info_color = 'text-blue-300';
+                    console.log('info:', message);
                     break;
                 case 'error':
                     info_color = 'text-red-300';
+                    console.error(message);
                     break;
                 case 'warn':
                     info_color = 'text-yellow-300';
+                    console.warn(message);
                     break;
                 case 'success':
                     info_color = 'text-green-300';
+                    console.log('success:', message);
                     break;
             }
             debugConsole = document.getElementById('debug-console');
             debugConsole.innerHTML += `<p class="${time_color}">${time}: <span class="${info_color}">${message}</span></p>`;
             debugConsole.scrollTop = debugConsole.scrollHeight;
-            //console.log(event.data);
         }
     }
 </script>

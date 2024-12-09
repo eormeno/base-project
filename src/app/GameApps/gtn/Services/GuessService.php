@@ -22,7 +22,7 @@ class GuessService extends GameService
     private function checkNumberIsCheat($number, GtnService $gtnService, array &$ret): void
     {
         if ($number == $gtnService->cheat_number) {
-            $ret['cheat'] = [$gtnService->random_number];
+            $ret['guess_result.cheat'] = [$gtnService->random_number];
             $gtnService->cheat();
         }
     }
@@ -30,7 +30,7 @@ class GuessService extends GameService
     private function checkNumberIsGuessed($number, GtnService $gtnService, array &$ret)
     {
         if ($number == $gtnService->random_number) {
-            $ret['success'] = [$number];
+            $ret['guess_result.success'] = [$gtnService->user->name];
             $gtnService->endGame();
         }
     }
@@ -38,7 +38,7 @@ class GuessService extends GameService
     private function checkNoEnoughAttempts(GtnService $gtnService, array &$ret)
     {
         if ($gtnService->remaining_attempts == 0) {
-            $ret['game_over'] = [$gtnService->random_number];
+            $ret['guess_result.game_over'] = [$gtnService->random_number];
             $gtnService->endGame();
         }
     }
@@ -50,7 +50,7 @@ class GuessService extends GameService
         }
         if ($number < $gtnService->random_number) {
             if ($number < $gtnService->min_number) {
-                $ret['out_of_range'] = [$number, $gtnService->min_number, $gtnService->max_number];
+                $ret['guess_result.out_of_range'] = [$number, $gtnService->min_number, $gtnService->max_number];
                 return;
             }
             $gtnService->decreaseRemainingAttempts();
@@ -58,7 +58,7 @@ class GuessService extends GameService
             if ($gtnService->finished) {
                 return;
             }
-            $ret['greater'] = [$number];
+            $ret['guess_result.greater'] = [$number];
         }
     }
 
@@ -69,7 +69,7 @@ class GuessService extends GameService
         }
         if ($number > $gtnService->random_number) {
             if ($number > $gtnService->max_number) {
-                $ret['out_of_range'] = [$number, $gtnService->min_number, $gtnService->max_number];
+                $ret['guess_result.out_of_range'] = [$number, $gtnService->min_number, $gtnService->max_number];
                 return;
             }
             $gtnService->decreaseRemainingAttempts();
@@ -77,7 +77,7 @@ class GuessService extends GameService
             if ($gtnService->finished) {
                 return;
             }
-            $ret['lower'] = [$number];
+            $ret['guess_result.lower'] = [$number];
         }
     }
 }
