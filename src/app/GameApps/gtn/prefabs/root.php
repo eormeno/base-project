@@ -2,13 +2,13 @@
 
 return [
     'components' => [
-        'gtn.game-data' => [
-            'min_number' => 1,
-            'max_number' => 1024,
-            'attempts' => 0,
-            'max_attempts' => 10,
-            'score' => 0,
-        ],
+        // 'gtn.game-data' => [
+        //     'min_number' => 1,
+        //     'max_number' => 1024,
+        //     'attempts' => 0,
+        //     'max_attempts' => 10,
+        //     'score' => 0,
+        // ],
         'gtn.initial-state-view' => [],
         'gtn.game-over-state' => [],
         'gtn.playing-state' => [],
