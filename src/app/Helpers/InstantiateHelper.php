@@ -30,25 +30,27 @@ class InstantiateHelper
         ?GameObject $parent = null,
         Prefab $prefab
     ): GameObject {
-        // Crear el GameObject raíz del prefab
+
         $gameObject = GameObject::create([
-            'name' => $prefab->name,
+            'name' => $prefab->name,  // the first object's name is the prefab's name
         ]);
-        // Crear los componentes definidos en la estructura
-        foreach ($prefab->structure['components'] as $slug_type => $attributes) {
+
+        $components = $prefab->structure['components'] ?? [];
+        foreach ($components as $slug_type => $attributes) {
             self::createComponent($gameObject, $slug_type, $attributes);
         }
-        // Crear los hijos recursivamente
-        if (isset($prefab->structure['children'])) {
-            foreach ($prefab->structure['children'] as $childData) {
-                self::createChildFromStructure($gameObject, $childData);
-            }
+
+        $children = $prefab->structure['children'] ?? [];
+        foreach ($children as $name => $childData) {
+            self::createChildFromStructure($gameObject, $name, $childData);
         }
+
         return $gameObject;
     }
 
     protected static function createChildFromStructure(
         GameObject $parent,
+        string $name,
         array $childData
     ): GameObject {
         $child = GameObject::create([
