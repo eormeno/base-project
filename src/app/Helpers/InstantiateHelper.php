@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Models\Game;
 use ReflectionClass;
 use App\Models\Prefab;
 use App\Utils\ReflectionUtils;
@@ -19,20 +18,18 @@ class InstantiateHelper
         $gameObject = DB::transaction(function () use ($prefab) {
             return self::createGameObjectHierarchy(null, $prefab);
         });
-        $gameObject->componentsIterator(function (Component $component, Component $subclass) {
-            $subclass->onAwake();
-            $component->update(['awoke' => true]);
-        });
+        // $gameObject->componentsIterator(function (Component $component, Component $subclass) {
+        //     $subclass->onAwake();
+        //     $component->update(['awoke' => true]);
+        // });
         return $gameObject;
     }
 
-    protected static function createGameObjectHierarchy(
-        ?GameObject $parent = null,
-        Prefab $prefab
-    ): GameObject {
-
+    protected static function createGameObjectHierarchy(?GameObject $parent = null, Prefab $prefab): GameObject
+    {
+        // the first object's name is the prefab's name
         $gameObject = GameObject::create([
-            'name' => $prefab->name,  // the first object's name is the prefab's name
+            'name' => $prefab->name,
         ]);
 
         $components = $prefab->structure['components'] ?? [];
@@ -41,32 +38,28 @@ class InstantiateHelper
         }
 
         $children = $prefab->structure['children'] ?? [];
-        foreach ($children as $name => $childData) {
-            self::createChildFromStructure($gameObject, $name, $childData);
+        foreach ($children as $childName => $childData) {
+            self::createChildren($gameObject, $childName, $childData);
         }
 
         return $gameObject;
     }
 
-    protected static function createChildFromStructure(
-        GameObject $parent,
-        string $name,
-        array $childData
-    ): GameObject {
+    protected static function createChildren(GameObject $parent, string $childName, array $childData): void
+    {
         $child = GameObject::create([
-            'name' => $childData['name'],
+            'name' => $childName,
             'active' => $childData['active'] ?? true,
             'game_object_id' => $parent->id
         ]);
-        foreach ($childData['components'] as $slug_type => $attributes) {
+        $components = $childData['components'] ?? [];
+        foreach ($components as $slug_type => $attributes) {
             self::createComponent($child, $slug_type, $attributes);
         }
-        if (isset($childData['children'])) {
-            foreach ($childData['children'] as $grandChildData) {
-                self::createChildFromStructure($child, $grandChildData);
-            }
+        $grandChildren = $childData['children'] ?? [];
+        foreach ($grandChildren as $grandChildName => $grandChildData) {
+            self::createChildren($child, $grandChildName, $grandChildData);
         }
-        return $child;
     }
 
     protected static function createComponent(

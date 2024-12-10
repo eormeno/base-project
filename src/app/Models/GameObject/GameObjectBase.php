@@ -77,7 +77,7 @@ class GameObjectBase extends Model
             return null;
         }
         $initialStateComponent->enabled = true;
-        $initialStateComponent->onEnter();
+        $initialStateComponent->onEnter();  // TODO Verificar si es necesario
         $this->current_state = $initialStateComponent;
         return $initialStateComponent;
     }
