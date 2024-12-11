@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GameAppController;
@@ -15,42 +14,28 @@ Route::get('/marketing', function () {
     return view('marketing.banner');
 })->middleware('auth:sanctum');
 
-// una ruta que recibe como parametro el nombre de usuario y una clave, si es correcta retorna el un json con mensaje "Bienvenido" de lo contrario retorna "Usuario o clave incorrecta"
-Route::get('/entrar/{username}/{password}', function ($username, $password) {
-    if ($username == 'admin' && $password == '1234') {
-        return response()->json(['message' => 'Bienvenido']);
-    } else {
-        return response()->json(['message' => 'Usuario o clave incorrecta']);
-    }
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
 
     Route::get('/dashboard', function () {
         $gameApps = \App\Models\GameApp::all();
         return view('dashboard', compact('gameApps'));
     })->name('dashboard');
 
-    buildRoutes('guess-the-number', GuessTheNumberController::class);
-    buildRoutes('mythic-treasure-quest', MythicTreasureQuestController::class);
+    Route::prefix('guess-the-number')->group(function () {
+        Route::get('/', [GuessTheNumberController::class, 'index'])->name('guess-the-number');
+        Route::post('/', [GuessTheNumberController::class, 'event'])->name('guess-the-number');
+        Route::get('/reset', [GuessTheNumberController::class, '_reset'])->name("guess-the-number.reset");
+    });
+
+    Route::prefix('mythic-treasure-quest')->group(function () {
+        Route::get('/', [MythicTreasureQuestController::class, 'index'])->name('mythic-treasure-quest');
+        Route::post('/', [MythicTreasureQuestController::class, 'event'])->name('mythic-treasure-quest');
+        Route::get('/reset', [MythicTreasureQuestController::class, '_reset'])->name("mythic-treasure-quest.reset");
+    });
 
     Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
 
     Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'play'])->name('play');
     Route::post('/game-app/{game}', [GameAppController::class, 'event'])->name('event');
-
 });
-
-function buildRoutes(string $routeName, $controller)
-{
-    Route::prefix($routeName)->group(function () use ($routeName, $controller) {
-        Route::get('/', [$controller, 'index'])->name($routeName);
-        Route::post('/', [$controller, 'event'])->name($routeName);
-        Route::get('/reset', [$controller, '_reset'])->name("$routeName.reset");
-    });
-}

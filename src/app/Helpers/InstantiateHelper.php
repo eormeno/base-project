@@ -18,6 +18,7 @@ class InstantiateHelper
         $gameObject = DB::transaction(function () use ($prefab) {
             return self::createGameObjectHierarchy(null, $prefab);
         });
+        // TODO a esto hay que estudiarlo bien, porque no se si es necesario
         // $gameObject->componentsIterator(function (Component $component, Component $subclass) {
         //     $subclass->onAwake();
         //     $component->update(['awoke' => true]);
@@ -31,17 +32,14 @@ class InstantiateHelper
         $gameObject = GameObject::create([
             'name' => $prefab->name,
         ]);
-
         $components = $prefab->structure['components'] ?? [];
         foreach ($components as $slug_type => $attributes) {
             self::createComponent($gameObject, $slug_type, $attributes);
         }
-
         $children = $prefab->structure['children'] ?? [];
         foreach ($children as $childName => $childData) {
             self::createChildren($gameObject, $childName, $childData);
         }
-
         return $gameObject;
     }
 
