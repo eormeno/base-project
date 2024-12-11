@@ -15,7 +15,7 @@ class GameAppController extends Controller
         GameInstanceService $gamesService
     ) {
         $currentGame = $gamesService->lastGameInstanceOfUser($gameApp);
-        return view('game-app.index', compact('currentGame'));
+        return view("game-app.$gameApp->client", compact('currentGame'));
     }
 
     public function event(

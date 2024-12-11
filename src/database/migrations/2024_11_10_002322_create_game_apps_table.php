@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('min_age')->default(18);
             $table->string('image')->nullable();
             $table->string('prefab_name')->nullable();
+            $table->string('client')->default('blade.client');
             $table->string('version')->nullable();
             $table->integer('max_instances_per_user')->default(1);
             $table->integer('min_users_per_instance')->default(1);
