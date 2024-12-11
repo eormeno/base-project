@@ -92,7 +92,6 @@ function main() {
     var offset = 0;        // start at the beginning of the buffer
     gl.vertexAttribPointer(
         positionAttributeLocation, size, type, normalize, stride, offset);
-
     // draw
     var primitiveType = gl.TRIANGLES;
     var offset = 0;

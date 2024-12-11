@@ -50,7 +50,7 @@ for webgl-utils, m3, m4, and webgl-lessons-ui.
   void main() {
     // gl_FragColor is a special variable a fragment shader
     // is responsible for setting
-    gl_FragColor = vec4(0.1, 0.7, 0.5, 1); // return redish-purple
+    gl_FragColor = vec4(0.4, 0.7, 0.5, 1); // return redish-purple
   }
 
 </script>
