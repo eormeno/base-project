@@ -17,7 +17,6 @@ class PlayingStateComponent extends StateViewComponent
     public function onStart(): void
     {
         $gtn_data = $this->getService('gtn-service')->toArray();
-        //        $messages = app(MessageService::class)->getMessages(self::class, $gtn_data);
         $messages = [
             'i18n' => [
                 "remaining_attempts_message" => $gtn_data['remaining_message'],

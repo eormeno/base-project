@@ -2,10 +2,9 @@
 
 return [
     'components' => [
-        // 'image' => [
-        //     'path' => 'background.jpeg',
-        //     'width' => 800,
-        //     'height' => 600,
-        // ],
+        'sprite-renderer' => [
+            'texture' => 'background.jpeg',
+            'layer' => 0,
+        ],
     ],
 ];

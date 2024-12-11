@@ -2,7 +2,6 @@
 
 namespace App\Models\Components\GTN;
 
-use App\Services\MessageService;
 use App\Models\Components\StateViewComponent;
 
 class InitialStateViewComponent extends StateViewComponent
@@ -49,11 +48,4 @@ class InitialStateViewComponent extends StateViewComponent
     {
         return PreparingStateComponent::state();
     }
-
-    // public function messages(): array
-    // {
-    //     $gtnService = $this->getService('gtn-service')->toArray();
-    //     $messages = app(MessageService::class)->getMessages(self::class, $gtnService);
-    //     return $messages;
-    // }
 }

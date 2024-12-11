@@ -2,9 +2,7 @@
 
 namespace App\Models\Components\GTN;
 
-use App\Services\MessageService;
 use App\Models\Components\StateViewComponent;
-
 
 class ShowingClueStateComponent extends StateViewComponent
 {
@@ -19,7 +17,6 @@ class ShowingClueStateComponent extends StateViewComponent
     public function onStart(): void
     {
         $clues = $this->getService('clue-service')->getClues();
-        //$messages = app(MessageService::class)->getMessages(self::class, $clues);
         $messages = [
             'i18n' => [
                 'title' => null,
@@ -41,10 +38,4 @@ class ShowingClueStateComponent extends StateViewComponent
     {
         return PreparingStateComponent::state();
     }
-    // public function messages(): array
-    // {
-    //     $clues = $this->getService('clue-service')->getClues();
-    //     $messages = app(MessageService::class)->getMessages(self::class, $clues);
-    //     return $messages;
-    // }
 }

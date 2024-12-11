@@ -8,14 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('gtn_showing_clue_state_components', function (Blueprint $table) {
+        Schema::create('sprite_renderer_components', function (Blueprint $table) {
             $table->id(); // PK and FK to components
             $table->foreign('id')->references('id')->on('components')->onDelete('cascade');
+            $table->string('texture');
+            $table->integer('layer')->default(0);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('gtn_showing_clue_state_components');
+        Schema::dropIfExists('sprite_renderer_components');
     }
 };

@@ -80,6 +80,9 @@ class GameAppsLoader
     {
         $result = ['apps_created' => 0, 'apps_updated' => 0, 'prefabs_created' => 0, 'prefabs_updated' => 0];
         foreach ($gameApps as $prefix => $info) {
+            if (!isset($info['config'])) {
+                continue;
+            }
             $config = $info['config'];
             $config['prefix'] = $prefix;
             $image_name = $config['image'];
