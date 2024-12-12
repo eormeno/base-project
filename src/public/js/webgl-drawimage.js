@@ -1,5 +1,5 @@
 class WebGLImageDrawer {
-    constructor() {
+    constructor(ballUrl) {
         this.canvas = document.getElementById('glCanvas');
         if (!this.canvas) {
             throw new Error('Canvas element with id "glCanvas" not found');
@@ -13,6 +13,24 @@ class WebGLImageDrawer {
         this.initWebGL();
         this.textures = [];
         this.images = [];
+
+        this.ball = {
+            x: 100,
+            y: 100,
+            width: 48,
+            height: 48,
+            dx: 150, // Velocidad en píxeles por segundo
+            dy: 150,
+            texture: null
+        };
+        this.lastTime = 0;
+        this.loadBallImage(ballUrl);
+        this.startAnimation();
+    }
+
+    async loadBallImage(url) {
+        const image = await this.loadImage(url);
+        this.ball.texture = this.createTexture(image);
     }
 
     initWebGL() {
@@ -114,6 +132,43 @@ class WebGLImageDrawer {
         });
     }
 
+    // startAnimation() {
+    //     setInterval(() => {
+    //         this.update();
+    //         this.render();
+    //     }, 100); // Aproximadamente 60 FPS
+    // }
+    startAnimation() {
+        requestAnimationFrame(this.animate.bind(this));
+    }
+
+    animate(currentTime) {
+        const deltaTime = (currentTime - this.lastTime) / 1000; // Convertir a segundos
+        this.lastTime = currentTime;
+
+        this.update(deltaTime);
+        this.render();
+
+        requestAnimationFrame(this.animate.bind(this));
+    }
+
+    update(deltaTime) {
+        const canvasWidth = this.gl.canvas.width;
+        const canvasHeight = this.gl.canvas.height;
+
+        // Actualizar la posición de la pelota
+        this.ball.x += this.ball.dx * deltaTime;
+        this.ball.y += this.ball.dy * deltaTime;
+
+        // Detectar colisiones con los bordes y cambiar la dirección
+        if (this.ball.x <= 0 || this.ball.x + this.ball.width >= canvasWidth) {
+            this.ball.dx *= -1;
+        }
+        if (this.ball.y <= 0 || this.ball.y + this.ball.height >= canvasHeight) {
+            this.ball.dy *= -1;
+        }
+    }
+
     render() {
         const gl = this.gl;
         gl.clearColor(0, 0, 0, 0);
@@ -122,8 +177,11 @@ class WebGLImageDrawer {
         this.images.forEach(({ image, x, y, width, height }) => {
             const texture = this.createTexture(image);
             this.drawTexture(texture, x, y, width, height);
-            console.log('Image ', image, ' drawn at ', x, y, width, height);
         });
+
+        if (this.ball.texture) {
+            this.drawTexture(this.ball.texture, this.ball.x, this.ball.y, this.ball.width, this.ball.height);
+        }
     }
 
     createTexture(image) {
