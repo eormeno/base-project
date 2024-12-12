@@ -13,14 +13,17 @@
     import WebGLImageDrawer from '{{ asset('js/webgl-drawimage.js') }}';
     let backgroundUrl = '{{ asset('storage/images/background.png') }}';
     let ballUrl = '{{ asset('storage/images/soccer_ball.png') }}';
+    let ppgUrl = '{{ asset('storage/images/PPG-fake.jpg') }}';
 
     window.onload = async () => {
     try {
         const drawer = new WebGLImageDrawer();
 
         // Dibujar imágenes en orden controlado
-        await drawer.drawImage('{{ asset("storage/images/background.png") }}', 0, 0, 800, 450); // Fondo
-        await drawer.drawImage('{{ asset("storage/images/soccer_ball.png") }}', 200, 150, 64, 64); // Imagen superpuesta
+        //await drawer.drawImage(ppgUrl, 0, 0, 800, 450);
+        await drawer.drawImage(backgroundUrl, 0, 0, 800, 450);
+        await drawer.drawImage(ballUrl, 200, 150, 64, 64);
+
     } catch (error) {
         console.error('Error al dibujar imágenes:', error);
     }

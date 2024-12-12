@@ -122,6 +122,7 @@ class WebGLImageDrawer {
         this.images.forEach(({ image, x, y, width, height }) => {
             const texture = this.createTexture(image);
             this.drawTexture(texture, x, y, width, height);
+            console.log('Image ', image, ' drawn at ', x, y, width, height);
         });
     }
 
