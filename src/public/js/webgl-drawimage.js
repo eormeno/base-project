@@ -19,8 +19,8 @@ class WebGLImageDrawer {
             y: 100,
             width: 48,
             height: 48,
-            dx: 150, // Velocidad en píxeles por segundo
-            dy: 150,
+            dx: 250, // Velocidad en píxeles por segundo
+            dy: 250,
             texture: null
         };
         this.lastTime = 0;
@@ -132,12 +132,6 @@ class WebGLImageDrawer {
         });
     }
 
-    // startAnimation() {
-    //     setInterval(() => {
-    //         this.update();
-    //         this.render();
-    //     }, 100); // Aproximadamente 60 FPS
-    // }
     startAnimation() {
         requestAnimationFrame(this.animate.bind(this));
     }
@@ -166,6 +160,18 @@ class WebGLImageDrawer {
         }
         if (this.ball.y <= 0 || this.ball.y + this.ball.height >= canvasHeight) {
             this.ball.dy *= -1;
+        }
+        if (this.ball.x <= 0) {
+            this.ball.x = 0;
+        }
+        if (this.ball.x + this.ball.width >= canvasWidth) {
+            this.ball.x = canvasWidth - this.ball.width;
+        }
+        if (this.ball.y <= 0) {
+            this.ball.y = 0;
+        }
+        if (this.ball.y + this.ball.height >= canvasHeight) {
+            this.ball.y = canvasHeight - this.ball.height;
         }
     }
 
