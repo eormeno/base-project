@@ -5,7 +5,8 @@
     </x-slot>
 
     <div class="left-1/2 border mx-auto max-w-min border-gray-600 rounded-md p-2 bg-slate-200">
-        <canvas id="glCanvas" width="800" height="450" style="width: 800px; height: 450px;"></canvas>
+        <canvas id="glCanvas" width="{{ $gameApp->width }}" height="{{ $gameApp->height }}"
+            style="width: {{ $gameApp->width }}px; height: {{ $gameApp->height }}px;"></canvas>
     </div>
 </x-guess-the-number-layout>
 
@@ -15,14 +16,14 @@
     let ballUrl = '{{ asset('storage/images/soccer_ball.png') }}';
 
     window.onload = async () => {
-    try {
-        const drawer = new WebGLImageDrawer(ballUrl);
+        try {
+            const drawer = new WebGLImageDrawer(ballUrl);
 
-        await drawer.drawImage(backgroundUrl, 0, 0, 800, 450);
-        //await drawer.drawImage(ballUrl, 200, 150, 48, 48);
+            await drawer.drawImage(backgroundUrl, 0, 0, 800, 450);
+            //await drawer.drawImage(ballUrl, 200, 150, 48, 48);
 
-    } catch (error) {
-        console.error('Error al dibujar imágenes:', error);
-    }
-};
+        } catch (error) {
+            console.error('Error al dibujar imágenes:', error);
+        }
+    };
 </script>

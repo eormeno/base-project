@@ -6,5 +6,7 @@ return [
     'active' => true,
     'description' => 'A game where players must bounce a ball into a goal.',
     'client' => 'webgl',
+    'width' => 800,
+    'height' => 450,
     'prefab_name' => 'bba.root'
 ];

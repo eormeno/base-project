@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('prefab_name')->nullable();
             $table->string('client')->default('blade.client');
+            $table->integer('width')->default(800);
+            $table->integer('height')->default(450);
             $table->string('version')->nullable();
             $table->integer('max_instances_per_user')->default(1);
             $table->integer('min_users_per_instance')->default(1);
