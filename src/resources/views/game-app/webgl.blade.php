@@ -1,5 +1,9 @@
 <x-guess-the-number-layout>
 
+    <div id="routeDiv" route="{{ route('event', $currentGame->id) }}" token="{{ csrf_token() }}"></div>
+
+    <script src="{{ asset('js/webgl-go-renderer.js') }}"></script>
+
     <x-slot name="title">
         {{ __("$currentGame->title") }}
     </x-slot>
@@ -10,7 +14,8 @@
     </div>
 </x-guess-the-number-layout>
 
-<script type="module">
+
+{{-- <script type="module">
     import WebGLImageDrawer from '{{ asset('js/webgl-drawimage.js') }}';
     let backgroundUrl = '{{ asset('storage/images/background.png') }}';
     let ballUrl = '{{ asset('storage/images/soccer_ball.png') }}';
@@ -26,4 +31,4 @@
             console.error('Error al dibujar imágenes:', error);
         }
     };
-</script>
+</script> --}}
