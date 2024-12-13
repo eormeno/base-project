@@ -2,10 +2,13 @@
 
 return [
     'components' => [
+        'sprite-renderer' => [
+            'texture' => 'background.jpeg',
+            'layer' => 0,
+        ],
     ],
     'children' => [
         'bba.ball' => [],
-        'bba.background' => [],
         'slot' => []
     ]
 
