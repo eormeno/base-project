@@ -38,8 +38,12 @@ class InstantiateHelper
         }
         $children = $prefab->structure['children'] ?? [];
         foreach ($children as $childName => $childData) {
-            $isPrefab = Prefab::where('name', $childName)->exists();
-
+            $childPrefab = Prefab::where('name', $childName)->first();
+            if ($childPrefab) {
+                $childGameObject = self::instantiatePrefab($childPrefab);
+                $childGameObject->update(['game_object_id' => $gameObject->id]);
+                continue;
+            }
             self::createChildren($gameObject, $childName, $childData);
         }
         return $gameObject;

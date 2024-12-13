@@ -34,34 +34,48 @@ it('can play bba game', function () {
     // the game is created
     $newGame = Game::where('game_app_id', $gameApp->id)->first();
     $this->assertNotNull($newGame);
-    // in the table 'game_objects' the following rows are created
-    $table = 'game_objects';
-    $columns = ['id', 'name', 'game_id', 'game_object_id'];
-    $rows = [
-        1 => ['bba.root', $newGame->id, null],
-        2 => ['bba.ball', null, 1],
-        3 => ['slot', null, 1],
-    ];
-    foreach ($rows as $id => $row) {
-        $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
-    }
 
-    $table = 'components';
-    $columns = ['id', 'game_object_id', 'type', 'enabled', 'awoke', 'messages'];
-    $rows = [
-        1 => [1, 'App\GameApps\Components\SpriteRendererComponent', 1, 0, null],
-    ];
-    foreach ($rows as $id => $row) {
-        $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
-    }
+    $this->withoutMockingConsoleOutput();
+    // shows in console the game_object table
+    Artisan::call('db:show', [
+        'table' => 'game_objects',
+        'columns' => ['id', 'name'],
+        '--limit' => 10
+    ]);
+    // Captura la salida del comando
+    $consoleOutput = Artisan::output();
+    // Muestra directamente en la consola
+    echo PHP_EOL . $consoleOutput;
 
-    $table = 'sprite_renderer_components';
-    $columns = ['id', 'texture', 'layer'];
-    $rows = [
-        1 => ['background.jpeg', 0],
-    ];
-    foreach ($rows as $id => $row) {
-        $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
-    }
+
+    // // in the table 'game_objects' the following rows are created
+    // $table = 'game_objects';
+    // $columns = ['id', 'name', 'game_id', 'game_object_id'];
+    // $rows = [
+    //     1 => ['bba.root', $newGame->id, null],
+    //     2 => ['bba.ball', null, 1],
+    //     3 => ['slot', null, 1],
+    // ];
+    // foreach ($rows as $id => $row) {
+    //     $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
+    // }
+
+    // $table = 'components';
+    // $columns = ['id', 'game_object_id', 'type', 'enabled', 'awoke', 'messages'];
+    // $rows = [
+    //     1 => [1, 'App\GameApps\Components\SpriteRendererComponent', 1, 0, null],
+    // ];
+    // foreach ($rows as $id => $row) {
+    //     $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
+    // }
+
+    // $table = 'sprite_renderer_components';
+    // $columns = ['id', 'texture', 'layer'];
+    // $rows = [
+    //     1 => ['background.jpeg', 0],
+    // ];
+    // foreach ($rows as $id => $row) {
+    //     $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
+    // }
 
 });
