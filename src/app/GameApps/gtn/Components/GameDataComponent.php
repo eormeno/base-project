@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Components\GTN;
+namespace App\GameApps\gtn\Components;
 
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -193,7 +193,7 @@ class ReflectionUtils
             $path = self::dotsToPath(Str::beforeLast($componentType, '.')) . '\\';
         }
         $studly = Str::studly($onlyType);
-        $componentModel = "App\\GameApps\\Components\\$path{$studly}Component";
+        $componentModel = "App\\GameApps\\{$path}Components\\{$studly}Component";
         return $componentModel;
     }
 
