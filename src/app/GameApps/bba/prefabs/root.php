@@ -2,6 +2,7 @@
 
 return [
     'components' => [
+        'bba.initial-state' => [],
         'sprite-renderer' => [
             'texture' => 'background.jpeg',
             'layer' => 0,
