@@ -3,6 +3,7 @@
 use App\Models\Game;
 use App\Models\User;
 use App\Models\GameApp;
+use Tests\Helpers\TableTools;
 
 test('dashboard display bba game', function () {
     $user = User::factory()->adminUser()->create();
@@ -36,16 +37,11 @@ it('can play bba game', function () {
     $this->assertNotNull($newGame);
 
     $this->withoutMockingConsoleOutput();
-    // shows in console the game_object table
-    Artisan::call('db:show', [
-        'table' => 'game_objects',
-        'columns' => ['id', 'name'],
-        '--limit' => 10
-    ]);
-    // Captura la salida del comando
-    $consoleOutput = Artisan::output();
-    // Muestra directamente en la consola
-    echo PHP_EOL . $consoleOutput;
+
+    TableTools::showTable('game_objects', ['id', 'name', 'game_object_id', 'game_id']);
+    //TableTools::showTable('components');
+    TableTools::showTable('sprite_renderer_components');
+    TableTools::showTable('transform2_d_components');
 
 
     // // in the table 'game_objects' the following rows are created
@@ -77,5 +73,6 @@ it('can play bba game', function () {
     // foreach ($rows as $id => $row) {
     //     $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
     // }
+}
 
-});
+);

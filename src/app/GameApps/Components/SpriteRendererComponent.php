@@ -2,9 +2,15 @@
 
 namespace App\GameApps\Components;
 
-use App\Models\Components\Component;
+use App\Models\Components\PersistentComponent;
 
-class SpriteRendererComponent extends Component
+class SpriteRendererComponent extends PersistentComponent
 {
-    protected $fillable = ['id', 'texture', 'layer'];
+    public static function config(): array
+    {
+        return [
+            'texture' => ['string', ''],
+            'layer' => ['integer', 0],
+        ];
+    }
 }
