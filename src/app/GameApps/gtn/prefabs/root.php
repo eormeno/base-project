@@ -1,6 +1,51 @@
 <?php
 
 return [
+    'states' => [
+        'initial_state_view' => [
+            'on' => 'initial',
+            'triggers' => ['start_preparing']
+        ],
+        'preparing_state' => [
+            'on' => 'start_preparing',
+            'auto_transition' => 'showing_clues'
+        ],
+        'showing_clue_state' => [
+            'on' => 'show_clues',
+            'triggers' => [
+                'other_challenge' => 'preparing',
+                'accept_challenge' => 'playing'
+            ]
+        ],
+        'playing_state' => [
+            'on' => 'accept_challenge',
+            'triggers' => [
+                'success' => 'success',
+                'game_over' => 'game_over',
+                'repeat' => 'playing'
+            ]
+        ],
+        'success_state' => [
+            'on' => 'success',
+            'triggers' => [
+                'show_clues' => 'showing_clues'
+            ],
+            'auto_transition_after' => [
+                'time' => 5,
+                'state' => 'asking_to_play'
+            ]
+        ],
+        'game_over_state' => [
+            'on' => 'game_over',
+            'triggers' => [
+                'show_clues' => 'showing_clues'
+            ],
+            'auto_transition_after' => [
+                'time' => 5,
+                'state' => 'asking_to_play'
+            ]
+        ]
+    ],
     'components' => [
         // 'gtn.game-data' => [
         //     'min_number' => 1,

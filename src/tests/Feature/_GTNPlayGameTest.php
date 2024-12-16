@@ -16,7 +16,7 @@ test('dashboard display bba game', function () {
     $response->assertSee($gameApp->name);
 });
 
-it('can play bba game', function () {
+it('can play gtn game', function () {
     $user = User::factory()->adminUser()->create();
     $this->artisan('game-apps:reload')->assertExitCode(0);
     $gameApp = GameApp::where('prefix', 'gtn')->first();
@@ -38,21 +38,19 @@ it('can play bba game', function () {
 
     $this->withoutMockingConsoleOutput();
 
-    TableTools::showTable('game_objects', ['id', 'name', 'state_component_id']);
+    // TableTools::showTable('game_objects', ['id', 'name', 'state_component_id']);
     TableTools::showTable('game_services');
     TableTools::showTable('components');
 
-    // // in the table 'game_objects' the following rows are created
-    // $table = 'game_objects';
-    // $columns = ['id', 'name', 'game_id', 'game_object_id'];
-    // $rows = [
-    //     1 => ['bba.root', $newGame->id, null],
-    //     2 => ['bba.ball', null, 1],
-    //     3 => ['slot', null, 1],
-    // ];
-    // foreach ($rows as $id => $row) {
-    //     $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
-    // }
+    // in the table 'game_objects' the following rows are created
+    $table = 'game_objects';
+    $columns = ['id', 'name', 'game_id', 'game_object_id', 'state_component_id'];
+    $rows = [
+        1 => ['gtn.root', $newGame->id, null, null],
+    ];
+    foreach ($rows as $id => $row) {
+        $this->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
+    }
 
     // $table = 'components';
     // $columns = ['id', 'game_object_id', 'type', 'enabled', 'awoke', 'messages'];
