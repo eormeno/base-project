@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "400d52e362fd6c19a74ad679df44544b",
+    "content-hash": "d85634770202e7a8599026a63eaa23f5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -7275,16 +7275,16 @@
         },
         {
             "name": "pestphp/pest",
-            "version": "v2.34.7",
+            "version": "v2.34.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "a7a3e4240e341d0fee1c54814ce18adc26ce5a76"
+                "reference": "ef120125e036bf84c9e46a9e62219702f5b92e16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/a7a3e4240e341d0fee1c54814ce18adc26ce5a76",
-                "reference": "a7a3e4240e341d0fee1c54814ce18adc26ce5a76",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/ef120125e036bf84c9e46a9e62219702f5b92e16",
+                "reference": "ef120125e036bf84c9e46a9e62219702f5b92e16",
                 "shasum": ""
             },
             "require": {
@@ -7303,8 +7303,8 @@
             },
             "require-dev": {
                 "pestphp/pest-dev-tools": "^2.16.0",
-                "pestphp/pest-plugin-type-coverage": "^2.8.1",
-                "symfony/process": "^6.4.0|^7.0.4"
+                "pestphp/pest-plugin-type-coverage": "^2.8.4",
+                "symfony/process": "^6.4.0|^7.1.1"
             },
             "bin": [
                 "bin/pest"
@@ -7367,7 +7367,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v2.34.7"
+                "source": "https://github.com/pestphp/pest/tree/v2.34.9"
             },
             "funding": [
                 {
@@ -7379,7 +7379,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-05T07:44:17+00:00"
+            "time": "2024-07-11T08:36:26+00:00"
         },
         {
             "name": "pestphp/pest-plugin",

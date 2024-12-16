@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\console\commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
