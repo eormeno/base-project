@@ -1,6 +1,6 @@
 <?php
 
-namespace App\console\commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Services\GameAppsLoader;
