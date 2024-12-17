@@ -16,6 +16,11 @@ class ComponentBase extends Model
         'messages' => 'array',
     ];
 
+    protected static function enablingState(): string|null
+    {
+        return null;
+    }
+
     public function gameObject(): BelongsTo
     {
         return $this->belongsTo(GameObject::class);
