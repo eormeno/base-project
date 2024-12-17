@@ -2,9 +2,7 @@
 
 namespace App\Models\Components;
 
-use App\Models\GameService;
 use App\Traits\DebugHelper;
-use App\Utils\ReflectionUtils;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,22 +29,8 @@ class ComponentBase extends Model
         return $this->belongsTo(Component::class, 'id');
     }
 
-    protected function findComponent(string $slug_type): Component
-    {
-        $type = ReflectionUtils::componentClass($slug_type);
-        $game_object = $this->super->gameObject;
-        return $game_object->components()->first([
-            'type' => $type,
-        ])->first()->subclass();
-    }
-
     public function subclass(): Component
     {
         return $this->type::find($this->id);
-    }
-
-    public function getService(string $slug_type): GameService
-    {
-        return $this->super->gameObject->game->getService($slug_type);
     }
 }
