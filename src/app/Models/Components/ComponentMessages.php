@@ -40,11 +40,11 @@ class ComponentMessages extends ComponentFinders
             $rutaClave = "$rutaBase.$clave";
             if (__($rutaClave) !== $rutaClave) {
                 // if i18n key exists, then use it for i18n the value
-                $this->success($rutaClave);
+                //$this->success($rutaClave);
                 $valor = __($rutaClave, $valor);
                 continue;
             }
-            $this->warn($rutaClave);
+            //$this->warn($rutaClave);
             if (is_array($valor) && count($valor) > 0) {
                 if (!$this->recurseAttrs($valor, $rutaBase)) {
                     return false;

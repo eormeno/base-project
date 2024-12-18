@@ -67,7 +67,7 @@ abstract class StateViewComponent extends Component implements IState, IView
         if (!isset($this->view_name)) {
             $this->view_name = 'web-renderer.default';
         }
-        $this->info("Rendering view $this->view_name");
+        //$this->info("Rendering view $this->view_name");
         $view = view($this->view_name, $data);
         return $view;
     }

@@ -58,3 +58,15 @@ function showTable($table, $columns =[], $limit = 10)
     $consoleOutput = Artisan::output();
     echo PHP_EOL . $consoleOutput;
 }
+
+function createEvent(string $name) : array
+{
+    $event = [
+        'event' => $name,
+        'source' => 'test',
+        'data' => [],
+        'destination' => null,
+        'rendered' => [],
+    ];
+    return $event;
+}
