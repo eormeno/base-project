@@ -88,7 +88,7 @@ class GameAppsLoader
             $image_name = $config['image'];
             $image_path = $info['resources'][$image_name];
             unset($config['image']);
-            $config['game_services'] = isset($info['Services']) ? $info['Services'] : [];
+            $config['service_registry'] = isset($info['Services']) ? $info['Services'] : [];
             $game_app = GameApp::where('prefix', $prefix)->first();
             if ($game_app) {
                 $game_app->update($config);

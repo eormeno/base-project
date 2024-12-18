@@ -15,21 +15,24 @@ class GameApp extends Model
     protected $fillable = [
         'prefix',
         'name',
-        'image',
         'description',
         'min_age',
+        'image',
         'prefab_name',
-        'active',
+        'client',
+        'width',
+        'height',
         'version',
-        'max_instances',
+        'max_instances_per_user',
         'min_players_per_instance',
         'max_players_per_instance',
-        'game_services',
+        'active',
+        'service_registry',
     ];
 
     protected $casts = [
         'active' => 'boolean',
-        'game_services' => 'array',
+        'service_registry' => 'array',
     ];
 
     public function games() : HasMany

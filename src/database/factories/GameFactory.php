@@ -67,7 +67,7 @@ class GameFactory extends Factory
     public function withServices(): static
     {
         return $this->afterCreating(function ($game) {
-            $services = $game->gameApp->game_services;
+            $services = $game->gameApp->service_registry;
             foreach ($services as $slug => $class_name) {
                 $game->addService($slug, new $class_name());
             }
