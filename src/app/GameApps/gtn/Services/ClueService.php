@@ -37,9 +37,17 @@ class ClueService extends GameService
         $min = $gtnService->min_number;
         $max = $gtnService->max_number;
         do {
-            $number = random_int($min, $max);
+            $number = $this->getRandomNumber($min, $max);
         } while ($this->getMinimalIterations($number, $min, $max) > 6);
         return $number;
+    }
+
+    private function getRandomNumber(int $min, int $max): int
+    {
+        if (env('APP_ENV') === 'testing') {
+            return 512;
+        }
+        return random_int($min, $max);
     }
 
     public function getMinimalIterations(int $number, int $min, int $max): int

@@ -59,12 +59,12 @@ function showTable($table, $columns =[], $limit = 10)
     echo PHP_EOL . $consoleOutput;
 }
 
-function createEvent(string $name) : array
+function createEvent(string $name, array $data = []) : array
 {
     $event = [
         'event' => $name,
         'source' => 'test',
-        'data' => [],
+        'data' => $data,
         'destination' => null,
         'rendered' => [],
     ];
