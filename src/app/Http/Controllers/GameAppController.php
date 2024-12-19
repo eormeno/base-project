@@ -14,7 +14,8 @@ class GameAppController extends Controller
         GameApp $gameApp,
         GameInstanceService $gamesService
     ) {
-        $currentGame = $gamesService->lastGameInstanceOfUser($gameApp);
+        $currentUser = auth()->user();
+        $currentGame = $gamesService->getOrCreateUserGame($currentUser, $gameApp);
         return view("game-app.$gameApp->client", compact('gameApp', 'currentGame'));
     }
 
