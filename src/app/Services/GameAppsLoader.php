@@ -114,6 +114,7 @@ class GameAppsLoader
         }
         if (isset($elements['prefabs'])) {
             $result_prefabs = $this->updatePrefabs(null, $elements['prefabs']);
+            // TODO Ver una mejor forma de informar la cantidad de prefabs creados y actualizados
         }
     }
 
