@@ -67,10 +67,11 @@ test("Events interaction returns the active gameobject with its view", function 
 });
 
 test('Display tables', function () {
-    $this->markTestSkipped('Only for debugging');
+    //$this->markTestSkipped('Only for debugging');
     getUserPlayingGame('gtn');
     $this->withoutMockingConsoleOutput();
-    showTable('game_objects');
+    showTable('prefabs');
+    showTable('game_objects', ['id', 'name', 'active', 'game_object_id']);
     showTable('components');
-    showTable('game_services');
+    //showTable('game_services');
 });

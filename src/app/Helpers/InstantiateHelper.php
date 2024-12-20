@@ -26,11 +26,15 @@ class InstantiateHelper
         return $gameObject;
     }
 
-    protected static function createGameObjectHierarchy(?GameObject $parent = null, Prefab $prefab): GameObject
-    {
-        // the first object's name is the prefab's name
+    protected static function createGameObjectHierarchy(
+        ?GameObject $parent = null,
+        Prefab $prefab,
+        ?string $name = null,
+        bool $active = true
+    ): GameObject {
         $gameObject = GameObject::create([
-            'name' => $prefab->name,
+            'name' => $name ?? $prefab->name,
+            'active' => $active,
         ]);
         $components = $prefab->structure['components'] ?? [];
         foreach ($components as $slug_type => $attributes) {
@@ -38,11 +42,13 @@ class InstantiateHelper
         }
         $children = $prefab->structure['children'] ?? [];
         foreach ($children as $childName => $childData) {
-            $childPrefab = Prefab::where('name', $childName)->first();
-            if ($childPrefab) {
-                $childGameObject = self::instantiatePrefab($childPrefab);
-                $childGameObject->update(['game_object_id' => $gameObject->id]);
-                continue;
+            if (isset($childData['prefab'])) {
+                $childPrefab = Prefab::where('name', $childData['prefab'])->first();
+                if ($childPrefab) {
+                    $active = $childData['active'] ?? true;
+                    self::createGameObjectHierarchy($gameObject, $childPrefab, $childName, $active);
+                    continue;
+                }
             }
             self::createChildren($gameObject, $childName, $childData);
         }

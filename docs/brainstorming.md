@@ -67,8 +67,11 @@ Un Game continene la información de una partida de uno o más jugadores de un v
 - Un registro de los servicios de juego que se utilizan. Cada servicio de juego se instanciará para cada partida, y pueden ser definidos con o sin persistencia.
 
 ### GameObject
-Los GameObjects son los objetos principales del juego. Representan a los objetos con los que el jugador interactúa. Pueden ser desde un simple sprite, una caja de texto, o un contenedor de elementos de UI.
+Los GameObjects son los objetos principales del juego. Representan a los objetos con los que el jugador interactúa. Pueden ser desde un sprite, una caja de texto, o un contenedor de elementos de UI.
 
 Todo GameObject tiene un estado, que es la información que define su comportamiento y apariencia. Este estado puede ser modificado por los componentes adjuntos al GameObject.
 
-Todo GameObject debe tener al menos un componente que componentes adjuntos, que definen su comportamiento. Los GameObjects también pueden tener hijos, que son otros GameObjects que están adjuntos a ellos. Esto permite jerarquías complejas de GameObjects.
+Todo GameObject debe tener al menos un componente que define su comportamiento. Los GameObjects también pueden tener a otros GameObjects como hijos. Esto permite jerarquías complejas de GameObjects.
+
+### Component
+Los Componentes son los elementos que definen el comportamiento de un GameObject. Pueden ser desde un componente que define la física de un objeto, hasta un componente que define la lógica de un enemigo.

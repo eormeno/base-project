@@ -48,6 +48,25 @@ return [
             // 'view' => 'gtn.game-over-state-view',
         ],
     ],
+    'children' => [
+        'initial_view_2' => [
+            'prefab' => 'gtn.ui_container',
+            'active' => false,
+        ],
+        'showing_view' => [
+            'active' => false,
+        ],
+        'playing_view' => [
+            'active' => false,
+        ],
+        'success_view' => [
+            'active' => false,
+        ],
+        'gameover_view' => [
+            'active' => false,
+        ],
+    ]
+
 
     // 'children' => [
     //     [
