@@ -75,3 +75,19 @@ Todo GameObject debe tener al menos un componente que define su comportamiento. 
 
 ### Component
 Los Componentes son los elementos que definen el comportamiento de un GameObject. Pueden ser desde un componente que define la física de un objeto, hasta un componente que define la lógica de un enemigo.
+
+### Últimos cambios
+- Ahora cuando se instancia un Prefab, se le puede indicar el nombre y si se quiere que esté activo.
+Por ejemplo:
+```php
+'children' => [
+        'initial_view_2' => [
+            'prefab' => 'gtn.ui_container',
+            'active' => false,
+        ],
+    ],
+```
+En el ejemplo, se está diciendo que se quiere instanciar un prefab llamado `gtn.ui_container` con el nombre `initial_view_2`, y que no esté activo.
+
+### Últimas ideas
+Hacer que los estados de los GameObjects se implementen como estructuras de hijos.
