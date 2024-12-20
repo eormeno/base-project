@@ -46,6 +46,7 @@ class Game extends Model
 
     public function addService(string $slug, GameService $service): void
     {
+        // TODO Enviar este código a un helper o a la clase GameService como método estático
         $reflection_class = new ReflectionClass($service);
         $new_service = $this->services()->create([
             'game_id' => $this->id,
@@ -62,6 +63,7 @@ class Game extends Model
     {
         $service = $this->services->firstWhere('slug', $slug);
         $type = $service->type;
+        // TODO Enviar este código a un helper o a la clase GameService como método estático
         // Check the service inherits from GameService and implements IPersistent interface
         if (
             !is_subclass_of($type, GameService::class) ||
