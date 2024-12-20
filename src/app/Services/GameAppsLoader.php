@@ -79,17 +79,18 @@ class GameAppsLoader
     protected function updateGameApps(array $gameApps): array
     {
         $result = ['apps_created' => 0, 'apps_updated' => 0, 'prefabs_created' => 0, 'prefabs_updated' => 0];
-        foreach ($gameApps as $prefix => $info) {
-            if (!isset($info['config'])) {
+        foreach ($gameApps as $folder => $element) {
+            $this->updateCommons($folder, $element);
+            if (!isset($element['config'])) {
                 continue;
             }
-            $config = $info['config'];
-            $config['prefix'] = $prefix;
+            $config = $element['config'];
+            $config['prefix'] = $folder;
             $image_name = $config['image'];
-            $image_path = $info['resources'][$image_name];
+            $image_path = $element['resources'][$image_name];
             unset($config['image']);
-            $config['service_registry'] = isset($info['Services']) ? $info['Services'] : [];
-            $game_app = GameApp::where('prefix', $prefix)->first();
+            $config['service_registry'] = isset($element['Services']) ? $element['Services'] : [];
+            $game_app = GameApp::where('prefix', $folder)->first();
             if ($game_app) {
                 $game_app->update($config);
                 $result['apps_updated']++;
@@ -97,8 +98,8 @@ class GameAppsLoader
                 GameApp::factory()->image($image_path, $image_name)->create($config);
                 $result['apps_created']++;
             }
-            if (isset($info['prefabs'])) {
-                $result_prefabs = $this->updatePrefabs($prefix, $info['prefabs']);
+            if (isset($element['prefabs'])) {
+                $result_prefabs = $this->updatePrefabs($folder, $element['prefabs']);
                 $result['prefabs_created'] += $result_prefabs['created'];
                 $result['prefabs_updated'] += $result_prefabs['updated'];
             }
@@ -106,11 +107,21 @@ class GameAppsLoader
         return $result;
     }
 
-    protected function updatePrefabs(string $prefix, array $prefabs): array
+    protected function updateCommons(string $folder, array $elements): void
+    {
+        if (Str::lower($folder) !== 'common') {
+            return;
+        }
+        if (isset($elements['prefabs'])) {
+            $result_prefabs = $this->updatePrefabs(null, $elements['prefabs']);
+        }
+    }
+
+    protected function updatePrefabs(string|null $prefix, array $prefabs): array
     {
         $result = ['created' => 0, 'updated' => 0];
         foreach ($prefabs as $name => $prefab) {
-            $name = "$prefix.$name";
+            $name = $prefix ? "$prefix.$name" : $name;
             $p = Prefab::find($name);
             if ($p) {
                 $p->update(['structure' => $prefab]);

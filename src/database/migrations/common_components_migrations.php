@@ -42,10 +42,13 @@ return new class extends Migration {
         $name = basename(__FILE__, '.php');
         // extract the words between the underscores
         $words = explode('_', $name);
-        // remove the last word
+        // remove the last word (migrations)
         array_pop($words);
         // join the words with a '/'
-        $namespace = implode('/', $words);
-        return "GameApps/$namespace";
+        $namespace = "GameApps/" . implode('/', $words);
+        if (!is_dir(app_path($namespace))) {
+            throw new Exception("Folder $namespace does not exist");
+        }
+        return $namespace;
     }
 };

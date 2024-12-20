@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GameApps\Components;
+namespace App\GameApps\Common\Components;
 
 use App\Models\Components\PersistentComponent;
 
