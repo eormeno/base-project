@@ -122,6 +122,7 @@ class GameAppsLoader
     {
         $result = ['created' => 0, 'updated' => 0];
         foreach ($prefabs as $name => $prefab) {
+            // TODO Trabajando en que los prefabs sean herederos de Prefab
             $name = $prefix ? "$prefix.$name" : $name;
             $p = Prefab::find($name);
             if ($p) {
