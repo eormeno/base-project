@@ -6,7 +6,7 @@ use App\Models\GameApp;
 
 function reloadGameApps(string $prefix): GameApp
 {
-    Artisan::call('game-apps:reload');
+    Artisan::call('games');
     $gameApp = GameApp::where('prefix', $prefix)->firstOrFail();
     test()->assertNotNull($gameApp);
     return $gameApp;
