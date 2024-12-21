@@ -36,6 +36,7 @@ classDiagram
     }
     class Prefab {
         +string name
+        +string type
         +json structure
         +GameObject instantiate()
     }
