@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Prefab;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
 class PrefabsLoader
@@ -30,20 +29,19 @@ class PrefabsLoader
 
     protected function updatePrefabs(string|null $prefix, array $prefabs): void
     {
-        foreach ($prefabs as $name => $prefab) {
+        foreach ($prefabs as $name => $structure) {
             // TODO Trabajando en que los prefabs sean herederos de Prefab
-            if (Str::lower($prefix) === 'common') {
-                $prefix = null;
-            }
-            $name = $prefix ? "$prefix.$name" : $name;
-            $p = Prefab::find($name);
-            if ($p) {
-                $p->update(['structure' => $prefab]);
-                $this->result['updated']++;
-            } else {
-                $p = Prefab::create(['name' => $name, 'structure' => $prefab]);
-                $this->result['created']++;
-            }
+            $name = $this->determinePrefabName($prefix, $name);
+            $prefab = Prefab::updateOrCreate(['name' => $name], ['structure' => $structure]);
+            $this->result[$prefab->wasRecentlyCreated ? 'created' : 'updated']++;
         }
+    }
+
+    private function determinePrefabName(string $prefix, string $name): string
+    {
+        if (strtolower($prefix) === 'common') {
+            return $name;
+        }
+        return "$prefix.$name";
     }
 }
