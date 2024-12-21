@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('prefabs', function (Blueprint $table) {
             $table->string('name')->primary();
+            $table->string('type')->nullable();
             $table->json('structure');
         });
     }

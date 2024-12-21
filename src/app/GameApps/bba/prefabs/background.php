@@ -1,10 +1,20 @@
 <?php
 
-return [
-    'components' => [
-        'sprite-renderer' => [
-            'texture' => 'background.jpeg',
-            'layer' => 0,
-        ],
-    ],
-];
+namespace App\GameApps\bba\prefabs;
+
+use App\Models\Prefab;
+
+class Background extends Prefab
+{
+    public static function structure(): array
+    {
+        return [
+            'components' => [
+                'sprite-renderer' => [
+                    'texture' => 'background.jpeg',
+                    'layer' => 0,
+                ],
+            ],
+        ];
+    }
+}

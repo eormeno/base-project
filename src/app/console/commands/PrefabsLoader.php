@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Prefab;
+use App\Utils\ReflectionUtils;
 use Illuminate\Console\Command;
 
 class PrefabsLoader
@@ -30,13 +31,18 @@ class PrefabsLoader
     protected function updatePrefabs(string|null $prefix, array $prefabs): void
     {
         foreach ($prefabs as $name => $structure) {
-            if (!is_array($structure)) {
-                $this->command->error("Invalid prefab structure for $name");
+            if (!is_string($name)) {
+                $this->command->error("Prefab name must be a class name that extends Prefab");
                 continue;
             }
-            // TODO Trabajando en que los prefabs sean herederos de Prefab
+            $type = ReflectionUtils::isSubclassOf($structure, Prefab::class);
+            if (!$type) {
+                $this->command->error("Prefab $name is not a subclass of Prefab");
+                continue;
+            }
+            $structure = $type::structure();
             $name = $this->determinePrefabName($prefix, $name);
-            $prefab = Prefab::updateOrCreate(['name' => $name], ['structure' => $structure]);
+            $prefab = Prefab::updateOrCreate(['name' => $name], ['type' => $type, 'structure' => $structure]);
             $this->result[$prefab->wasRecentlyCreated ? 'created' : 'updated']++;
         }
     }

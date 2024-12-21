@@ -38,6 +38,16 @@ class ReflectionUtils
         return $reflection->implementsInterface($interface);
     }
 
+    // return true if the class is a subclass of another class
+    public static function isSubclassOf($class, $parent): mixed
+    {
+        $reflection = new ReflectionClass($class);
+        if (!$reflection->isSubclassOf($parent)) {
+            return null;
+        }
+        return $class;
+    }
+
     public static function getMethods($class)
     {
         $reflection = new ReflectionClass($class);

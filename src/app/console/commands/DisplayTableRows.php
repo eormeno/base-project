@@ -13,7 +13,7 @@ class DisplayTableRows extends Command
      *
      * @var string
      */
-    protected $signature = 'db:show {table} {columns?*} {--limit=10}';
+    protected $signature = 'db:show {table} {columns?*} {--limit=100}';
 
     /**
      * The console command description.

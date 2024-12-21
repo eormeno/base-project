@@ -13,7 +13,7 @@ class Prefab extends Model
     protected $primaryKey = 'name'; // PK is 'name'
     public $timestamps = false;
 
-    protected $fillable = ['name', 'structure'];
+    protected $fillable = ['name', 'type', 'structure'];
 
     protected $casts = [
         'structure' => 'array',
