@@ -30,6 +30,10 @@ class PrefabsLoader
     protected function updatePrefabs(string|null $prefix, array $prefabs): void
     {
         foreach ($prefabs as $name => $structure) {
+            if (!is_array($structure)) {
+                $this->command->error("Invalid prefab structure for $name");
+                continue;
+            }
             // TODO Trabajando en que los prefabs sean herederos de Prefab
             $name = $this->determinePrefabName($prefix, $name);
             $prefab = Prefab::updateOrCreate(['name' => $name], ['structure' => $structure]);
