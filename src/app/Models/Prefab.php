@@ -19,8 +19,20 @@ class Prefab extends Model
         'structure' => 'array',
     ];
 
-    public function instantiate(): GameObject
+    public static function structure(): array
     {
-        return InstantiateHelper::instantiatePrefab($this);
+        return [];
+    }
+
+    public final function instantiate(array $attributes = []): GameObject
+    {
+        $gameObject = InstantiateHelper::instantiatePrefab($this);
+        $gameObject = $this->afterInstantiated($gameObject, $attributes);
+        return $gameObject;
+    }
+
+    protected function afterInstantiated(GameObject $gameObject, array $attributes = []): GameObject
+    {
+        return $gameObject;
     }
 }

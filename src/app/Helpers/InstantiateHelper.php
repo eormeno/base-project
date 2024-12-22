@@ -13,7 +13,7 @@ use App\Models\GameObject\GameObjectBase;
 
 class InstantiateHelper
 {
-    public static function instantiatePrefab(Prefab $prefab): GameObject
+    public static function instantiatePrefab(Prefab $prefab, bool $active = true, array $attributes = []): GameObject
     {
         $gameObject = DB::transaction(function () use ($prefab) {
             return self::createGameObjectHierarchy(null, $prefab);

@@ -3,9 +3,16 @@
 namespace App\GameApps\gtn\prefabs;
 
 use App\Models\Prefab;
+use App\Models\GameObject\GameObject;
 
 class Root extends Prefab
 {
+    protected function afterInstantiated(GameObject $gameObject, array $attributes = []): GameObject
+    {
+        echo "Root:: afterInstantiated\n";
+        return $gameObject;
+    }
+
     public static function structure(): array
     {
         return [
