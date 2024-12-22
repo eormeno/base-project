@@ -27,6 +27,7 @@ class Prefab extends Model
 
     public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
+        echo "Prefab::afterInstantiate\n";
     }
 
     public final function instantiate(bool $active = true, array $attributes = []): GameObject
