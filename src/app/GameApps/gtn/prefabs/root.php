@@ -7,10 +7,9 @@ use App\Models\GameObject\GameObject;
 
 class Root extends Prefab
 {
-    protected function afterInstantiated(GameObject $gameObject, array $attributes = []): GameObject
+    public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        echo "Root:: afterInstantiated\n";
-        return $gameObject;
+        echo "Root instantiated\n";
     }
 
     public static function structure(): array

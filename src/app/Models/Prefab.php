@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\InstantiateHelper;
+use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,15 +25,31 @@ class Prefab extends Model
         return [];
     }
 
-    public final function instantiate(array $attributes = []): GameObject
+    public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        $gameObject = InstantiateHelper::instantiatePrefab($this);
-        $gameObject = $this->afterInstantiated($gameObject, $attributes);
-        return $gameObject;
     }
 
-    protected function afterInstantiated(GameObject $gameObject, array $attributes = []): GameObject
+    public final function instantiate(bool $active = true, array $attributes = []): GameObject
     {
+        $gameObject = DB::transaction(function () {
+            return InstantiateHelper::createGameObjectHierarchy(null, $this);
+        });
+        // TODO a esto hay que estudiarlo bien, porque no se si es necesario
+        // $gameObject->componentsIterator(function (Component $component, Component $subclass) {
+        //     $subclass->onAwake();
+        //     $component->update(['awoke' => true]);
+        // });
         return $gameObject;
+        //return InstantiateHelper::instantiatePrefab($this);
+    }
+
+    public static function findPrefab(string $name): ?Prefab
+    {
+        $prefab = self::where('name', $name)->first();
+        if (!$prefab) {
+            return null;
+        }
+        $type = $prefab->type;
+        return new $type($prefab->toArray());
     }
 }

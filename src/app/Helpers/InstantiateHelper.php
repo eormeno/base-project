@@ -13,45 +13,43 @@ use App\Models\GameObject\GameObjectBase;
 
 class InstantiateHelper
 {
-    public static function instantiatePrefab(Prefab $prefab, bool $active = true, array $attributes = []): GameObject
-    {
-        $gameObject = DB::transaction(function () use ($prefab) {
-            return self::createGameObjectHierarchy(null, $prefab);
-        });
-        // TODO a esto hay que estudiarlo bien, porque no se si es necesario
-        // $gameObject->componentsIterator(function (Component $component, Component $subclass) {
-        //     $subclass->onAwake();
-        //     $component->update(['awoke' => true]);
-        // });
-        return $gameObject;
-    }
+    // public static function instantiatePrefab(Prefab $prefab, bool $active = true, array $attributes = []): GameObject
+    // {
+    //     $gameObject = DB::transaction(function () use ($prefab) {
+    //         return self::createGameObjectHierarchy(null, $prefab);
+    //     });
+    //     // TODO a esto hay que estudiarlo bien, porque no se si es necesario
+    //     // $gameObject->componentsIterator(function (Component $component, Component $subclass) {
+    //     //     $subclass->onAwake();
+    //     //     $component->update(['awoke' => true]);
+    //     // });
+    //     return $gameObject;
+    // }
 
-    protected static function createGameObjectHierarchy(
+    public static function createGameObjectHierarchy(
         ?GameObject $parent = null,
         Prefab $prefab,
         ?string $name = null,
         bool $active = true
     ): GameObject {
-        $gameObject = GameObject::create([
-            'name' => $name ?? $prefab->name,
-            'active' => $active,
-        ]);
+        $gameObject = GameObject::create(['name' => $name ?? $prefab->name, 'active' => $active]);
         $components = $prefab->structure['components'] ?? [];
         foreach ($components as $slug_type => $attributes) {
             self::createComponent($gameObject, $slug_type, $attributes);
         }
         $children = $prefab->structure['children'] ?? [];
-        foreach ($children as $childName => $childData) {
-            if (isset($childData['prefab'])) {
-                $childPrefab = Prefab::where('name', $childData['prefab'])->first();
-                if ($childPrefab) {
-                    $active = $childData['active'] ?? true;
-                    self::createGameObjectHierarchy($gameObject, $childPrefab, $childName, $active);
+        foreach ($children as $child_name => $child_data) {
+            if ($child_prefab_name = $child_data['prefab'] ?? null) {
+                //$child_prefab = Prefab::where('name', $prefab)->first();
+                if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
+                    $active = $child_data['active'] ?? true;
+                    self::createGameObjectHierarchy($gameObject, $child_prefab, $child_name, $active);
                     continue;
                 }
             }
-            self::createChildren($gameObject, $childName, $childData);
+            self::createChildren($gameObject, $child_name, $child_data);
         }
+        $prefab->afterInstantiate($gameObject);
         return $gameObject;
     }
 

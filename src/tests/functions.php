@@ -48,7 +48,7 @@ function getUserPlayingGame(string $prefix): Game
     return $newGame;
 }
 
-function showTable($table, $columns =[], $limit = 10)
+function showTable($table, $columns =[], $limit = 100)
 {
     Artisan::call('db:show', [
         'table' => $table,

@@ -66,12 +66,12 @@ test("Events interaction returns the active gameobject with its view", function 
     ]);
 });
 
-test('Display tables', function () {
-    $this->markTestSkipped('Only for debugging');
-    getUserPlayingGame('gtn');
-    $this->withoutMockingConsoleOutput();
-    showTable('prefabs');
-    showTable('game_objects', ['id', 'name', 'active', 'game_object_id']);
-    showTable('components');
-    //showTable('game_services');
-});
+// test('Display tables', function () {
+//     //$this->markTestSkipped('Only for debugging');
+//     getUserPlayingGame('gtn');
+//     $this->withoutMockingConsoleOutput();
+//     showTable('prefabs', ['name', 'type']);
+//     showTable('game_objects', ['id', 'name', 'active', 'game_object_id']);
+//     showTable('components');
+//     //showTable('game_services');
+// });
