@@ -197,7 +197,7 @@ class ReflectionUtils
     public static function componentClass(string $componentType): string
     {
         $onlyType = $componentType;
-        $path = '';
+        $path = 'Common\\'; // Default path for common components
         if (Str::contains($componentType, '.')) {
             $onlyType = Str::afterLast($componentType, '.');
             $path = self::dotsToPath(Str::beforeLast($componentType, '.')) . '\\';

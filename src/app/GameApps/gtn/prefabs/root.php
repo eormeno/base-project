@@ -58,7 +58,7 @@ class Root extends Prefab
             ],
             'children' => [
                 'initial_view_2' => [
-                    'prefab' => 'gtn.ui_container',
+                    'prefab' => 'ui-container',
                     'active' => false,
                 ],
                 'showing_view' => [
