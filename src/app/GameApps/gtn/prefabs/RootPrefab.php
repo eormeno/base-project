@@ -5,11 +5,11 @@ namespace App\GameApps\gtn\prefabs;
 use App\Models\Prefab;
 use App\Models\GameObject\GameObject;
 
-class Root extends Prefab
+class RootPrefab extends Prefab
 {
     public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        echo "Root instantiated with attributes: " . json_encode($attributes) . "\n";
+        echo "afterInstantiate RootPrefab with attributes: " . json_encode($attributes) . PHP_EOL;
     }
 
     public static function structure(): array

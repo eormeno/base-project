@@ -2,8 +2,11 @@
 
 namespace App\Models\Components;
 
+use ReflectionClass;
+use App\Utils\ReflectionUtils;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\GameObject\GameObjectBase;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ComponentBase extends Model
@@ -65,5 +68,25 @@ class ComponentBase extends Model
     public function subclass(): Component
     {
         return $this->type::find($this->id);
+    }
+
+    protected static function createFromSlug(
+        GameObjectBase $gameObject,
+        string $slug_type,
+        array $attributes
+    ): Component {
+        $type = ReflectionUtils::componentClass($slug_type);
+        $component = $gameObject->components()->create(self::stateComponentConfig($type));
+        return $type::create(array_merge(['id' => $component->id], $attributes));
+    }
+
+    private static function stateComponentConfig($type): array
+    {
+        $attributes = ['type' => $type, 'enabled' => true];
+        $class = new ReflectionClass($type);
+        if ($class->implementsInterface(IState::class)) {
+            return array_merge($attributes, ['enabled' => false, 'state' => $type::state()]);
+        }
+        return $attributes;
     }
 }

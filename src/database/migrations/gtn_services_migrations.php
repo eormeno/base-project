@@ -27,7 +27,7 @@ return new class extends Migration {
             });
         }, GameService::class, IPersistent::class);
 
-        print "Created {$tables} tables";
+        print "Created {$tables} tables found in {$this->namespace()}\n";
     }
 
     public function down(): void

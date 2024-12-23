@@ -16,6 +16,8 @@ test("The game's root gameobject is created", function () {
 
 test("Events interaction returns the active gameobject with its view", function () {
     $newGame = getUserPlayingGame('gtn');
+    $game_app = $newGame->gameApp;
+    $prefab_name = $game_app->prefab_name;
 
     // Reload the game (this must be the first event)
     $event = createEvent('reload');
@@ -37,7 +39,7 @@ test("Events interaction returns the active gameobject with its view", function 
     $this->assertIsArray($response->json('actives'));
     // The game should be in 'initial' state
     existsGameObjectsInDatabase([
-        1 => ['gtn.root', $newGame->id, null, 1],
+        1 => [$prefab_name, $newGame->id, null, 1],
     ]);
 
     // The user wants to play (a button is clicked that sends this event)
@@ -46,14 +48,14 @@ test("Events interaction returns the active gameobject with its view", function 
     $response->assertStatus(200);
     // The game should be in 'showing_clues' state
     existsGameObjectsInDatabase([
-        1 => ['gtn.root', $newGame->id, null, 3],
+        1 => [$prefab_name, $newGame->id, null, 3],
     ]);
 
     // The user wants to play (a button is clicked that sends this event)
     $response = $this->postJson(route('event', $newGame), $event);
     $response->assertStatus(200);
     existsGameObjectsInDatabase([
-        1 => ['gtn.root', $newGame->id, null, 4],
+        1 => [$prefab_name, $newGame->id, null, 4],
     ]);
 
     // In test environment the random number is always 512
@@ -62,7 +64,7 @@ test("Events interaction returns the active gameobject with its view", function 
     $response->assertStatus(200);
     // The game should be in the 'success' state
     existsGameObjectsInDatabase([
-        1 => ['gtn.root', $newGame->id, null, 5],
+        1 => [$prefab_name, $newGame->id, null, 5],
     ]);
 });
 

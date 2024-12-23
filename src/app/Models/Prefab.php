@@ -27,7 +27,6 @@ class Prefab extends Model
 
     public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        echo "Prefab::afterInstantiate\n";
     }
 
     public final function instantiate(bool $active = true, array $attributes = []): GameObject
@@ -47,7 +46,6 @@ class Prefab extends Model
         //     $component->update(['awoke' => true]);
         // });
         return $gameObject;
-        //return InstantiateHelper::instantiatePrefab($this);
     }
 
     public static function findPrefab(string $name): ?Prefab

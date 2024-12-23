@@ -26,7 +26,7 @@ return new class extends Migration {
             });
         }, PersistentComponent::class);
 
-        print "Created {$tables} tables";
+        print "Created {$tables} tables found in {$this->namespace()}\n";
     }
 
     public function down(): void

@@ -5,7 +5,6 @@ namespace App\Models\GameObject;
 use App\Models\Game;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
-use App\Helpers\InstantiateHelper;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -102,7 +101,7 @@ class GameObjectBase extends Model
 
     public function addComponent(string $slug_type, array $attributes = []): Component
     {
-        return InstantiateHelper::createComponent($this, $slug_type, $attributes);
+        return Component::createFromSlug($this, $slug_type, $attributes);
     }
 
     public function getComponent(string $slug_type): ?Component
