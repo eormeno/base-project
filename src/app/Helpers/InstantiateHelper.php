@@ -6,7 +6,6 @@ use ReflectionClass;
 use App\Models\Prefab;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\IState;
-use Illuminate\Support\Facades\DB;
 use App\Models\Components\Component;
 use App\Models\GameObject\GameObject;
 use App\Models\GameObject\GameObjectBase;
@@ -26,12 +25,14 @@ class InstantiateHelper
     //     return $gameObject;
     // }
 
-    public static function createGameObjectHierarchy(
+    public static function createPrefabStructure(
         ?GameObject $parent = null,
         Prefab $prefab,
         ?string $name = null,
-        bool $active = true
+        bool $active = true,
+        array $prefab_attributes = []
     ): GameObject {
+        //echo "Prefab $prefab->name with attributes: " . json_encode($prefab_attributes) . "\n";
         $prefab = Prefab::findPrefab($prefab->name);
         $gameObject = GameObject::create(['name' => $name ?? $prefab->name, 'active' => $active]);
         $components = $prefab->structure['components'] ?? [];
@@ -44,13 +45,15 @@ class InstantiateHelper
                 //$child_prefab = Prefab::where('name', $prefab)->first();
                 if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
                     $active = $child_data['active'] ?? true;
-                    self::createGameObjectHierarchy($gameObject, $child_prefab, $child_name, $active);
+                    $child_attributes = $child_data['attributes'] ?? [];
+                    self::createPrefabStructure($gameObject, $child_prefab, $child_name, $active, $child_attributes);
                     continue;
                 }
             }
             self::createChildren($gameObject, $child_name, $child_data);
         }
-        $prefab->afterInstantiate($gameObject);
+        //echo "Prefab INSTANTIATED $prefab->name with attributes: " . json_encode($prefab_attributes) . "\n";
+        $prefab->afterInstantiate(gameObject: $gameObject, attributes: $prefab_attributes);
         return $gameObject;
     }
 

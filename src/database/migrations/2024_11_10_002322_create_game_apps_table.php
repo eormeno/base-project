@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('min_age')->default(18);
             $table->string('image')->nullable();
             $table->string('prefab_name')->nullable();
+            $table->json('prefab_attributes')->nullable();
             $table->string('client')->default('blade.client');
             $table->integer('width')->default(800);
             $table->integer('height')->default(450);

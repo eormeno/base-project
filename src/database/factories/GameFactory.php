@@ -25,9 +25,10 @@ class GameFactory extends Factory
     public function forGameApp(GameApp $gameApp): static
     {
         return $this->state(function (array $attributes) use ($gameApp) {
+            $prefab_attributes = $gameApp->prefab_attributes ?? [];
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->instantiate()->id,
+                'game_object_id' => $gameApp->prefab->instantiate(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
@@ -37,9 +38,10 @@ class GameFactory extends Factory
     {
         $gameApp = GameApp::where('prefix', $prefix)->first();
         return $this->state(function (array $attributes) use ($gameApp) {
+            $prefab_attributes = $gameApp->prefab_attributes ?? [];
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->instantiate()->id,
+                'game_object_id' => $gameApp->prefab->instantiate(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });

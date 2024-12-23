@@ -8,7 +8,7 @@ class UiContainer extends Prefab
 {
     public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        echo "UiContainer instantiated\n";
+        echo "UiContainer instantiated with attributes: " . json_encode($attributes) . "\n";
     }
 
     public static function structure(): array

@@ -9,7 +9,7 @@ class Root extends Prefab
 {
     public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        echo "Root instantiated\n";
+        echo "Root instantiated with attributes: " . json_encode($attributes) . "\n";
     }
 
     public static function structure(): array
@@ -66,6 +66,9 @@ class Root extends Prefab
                 'initial_view_2' => [
                     'prefab' => 'ui-container',
                     'active' => false,
+                    'attributes' => [
+                        'apellido' => 'Ormeño'
+                    ],
                 ],
                 'showing_view' => [
                     'active' => false,

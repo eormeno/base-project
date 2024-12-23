@@ -32,8 +32,14 @@ class Prefab extends Model
 
     public final function instantiate(bool $active = true, array $attributes = []): GameObject
     {
-        $gameObject = DB::transaction(function () {
-            return InstantiateHelper::createGameObjectHierarchy(null, $this);
+        $gameObject = DB::transaction(function () use ($active, $attributes) {
+            return InstantiateHelper::createPrefabStructure(
+                parent: null,
+                prefab: $this,
+                name: null,
+                active: $active,
+                prefab_attributes: $attributes
+            );
         });
         // TODO a esto hay que estudiarlo bien, porque no se si es necesario
         // $gameObject->componentsIterator(function (Component $component, Component $subclass) {

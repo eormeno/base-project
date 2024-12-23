@@ -2,8 +2,13 @@
 Las aplicaciones de juego en el proyecto se estructuran de la siguiente manera:
 
 ```ascii
-App
-└── prefix1
+GameApps
+├── Common
+│   ├── Components
+│   │   └── Component_1, ..., Component_n
+│   ├── Prefabs
+│   │   └── prefabs...
+├── prefix1
 │   ├── config.php
 │   ├── Components
 │   │   ├── Component1.php
@@ -94,6 +99,8 @@ classDiagram
         +string description
         +int min_age
         +string image
+        +string prefab_name
+        +json prefab_attributes
         +string client
         +int width
         +int height

@@ -19,6 +19,7 @@ class GameApp extends Model
         'min_age',
         'image',
         'prefab_name',
+        'prefab_attributes',
         'client',
         'width',
         'height',
@@ -32,6 +33,7 @@ class GameApp extends Model
 
     protected $casts = [
         'active' => 'boolean',
+        'prefab_attributes' => 'array',
         'service_registry' => 'array',
     ];
 
