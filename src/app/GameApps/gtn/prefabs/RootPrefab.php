@@ -9,7 +9,6 @@ class RootPrefab extends Prefab
 {
     public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
     {
-        echo "afterInstantiate RootPrefab with attributes: " . json_encode($attributes) . PHP_EOL;
     }
 
     public static function structure(): array
