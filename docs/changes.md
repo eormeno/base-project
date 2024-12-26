@@ -50,3 +50,5 @@ return [
     'client' => 'blade',
 ];
 ```
+25 de diciembre de 2024
+Se crearon los prefabs label y button y sus componentes.
