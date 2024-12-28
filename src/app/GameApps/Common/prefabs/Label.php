@@ -5,6 +5,13 @@ use App\Models\Prefab;
 
 class Label extends Prefab
 {
+	public static function components(): array
+	{
+		return [
+			'label' => []
+		];
+	}
+
     public static function structure(): array
     {
         return [

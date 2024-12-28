@@ -3,23 +3,50 @@
 namespace App\GameApps\gtn\prefabs;
 
 use App\Models\Prefab;
-use App\Models\GameObject\GameObject;
 
 class RootPrefab extends Prefab
 {
-	public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
-	{
-	}
-
 	public static function states(): array
 	{
 		return [
-			'initial' => ['gtn.initial-state-view' => []],
+			'initial' => ['gtn.initial-state-view' => ['view' => 'initial_view_2']],
 			'preparing' => ['gtn.preparing-state' => []],
 			'showing_clue' => ['gtn.showing-clue-state' => []],
 			'playing' => ['gtn.playing-state' => []],
 			'success' => ['gtn.success-state' => []],
 			'game_over' => ['gtn.game-over-state' => []],
+		];
+	}
+
+	public static function components(): array
+	{
+		return [
+			'gtn.game-data' => [],
+		];
+	}
+
+	public static function children(): array
+	{
+		return [
+			'initial_view_2' => [
+				'prefab' => 'ui-container',
+				'active' => false,
+				'attributes' => [
+					'apellido' => 'Ormeño'
+				],
+			],
+			'showing_view' => [
+				'active' => false,
+			],
+			'playing_view' => [
+				'active' => false,
+			],
+			'success_view' => [
+				'active' => false,
+			],
+			'gameover_view' => [
+				'active' => false,
+			],
 		];
 	}
 

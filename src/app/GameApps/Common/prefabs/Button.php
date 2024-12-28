@@ -5,6 +5,13 @@ use App\Models\Prefab;
 
 class Button extends Prefab
 {
+	public static function components(): array
+	{
+		return [
+			'button' => []
+		];
+	}
+
     public static function structure(): array
     {
         return [
