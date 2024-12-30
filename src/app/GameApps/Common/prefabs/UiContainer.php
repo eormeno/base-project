@@ -5,7 +5,6 @@ use App\Models\Prefab;
 
 class UiContainer extends Prefab
 {
-
 	public static function components(): array
 	{
 		return [
