@@ -16,6 +16,7 @@ class InstantiateHelper
     ): GameObject {
         $prefab = Prefab::findPrefab($prefab->name);
         $gameObject = GameObject::create(['name' => $name ?? $prefab->name, 'active' => $active]);
+		$state_components = $prefab->structure['states'] ?? [];
         $components = $prefab->structure['components'] ?? [];
         foreach ($components as $slug_type => $attributes) {
             $gameObject->addComponent($slug_type, $attributes);
