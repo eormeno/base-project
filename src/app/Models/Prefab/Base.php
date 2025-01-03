@@ -72,4 +72,9 @@ abstract class Base extends Model
         $type = $prefab->type;
         return new $type($prefab->toArray());
     }
+
+	public static function castPrefab(Prefab $prefab): Prefab{
+		$type = $prefab->type;
+		return new $type($prefab->toArray());
+	}
 }

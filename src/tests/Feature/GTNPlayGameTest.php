@@ -66,6 +66,8 @@ test("Events interaction returns the active gameobject with its view", function 
     existsGameObjectsInDatabase([
         1 => [$prefab_name, $newGame->id, null, 5],
     ]);
+	$this->withoutMockingConsoleOutput();
+    showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state', 'state_components']);
 });
 
 // test('Display tables', function () {
@@ -73,7 +75,7 @@ test("Events interaction returns the active gameobject with its view", function 
 //     getUserPlayingGame('gtn');
 //     $this->withoutMockingConsoleOutput();
 //     showTable('prefabs', ['name', 'type']);
-//     showTable('game_objects', ['id', 'name', 'active', 'game_object_id']);
+//     showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
 //     showTable('components');
 //     //showTable('game_services');
 // });

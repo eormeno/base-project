@@ -9,7 +9,9 @@ class RootPrefab extends Prefab
 	public static function states(): array
 	{
 		return [
-			'initial' => ['gtn.initial-state-view' => ['view' => 'initial_view_2']],
+			// 'initial' => ['gtn.initial-state-view' => ['view' => 'initial_view_2']],
+			// TODO Añadir el componente de la vista inicial como atributo
+			'initial' => ['gtn.initial-state-view' => []],
 			'preparing' => ['gtn.preparing-state' => []],
 			'showing_clue' => ['gtn.showing-clue-state' => []],
 			'playing' => ['gtn.playing-state' => []],
@@ -54,12 +56,12 @@ class RootPrefab extends Prefab
 	{
 		return [
 			'components' => [
-				'gtn.initial-state-view' => [],
-				'gtn.preparing-state' => [],
-				'gtn.showing-clue-state' => [],
-				'gtn.playing-state' => [],
-				'gtn.success-state' => [],
-				'gtn.game-over-state' => [],
+				// 'gtn.initial-state-view' => [],
+				// 'gtn.preparing-state' => [],
+				// 'gtn.showing-clue-state' => [],
+				// 'gtn.playing-state' => [],
+				// 'gtn.success-state' => [],
+				// 'gtn.game-over-state' => [],
 			],
 			'children' => [
 				'initial_view_2' => [

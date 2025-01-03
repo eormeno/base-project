@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use App\Models\GameApp;
+use App\Models\Prefab\Prefab;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,9 +27,10 @@ class GameFactory extends Factory
     {
         return $this->state(function (array $attributes) use ($gameApp) {
             $prefab_attributes = $gameApp->prefab_attributes ?? [];
+			$prefab = Prefab::castPrefab($gameApp->prefab);
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
+                'game_object_id' => $prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
@@ -39,9 +41,10 @@ class GameFactory extends Factory
         $gameApp = GameApp::where('prefix', $prefix)->first();
         return $this->state(function (array $attributes) use ($gameApp) {
             $prefab_attributes = $gameApp->prefab_attributes ?? [];
+			$prefab = Prefab::castPrefab($gameApp->prefab);
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
+                'game_object_id' => $prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
