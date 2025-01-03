@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Prefab;
+use App\Models\Prefab\Prefab;
 use App\Models\GameObject\GameObject;
 
 class InstantiateHelper
@@ -16,7 +16,7 @@ class InstantiateHelper
     ): GameObject {
         $prefab = Prefab::findPrefab($prefab->name);
         $gameObject = GameObject::create(['name' => $name ?? $prefab->name, 'active' => $active]);
-		$state_components = $prefab->structure['states'] ?? [];
+        //$states = self::readStates($prefab);
         $components = $prefab->structure['components'] ?? [];
         foreach ($components as $slug_type => $attributes) {
             $gameObject->addComponent($slug_type, $attributes);
@@ -35,6 +35,18 @@ class InstantiateHelper
         }
         $prefab->afterInstantiate(gameObject: $gameObject, attributes: $prefab_attributes);
         return $gameObject;
+    }
+
+    private static function readStates(Prefab $prefab): void
+    {
+		$state_components = $prefab->structure['states'] ?? [];
+        foreach ($state_components as $state => $component_config) {
+            $component_slug = array_key_first($component_config);
+			$component_attributes = $component_config[$component_slug];
+			$prefab->addComponent($component_slug, $component_attributes);
+        }
+
+
     }
 
     protected static function createChildren(GameObject $parent, string $childName, array $childData): void

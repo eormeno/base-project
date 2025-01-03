@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Prefab;
 
 use App\Helpers\InstantiateHelper;
 use Illuminate\Support\Facades\DB;

@@ -1,7 +1,7 @@
 <?php
 namespace App\GameApps\Common\prefabs;
 
-use App\Models\Prefab;
+use App\Models\Prefab\Prefab;
 
 class Label extends Prefab
 {

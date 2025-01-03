@@ -2,7 +2,7 @@
 
 namespace App\GameApps\bba\prefabs;
 
-use App\Models\Prefab;
+use App\Models\Prefab\Prefab;
 
 class Root extends Prefab
 {

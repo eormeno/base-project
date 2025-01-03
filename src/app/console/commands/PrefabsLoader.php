@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Prefab;
+use App\Models\Prefab\Prefab;
 use App\Utils\ReflectionUtils;
 use Illuminate\Console\Command;
 
