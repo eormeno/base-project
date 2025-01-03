@@ -2,31 +2,11 @@
 
 namespace App\Models\Prefab;
 
-use App\Helpers\InstantiateHelper;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
 
 abstract class BaseBuilder extends Base
 {
-	final public function instantiate(bool $active = true, array $attributes = []): GameObject
-    {
-        $gameObject = DB::transaction(function () use ($active, $attributes) {
-            return InstantiateHelper::createPrefabStructure(
-                parent: null,
-                prefab: $this,
-                name: null,
-                active: $active,
-                prefab_attributes: $attributes
-            );
-        });
-        // TODO a esto hay que estudiarlo bien, porque no se si es necesario
-        // $gameObject->componentsIterator(function (Component $component, Component $subclass) {
-        //     $subclass->onAwake();
-        //     $component->update(['awoke' => true]);
-        // });
-        return $gameObject;
-    }
-
 	final public function buildGameObject(bool $active = true, array $attributes = []): GameObject
     {
         $gameObject = DB::transaction(function () use ($active, $attributes) {
