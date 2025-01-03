@@ -28,7 +28,7 @@ class GameFactory extends Factory
             $prefab_attributes = $gameApp->prefab_attributes ?? [];
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->instantiate(active: true, attributes: $prefab_attributes)->id,
+                'game_object_id' => $gameApp->prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
@@ -41,7 +41,7 @@ class GameFactory extends Factory
             $prefab_attributes = $gameApp->prefab_attributes ?? [];
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $gameApp->prefab->instantiate(active: true, attributes: $prefab_attributes)->id,
+                'game_object_id' => $gameApp->prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
