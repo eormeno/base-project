@@ -2,6 +2,7 @@
 
 namespace App\Models\Components;
 
+use App\Models\GameObject\Base;
 use ReflectionClass;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\GameObject;
@@ -71,7 +72,7 @@ class ComponentBase extends Model
     }
 
     protected static function createFromSlug(
-        GameObjectBase $gameObject,
+        Base $gameObject,
         string $slug_type,
         array $attributes
     ): Component {

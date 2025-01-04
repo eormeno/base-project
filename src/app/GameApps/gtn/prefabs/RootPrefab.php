@@ -9,8 +9,6 @@ class RootPrefab extends Prefab
 	public static function states(): array
 	{
 		return [
-			// 'initial' => ['gtn.initial-state-view' => ['view' => 'initial_view_2']],
-			// TODO Añadir el componente de la vista inicial como atributo
 			'initial' => ['gtn.initial-state-view' => []],
 			'preparing' => ['gtn.preparing-state' => []],
 			'showing_clue' => ['gtn.showing-clue-state' => []],

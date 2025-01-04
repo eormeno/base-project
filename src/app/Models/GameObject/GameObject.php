@@ -2,6 +2,6 @@
 
 namespace App\Models\GameObject;
 
-class GameObject extends GameObjectViewProvider
+class GameObject extends ViewStateContextBase
 {
 }

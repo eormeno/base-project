@@ -4,7 +4,7 @@ namespace App\Models\GameObject;
 
 use App\Models\Components\IView;
 
-class GameObjectViewProvider extends GameObjectFrontEventListener implements IView
+abstract class ViewStateContextBase extends StateContextBase implements IView
 {
     public function view()
     {
