@@ -11,7 +11,7 @@ class ShowingClueStateComponent extends StateViewComponent
 
     public static function state(): string|null
     {
-        return 'showing-clue';
+        return 'showing_clue';
     }
 
     public function onStart(): void

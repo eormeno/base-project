@@ -11,7 +11,7 @@ class GameOverStateComponent extends StateViewComponent
 
     public static function state(): string|null
     {
-        return 'game-over';
+        return 'game_over';
     }
 
     public function onStart(): void
