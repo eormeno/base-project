@@ -24,6 +24,7 @@ abstract class StateContextBase extends Base implements IStateContext, IFrontEve
 	public function request(array $event)
 	{
 		do {
+			// TODO para que sean iguales, se debe revisar el bucle
 			$current_state_component = $this->currentStateComponent();
 			$current_state_component_2 = $this->currentStateComponent_2();
 			$current_state_name = $current_state_component::state();

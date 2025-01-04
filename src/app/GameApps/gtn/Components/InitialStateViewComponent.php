@@ -46,6 +46,7 @@ class InitialStateViewComponent extends StateViewComponent
 
     public function onWantToPlayEvent()
     {
-        return PreparingStateComponent::state();
+        //return PreparingStateComponent::state();
+		return 'preparing';
     }
 }

@@ -38,11 +38,13 @@ class SuccessStateComponent extends StateViewComponent
 
     public function onPlayAgainEvent()
     {
-        return PreparingStateComponent::state();
+        //return PreparingStateComponent::state();
+		return 'preparing';
     }
 
     public function onExitEvent()
     {
-        return InitialStateViewComponent::state();
+        //return InitialStateViewComponent::state();
+		return 'initial';
     }
 }

@@ -31,11 +31,13 @@ class ShowingClueStateComponent extends StateViewComponent
 
     public function onWantToPlayEvent()
     {
-        return PlayingStateComponent::state();
+        //return PlayingStateComponent::state();
+		return 'playing';
     }
 
     public function onAnotherChallengeEvent()
     {
-        return PreparingStateComponent::state();
+        //return PreparingStateComponent::state();
+		return 'preparing';
     }
 }

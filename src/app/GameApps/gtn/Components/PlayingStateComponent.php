@@ -34,9 +34,11 @@ class PlayingStateComponent extends StateViewComponent
         $result = $this->getService('guess-service')->guess($number);
 
         if (array_key_exists('guess_result.success', $result)) {
-            return SuccessStateComponent::state();
+            //return SuccessStateComponent::state();
+			return 'success';
         } else if (array_key_exists('guess_result.game_over', $result)) {
-            return GameOverStateComponent::state();
+            //return GameOverStateComponent::state();
+			return 'game_over';
         }
 
         $this->onStart();
