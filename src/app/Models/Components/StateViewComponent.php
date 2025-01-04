@@ -23,23 +23,18 @@ abstract class StateViewComponent extends Component implements IState, IView
 		$destination = $event['destination'];
 		if ($eventName === null || $eventName === '' || $eventName === 'reload') {
 			$pass = $this->passTo();
-			echo "Passing to $pass" . PHP_EOL;
-			$this->super->gameObject->update(['state' => $pass]);
 			return $pass;
 		}
 		$method = 'on' . CaseConverters::snakeToPascal($eventName) . 'Event';
 		$nextState = $this->passTo();
 		if (method_exists($this, $method)) {
 			$nextState = ReflectionUtils::invokeMethod($this, $method, $eventData);
-			$this->super->gameObject->update(['state' => $nextState]);
 		}
 		if (!$nextState) {
 			//$nextState = $this->super->gameObject->state;
 			$nextState = get_class($this)::state();
 			echo "StateViewComponent: No method found for event $eventName" . PHP_EOL;
 		}
-		$this->super->gameObject->update(['state' => $nextState]);
-
 		return $nextState;
 	}
 
