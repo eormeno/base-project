@@ -6,9 +6,9 @@ use App\Models\GameObject\GameObject;
 function existsGameObjectsInDatabase(array $rows): void
 {
     $table = 'game_objects';
-    $columns = ['id', 'name', 'game_id', 'game_object_id', 'state_component_id'];
+    $columns = ['id', 'name', 'game_id', 'game_object_id', 'state'];
     foreach ($rows as $id => $row) {
-        test()->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row)));
+        test()->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row))); // phpcs:ignore
     }
 }
 

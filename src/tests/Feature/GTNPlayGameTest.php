@@ -39,7 +39,7 @@ test("Events interaction returns the active gameobject with its view", function 
     $this->assertIsArray($response->json('actives'));
     // The game should be in 'initial' state
     existsGameObjectsInDatabase([
-        1 => [$prefab_name, $newGame->id, null, 1],
+        1 => [$prefab_name, $newGame->id, null, 'initial'],
     ]);
 
     // The user wants to play (a button is clicked that sends this event)
@@ -48,14 +48,14 @@ test("Events interaction returns the active gameobject with its view", function 
     $response->assertStatus(200);
     // The game should be in 'showing_clues' state
     existsGameObjectsInDatabase([
-        1 => [$prefab_name, $newGame->id, null, 3],
+        1 => [$prefab_name, $newGame->id, null, 'showing_clue'],
     ]);
 
     // The user wants to play (a button is clicked that sends this event)
     $response = $this->postJson(route('event', $newGame), $event);
     $response->assertStatus(200);
     existsGameObjectsInDatabase([
-        1 => [$prefab_name, $newGame->id, null, 4],
+        1 => [$prefab_name, $newGame->id, null, 'playing'],
     ]);
 
     // In test environment the random number is always 512
@@ -64,10 +64,10 @@ test("Events interaction returns the active gameobject with its view", function 
     $response->assertStatus(200);
     // The game should be in the 'success' state
     existsGameObjectsInDatabase([
-        1 => [$prefab_name, $newGame->id, null, 5],
+        1 => [$prefab_name, $newGame->id, null, 'success'],
     ]);
 	$this->withoutMockingConsoleOutput();
-    showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state', 'state_components']);
+    showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
 });
 
 // test('Display tables', function () {

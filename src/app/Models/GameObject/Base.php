@@ -84,7 +84,7 @@ abstract class Base extends Model
 		$state_components = $this->state_components ?? [];
 		$current_state = $this->state;
 		if($current_state_component_id = $state_components[$current_state] ?? null) {
-			return Component::find($current_state_component_id);
+			return Component::find($current_state_component_id)->subclass();
 		}
 		return null;
 	}
