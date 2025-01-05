@@ -8,7 +8,7 @@ use App\Contracts\IStateContext;
 use App\Contracts\IFrontEventListener;
 
 /**
- * Handles the front incoming event, trying to manage the GO's state following the State-Design-Pattern.
+ * Handles the front incoming event managing the GO's state following the State-Design-Pattern.
  */
 abstract class StateContextBase extends Base implements IStateContext, IFrontEventListener
 {
@@ -22,20 +22,14 @@ abstract class StateContextBase extends Base implements IStateContext, IFrontEve
 	}
 
 	public function request(array $event)
-	{
-		do {
-			// $current_state_component = $this->currentStateComponent();
-			$current_state_component_2 = $this->currentStateComponent_2();
-			// $current_state_name = $current_state_component::state();
-			$current_state_name_2 = $this->state;
-			// echo "Current state component: $current_state_component->id ($current_state_name) $current_state_component_2->id ($current_state_name_2)" . PHP_EOL;
-			$current_state_component_2->onStart();
-			$next_state_name = $current_state_component_2->handleStateEvent($event);
-			// $next_state_component = $this->findComponentForState($next_state_name);
-			// $this->current_state = $next_state_component;
-			// $this->state = $next_state_name;
-			$this->update(['state' => $next_state_name]);
-			$event = Constants::EMPTY_EVENT;
-		} while ($next_state_name !== $current_state_name_2);
-	}
+    {
+        do {
+			$stateName = $this->state;
+            $stateComponent = $this->currentStateComponent();
+            $stateComponent->onStart();
+            $nextState = $stateComponent->handleStateEvent($event);
+			$this->update(['state' => $nextState]);
+            $event = Constants::EMPTY_EVENT;
+        } while ($nextState !== $stateName);
+    }
 }

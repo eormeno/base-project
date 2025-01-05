@@ -54,32 +54,7 @@ abstract class Base extends Model
 		return $this->belongsTo(GameObject::class);
 	}
 
-	protected function findComponentForState(string $state): ?Component
-	{
-		$stateComponent = $this->components()->where('state', $state)->first();
-		if (!$stateComponent) {
-			return null;
-		}
-		return $stateComponent->subclass();
-	}
-
 	protected function currentStateComponent(): ?Component
-	{
-		$current = $this->current_state->first();
-		if ($current !== null) {
-			return $current->subclass();
-		}
-		$initialStateComponent = $this->findComponentForState(self::INITIAL_STATE);
-		if ($initialStateComponent === null) {
-			return null;
-		}
-		$initialStateComponent->enabled = true;
-		$initialStateComponent->onEnter();  // TODO Verificar si es necesario
-		$this->current_state = $initialStateComponent;
-		return $initialStateComponent;
-	}
-
-	protected function currentStateComponent_2(): ?Component
 	{
 		$state_components = $this->state_components ?? [];
 		$current_state = $this->state;
