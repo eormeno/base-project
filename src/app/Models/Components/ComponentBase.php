@@ -83,6 +83,7 @@ class ComponentBase extends Model
 
     private static function stateComponentConfig($type): array
     {
+		// TODO Try to remove this method
         $attributes = ['type' => $type, 'enabled' => true];
         $class = new ReflectionClass($type);
         if ($class->implementsInterface(IState::class)) {
