@@ -9,11 +9,6 @@ class ShowingClueStateComponent extends StateViewComponent
     protected $table = 'gtn_showing_clue_state_components';
     protected $view_name = 'guess-the-number.showing-clue';
 
-    public static function state(): string|null
-    {
-        return 'showing_clue';
-    }
-
     public function onStart(): void
     {
         $clues = $this->getService('clue-service')->getClues();
@@ -31,13 +26,11 @@ class ShowingClueStateComponent extends StateViewComponent
 
     public function onWantToPlayEvent()
     {
-        //return PlayingStateComponent::state();
 		return 'playing';
     }
 
     public function onAnotherChallengeEvent()
     {
-        //return PreparingStateComponent::state();
 		return 'preparing';
     }
 }

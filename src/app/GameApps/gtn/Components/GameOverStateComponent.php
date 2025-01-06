@@ -9,11 +9,6 @@ class GameOverStateComponent extends StateViewComponent
     protected $table = 'gtn_game_over_state_components';
     protected $view_name = 'guess-the-number.game-over';
 
-    public static function state(): string|null
-    {
-        return 'game_over';
-    }
-
     public function onStart(): void
     {
         $gtn_service = $this->getService('gtn-service');
@@ -33,13 +28,11 @@ class GameOverStateComponent extends StateViewComponent
 
     public function onPlayAgainEvent()
     {
-        //return PreparingStateComponent::state();
 		return 'preparing';
     }
 
     public function onExitEvent()
     {
-        //return InitialStateViewComponent::state();
 		return 'initial';
     }
 }

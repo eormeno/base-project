@@ -9,11 +9,6 @@ class SuccessStateComponent extends StateViewComponent
     protected $table = 'gtn_success_state_components';
     protected $view_name = 'guess-the-number.success';
 
-    public static function state(): string|null
-    {
-        return 'success';
-    }
-
     public function onStart(): void
     {
         $gtn_data = $this->getService('gtn-service');
@@ -38,13 +33,11 @@ class SuccessStateComponent extends StateViewComponent
 
     public function onPlayAgainEvent()
     {
-        //return PreparingStateComponent::state();
 		return 'preparing';
     }
 
     public function onExitEvent()
     {
-        //return InitialStateViewComponent::state();
 		return 'initial';
     }
 }

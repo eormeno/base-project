@@ -86,7 +86,7 @@ class ComponentBase extends Model
         $attributes = ['type' => $type, 'enabled' => true];
         $class = new ReflectionClass($type);
         if ($class->implementsInterface(IState::class)) {
-            return array_merge($attributes, ['enabled' => false, 'state' => $type::state()]);
+            return array_merge($attributes, ['enabled' => false]);
         }
         return $attributes;
     }

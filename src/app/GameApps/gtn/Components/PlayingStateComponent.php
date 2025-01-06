@@ -9,11 +9,6 @@ class PlayingStateComponent extends StateViewComponent
     protected $table = 'gtn_playing_state_components';
     protected $view_name = 'guess-the-number.playing';
 
-    public static function state(): string|null
-    {
-        return 'playing';
-    }
-
     public function onStart(): void
     {
         $gtn_data = $this->getService('gtn-service')->toArray();
@@ -34,10 +29,8 @@ class PlayingStateComponent extends StateViewComponent
         $result = $this->getService('guess-service')->guess($number);
 
         if (array_key_exists('guess_result.success', $result)) {
-            //return SuccessStateComponent::state();
 			return 'success';
         } else if (array_key_exists('guess_result.game_over', $result)) {
-            //return GameOverStateComponent::state();
 			return 'game_over';
         }
 

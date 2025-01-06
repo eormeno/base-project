@@ -9,11 +9,6 @@ class InitialStateViewComponent extends StateViewComponent
     protected $table = 'gtn_initial_state_view_components';
     protected $view_name = 'guess-the-number.initial';
 
-    public static function state(): string|null
-    {
-        return 'initial';
-    }
-
     public function onStart(): void
     {
         $gtn_service = $this->getService('gtn-service');
@@ -46,7 +41,6 @@ class InitialStateViewComponent extends StateViewComponent
 
     public function onWantToPlayEvent()
     {
-        //return PreparingStateComponent::state();
 		return 'preparing';
     }
 }

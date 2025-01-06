@@ -9,11 +9,6 @@ class BBATitleScreenComponent extends StateViewComponent implements IPersistent
 {
     protected $table = 'bba_title_screen_components';
 
-    public static function state(): string|null
-    {
-        return 'initial';
-    }
-
     public static function config(): array
     {
         return [];
