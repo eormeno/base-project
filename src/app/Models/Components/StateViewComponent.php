@@ -21,6 +21,7 @@ abstract class StateViewComponent extends Component implements IState, IView
 		$eventData = $event['data'];
 		$source = $event['source'];
 		$destination = $event['destination'];
+		$currentState = $this->super->gameObject->state;
 		$nextState = $this->passTo();
 
 		if (!in_array($eventName, [null, '', 'reload'])) {
@@ -30,7 +31,9 @@ abstract class StateViewComponent extends Component implements IState, IView
 			}
 		}
 
-		// revisar esto
+		if (!$nextState) {
+			$nextState = $currentState;
+		}
 
 		return $nextState;
 	}
@@ -69,8 +72,8 @@ abstract class StateViewComponent extends Component implements IState, IView
 
 	public function passTo(): string|null
 	{
-		return get_class($this)::state();
-		//return null;
+		//return get_class($this)::state();
+		return null;
 	}
 
 	public function view()
