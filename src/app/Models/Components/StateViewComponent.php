@@ -16,26 +16,24 @@ abstract class StateViewComponent extends Component implements IState, IView
 	}
 
 	public function handleStateEvent(array $event): string|null
-    {
-        $eventName = $event['event'];
-        $eventData = $event['data'];
-        $source = $event['source'];
-        $destination = $event['destination'];
+	{
+		$eventName = $event['event'];
+		$eventData = $event['data'];
+		$source = $event['source'];
+		$destination = $event['destination'];
+		$nextState = $this->passTo();
 
-        if ($eventName === null || $eventName === '' || $eventName === 'reload') {
-            return $this->passTo();
-        }
+		if (!in_array($eventName, [null, '', 'reload'])) {
+			$method = 'on' . CaseConverters::snakeToPascal($eventName) . 'Event';
+			if (method_exists($this, $method)) {
+				$nextState = ReflectionUtils::invokeMethod($this, $method, $eventData);
+			}
+		}
 
-        $method = 'on' . CaseConverters::snakeToPascal($eventName) . 'Event';
-        if (method_exists($this, $method)) {
-            $ref_cls = ReflectionUtils::invokeMethod($this, $method, $eventData);
-            if ($ref_cls) {
-                return $ref_cls;
-            }
-        }
+		// revisar esto
 
-        return $this->passTo();
-    }
+		return $nextState;
+	}
 
 
 	public function handleStateEvent2(array $event): string|null
