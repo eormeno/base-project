@@ -56,6 +56,6 @@ class ComponentMessages extends ComponentFinders
 
     protected function messages(): array
     {
-        return $this->super->messages;
+        return $this->super->messages ?? [];
     }
 }
