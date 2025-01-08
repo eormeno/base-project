@@ -9,7 +9,7 @@ class Root extends Prefab
 	public static function states(): array
 	{
 		return [
-			'initial' => ['bba.bouncing' => []],
+			'initial' => ['bba.playing-screen' => []],
 		];
 	}
 }

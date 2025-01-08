@@ -2,12 +2,11 @@
 
 namespace App\Models\Components;
 
-use App\Models\GameObject\Base;
 use ReflectionClass;
 use App\Utils\ReflectionUtils;
+use App\Models\GameObject\Base;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\GameObject\GameObjectBase;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ComponentBase extends Model
@@ -19,6 +18,15 @@ class ComponentBase extends Model
         'awoke' => 'boolean',
         'messages' => 'array',
     ];
+
+	/**
+	 * Ensure 'messages' is an array and its initial value is an empty array
+	 * @return array
+	 */
+	public function getMessagesAttribute(): array
+	{
+		return $this->message ? json_decode($this->message, true) : [];
+	}
 
     /**
      * The state the game object is in when this component is enabled. A null response means the enabling state is

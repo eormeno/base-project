@@ -8,7 +8,7 @@ use App\Utils\ReflectionUtils;
 abstract class StateViewComponent extends Component implements IState, IView
 {
 	protected $fillable = ['id'];
-	protected $view_name = 'web-renderer.default';
+	protected $view_name = 'default';
 
 	public function handleStateEvent(array $event): string|null
 	{
@@ -52,7 +52,7 @@ abstract class StateViewComponent extends Component implements IState, IView
 	{
 		$data = $this->messages();
 		if (!isset($this->view_name)) {
-			$this->view_name = 'web-renderer.default';
+			$this->view_name = 'default';
 		}
 		$view = view($this->view_name, $data);
 		return $view;
