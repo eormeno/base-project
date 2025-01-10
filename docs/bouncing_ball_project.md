@@ -21,5 +21,24 @@ stateDiagram-v2
     GameOver --> Initial: Restart
 ```
 
+## Configuración del proyecto
+- Prefix: `bba`
+- Screen Size: 800x450
+- Aspect Ratio: 16:9
+
 ## Diseño de Prefabs
 - `BouncingBallRoot`. GameObject raíz del juego, contenedor de los otros componentes y manejador de los estados del juego.
+- `Initial` Pantalla inicial del juego.
+    - `title:Text`
+        - text: "Bouncing Ball"
+        - style: Title
+    - `rules:Text`
+        - text: "Rules: Move the bar to prevent the ball from falling. Each bounce increases the speed of the ball."
+        - style: Body
+    - `scores:Table`
+        - columns: 2
+        - rows: 5
+        - headers: "Rank", "Score"
+    - `start:Button`
+        - text: "Start"
+        - onClick: start
