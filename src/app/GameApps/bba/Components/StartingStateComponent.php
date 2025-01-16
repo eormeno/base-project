@@ -4,7 +4,7 @@ namespace App\GameApps\bba\Components;
 
 use App\Models\Components\PersistentComponent;
 
-class PlayingScreenComponent extends PersistentComponent
+class StartingStateComponent extends PersistentComponent
 {
     public static function config(): array
     {

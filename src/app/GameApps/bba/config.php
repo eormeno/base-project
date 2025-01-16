@@ -8,5 +8,5 @@ return [
     'client' => 'webgl',
     'width' => 800,
     'height' => 450,
-    'prefab_name' => 'bba.root',
+    'prefab_name' => 'bba.bouncing-ball-root',
 ];

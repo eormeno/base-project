@@ -11,24 +11,36 @@ El juego consiste en una bola que rebota en los bordes de la pantalla. El jugado
 
 ## Diagrama de estados
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Initial
-    Initial --> Starting: Start
-    Starting --> Playing
-    Playing --> GameOver
-    GameOver --> Initial: Restart
-```
-
 ## Configuración del proyecto
 - Prefix: `bba`
 - Screen Size: 800x450
 - Aspect Ratio: 16:9
 
 ## Diseño de Prefabs
-- `BouncingBallRoot`. GameObject raíz del juego, contenedor de los otros componentes y manejador de los estados del juego.
-- `Initial` Pantalla inicial del juego.
+### `BouncingBallRootPrefab`
+Es el GameObject raíz del juego y manejador de los estados globales del juego. La siguiente tabla muestra para cada estado del juego, el componente su componente de estado.
+
+> Nota: Recuerde que sólo un componente de estado estará `enabled` a la vez.
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Initial
+    Initial --> Starting: start
+    Starting --> Playing
+    Playing --> GameOver
+    GameOver --> Initial: restart
+```
+
+| Estado | Componentes de estado |
+|--------|---------------------|
+| initial | InitialStateComponent |
+| starting | StartingStateComponent |
+| playing | PlayingStateComponent |
+| game_over | GameOverStateComponent |
+
+### `InitialPrefab`
+Pantalla inicial del juego.
     - `title:Text`
         - text: "Bouncing Ball"
         - style: Title
