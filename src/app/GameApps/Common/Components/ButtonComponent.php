@@ -10,7 +10,6 @@ class ButtonComponent extends PersistentComponent
     {
         return [
             'event' => ['string', ''],
-            'data' => ['json', null],
             'text' => ['string', ''],
             'style' => ['string', ''],
         ];

@@ -2,6 +2,7 @@
 namespace App\GameApps\Common\prefabs;
 
 use App\Models\Prefab\Prefab;
+use App\Models\GameObject\GameObject;
 
 class Button extends Prefab
 {
@@ -11,6 +12,13 @@ class Button extends Prefab
 			'button' => []
 		];
 	}
+
+	public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
+	{
+		$label_component = $gameObject->getComponent('button');
+		$label_component->update($attributes);
+	}
+
 
     public static function structure(): array
     {

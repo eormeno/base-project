@@ -2,6 +2,7 @@
 namespace App\GameApps\Common\prefabs;
 
 use App\Models\Prefab\Prefab;
+use App\Models\GameObject\GameObject;
 
 class Label extends Prefab
 {
@@ -10,6 +11,12 @@ class Label extends Prefab
 		return [
 			'label' => []
 		];
+	}
+
+	public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
+	{
+		$label_component = $gameObject->getComponent('label');
+		$label_component->update($attributes);
 	}
 
     public static function structure(): array
