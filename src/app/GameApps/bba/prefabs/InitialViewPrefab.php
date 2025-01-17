@@ -9,10 +9,10 @@ class InitialViewPrefab extends Prefab
 	public static function children(): array
 	{
 		return [
-			'title' => ['prefab' => 'common.label', 'attributes' => ['text' => 'Bouncing Ball']],
-			'rules' => ['prefab' => 'common.label'],
-			'scores' => ['prefab' => 'common.label'],
-			'button' => ['prefab' => 'common.button'],
+			'title' => ['prefab' => 'label', 'attributes' => ['text' => 'Bouncing Ball']],
+			'rules' => ['prefab' => 'label'],
+			'scores' => ['prefab' => 'label'],
+			'button' => ['prefab' => 'button'],
 		];
 	}
 }

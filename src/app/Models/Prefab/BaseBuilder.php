@@ -31,16 +31,30 @@ abstract class BaseBuilder extends Base
 		bool $active = true,
 		array $initParams = []
 	): GameObject {
-		$gameObject = GameObject::create(['name' => $gameObjectName ?? $this->name, 'active' => $active]);
+		$gameObject = GameObject::create(
+			[
+				'name' => $gameObjectName ?? $this->name,
+				'active' => $active,
+				'game_object_id' => $parent?->id
+			]
+		);
 		$this->createStateComponents($gameObject);
-		$components = $this->structure['components'] ?? [];
-		foreach ($components as $slug_type => $attributes) {
-			$gameObject->addComponent($slug_type, $attributes);
-		}
-		//$children = $this->structure['children'] ?? [];
+		$this->createComponents($gameObject);
+		// $components = $this->structure['components'] ?? [];
+		// foreach ($components as $slug_type => $attributes) {
+		// 	$gameObject->addComponent($slug_type, $attributes);
+		// }
 		$this->createChildren($gameObject);
 		$this->afterInstantiate(gameObject: $gameObject, attributes: $initParams);
 		return $gameObject;
+	}
+
+	private function createComponents(GameObject $gameObject): void
+	{
+		$components = $this->components();
+		foreach ($components as $slug_type => $attributes) {
+			$gameObject->addComponent($slug_type, $attributes);
+		}
 	}
 
 	private function createStateComponents(GameObject $gameObject): void
@@ -49,8 +63,10 @@ abstract class BaseBuilder extends Base
 		$state_components = [];
 		$initial_state = array_key_first($states) ?? null;
 		foreach ($states as $state => $component_config) {
+			$enabled = $state === $initial_state;
 			$component_slug = array_key_first($component_config);
 			$component_attributes = $component_config[$component_slug];
+			$component_attributes['enabled'] = $enabled;
 			$component = $gameObject->addComponent($component_slug, $component_attributes);
 			$state_components[$state] = $component->id;
 		}
