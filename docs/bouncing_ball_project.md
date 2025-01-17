@@ -41,10 +41,10 @@ stateDiagram-v2
 
 ### `InitialPrefab`
 Pantalla inicial del juego.
-    - `title:Text`
+    - `title:Label`
         - text: "Bouncing Ball"
         - style: Title
-    - `rules:Text`
+    - `rules:Label`
         - text: "Rules: Move the bar to prevent the ball from falling. Each bounce increases the speed of the ball."
         - style: Body
     - `scores:Table`

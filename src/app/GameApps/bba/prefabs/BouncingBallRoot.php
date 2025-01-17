@@ -19,9 +19,7 @@ class BouncingBallRoot extends Prefab
 	public static function children(): array
 	{
 		return [
-			'initial_view' => ['active' => true],
-			'playing_view' => ['active' => false],
-			'gameover_view' => ['active' => false],
+			'initial_view' => ['prefab' => 'bba.initial-view-prefab'],
 		];
 	}
 }
