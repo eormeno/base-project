@@ -12,6 +12,8 @@ test("The game's root gameobject is created", function () {
 	$newGame = getUserPlayingGame('bba');
 	$rootGameObject = rootGameObjectForGameIsCreated($newGame);
 	gameObjectHasComponents($rootGameObject, ['InitialStateComponent', 'StartingStateComponent', 'PlayingStateComponent', 'GameOverStateComponent']);
+	showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+
 });
 
 test("Events interaction returns the active gameobject with its view", function () {

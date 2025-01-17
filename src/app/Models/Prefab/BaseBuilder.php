@@ -32,29 +32,20 @@ abstract class BaseBuilder extends Base
 		array $initParams = []
 	): GameObject {
 		$gameObject = GameObject::create(['name' => $gameObjectName ?? $this->name, 'active' => $active]);
-		$this->setGameObjectStates($gameObject, $this->states());
+		$this->createStateComponents($gameObject);
 		$components = $this->structure['components'] ?? [];
 		foreach ($components as $slug_type => $attributes) {
 			$gameObject->addComponent($slug_type, $attributes);
 		}
-		$children = $this->structure['children'] ?? [];
-		foreach ($children as $child_name => $child_data) {
-			if ($child_prefab_name = $child_data['prefab'] ?? null) {
-				if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
-					$active = $child_data['active'] ?? true;
-					$child_attributes = $child_data['attributes'] ?? [];
-					$child_prefab->createPrefabStructure($gameObject, $child_name, $active, $child_attributes);
-					continue;
-				}
-			}
-			$this->createChildren($gameObject, $child_name, $child_data);
-		}
+		//$children = $this->structure['children'] ?? [];
+		$this->createChildren($gameObject);
 		$this->afterInstantiate(gameObject: $gameObject, attributes: $initParams);
 		return $gameObject;
 	}
 
-	private function setGameObjectStates(GameObject $gameObject, array $states): void
+	private function createStateComponents(GameObject $gameObject): void
 	{
+		$states = $this->states();
 		$state_components = [];
 		$initial_state = array_key_first($states) ?? null;
 		foreach ($states as $state => $component_config) {
@@ -66,7 +57,23 @@ abstract class BaseBuilder extends Base
 		$gameObject->update(['state' => $initial_state, 'state_components' => $state_components]);
 	}
 
-	private function createChildren(GameObject $parent, string $childName, array $childData): void
+	private function createChildren(GameObject $parent): void
+	{
+		$children = $this->children();
+		foreach ($children as $child_name => $child_data) {
+			if ($child_prefab_name = $child_data['prefab'] ?? null) {
+				if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
+					$active = $child_data['active'] ?? true;
+					$child_attributes = $child_data['attributes'] ?? [];
+					$child_prefab->createPrefabStructure($parent, $child_name, $active, $child_attributes);
+					continue;
+				}
+			}
+			$this->createChild($parent, $child_name, $child_data);
+		}
+	}
+
+	private function createChild(GameObject $parent, string $childName, array $childData): void
 	{
 		$child = GameObject::create([
 			'name' => $childName,
@@ -79,7 +86,7 @@ abstract class BaseBuilder extends Base
 		}
 		$grandChildren = $childData['children'] ?? [];
 		foreach ($grandChildren as $grandChildName => $grandChildData) {
-			self::createChildren($child, $grandChildName, $grandChildData);
+			self::createChild($child, $grandChildName, $grandChildData);
 		}
 	}
 
