@@ -22,8 +22,6 @@ class RendererService implements IRenderer
     {
 		$client = $game->gameApp->client;
         $gameObject = $game->gameObject;
-        //$base64View = base64_encode($gameObject->view());
-		//$base64View = $gameObject->view();
 		$view = $client == 'webgl' ? $gameObject->view() : base64_encode($gameObject->view());
         $ret = [
 			'elapsed' => 0,
