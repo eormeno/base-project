@@ -26,11 +26,11 @@ class GameFactory extends Factory
     public function forGameApp(GameApp $gameApp): static
     {
         return $this->state(function (array $attributes) use ($gameApp) {
-            $prefab_attributes = $gameApp->prefab_attributes ?? [];
-			$prefab = Prefab::castPrefab($gameApp->prefab);
+            // $prefab_attributes = $gameApp->prefab_attributes ?? [];
+			// $prefab = Prefab::castPrefab($gameApp->prefab);
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
+                //'game_object_id' => $prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
@@ -40,11 +40,11 @@ class GameFactory extends Factory
     {
         $gameApp = GameApp::where('prefix', $prefix)->first();
         return $this->state(function (array $attributes) use ($gameApp) {
-            $prefab_attributes = $gameApp->prefab_attributes ?? [];
-			$prefab = Prefab::castPrefab($gameApp->prefab);
+            // $prefab_attributes = $gameApp->prefab_attributes ?? [];
+			// $prefab = Prefab::castPrefab($gameApp->prefab);
             return [
                 'game_app_id' => $gameApp->id,
-                'game_object_id' => $prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
+                //'game_object_id' => $prefab->buildGameObject(active: true, attributes: $prefab_attributes)->id,
                 'invitation_code' => uniqid(),
             ];
         });
@@ -79,11 +79,15 @@ class GameFactory extends Factory
         });
     }
 
-    // After creating the Game, update the GameObject game_id to the Game id
+    // After creating the Game, instantiate the GameObject defined by the prefab
     public function withGameObject(): static
     {
         return $this->afterCreating(function ($game) {
-            $game->gameObject->update(['game_id' => $game->id]);
+			$prefab_attributes = $game->gameApp->prefab_attributes ?? [];
+			$prefab = Prefab::castPrefab($game->gameApp->prefab);
+			$root = $prefab->buildGameObject(game: $game, active: true, attributes: $prefab_attributes)->id;
+			$game->update(['game_object_id' => $root]);
+            //$game->gameObject->update(['game_id' => $game->id]);
         });
     }
 

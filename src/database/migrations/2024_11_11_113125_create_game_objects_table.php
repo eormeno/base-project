@@ -16,7 +16,7 @@ return new class extends Migration {
 			// Whether the object is active or not
 			$table->boolean('active')->default(true);
 			// The game that the object belongs to
-			$table->foreignId('game_id')->nullable()->constrained('games')->onDelete('cascade');
+			$table->foreignId('game_id')->constrained('games')->onDelete('cascade');
 			// The parent object
 			$table->foreignId('game_object_id')->nullable()->constrained('game_objects')->onDelete('cascade');
 			// The current state of the object
@@ -25,16 +25,6 @@ return new class extends Migration {
 			$table->json('state_components')->nullable();
 			// Each indexed child object like: { 'initial_view_2': 1, 'showing_view': 2, ... }
 			$table->json('indexed_children')->nullable();
-			// $table->float('x')->default(0);
-			// $table->float('y')->default(0);
-			// $table->float('z')->default(0);
-			// $table->float('scale_x')->default(1);
-			// $table->float('scale_y')->default(1);
-			// $table->float('scale_z')->default(1);
-			// $table->float('rotation_x')->default(0);
-			// $table->float('rotation_y')->default(0);
-			// $table->float('rotation_z')->default(0);
-			// TODO remove this column
 			$table->foreignId('state_component_id')->nullable()->constrained('components')->onDelete('cascade');
 		});
 	}

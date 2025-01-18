@@ -2,15 +2,17 @@
 
 namespace App\Models\Prefab;
 
+use App\Models\Game;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
 
 abstract class BaseBuilder extends Base
 {
-	final public function buildGameObject(bool $active = true, array $attributes = []): GameObject
+	final public function buildGameObject(Game $game, bool $active = true, array $attributes = []): GameObject
 	{
-		$gameObject = DB::transaction(function () use ($active, $attributes) {
+		$gameObject = DB::transaction(function () use ($game, $active, $attributes) {
 			return $this->createPrefabStructure(
+				game: $game,
 				parent: null,
 				gameObjectName: null,
 				active: $active,
@@ -26,6 +28,7 @@ abstract class BaseBuilder extends Base
 	}
 
 	private function createPrefabStructure(
+		Game $game,
 		?GameObject $parent = null,
 		?string $gameObjectName = null,	// new game object optional name
 		bool $active = true,
@@ -35,7 +38,8 @@ abstract class BaseBuilder extends Base
 			[
 				'name' => $gameObjectName ?? $this->name,
 				'active' => $active,
-				'game_object_id' => $parent?->id
+				'game_object_id' => $parent?->id,
+				'game_id' => $game->id
 			]
 		);
 		$this->createStateComponents($gameObject);
@@ -44,7 +48,7 @@ abstract class BaseBuilder extends Base
 		// foreach ($components as $slug_type => $attributes) {
 		// 	$gameObject->addComponent($slug_type, $attributes);
 		// }
-		$this->createChildren($gameObject);
+		$this->createChildren($game, $gameObject);
 		$this->afterInstantiate(gameObject: $gameObject, attributes: $initParams);
 		return $gameObject;
 	}
@@ -73,7 +77,7 @@ abstract class BaseBuilder extends Base
 		$gameObject->update(['state' => $initial_state, 'state_components' => $state_components]);
 	}
 
-	private function createChildren(GameObject $parent): void
+	private function createChildren(Game $game, GameObject $parent): void
 	{
 		$children = $this->children();
 		foreach ($children as $child_name => $child_data) {
@@ -81,20 +85,21 @@ abstract class BaseBuilder extends Base
 				if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
 					$active = $child_data['active'] ?? true;
 					$child_attributes = $child_data['attributes'] ?? [];
-					$child_prefab->createPrefabStructure($parent, $child_name, $active, $child_attributes);
+					$child_prefab->createPrefabStructure($game, $parent, $child_name, $active, $child_attributes);
 					continue;
 				}
 			}
-			$this->createChild($parent, $child_name, $child_data);
+			$this->createChild($game, $parent, $child_name, $child_data);
 		}
 	}
 
-	private function createChild(GameObject $parent, string $childName, array $childData): void
+	private function createChild(Game $game, GameObject $parent, string $childName, array $childData): void
 	{
 		$child = GameObject::create([
 			'name' => $childName,
 			'active' => $childData['active'] ?? true,
-			'game_object_id' => $parent->id
+			'game_object_id' => $parent->id,
+			'game_id' => $game->id
 		]);
 		$components = $childData['components'] ?? [];
 		foreach ($components as $slug_type => $attributes) {
@@ -102,8 +107,7 @@ abstract class BaseBuilder extends Base
 		}
 		$grandChildren = $childData['children'] ?? [];
 		foreach ($grandChildren as $grandChildName => $grandChildData) {
-			self::createChild($child, $grandChildName, $grandChildData);
+			$this->createChild($game, $child, $grandChildName, $grandChildData);
 		}
 	}
-
 }
