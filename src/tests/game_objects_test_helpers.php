@@ -12,7 +12,7 @@ function existsGameObjectsInDatabase(array $rows): void
     }
 }
 
-function rootGameObjectForGameIsCreated(Game $game) : GameObject
+function rootGameObjectIsCreated(Game $game) : GameObject
 {
     $rootGameObject = GameObject::where('game_id', $game->id)->where('game_object_id', null)->first();
     test()->assertNotNull($rootGameObject);

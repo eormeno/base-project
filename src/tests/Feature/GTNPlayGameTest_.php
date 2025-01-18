@@ -10,7 +10,7 @@ test("Clicking 'play' game page is shown", function () {
 
 test("The game's root gameobject is created", function () {
     $newGame = getUserPlayingGame('gtn');
-    $rootGameObject = rootGameObjectForGameIsCreated($newGame);
+    $rootGameObject = rootGameObjectIsCreated($newGame);
     gameObjectHasComponents($rootGameObject, ['InitialStateViewComponent', 'GameOverStateComponent', 'PlayingStateComponent', 'PreparingStateComponent', 'ShowingClueStateComponent', 'SuccessStateComponent']);
 });
 

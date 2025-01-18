@@ -10,16 +10,15 @@ test("Clicking 'play' game page is shown", function () {
 
 test("The game's root gameobject is created", function () {
 	$newGame = getUserPlayingGame('bba');
-	$rootGameObject = rootGameObjectForGameIsCreated($newGame);
+	$rootGameObject = rootGameObjectIsCreated($newGame);
 	gameObjectHasComponents($rootGameObject, ['InitialStateComponent', 'StartingStateComponent', 'PlayingStateComponent', 'GameOverStateComponent']);
-	showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state','state_components']);
+	//showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state','state_components']);
 	//showTable('components');
-	showTable('label_components');
-	showTable('button_components');
+	//showTable('label_components');
+	//showTable('button_components');
 });
 
 test("Events interaction returns the active gameobject with its view", function () {
-	$this->markTestSkipped('Only for debugging');
 	$newGame = getUserPlayingGame('bba');
 	$game_app = $newGame->gameApp;
 	$prefab_name = $game_app->prefab_name;
@@ -30,6 +29,7 @@ test("Events interaction returns the active gameobject with its view", function 
 	if ($response->exception) {
 		throw $response->exception;
 	}
+	echo $response->getContent();
 	$response->assertStatus(200);
 	/*
 	 * The expected json should have the following structure
@@ -38,7 +38,7 @@ test("Events interaction returns the active gameobject with its view", function 
 	 *     "1":  // a base 64 encoded string
 	 *     "actives": // an array with the active game objects, in this case "1"
 	 * }
-	 */
+	 *-/
 	$response->assertJsonStructure(['root', '1', 'actives',]);
 	$this->assertIsString($response->json('1'));
 	$this->assertIsArray($response->json('actives'));
@@ -73,6 +73,7 @@ test("Events interaction returns the active gameobject with its view", function 
 	]);
 	$this->withoutMockingConsoleOutput();
 	showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+	*/
 });
 
 // test('Display tables', function () {
