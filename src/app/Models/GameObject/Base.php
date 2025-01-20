@@ -66,18 +66,14 @@ abstract class Base extends Model
 
 	public function componentsIterator(
 		callable $callback,
-		?string $type = null,
-		?bool $enabled = null
+		bool $enabled = true
 	): void {
 		$components = $this->components()->get();
 		foreach ($components as $component) {
-			if ($enabled !== null && $component->enabled !== $enabled) {
+			if ($component->enabled !== $enabled) {
 				continue;
 			}
 			$subclass = $component->subclass();
-			if ($type !== null && !is_subclass_of($subclass, $type)) {
-				continue;
-			}
 			$callback($component, $subclass);
 		}
 	}

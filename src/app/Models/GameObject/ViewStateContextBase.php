@@ -2,11 +2,23 @@
 
 namespace App\Models\GameObject;
 
-use App\Models\Components\IView;
-
-abstract class ViewStateContextBase extends StateContextBase implements IView
+abstract class ViewStateContextBase extends StateContextBase
 {
     public function view()
+    {
+		$mergedViews = [];
+		$this->componentsIterator(function ($component) use (&$mergedViews) {
+			echo "Component: $component->type\n";
+
+			$view = $component->view();
+			if ($view !== null) {
+				$mergedViews = array_merge($mergedViews, $view);
+			}
+		});
+		return $mergedViews ?? null;
+    }
+
+	public function view2()
     {
         $currentStateViewComponent = $this->currentStateComponent();
         if ($currentStateViewComponent === null) {
@@ -14,4 +26,5 @@ abstract class ViewStateContextBase extends StateContextBase implements IView
         }
         return $currentStateViewComponent->view();
     }
+
 }

@@ -20,15 +20,30 @@ class RendererService implements IRenderer
 
     private function request(Game $game, array $event): array
     {
-		$client = $game->gameApp->client;
-        $gameObject = $game->gameObject;
-		$view = $client == 'webgl' ? $gameObject->view() : base64_encode($gameObject->view());
+		$jsonClient = $game->gameApp->client == 'webgl';
+        $rootGameObject = $game->gameObject;
         $ret = [
 			'elapsed' => 0,
-            'root' => $gameObject->id,
-            $gameObject->id => $view,
-            'actives' => [$gameObject->id]
+            'root' => $rootGameObject->id,
         ];
+		$views = $this->resolveActiveGameObjectsViews($game, $jsonClient);
+		foreach ($views as $id => $view) {
+			$ret[$id] = $view;
+		}
+		$ret['actives'] = collect($game->activeGameObjects())->pluck('id')->toArray();
         return $ret;
     }
+
+	private function resolveActiveGameObjectsViews(Game $game, bool $jsonClient): array
+	{
+        $gameObject = $game->gameObject;
+		$gameObjects = $game->activeGameObjects();
+		$views = [];
+		foreach ($gameObjects as $gameObject) {
+			$view = $jsonClient ? $gameObject->view() : base64_encode($gameObject->view());
+			$views[$gameObject->id] = $view;
+		}
+		return $views;
+	}
+
 }

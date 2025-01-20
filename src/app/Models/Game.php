@@ -34,6 +34,18 @@ class Game extends Model
         return $this->hasOne(GameObject::class, 'id', 'game_object_id');
     }
 
+	public function gameObjects(): HasMany
+	{
+		return $this->hasMany(GameObject::class);
+	}
+
+	public function activeGameObjects(): array
+	{
+		return $this->gameObjects->filter(function ($gameObject) {
+			return $gameObject->active;
+		})->all();
+	}
+
     public function players(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();

@@ -19,30 +19,30 @@ class ComponentBase extends Model
 		'messages' => 'array',
 	];
 
-	/**
-	 * The state the game object is in when this component is enabled. A null response means the enabling state is
-	 * controlled by the enable attribute.
-	 *
-	 * @return string|null
-	 */
-	protected static function enablingState(): string|null
-	{
-		return null;
-	}
+	// /**
+	//  * The state the game object is in when this component is enabled. A null response means the enabling state is
+	//  * controlled by the enable attribute.
+	//  *
+	//  * @return string|null
+	//  */
+	// protected static function enablingState(): string|null
+	// {
+	// 	return null;
+	// }
 
-	/**
-	 * Whether the component is enabled. If enablingState() returns null, this attribute is used to determine if the
-	 * component is enabled.
-	 *
-	 * @return bool
-	 */
-	public function getEnabledAttribute(): bool
-	{
-		if (self::enablingState() === null) {
-			return $this->super()->enabled;
-		}
-		return $this->gameObject()->state === self::enablingState();
-	}
+	// /**
+	//  * Whether the component is enabled. If enablingState() returns null, this attribute is used to determine if the
+	//  * component is enabled.
+	//  *
+	//  * @return bool
+	//  */
+	// public function getEnabledAttribute(): bool
+	// {
+	// 	if (self::enablingState() === null) {
+	// 		return $this->super()->enabled;
+	// 	}
+	// 	return $this->gameObject()->state === self::enablingState();
+	// }
 
 	/**
 	 * Set the enabled attribute.

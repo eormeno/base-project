@@ -13,4 +13,14 @@ class LabelComponent extends PersistentComponent
             'style' => ['string', ''],
         ];
     }
+
+	public function view()
+	{
+		echo "LabelComponent: view\n";
+		return [
+			'type' => 'label',
+			'text' => $this->text,
+			'style' => $this->style,
+		];
+	}
 }

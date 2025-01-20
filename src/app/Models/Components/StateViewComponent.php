@@ -5,7 +5,7 @@ namespace App\Models\Components;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 
-abstract class StateViewComponent extends Component implements IState, IView
+abstract class StateViewComponent extends Component implements IState
 {
 	protected $fillable = ['id'];
 	protected $view_name = 'default';
