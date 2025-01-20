@@ -16,7 +16,6 @@ class LabelComponent extends PersistentComponent
 
 	public function view()
 	{
-		echo "LabelComponent: view\n";
 		return [
 			'type' => 'label',
 			'text' => $this->text,

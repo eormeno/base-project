@@ -14,4 +14,14 @@ class ButtonComponent extends PersistentComponent
             'style' => ['string', ''],
         ];
     }
+
+	public function view()
+	{
+		return [
+			'type' => 'button',
+			'event' => $this->event,
+			'text' => $this->text,
+			'style' => $this->style,
+		];
+	}
 }

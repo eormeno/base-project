@@ -10,4 +10,11 @@ class GameOverStateComponent extends PersistentComponent
     {
         return [];
     }
+
+	public function view()
+	{
+		return [
+			'type' => 'game-over-state',
+		];
+	}
 }

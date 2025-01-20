@@ -10,4 +10,11 @@ class InitialStateComponent extends PersistentComponent
     {
         return [];
     }
+
+	public function view()
+	{
+		return [
+			'type' => 'initial-state',
+		];
+	}
 }

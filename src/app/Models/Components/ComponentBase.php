@@ -70,6 +70,11 @@ class ComponentBase extends Model
 		return $this->type::find($this->id);
 	}
 
+	public function view()
+	{
+		return null;
+	}
+
 	protected static function createFromSlug(
 		Base $gameObject,
 		string $slug_type,

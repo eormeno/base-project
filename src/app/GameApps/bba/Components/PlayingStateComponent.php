@@ -10,4 +10,11 @@ class PlayingStateComponent extends PersistentComponent
     {
         return [];
     }
+
+	public function view()
+	{
+		return [
+			'type' => 'playing-state',
+		];
+	}
 }

@@ -19,12 +19,12 @@ class Label extends Prefab
 		$label_component->update($attributes);
 	}
 
-    public static function structure(): array
-    {
-        return [
-            'components' => [
-                'label' => []
-            ]
-        ];
-    }
+    // public static function structure(): array
+    // {
+    //     return [
+    //         'components' => [
+    //             'label' => []
+    //         ]
+    //     ];
+    // }
 }

@@ -16,9 +16,4 @@ class Component extends ComponentMessages
 	public function onUpdate(float $delta): void
 	{
 	}
-
-	public function view()
-	{
-		return null;
-	}
 }

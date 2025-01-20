@@ -19,13 +19,12 @@ class Button extends Prefab
 		$label_component->update($attributes);
 	}
 
-
-    public static function structure(): array
-    {
-        return [
-            'components' => [
-                'button' => []
-            ]
-        ];
-    }
+    // public static function structure(): array
+    // {
+    //     return [
+    //         'components' => [
+    //             'button' => []
+    //         ]
+    //     ];
+    // }
 }

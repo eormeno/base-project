@@ -8,8 +8,8 @@ abstract class ViewStateContextBase extends StateContextBase
     {
 		$mergedViews = [];
 		$this->componentsIterator(function ($component) use (&$mergedViews) {
-			echo "Component: $component->type\n";
-
+			// echos the class name of the component
+			echo get_class($component) . "\n";
 			$view = $component->view();
 			if ($view !== null) {
 				$mergedViews = array_merge($mergedViews, $view);

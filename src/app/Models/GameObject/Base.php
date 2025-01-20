@@ -74,7 +74,7 @@ abstract class Base extends Model
 				continue;
 			}
 			$subclass = $component->subclass();
-			$callback($component, $subclass);
+			$callback($subclass);
 		}
 	}
 
