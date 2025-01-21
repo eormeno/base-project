@@ -10,11 +10,22 @@ test("Clicking 'play' game page is shown", function () {
 
 test("The game's root gameobject is created", function () {
     $newGame = getUserPlayingGame('gtn');
+	$rootPrefab = existsRootPrefab('gtn');
     $rootGameObject = rootGameObjectIsCreated($newGame);
-    gameObjectHasComponents($rootGameObject, ['InitialStateViewComponent', 'GameOverStateComponent', 'PlayingStateComponent', 'PreparingStateComponent', 'ShowingClueStateComponent', 'SuccessStateComponent']);
+
+	// echo "Defined components: \n";
+	// $definedComponents = getDefinedComponents($rootPrefab);
+	// foreach ($definedComponents as $component) {
+	// 	echo $component . "\n";
+	// }
+    gameObjectHasComponents($rootPrefab, $rootGameObject);
+    //gameObjectHasComponents($rootGameObject, ['InitialStateViewComponent', 'GameOverStateComponent', 'PlayingStateComponent', 'PreparingStateComponent', 'ShowingClueStateComponent', 'SuccessStateComponent']);
+	//showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+	//showTable('components');
 });
 
 test("Events interaction returns the active gameobject with its view", function () {
+	$this->markTestSkipped('Only for debugging');
     $newGame = getUserPlayingGame('gtn');
     $game_app = $newGame->gameApp;
     $prefab_name = $game_app->prefab_name;

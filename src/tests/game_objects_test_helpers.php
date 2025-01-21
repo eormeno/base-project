@@ -1,30 +1,60 @@
 <?php
 
 use App\Models\Game;
+use App\Models\GameApp;
+use App\Models\Prefab\Prefab;
+use App\Utils\ReflectionUtils;
 use App\Models\GameObject\GameObject;
 
 function existsGameObjectsInDatabase(array $rows): void
 {
-    $table = 'game_objects';
-    $columns = ['id', 'name', 'game_id', 'game_object_id', 'state'];
-    foreach ($rows as $id => $row) {
-        test()->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row))); // phpcs:ignore
-    }
+	$table = 'game_objects';
+	$columns = ['id', 'name', 'game_id', 'game_object_id', 'state'];
+	foreach ($rows as $id => $row) {
+		test()->assertDatabaseHas($table, array_combine($columns, array_merge([$id], $row))); // phpcs:ignore
+	}
 }
 
-function rootGameObjectIsCreated(Game $game) : GameObject
+function existsRootPrefab(string $prefix): Prefab
 {
-    $rootGameObject = GameObject::where('game_id', $game->id)->where('game_object_id', null)->first();
-    test()->assertNotNull($rootGameObject);
-    return $rootGameObject;
+	$gameApp = reloadGameApps($prefix);
+	$prefab = Prefab::castPrefab($gameApp->prefab);
+	test()->assertNotNull($prefab);
+	return $prefab;
 }
 
-function gameObjectHasComponents(GameObject $gameObject, array $componentsTypes): void
+
+function rootGameObjectIsCreated(Game $game): GameObject
 {
-    $components = $gameObject->components()->get();
-    test()->assertEquals(count($components), count($componentsTypes));
-    foreach ($components as $component) {
-        $component->type = substr(strrchr($component->type, "\\"), 1);
-        test()->assertTrue(in_array($component->type, $componentsTypes), "Component type {$component->type} is not in the list of expected components");
-    }
+	$rootGameObject = GameObject::where('game_id', $game->id)->where('game_object_id', null)->first();
+	test()->assertNotNull($rootGameObject);
+	return $rootGameObject;
+}
+
+function gameObjectHasComponents(Prefab $prefab, GameObject $gameObject): void
+{
+	$definedComponents = getDefinedComponents($prefab);
+	$components = $gameObject->components()->get();
+	test()->assertEquals(count($components), count($definedComponents));
+	foreach ($components as $component) {
+		//$component->type = substr(strrchr($component->type, "\\"), 1);
+		test()->assertTrue(in_array($component->type, $definedComponents), "Component type {$component->type} is not in the list of expected components");
+	}
+}
+
+function getDefinedComponents(Prefab $prefab): array
+{
+	$ret = [];
+	// get the components associated to states
+	$states = $prefab->states();
+	foreach ($states as $state => $value) {
+		$slug_type = array_key_first($value);
+		$ret[] = ReflectionUtils::componentClass($slug_type);
+	}
+	// get the components defined in the prefab
+	$components = $prefab->components();
+	foreach ($components as $slug_type => $value) {
+		$ret[] = ReflectionUtils::componentClass($slug_type);
+	}
+	return $ret;
 }
