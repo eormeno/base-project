@@ -12,14 +12,7 @@ test("The game's root gameobject is created", function () {
     $newGame = getUserPlayingGame('gtn');
 	$rootPrefab = existsRootPrefab('gtn');
     $rootGameObject = rootGameObjectIsCreated($newGame);
-
-	// echo "Defined components: \n";
-	// $definedComponents = getDefinedComponents($rootPrefab);
-	// foreach ($definedComponents as $component) {
-	// 	echo $component . "\n";
-	// }
     gameObjectHasComponents($rootPrefab, $rootGameObject);
-    //gameObjectHasComponents($rootGameObject, ['InitialStateViewComponent', 'GameOverStateComponent', 'PlayingStateComponent', 'PreparingStateComponent', 'ShowingClueStateComponent', 'SuccessStateComponent']);
 	//showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
 	//showTable('components');
 });
