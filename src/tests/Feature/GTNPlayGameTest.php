@@ -13,8 +13,8 @@ test("The game's root gameobject is created", function () {
 	$rootPrefab = existsRootPrefab('gtn');
     $rootGameObject = rootGameObjectIsCreated($newGame);
     gameObjectHasComponents($rootPrefab, $rootGameObject);
-	//showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
-	//showTable('components');
+	showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+	showTable('components');
 });
 
 test("Events interaction returns the active gameobject with its view", function () {

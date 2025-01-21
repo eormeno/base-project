@@ -54,7 +54,6 @@ abstract class StateViewComponent extends Component implements IState
 		if (!isset($this->view_name)) {
 			$this->view_name = 'default';
 		}
-		$view = view($this->view_name, $data);
-		return $view;
+		return base64_encode(view($this->view_name, $data));
 	}
 }

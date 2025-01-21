@@ -50,10 +50,10 @@ class ComponentBase extends Model
 	 * @param bool $value
 	 * @return void
 	 */
-	public function setEnabledAttribute(bool $value): void
-	{
-		$this->super()->update(['enabled' => $value]);
-	}
+	// public function setEnabledAttribute(bool $value): void
+	// {
+	// 	$this->super()->update(['enabled' => $value]);
+	// }
 
 	public function gameObject(): BelongsTo
 	{
@@ -81,18 +81,19 @@ class ComponentBase extends Model
 		array $attributes
 	): Component {
 		$type = ReflectionUtils::componentClass($slug_type);
-		$component = $gameObject->components()->create(self::stateComponentConfig($type));
+		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true]);
+		unset ($attributes['enabled'], $attributes['type']);
 		return $type::create(array_merge(['id' => $component->id], $attributes));
 	}
 
-	private static function stateComponentConfig($type): array
-	{
-		// TODO Try to remove this method
-		$attributes = ['type' => $type, 'enabled' => true];
-		$class = new ReflectionClass($type);
-		if ($class->implementsInterface(IState::class)) {
-			return array_merge($attributes, ['enabled' => false]);
-		}
-		return $attributes;
-	}
+	// private static function stateComponentConfig($type): array
+	// {
+	// 	// TODO Try to remove this method
+	// 	$attributes = ['type' => $type, 'enabled' => true];
+	// 	$class = new ReflectionClass($type);
+	// 	if ($class->implementsInterface(IState::class)) {
+	// 		return array_merge($attributes, ['enabled' => false]);
+	// 	}
+	// 	return $attributes;
+	// }
 }
