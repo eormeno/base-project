@@ -10,10 +10,11 @@ test("Clicking 'play' game page is shown", function () {
 
 test("The game's root gameobject is created", function () {
 	$newGame = getUserPlayingGame('bba');
+	$rootPrefab = existsRootPrefab('bba');
 	$rootGameObject = rootGameObjectIsCreated($newGame);
-	gameObjectHasComponents($rootGameObject, ['InitialStateComponent', 'StartingStateComponent', 'PlayingStateComponent', 'GameOverStateComponent']);
+	gameObjectHasComponents($rootPrefab,$rootGameObject);
 	//showTable('game_objects', ['id', 'name', 'active', 'game_id', 'game_object_id', 'state','state_components']);
-	showTable('components');
+	//showTable('components');
 	//showTable('label_components');
 	//showTable('button_components');
 });
