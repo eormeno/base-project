@@ -11,6 +11,7 @@ class PreparingStateComponent extends StateViewComponent
 
 	public function onStart(): void
 	{
+		parent::onStart();
 		$this->getService('gtn-service')->startGame();
 	}
 

@@ -2,7 +2,7 @@
 
 namespace App\Models\Components;
 
-use ReflectionClass;
+use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
 use App\Models\GameObject\GameObject;
@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ComponentBase extends Model
 {
+	use DebugHelper;
 	public $timestamps = false;
 	protected $fillable = ['type', 'game_object_id', 'enabled', 'awoke', 'state', 'messages'];
 	protected $casts = [

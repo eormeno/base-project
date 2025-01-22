@@ -11,6 +11,7 @@ class GameOverStateComponent extends StateViewComponent
 
     public function onStart(): void
     {
+		parent::onStart();
         $gtn_service = $this->getService('gtn-service');
         $params = [
             'user_name' => $gtn_service->user->name,

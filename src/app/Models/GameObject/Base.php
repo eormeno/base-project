@@ -29,15 +29,32 @@ abstract class Base extends Model
 		return $this->belongsTo(Game::class);
 	}
 
-	public function getCurrentStateAttribute(): HasOne
+	public function changeState(string $state): void
 	{
-		return $this->hasOne(Component::class, 'id', 'state_component_id');
+		// disable the current state component
+		$stateComponent = $this->currentStateComponent();
+		if ($stateComponent) {
+			$stateComponent->super()->update(['enabled' => false]);
+			$stateComponent->onExit();
+		}
+		$this->update(['state' => $state]);
+		// enable the new state component
+		$stateComponent = $this->currentStateComponent();
+		if ($stateComponent) {
+			$stateComponent->super()->update(['enabled' => true]);
+			$stateComponent->onEnter();
+		}
 	}
 
-	public function setCurrentStateAttribute(Component $state): void
-	{
-		$this->update(['state_component_id' => $state->id]);
-	}
+	// public function getCurrentStateAttribute(): HasOne
+	// {
+	// 	return $this->hasOne(Component::class, 'id', 'state_component_id');
+	// }
+
+	// public function setCurrentStateAttribute(Component $state): void
+	// {
+	// 	$this->update(['state_component_id' => $state->id]);
+	// }
 
 	public function components(): HasMany
 	{
@@ -57,9 +74,9 @@ abstract class Base extends Model
 	protected function currentStateComponent(): ?Component
 	{
 		$state_components = $this->state_components ?? [];
-		$current_state = $this->state;
-		if($current_state_component_id = $state_components[$current_state] ?? null) {
-			return Component::find($current_state_component_id)->subclass();
+		$currentObjectState = $this->state;
+		if($stateComponentIdentifier = $state_components[$currentObjectState] ?? null) {
+			return Component::find($stateComponentIdentifier)->subclass();
 		}
 		return null;
 	}

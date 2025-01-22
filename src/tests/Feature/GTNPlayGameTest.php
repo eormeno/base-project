@@ -13,12 +13,12 @@ test("The game's root gameobject is created", function () {
 	$rootPrefab = existsRootPrefab('gtn');
     $rootGameObject = rootGameObjectIsCreated($newGame);
     gameObjectHasComponents($rootPrefab, $rootGameObject);
-	showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
-	showTable('components');
+	// showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+	// showTable('components');
 });
 
 test("Events interaction returns the active gameobject with its view", function () {
-	$this->markTestSkipped('Only for debugging');
+	//$this->markTestSkipped('Only for debugging');
     $newGame = getUserPlayingGame('gtn');
     $game_app = $newGame->gameApp;
     $prefab_name = $game_app->prefab_name;
@@ -71,7 +71,7 @@ test("Events interaction returns the active gameobject with its view", function 
         1 => [$prefab_name, $newGame->id, null, 'success'],
     ]);
 	$this->withoutMockingConsoleOutput();
-    showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+    // showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
 });
 
 // test('Display tables', function () {

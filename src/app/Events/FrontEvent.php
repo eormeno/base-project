@@ -32,4 +32,9 @@ class FrontEvent
             new PrivateChannel('channel-name'),
         ];
     }
+
+	public function __tostring(): string
+	{
+		return json_encode($this->event);
+	}
 }

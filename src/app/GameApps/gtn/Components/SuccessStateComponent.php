@@ -11,6 +11,7 @@ class SuccessStateComponent extends StateViewComponent
 
     public function onStart(): void
     {
+		parent::onStart();
         $gtn_data = $this->getService('gtn-service');
         $param = [
             'user_name' => $gtn_data->user->name,

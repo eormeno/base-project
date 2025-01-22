@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait DebugHelper
 {
-    const BASIC_INFO = ['source', 'data', 'is_signal', 'rendered'];
+    private const BASIC_INFO = ['source', 'data', 'is_signal', 'rendered'];
 
     public function log(string $message, string $type = 'log')
     {
@@ -14,6 +14,10 @@ trait DebugHelper
             'data' => ['message' => $message, 'time' => date('H:i:s'), 'type' => $type],
         ];
         session(['events' => $events]);
+		// if the running environment is testing, print the message to the console
+		if (env('APP_ENV') === 'testing') {
+			echo 'log: ' . $message . PHP_EOL;
+		}
     }
 
     public function info(string $message)

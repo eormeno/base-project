@@ -11,6 +11,7 @@ class ShowingClueStateComponent extends StateViewComponent
 
     public function onStart(): void
     {
+		parent::onStart();
         $clues = $this->getService('clue-service')->getClues();
         $messages = [
             'i18n' => [

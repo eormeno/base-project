@@ -18,6 +18,7 @@ abstract class StateContextBase extends Base implements IStateContext, IFrontEve
 		if (!$this->active) {
 			return;
 		}
+		// echo $event . PHP_EOL;
 		$this->request($event->event);
 	}
 
@@ -28,7 +29,8 @@ abstract class StateContextBase extends Base implements IStateContext, IFrontEve
             $stateComponent = $this->currentStateComponent();
             $stateComponent->onStart();
             $nextState = $stateComponent->handleStateEvent($event);
-			$this->update(['state' => $nextState]);
+			//$this->update(['state' => $nextState]);
+			$this->changeState($nextState);
             $event = Constants::EMPTY_EVENT;
         } while ($nextState !== $stateName);
     }
