@@ -37,10 +37,14 @@ abstract class StateViewComponent extends Component implements IState
 
 	public function onEnter(): void
 	{
+		// TODO Review the sequence of invocation of this method
+		$this->log(class_basename($this) . '::onEnter()');
 	}
 
 	public function onExit(): void
 	{
+		// TODO Review the sequence of invocation of this method
+		$this->log(class_basename($this) . '::onExit()');
 	}
 
 	public function passTo(): string|null
