@@ -20,42 +20,6 @@ class ComponentBase extends Model
 		'messages' => 'array',
 	];
 
-	// /**
-	//  * The state the game object is in when this component is enabled. A null response means the enabling state is
-	//  * controlled by the enable attribute.
-	//  *
-	//  * @return string|null
-	//  */
-	// protected static function enablingState(): string|null
-	// {
-	// 	return null;
-	// }
-
-	// /**
-	//  * Whether the component is enabled. If enablingState() returns null, this attribute is used to determine if the
-	//  * component is enabled.
-	//  *
-	//  * @return bool
-	//  */
-	// public function getEnabledAttribute(): bool
-	// {
-	// 	if (self::enablingState() === null) {
-	// 		return $this->super()->enabled;
-	// 	}
-	// 	return $this->gameObject()->state === self::enablingState();
-	// }
-
-	/**
-	 * Set the enabled attribute.
-	 *
-	 * @param bool $value
-	 * @return void
-	 */
-	// public function setEnabledAttribute(bool $value): void
-	// {
-	// 	$this->super()->update(['enabled' => $value]);
-	// }
-
 	public function gameObject(): BelongsTo
 	{
 		return $this->belongsTo(GameObject::class);
@@ -86,15 +50,4 @@ class ComponentBase extends Model
 		unset ($attributes['enabled'], $attributes['type']);
 		return $type::create(array_merge(['id' => $component->id], $attributes));
 	}
-
-	// private static function stateComponentConfig($type): array
-	// {
-	// 	// TODO Try to remove this method
-	// 	$attributes = ['type' => $type, 'enabled' => true];
-	// 	$class = new ReflectionClass($type);
-	// 	if ($class->implementsInterface(IState::class)) {
-	// 		return array_merge($attributes, ['enabled' => false]);
-	// 	}
-	// 	return $attributes;
-	// }
 }
