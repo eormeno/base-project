@@ -1,18 +1,11 @@
 Clear-Host
-
-$currentPath = Get-Location
-# check if the currentPath ends with 'src' or 'src\'
-if ($currentPath -match 'src$' -or $currentPath -match 'src\\$') {
-    # if the currentPath ends with 'src' or 'src\', then change the directory to the parent directory
-    Set-Location ..
-}
-
 Set-Location src
 
 $filter = $args[0]
 if ($filter -eq $null) {
     # if no filter is provided, then run all tests
     php artisan test
+    Set-Location ..
     return
 }
 
@@ -35,3 +28,4 @@ if ($testClass -eq $null) {
 }
 
 php artisan test --filter=$testClass
+Set-Location ..
