@@ -1,12 +1,5 @@
 Clear-Host
 
-$currentPath = Get-Location
-# check if the currentPath ends with 'src' or 'src\'
-if ($currentPath -match 'src$' -or $currentPath -match 'src\\$') {
-    # if the currentPath ends with 'src' or 'src\', then change the directory to the parent directory
-    Set-Location ..
-}
-
 Set-Location src
 
 # if there is the '-r' argument, then remove the database.sqlite file
@@ -24,3 +17,5 @@ $artisan = Start-Process -FilePath "powershell.exe" -ArgumentList "-Command", "p
 # Save the process IDs to a file
 $processes = @($vite.Id, $artisan.Id)
 $processes | Out-File .\processes.txt
+
+Set-Location ..
