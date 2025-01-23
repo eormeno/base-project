@@ -25,7 +25,6 @@ return new class extends Migration {
 			$table->json('state_components')->nullable();
 			// Each indexed child object like: { 'initial_view_2': 1, 'showing_view': 2, ... }
 			$table->json('indexed_children')->nullable();
-			$table->foreignId('state_component_id')->nullable()->constrained('components')->onDelete('cascade');
 		});
 	}
 

@@ -250,7 +250,7 @@ erDiagram
     game_objects {
         int id PK
         int game_object_id FK
-        int state_component_id FK
+        json state_components
         string name
         bool active
     }

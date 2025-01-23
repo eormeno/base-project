@@ -16,7 +16,7 @@ abstract class Base extends Model
 
 	public $timestamps = false;
 
-	protected $fillable = ['name', 'active', 'state_component_id', 'game_object_id', 'game_id', 'state', 'state_components', 'indexed_children'];
+	protected $fillable = ['name', 'active', 'game_object_id', 'game_id', 'state', 'state_components', 'indexed_children'];
 
 	protected $casts = [
 		'active' => 'boolean',
@@ -45,16 +45,6 @@ abstract class Base extends Model
 			$stateComponent->onEnter();
 		}
 	}
-
-	// public function getCurrentStateAttribute(): HasOne
-	// {
-	// 	return $this->hasOne(Component::class, 'id', 'state_component_id');
-	// }
-
-	// public function setCurrentStateAttribute(Component $state): void
-	// {
-	// 	$this->update(['state_component_id' => $state->id]);
-	// }
 
 	public function components(): HasMany
 	{
