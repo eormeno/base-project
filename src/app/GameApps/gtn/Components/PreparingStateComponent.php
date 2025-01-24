@@ -2,18 +2,12 @@
 
 namespace App\GameApps\gtn\Components;
 
-use App\Models\Components\StateViewComponent;
 use App\Models\Components\PersistentComponent;
 
 class PreparingStateComponent extends PersistentComponent
 {
-	// protected $table = 'gtn_preparing_state_components';
+	use HasGTNPrefix;
 	protected $view_name = 'guess-the-number.preparing';
-
-	protected function getPrefix(): string
-	{
-		return 'xxxx';
-	}
 
 	public function onStart(): void
 	{

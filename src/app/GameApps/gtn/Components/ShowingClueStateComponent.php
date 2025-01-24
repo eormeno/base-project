@@ -2,44 +2,38 @@
 
 namespace App\GameApps\gtn\Components;
 
-use App\Models\Components\StateViewComponent;
+use HasGTNPrefix;
 use App\Models\Components\PersistentComponent;
 
 class ShowingClueStateComponent extends PersistentComponent
 {
-    //protected $table = 'gtn_showing_clue_state_components';
-    protected $view_name = 'guess-the-number.showing-clue';
+	protected $view_name = 'guess-the-number.showing-clue';
 
-	protected function getPrefix(): string
+	public function onStart(): void
 	{
-		return 'xxxx';
+		parent::onStart();
+		$clues = $this->getService('clue-service')->getClues();
+		$messages = [
+			'i18n' => [
+				'title' => null,
+				'good_luck' => null,
+				'yes_button' => null,
+				'another_challenge' => null,
+				'clues' => $clues
+			]
+		];
+		$this->updateView($messages);
 	}
 
-    public function onStart(): void
-    {
-		parent::onStart();
-        $clues = $this->getService('clue-service')->getClues();
-        $messages = [
-            'i18n' => [
-                'title' => null,
-                'good_luck' => null,
-                'yes_button' => null,
-                'another_challenge' => null,
-                'clues' => $clues
-            ]
-        ];
-        $this->updateView($messages);
-    }
-
-    public function onWantToPlayEvent()
-    {
+	public function onWantToPlayEvent()
+	{
 		return 'playing';
-    }
+	}
 
-    public function onAnotherChallengeEvent()
-    {
+	public function onAnotherChallengeEvent()
+	{
 		return 'preparing';
-    }
+	}
 
 	public function view()
 	{

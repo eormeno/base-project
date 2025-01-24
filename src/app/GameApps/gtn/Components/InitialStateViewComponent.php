@@ -6,13 +6,8 @@ use App\Models\Components\PersistentComponent;
 
 class InitialStateViewComponent extends PersistentComponent
 {
-	//protected $table = 'gtn_initial_state_view_components';
+	use HasGTNPrefix;
 	protected $view_name = 'guess-the-number.initial';
-
-	protected function getPrefix(): string
-	{
-		return 'xxxx';
-	}
 
 	public function onStart(): void
 	{

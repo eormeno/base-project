@@ -6,12 +6,7 @@ use App\Models\Components\PersistentComponent;
 
 class GameDataComponent extends PersistentComponent
 {
-	//protected $table = 'gtn_game_data_components';
-
-	public function getPrefix(): string
-	{
-		return 'xxxx';
-	}
+	use HasGTNPrefix;
 
 	public static function config(): array
 	{
@@ -25,12 +20,4 @@ class GameDataComponent extends PersistentComponent
 			'otron' => ['integer', 0],
 		];
 	}
-
-
-	// protected $fillable = ['id', 'score', 'max_attempts', 'min_number', 'max_number', 'attempts', 'random_number'];
-
-	// public function super(): BelongsTo
-	// {
-	//     return $this->belongsTo(Component::class, 'id', 'id');
-	// }
 }
