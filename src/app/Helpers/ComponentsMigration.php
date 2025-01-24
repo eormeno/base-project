@@ -14,17 +14,17 @@ class ComponentsMigration extends Migration
 {
 	public function __construct(
 		private string $filename,
-		private string $tablePrefix = ''
+		private bool $logs = false
 	) {
-		$this->tablePrefix = $tablePrefix ? "{$tablePrefix}_" : '';
 	}
 
 	public function up(): void
 	{
 		$tables = 0;
 		ReflectionUtils::findClassesInPath($this->namespace($this->filename), function ($class) use (&$tables) {
-			$table_name = $this->tablePrefix . $class->getMethod('getTable')->invoke(new $class->name);
-			print "Creating table $table_name\n";
+			$table_name = $class->getMethod('getTable')->invoke(new $class->name);
+			if ($this->logs)
+				print "Creating table $table_name\n";
 			$config = $class->getMethod('config')->invoke(null);
 			Schema::create($table_name, function (Blueprint $table) use ($config, &$tables) {
 				$table->id(); // PK and FK to components
@@ -38,7 +38,8 @@ class ComponentsMigration extends Migration
 			});
 		}, PersistentComponent::class);
 
-		print "Created {$tables} tables found in {$this->namespace($this->filename)}\n";
+		if ($this->logs)
+			print "Created {$tables} tables found in {$this->namespace($this->filename)}\n";
 	}
 
 	public function down(): void
