@@ -2,11 +2,12 @@
 
 namespace App\GameApps\gtn\Components;
 
-use HasGTNPrefix;
+use App\Traits\HasGTNPrefix;
 use App\Models\Components\PersistentComponent;
 
 class ShowingClueStateComponent extends PersistentComponent
 {
+	use HasGTNPrefix;
 	protected $view_name = 'guess-the-number.showing-clue';
 
 	public function onStart(): void

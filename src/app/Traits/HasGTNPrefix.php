@@ -1,6 +1,6 @@
 <?php
 
-namespace App\GameApps\gtn\Components;
+namespace App\Traits;
 
 trait HasGTNPrefix
 {

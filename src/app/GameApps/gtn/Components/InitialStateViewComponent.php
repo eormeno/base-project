@@ -2,6 +2,7 @@
 
 namespace App\GameApps\gtn\Components;
 
+use App\Traits\HasGTNPrefix;
 use App\Models\Components\PersistentComponent;
 
 class InitialStateViewComponent extends PersistentComponent
