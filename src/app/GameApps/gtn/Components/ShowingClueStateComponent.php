@@ -3,11 +3,17 @@
 namespace App\GameApps\gtn\Components;
 
 use App\Models\Components\StateViewComponent;
+use App\Models\Components\PersistentComponent;
 
-class ShowingClueStateComponent extends StateViewComponent
+class ShowingClueStateComponent extends PersistentComponent
 {
-    protected $table = 'gtn_showing_clue_state_components';
+    //protected $table = 'gtn_showing_clue_state_components';
     protected $view_name = 'guess-the-number.showing-clue';
+
+	protected function getPrefix(): string
+	{
+		return 'xxxx';
+	}
 
     public function onStart(): void
     {
@@ -34,4 +40,13 @@ class ShowingClueStateComponent extends StateViewComponent
     {
 		return 'preparing';
     }
+
+	public function view()
+	{
+		$data = $this->messages();
+		if (!isset($this->view_name)) {
+			$this->view_name = 'default';
+		}
+		return base64_encode(view($this->view_name, $data));
+	}
 }

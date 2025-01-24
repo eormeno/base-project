@@ -7,8 +7,8 @@ use App\Utils\ReflectionUtils;
 
 abstract class StateViewComponent extends Component
 {
-	protected $fillable = ['id'];
-	protected $view_name = 'default';
+	//protected $fillable = ['id'];
+	//protected $view_name = 'default';
 
 	public function handleStateEvent(array $event): string|null
 	{
@@ -52,12 +52,12 @@ abstract class StateViewComponent extends Component
 		return null;
 	}
 
-	public function view()
-	{
-		$data = $this->messages();
-		if (!isset($this->view_name)) {
-			$this->view_name = 'default';
-		}
-		return base64_encode(view($this->view_name, $data));
-	}
+	// public function view()
+	// {
+	// 	$data = $this->messages();
+	// 	if (!isset($this->view_name)) {
+	// 		$this->view_name = 'default';
+	// 	}
+	// 	return base64_encode(view($this->view_name, $data));
+	// }
 }

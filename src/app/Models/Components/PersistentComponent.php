@@ -8,8 +8,24 @@ abstract class PersistentComponent extends StateViewComponent implements IPersis
 {
     public function getTable(): string
     {
-        return parent::getTable();
+		$tableName = parent::getTable();
+		if (strpos($tableName, $this->getPrefix()) === 0) {
+			return $tableName;
+		}
+		if ($this->getPrefix() === '') {
+			return $tableName;
+		}
+		return $this->getPrefix() . '_' . $tableName;
     }
+
+	protected function getPrefix(): string {
+		return '';
+	}
+
+	public static function config(): array
+	{
+		return [];
+	}
 
     public function getFillable(): array
     {

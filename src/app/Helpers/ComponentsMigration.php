@@ -12,16 +12,18 @@ use App\Models\Components\PersistentComponent;
 
 class ComponentsMigration extends Migration
 {
-
-	public function __construct(private string $filename)
-	{
+	public function __construct(
+		private string $filename,
+		private string $tablePrefix = ''
+	) {
+		$this->tablePrefix = $tablePrefix ? "{$tablePrefix}_" : '';
 	}
 
 	public function up(): void
 	{
 		$tables = 0;
 		ReflectionUtils::findClassesInPath($this->namespace($this->filename), function ($class) use (&$tables) {
-			$table_name = $class->getMethod('getTable')->invoke(new $class->name);
+			$table_name = $this->tablePrefix . $class->getMethod('getTable')->invoke(new $class->name);
 			print "Creating table $table_name\n";
 			$config = $class->getMethod('config')->invoke(null);
 			Schema::create($table_name, function (Blueprint $table) use ($config, &$tables) {

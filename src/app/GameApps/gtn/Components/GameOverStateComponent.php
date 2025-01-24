@@ -2,12 +2,18 @@
 
 namespace App\GameApps\gtn\Components;
 
+use App\Models\Components\PersistentComponent;
 use App\Models\Components\StateViewComponent;
 
-class GameOverStateComponent extends StateViewComponent
+class GameOverStateComponent extends PersistentComponent
 {
-    protected $table = 'gtn_game_over_state_components';
+    //protected $table = 'gtn_game_over_state_components';
     protected $view_name = 'guess-the-number.game-over';
+
+	protected function getPrefix(): string
+	{
+		return 'xxxx';
+	}
 
     public function onStart(): void
     {
@@ -36,4 +42,13 @@ class GameOverStateComponent extends StateViewComponent
     {
 		return 'initial';
     }
+
+	public function view()
+	{
+		$data = $this->messages();
+		if (!isset($this->view_name)) {
+			$this->view_name = 'default';
+		}
+		return base64_encode(view($this->view_name, $data));
+	}
 }
