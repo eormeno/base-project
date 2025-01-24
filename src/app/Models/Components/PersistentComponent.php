@@ -4,7 +4,7 @@ namespace App\Models\Components;
 
 use App\Contracts\IPersistent;
 
-abstract class PersistentComponent extends StateViewComponent implements IPersistent
+abstract class PersistentComponent extends Component implements IPersistent
 {
     public function getTable(): string
     {

@@ -5,7 +5,7 @@ namespace App\Models\Components;
 use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 
-abstract class StateViewComponent extends Component
+abstract class ComponentStateManager extends ComponentMessages
 {
 	public function handleStateEvent(array $event): string|null
 	{
@@ -30,22 +30,5 @@ abstract class StateViewComponent extends Component
 		// TODO Validate the next state is a valid state for the game object
 
 		return $nextState;
-	}
-
-	public function onEnter(): void
-	{
-		// TODO Review the sequence of invocation of this method
-		$this->log(class_basename($this) . '::onEnter()');
-	}
-
-	public function onExit(): void
-	{
-		// TODO Review the sequence of invocation of this method
-		$this->log(class_basename($this) . '::onExit()');
-	}
-
-	public function passTo(): string|null
-	{
-		return null;
 	}
 }
