@@ -38,9 +38,9 @@ abstract class BaseBuilder extends Base
 				'game_id' => $game->id
 			]
 		);
-		$this->createStateComponents($gameObject, $this->states());
-		$this->createComponents($gameObject, $this->components());
-		$this->createChildren($game, $gameObject, $this->children());
+		$this->createStateComponents($gameObject, $this->structure()['states'] ?? []);
+		$this->createComponents($gameObject, $this->structure()['components'] ?? []);
+		$this->createChildren($game, $gameObject, $this->structure());
 		$this->afterInstantiate($gameObject, $initParams);
 		return $gameObject;
 	}
@@ -70,6 +70,9 @@ abstract class BaseBuilder extends Base
 	private function createChildren(Game $game, GameObject $parent, array $children): void
 	{
 		foreach ($children as $child_name => $child_data) {
+			if ($child_name === 'states' || $child_name === 'components') {
+				continue;
+			}
 			if (!$this->createChildFromPrefab($game, $parent, $child_name, $child_data)) {
 				$this->createChild($game, $parent, $child_name, $child_data);
 			}

@@ -46,13 +46,13 @@ function getDefinedComponents(Prefab $prefab): array
 {
 	$ret = [];
 	// get the components associated to states
-	$states = $prefab->states();
+	$states = $prefab->structure()['states'] ?? [];
 	foreach ($states as $state => $value) {
 		$slug_type = array_key_first($value);
 		$ret[] = ReflectionUtils::componentClass($slug_type);
 	}
 	// get the components defined in the prefab
-	$components = $prefab->components();
+	$components = $prefab->structure()['components'] ?? [];
 	foreach ($components as $slug_type => $value) {
 		$ret[] = ReflectionUtils::componentClass($slug_type);
 	}

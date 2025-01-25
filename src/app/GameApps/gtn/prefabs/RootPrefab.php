@@ -6,7 +6,17 @@ use App\Models\Prefab\Prefab;
 
 class RootPrefab extends Prefab
 {
-	public static function states(): array
+
+	public static function structure(): array
+	{
+		return [
+			'states' => self::states(),
+			'components' => self::components(),
+			self::children(),
+		];
+	}
+
+	private static function states(): array
 	{
 		return [
 			'initial' => ['gtn.initial-state-view' => []],
@@ -18,14 +28,14 @@ class RootPrefab extends Prefab
 		];
 	}
 
-	public static function components(): array
+	private static function components(): array
 	{
 		return [
 			'gtn.game-data' => [],
 		];
 	}
 
-	public static function children(): array
+	private static function children(): array
 	{
 		return [
 			'initial_view_2' => [

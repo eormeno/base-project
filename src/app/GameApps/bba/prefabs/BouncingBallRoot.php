@@ -6,7 +6,16 @@ use App\Models\Prefab\Prefab;
 
 class BouncingBallRoot extends Prefab
 {
-	public static function states(): array
+
+	public static function structure(): array
+	{
+		return [
+			'states' => self::states(),
+			self::children(),
+		];
+	}
+
+	private static function states(): array
 	{
 		return [
 			'initial' => ['bba.initial-state' => []],
@@ -16,7 +25,7 @@ class BouncingBallRoot extends Prefab
 		];
 	}
 
-	public static function children(): array
+	private static function children(): array
 	{
 		return [
 			'initial_view' => ['prefab' => 'bba.initial-view-prefab'],

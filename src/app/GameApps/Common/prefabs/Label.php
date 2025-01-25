@@ -6,6 +6,13 @@ use App\Models\GameObject\GameObject;
 
 class Label extends Prefab
 {
+	public static function structure(): array
+	{
+		return [
+			'components' => self::components(),
+		];
+	}
+
 	public static function components(): array
 	{
 		return [
