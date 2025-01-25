@@ -3,6 +3,7 @@
 namespace App\Models\Prefab;
 
 use App\Models\Game;
+use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
 
@@ -69,18 +70,59 @@ abstract class BaseBuilder extends Base
 
 	private function createChildren(Game $game, GameObject $parent, array $children): void
 	{
+		if (empty($children)) {
+			return;
+		}
 		foreach ($children as $childName => $childConfig) {
 			if ($childName === 'states' || $childName === 'components') {
 				continue;
 			}
+			//$parsedChildName = $this->parseChildName($childName);
 			if (!$this->createChildFromPrefab($game, $parent, $childName, $childConfig)) {
 				$this->createChild($game, $parent, $childName, $childConfig);
 			}
 		}
 	}
 
+	private function parseChildName(string $childName): array
+	{
+		// Trim whitespace and validate the input
+		$childName = trim($childName);
+		if (empty($childName)) {
+			throw new InvalidArgumentException('Child name cannot be empty.');
+		}
+
+		$parts = explode(':', $childName);
+
+		// Validate the number of parts
+		if (count($parts) > 2) {
+			throw new InvalidArgumentException('Child name format is invalid.');
+		}
+
+		// also check for both parts to be non-empty
+		if (empty($parts[0]) || (count($parts) === 2 && empty($parts[1]))) {
+			throw new InvalidArgumentException('Child name format is invalid.');
+		}
+
+		// Handle single part names
+		if (count($parts) === 1) {
+			return [
+				'is_prefab' => false,
+				'name' => $parts[0]
+			];
+		}
+
+		// Handle two part names
+		return [
+			'is_prefab' => true,
+			'name' => $parts[0],
+			'prefab' => $parts[1]
+		];
+	}
+
 	private function createChildFromPrefab(Game $game, GameObject $parent, string $childName, array $childConfig): bool
 	{
+		echo "Creating child from prefab: $childName\n";
 		if ($child_prefab_name = $childConfig['prefab'] ?? null) {
 			if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
 				$active = $childConfig['active'] ?? true;
