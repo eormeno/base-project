@@ -21,13 +21,12 @@ abstract class ViewStateContextBase extends StateContextBase
 		return $mergedViews ?? null;
     }
 
-	public function view2()
-    {
-        $currentStateViewComponent = $this->currentStateComponent();
-        if ($currentStateViewComponent === null) {
-            return "<h4>State View not found</h4>";
-        }
-        return $currentStateViewComponent->view();
-    }
-
+	// public function view2()
+    // {
+    //     $currentStateViewComponent = $this->currentStateComponent();
+    //     if ($currentStateViewComponent === null) {
+    //         return "<h4>State View not found</h4>";
+    //     }
+    //     return $currentStateViewComponent->view();
+    // }
 }

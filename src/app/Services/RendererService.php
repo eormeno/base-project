@@ -45,6 +45,9 @@ class RendererService implements IRenderer
 		$views = [];
 		foreach ($gameObjects as $gameObject) {
 			$view = $gameObject->view();
+			if (empty($view)) {
+				continue;
+			}
 			//$view = $jsonClient ? $gameObject->view() : base64_encode($gameObject->view());
 			$views[$gameObject->id] = $view;
 		}

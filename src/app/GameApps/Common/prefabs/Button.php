@@ -18,13 +18,4 @@ class Button extends Prefab
 		$label_component = $gameObject->getComponent('button');
 		$label_component->update($attributes);
 	}
-
-    // public static function structure(): array
-    // {
-    //     return [
-    //         'components' => [
-    //             'button' => []
-    //         ]
-    //     ];
-    // }
 }
