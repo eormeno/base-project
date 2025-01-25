@@ -15,7 +15,7 @@ test("The game's root gameobject is created", function () {
 	gameObjectHasComponents($rootPrefab,$rootGameObject);
 	showTable('game_objects', ['id', 'name', 'active', 'game_id', 'game_object_id', 'state','state_components']);
 	//showTable('components');
-	//showTable('label_components');
+	showTable('label_components');
 	//showTable('button_components');
 });
 

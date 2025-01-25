@@ -21,21 +21,22 @@ class BouncingBallRoot extends Prefab
 		return [
 			'initial_view' => ['prefab' => 'bba.initial-view-prefab'],
 			'object_1' => [
+				'components' => ['label' => ['text' => '1']],
 				'object_1_1' => [
-					'object_1_1_1' => ['components' => ['label' => []]],
-					'object_1_1_2' => [],
+					'object_1_1_1' => ['components' => ['label' => ['text' => '1.1.1']]],
+					'object_1_1_2' => ['components' => ['label' => ['text' => '1.1.2']]],
 				],
 				'object_1_2' => [
-					'object_1_2_1' => [],
-					'object_1_2_2' => [],
+					'object_1_2_1' => ['components' => ['label' => ['text' => '1.2.1']]],
+					'object_1_2_2' => ['components' => ['label' => ['text' => '1.2.2']]],
 				],
 				'object_1_3' => [
-					'object_1_3_1' => [],
-					'object_1_3_2' => [],
+					'object_1_3_1' => ['components' => ['label' => ['text' => '1.3.1']]],
+					'object_1_3_2' => ['components' => ['label' => ['text' => '1.3.2']]],
 				],
 				'object_1_4' => [
-					'object_1_4_1' => [],
-					'object_1_4_2' => [],
+					'object_1_4_1' => ['components' => ['label' => ['text' => '1.4.1']]],
+					'object_1_4_2' => ['components' => ['label' => ['text' => '1.4.2']]],
 				],
 			],
 		];
