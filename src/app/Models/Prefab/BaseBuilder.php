@@ -69,38 +69,38 @@ abstract class BaseBuilder extends Base
 
 	private function createChildren(Game $game, GameObject $parent, array $children): void
 	{
-		foreach ($children as $child_name => $child_data) {
-			if ($child_name === 'states' || $child_name === 'components') {
+		foreach ($children as $childName => $childConfig) {
+			if ($childName === 'states' || $childName === 'components') {
 				continue;
 			}
-			if (!$this->createChildFromPrefab($game, $parent, $child_name, $child_data)) {
-				$this->createChild($game, $parent, $child_name, $child_data);
+			if (!$this->createChildFromPrefab($game, $parent, $childName, $childConfig)) {
+				$this->createChild($game, $parent, $childName, $childConfig);
 			}
 		}
 	}
 
-	private function createChildFromPrefab(Game $game, GameObject $parent, string $child_name, array $child_data): bool
+	private function createChildFromPrefab(Game $game, GameObject $parent, string $childName, array $childConfig): bool
 	{
-		if ($child_prefab_name = $child_data['prefab'] ?? null) {
+		if ($child_prefab_name = $childConfig['prefab'] ?? null) {
 			if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
-				$active = $child_data['active'] ?? true;
-				$child_attributes = $child_data['attributes'] ?? [];
-				$child_prefab->createPrefabStructure($game, $parent, $child_name, $active, $child_attributes);
+				$active = $childConfig['active'] ?? true;
+				$child_attributes = $childConfig['attributes'] ?? [];
+				$child_prefab->createPrefabStructure($game, $parent, $childName, $active, $child_attributes);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private function createChild(Game $game, GameObject $parent, string $childName, array $childData): void
+	private function createChild(Game $game, GameObject $parent, string $childName, array $childConfig): void
 	{
 		$child = GameObject::create([
 			'name' => $childName,
-			'active' => $childData['active'] ?? true,
+			'active' => $childConfig['active'] ?? true,
 			'game_object_id' => $parent->id,
 			'game_id' => $game->id
 		]);
-		foreach ($childData as $key => $value) {
+		foreach ($childConfig as $key => $value) {
 			if ($key === 'states') {
 				$this->createStateComponents($child, $value);
 				continue;
