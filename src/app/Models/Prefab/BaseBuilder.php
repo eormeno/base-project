@@ -19,11 +19,7 @@ abstract class BaseBuilder extends Base
 				initParams: $attributes
 			);
 		});
-		// TODO a esto hay que estudiarlo bien, porque no se si es necesario
-		// $gameObject->componentsIterator(function (Component $component, Component $subclass) {
-		//     $subclass->onAwake();
-		//     $component->update(['awoke' => true]);
-		// });
+		// TODO Hay que ver si se ejecuta el awake de los componentes...
 		return $gameObject;
 	}
 
@@ -42,28 +38,22 @@ abstract class BaseBuilder extends Base
 				'game_id' => $game->id
 			]
 		);
-		$this->createStateComponents($gameObject);
-		$this->createComponents($gameObject);
-		// $components = $this->structure['components'] ?? [];
-		// foreach ($components as $slug_type => $attributes) {
-		// 	$gameObject->addComponent($slug_type, $attributes);
-		// }
-		$this->createChildren($game, $gameObject);
-		$this->afterInstantiate(gameObject: $gameObject, attributes: $initParams);
+		$this->createStateComponents($gameObject, $this->states());
+		$this->createComponents($gameObject, $this->components());
+		$this->createChildren($game, $gameObject, $this->children());
+		$this->afterInstantiate($gameObject, $initParams);
 		return $gameObject;
 	}
 
-	private function createComponents(GameObject $gameObject): void
+	private function createComponents(GameObject $gameObject, array $components): void
 	{
-		$components = $this->components();
 		foreach ($components as $slug_type => $attributes) {
 			$gameObject->addComponent($slug_type, $attributes);
 		}
 	}
 
-	private function createStateComponents(GameObject $gameObject): void
+	private function createStateComponents(GameObject $gameObject, array $states): void
 	{
-		$states = $this->states();
 		$state_components = [];
 		$initial_state = array_key_first($states) ?? null;
 		foreach ($states as $state => $component_config) {
@@ -77,20 +67,26 @@ abstract class BaseBuilder extends Base
 		$gameObject->update(['state' => $initial_state, 'state_components' => $state_components]);
 	}
 
-	private function createChildren(Game $game, GameObject $parent): void
+	private function createChildren(Game $game, GameObject $parent, array $children): void
 	{
-		$children = $this->children();
 		foreach ($children as $child_name => $child_data) {
-			if ($child_prefab_name = $child_data['prefab'] ?? null) {
-				if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
-					$active = $child_data['active'] ?? true;
-					$child_attributes = $child_data['attributes'] ?? [];
-					$child_prefab->createPrefabStructure($game, $parent, $child_name, $active, $child_attributes);
-					continue;
-				}
+			if (!$this->createChildFromPrefab($game, $parent, $child_name, $child_data)) {
+				$this->createChild($game, $parent, $child_name, $child_data);
 			}
-			$this->createChild($game, $parent, $child_name, $child_data);
 		}
+	}
+
+	private function createChildFromPrefab(Game $game, GameObject $parent, string $child_name, array $child_data): bool
+	{
+		if ($child_prefab_name = $child_data['prefab'] ?? null) {
+			if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
+				$active = $child_data['active'] ?? true;
+				$child_attributes = $child_data['attributes'] ?? [];
+				$child_prefab->createPrefabStructure($game, $parent, $child_name, $active, $child_attributes);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private function createChild(Game $game, GameObject $parent, string $childName, array $childData): void
@@ -101,13 +97,18 @@ abstract class BaseBuilder extends Base
 			'game_object_id' => $parent->id,
 			'game_id' => $game->id
 		]);
-		$components = $childData['components'] ?? [];
-		foreach ($components as $slug_type => $attributes) {
-			$child->addComponent($slug_type, $attributes);
-		}
-		$grandChildren = $childData['children'] ?? [];
-		foreach ($grandChildren as $grandChildName => $grandChildData) {
-			$this->createChild($game, $child, $grandChildName, $grandChildData);
+		foreach ($childData as $key => $value) {
+			if ($key === 'states') {
+				$this->createStateComponents($child, $value);
+				continue;
+			}
+			if ($key === 'components') {
+				$this->createComponents($child, $value);
+				continue;
+			}
+			if (!$this->createChildFromPrefab($game, $child, $key, $value)) {
+				$this->createChild($game, $child, $key, $value);
+			}
 		}
 	}
 }

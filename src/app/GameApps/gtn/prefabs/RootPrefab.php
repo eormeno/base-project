@@ -35,18 +35,10 @@ class RootPrefab extends Prefab
 					'apellido' => 'Ormeño'
 				],
 			],
-			'showing_view' => [
-				'active' => false,
-			],
-			'playing_view' => [
-				'active' => false,
-			],
-			'success_view' => [
-				'active' => false,
-			],
-			'gameover_view' => [
-				'active' => false,
-			],
+			'showing_view' => [],
+			'playing_view' => [],
+			'success_view' => [],
+			'gameover_view' => [],
 		];
 	}
 
