@@ -122,7 +122,7 @@ abstract class BaseBuilder extends Base
 
 	private function createChildFromPrefab(Game $game, GameObject $parent, string $childName, array $childConfig): bool
 	{
-		echo "Creating child from prefab: $childName\n";
+		echo "Creating child from prefab: $parent $childName\n";
 		if ($child_prefab_name = $childConfig['prefab'] ?? null) {
 			if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
 				$active = $childConfig['active'] ?? true;

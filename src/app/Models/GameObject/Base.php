@@ -106,4 +106,9 @@ abstract class Base extends Model
 		}
 		return false;
 	}
+
+	public function __tostring(): string
+	{
+		return $this->name;
+	}
 }
