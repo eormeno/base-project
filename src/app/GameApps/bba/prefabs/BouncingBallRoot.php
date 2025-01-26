@@ -11,24 +11,7 @@ class BouncingBallRoot extends Prefab
 	{
 		return [
 			'states' => self::states(),
-			self::children(),
-		];
-	}
-
-	private static function states(): array
-	{
-		return [
-			'initial' => ['bba.initial-state' => []],
-			'start' => ['bba.starting-state' => []],
-			'playing' => ['bba.playing-state' => []],
-			'game_over' => ['bba.game-over-state' => []],
-		];
-	}
-
-	private static function children(): array
-	{
-		return [
-			'initial_view' => ['prefab' => 'bba.initial-view-prefab'],
+			'initial_view:bba.initial-view-prefab' => [],
 			'object_1' => [
 				'components' => ['label' => ['text' => '1']],
 				'object_1_1' => [
@@ -48,6 +31,16 @@ class BouncingBallRoot extends Prefab
 					'object_1_4_2' => ['components' => ['label' => ['text' => '1.4.2']]],
 				],
 			],
+		];
+	}
+
+	private static function states(): array
+	{
+		return [
+			'initial' => ['bba.initial-state' => []],
+			'start' => ['bba.starting-state' => []],
+			'playing' => ['bba.playing-state' => []],
+			'game_over' => ['bba.game-over-state' => []],
 		];
 	}
 }

@@ -6,9 +6,20 @@ use App\Models\Game;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
+use App\Models\Prefab\Parsers\GameObjectNameParser;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 abstract class BaseBuilder extends Base
 {
+	private function getChildNameParser(): GameObjectNameParser
+	{
+		try {
+			return app()->make(GameObjectNameParser::class);
+		} catch (BindingResolutionException $e) {
+			return new GameObjectNameParser();
+		}
+	}
+
 	final public function buildGameObject(Game $game, bool $active = true, array $attributes = []): GameObject
 	{
 		$gameObject = DB::transaction(function () use ($game, $active, $attributes) {
@@ -77,60 +88,25 @@ abstract class BaseBuilder extends Base
 			if ($childName === 'states' || $childName === 'components') {
 				continue;
 			}
-			//$parsedChildName = $this->parseChildName($childName);
-			if (!$this->createChildFromPrefab($game, $parent, $childName, $childConfig)) {
-				$this->createChild($game, $parent, $childName, $childConfig);
+			$result = $this->getChildNameParser()->parse($childName);
+			if ($result->isPrefab) {
+				$this->createChildFromPrefab($game, $parent, $result->name, $result->prefab, $childConfig);
+				continue;
 			}
+			$this->createChild($game, $parent, $result->name, $childConfig);
 		}
 	}
 
-	private function parseChildName(string $childName): array
+	private function createChildFromPrefab(Game $game, GameObject $parent, string $childName, string $childPrefab, array $childConfig): bool
 	{
-		// Trim whitespace and validate the input
-		$childName = trim($childName);
-		if (empty($childName)) {
-			throw new InvalidArgumentException('Child name cannot be empty.');
+		// if ($child_prefab_name = $childConfig['prefab'] ?? null) {
+		if ($child_prefab = Prefab::findPrefab($childPrefab)) {
+			$active = $childConfig['active'] ?? true;
+			$child_attributes = $childConfig['attributes'] ?? [];
+			$child_prefab->createPrefabStructure($game, $parent, $childName, $active, $child_attributes);
+			return true;
 		}
-
-		$parts = explode(':', $childName);
-
-		// Validate the number of parts
-		if (count($parts) > 2) {
-			throw new InvalidArgumentException('Child name format is invalid.');
-		}
-
-		// also check for both parts to be non-empty
-		if (empty($parts[0]) || (count($parts) === 2 && empty($parts[1]))) {
-			throw new InvalidArgumentException('Child name format is invalid.');
-		}
-
-		// Handle single part names
-		if (count($parts) === 1) {
-			return [
-				'is_prefab' => false,
-				'name' => $parts[0]
-			];
-		}
-
-		// Handle two part names
-		return [
-			'is_prefab' => true,
-			'name' => $parts[0],
-			'prefab' => $parts[1]
-		];
-	}
-
-	private function createChildFromPrefab(Game $game, GameObject $parent, string $childName, array $childConfig): bool
-	{
-		echo "Creating child from prefab: $parent $childName\n";
-		if ($child_prefab_name = $childConfig['prefab'] ?? null) {
-			if ($child_prefab = Prefab::findPrefab($child_prefab_name)) {
-				$active = $childConfig['active'] ?? true;
-				$child_attributes = $childConfig['attributes'] ?? [];
-				$child_prefab->createPrefabStructure($game, $parent, $childName, $active, $child_attributes);
-				return true;
-			}
-		}
+		// }
 		return false;
 	}
 
@@ -151,9 +127,12 @@ abstract class BaseBuilder extends Base
 				$this->createComponents($child, $value);
 				continue;
 			}
-			if (!$this->createChildFromPrefab($game, $child, $key, $value)) {
-				$this->createChild($game, $child, $key, $value);
+			$result = $this->getChildNameParser()->parse($key);
+			if ($result->isPrefab) {
+				$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $value);
+				continue;
 			}
+			$this->createChild($game, $child, $result->name, $value);
 		}
 	}
 }

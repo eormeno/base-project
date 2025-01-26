@@ -12,7 +12,16 @@ class RootPrefab extends Prefab
 		return [
 			'states' => self::states(),
 			'components' => self::components(),
-			self::children(),
+			'initial_view_2:container' => [
+				'active' => false,
+				'attributes' => [
+					'apellido' => 'Ormeño'
+				],
+			],
+			'showing_view' => [],
+			'playing_view' => [],
+			'success_view' => [],
+			'gameover_view' => [],
 		];
 	}
 
@@ -32,23 +41,6 @@ class RootPrefab extends Prefab
 	{
 		return [
 			'gtn.game-data' => [],
-		];
-	}
-
-	private static function children(): array
-	{
-		return [
-			'initial_view_2' => [
-				'prefab' => 'container',
-				'active' => false,
-				'attributes' => [
-					'apellido' => 'Ormeño'
-				],
-			],
-			'showing_view' => [],
-			'playing_view' => [],
-			'success_view' => [],
-			'gameover_view' => [],
 		];
 	}
 }
