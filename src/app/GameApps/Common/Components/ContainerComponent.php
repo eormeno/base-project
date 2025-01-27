@@ -18,6 +18,7 @@ class ContainerComponent extends PersistentComponent
 	public function view()
 	{
 		return [
+			'type' => 'container',
 			'layout' => $this->layout,
 			'children' => $this->children,
 		];

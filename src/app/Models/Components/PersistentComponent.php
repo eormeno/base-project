@@ -36,4 +36,20 @@ abstract class PersistentComponent extends Component implements IPersistent
         }
         return array_merge(array_keys($config), ['id']);
     }
+
+	public function getCast(): array
+	{
+		$config = [];
+		// if current class has a config method, then call it
+		if (method_exists($this, 'config')) {
+			$config = $this->config();
+		}
+		$cast = [];
+		foreach ($config as $key => $value) {
+			if ($value[0] === 'json') {
+				$cast[$key] = 'array';
+			}
+		}
+		return $cast;
+	}
 }

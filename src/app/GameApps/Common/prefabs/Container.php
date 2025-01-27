@@ -23,11 +23,11 @@ class Container extends Prefab
 	public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
 	{
 		$containerComponent = $gameObject->getComponent('container');
-		$children = [];
-		foreach ($gameObject->children as $child) {
-			$children[] = $child->id;
-		}
+		// $children = [];
+		// foreach ($gameObject->children as $child) {
+		// 	$children[] = $child->id;
+		// }
 		$containerComponent->update($attributes);
-		$containerComponent->update(['children' => $children]);
+		$containerComponent->update(['children' => $gameObject->children->pluck('id')]);
 	}
 }

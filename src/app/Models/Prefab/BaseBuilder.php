@@ -92,11 +92,14 @@ abstract class BaseBuilder extends Base
 			}
 			$result = $this->getChildNameParser()->parse($childName);
 			if ($result->isPrefab) {
-				$this->createChildFromPrefab($game, $parent, $result->name, $result->prefab, $childConfig);
+				$grandChild = $this->createChildFromPrefab($game, $parent, $result->name, $result->prefab, $childConfig);
+				$parent->children()->save($grandChild);
 				continue;
 			}
-			$this->createChild($game, $parent, $result->name, $childConfig);
+			$grandChild = $this->createChild($game, $parent, $result->name, $childConfig);
+			$parent->children()->save($grandChild);
 		}
+		echo "children: " . json_encode($parent->children->pluck('id')) . PHP_EOL;
 	}
 
 	private function createChildFromPrefab(
@@ -105,11 +108,11 @@ abstract class BaseBuilder extends Base
 		string $childName,
 		string $childPrefab,
 		array $childConfig
-	): void {
+	): GameObject {
 		$foundChildPrefab = Prefab::findPrefab($childPrefab);
 		$active = $childConfig['active'] ?? true;
 		$prefabAttrs = $childConfig['attributes'] ?? [];
-		$newChildGameObject = $foundChildPrefab->createPrefabStructure(
+		$child = $foundChildPrefab->createPrefabStructure(
 			$game,
 			$parent,
 			$childName,
@@ -121,23 +124,27 @@ abstract class BaseBuilder extends Base
 				continue;
 			}
 			if ($grandChildName === 'states') {
-				$this->createStateComponents($newChildGameObject, $grandChildConfig);
+				$this->createStateComponents($child, $grandChildConfig);
 				continue;
 			}
 			if ($grandChildName === 'components') {
-				$this->createComponents($newChildGameObject, $grandChildConfig);
+				$this->createComponents($child, $grandChildConfig);
 				continue;
 			}
 			$result = $this->getChildNameParser()->parse($grandChildName);
 			if ($result->isPrefab) {
-				$this->createChildFromPrefab($game, $newChildGameObject, $result->name, $result->prefab, $grandChildConfig);
+				$grandChild = $this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
+				$child->children()->save($grandChild);
 				continue;
 			}
-			$this->createChild($game, $newChildGameObject, $result->name, $grandChildConfig);
+			$grandChild = $this->createChild($game, $child, $result->name, $grandChildConfig);
+			$child->children()->save($grandChild);
 		}
+		echo "children: " . json_encode($parent->children->pluck('id')) . PHP_EOL;
+		return $child;
 	}
 
-	private function createChild(Game $game, GameObject $parent, string $childName, array $childConfig): void
+	private function createChild(Game $game, GameObject $parent, string $childName, array $childConfig): GameObject
 	{
 		$child = GameObject::create([
 			'name' => $childName,
@@ -159,10 +166,14 @@ abstract class BaseBuilder extends Base
 			}
 			$result = $this->getChildNameParser()->parse($grandChildName);
 			if ($result->isPrefab) {
-				$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
+				$grandChild = $this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
+				$child->children()->save($grandChild);
 				continue;
 			}
-			$this->createChild($game, $child, $result->name, $grandChildConfig);
+			$grandChild = $this->createChild($game, $child, $result->name, $grandChildConfig);
+			$child->children()->save($grandChild);
 		}
+		echo "children: " . json_encode($parent->children->pluck('id')) . PHP_EOL;
+		return $child;
 	}
 }
