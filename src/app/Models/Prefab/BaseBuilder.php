@@ -3,7 +3,6 @@
 namespace App\Models\Prefab;
 
 use App\Models\Game;
-use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
 use App\Models\Prefab\Parsers\GameObjectNameParser;
@@ -85,7 +84,10 @@ abstract class BaseBuilder extends Base
 			return;
 		}
 		foreach ($children as $childName => $childConfig) {
-			if ($childName === 'states' || $childName === 'components') {
+			if (
+				$childName === 'states' ||
+				$childName === 'components' || $childName === 'active' || $childName === 'attributes'
+			) {
 				continue;
 			}
 			$result = $this->getChildNameParser()->parse($childName);
@@ -97,17 +99,42 @@ abstract class BaseBuilder extends Base
 		}
 	}
 
-	private function createChildFromPrefab(Game $game, GameObject $parent, string $childName, string $childPrefab, array $childConfig): bool
-	{
-		// if ($child_prefab_name = $childConfig['prefab'] ?? null) {
-		if ($child_prefab = Prefab::findPrefab($childPrefab)) {
-			$active = $childConfig['active'] ?? true;
-			$child_attributes = $childConfig['attributes'] ?? [];
-			$child_prefab->createPrefabStructure($game, $parent, $childName, $active, $child_attributes);
-			return true;
+	private function createChildFromPrefab(
+		Game $game,
+		GameObject $parent,
+		string $childName,
+		string $childPrefab,
+		array $childConfig
+	): void {
+		$foundChildPrefab = Prefab::findPrefab($childPrefab);
+		$active = $childConfig['active'] ?? true;
+		$prefabAttrs = $childConfig['attributes'] ?? [];
+		$newChildGameObject = $foundChildPrefab->createPrefabStructure(
+			$game,
+			$parent,
+			$childName,
+			$active,
+			$prefabAttrs
+		);
+		foreach ($childConfig as $grandChildName => $grandChildConfig) {
+			if ($grandChildName === 'active' || $grandChildName === 'attributes') {
+				continue;
+			}
+			if ($grandChildName === 'states') {
+				$this->createStateComponents($newChildGameObject, $grandChildConfig);
+				continue;
+			}
+			if ($grandChildName === 'components') {
+				$this->createComponents($newChildGameObject, $grandChildConfig);
+				continue;
+			}
+			$result = $this->getChildNameParser()->parse($grandChildName);
+			if ($result->isPrefab) {
+				$this->createChildFromPrefab($game, $newChildGameObject, $result->name, $result->prefab, $grandChildConfig);
+				continue;
+			}
+			$this->createChild($game, $newChildGameObject, $result->name, $grandChildConfig);
 		}
-		// }
-		return false;
 	}
 
 	private function createChild(Game $game, GameObject $parent, string $childName, array $childConfig): void
@@ -118,21 +145,24 @@ abstract class BaseBuilder extends Base
 			'game_object_id' => $parent->id,
 			'game_id' => $game->id
 		]);
-		foreach ($childConfig as $key => $value) {
-			if ($key === 'states') {
-				$this->createStateComponents($child, $value);
+		foreach ($childConfig as $grandChildName => $grandChildConfig) {
+			if ($grandChildName === 'active' || $grandChildName === 'attributes') {
 				continue;
 			}
-			if ($key === 'components') {
-				$this->createComponents($child, $value);
+			if ($grandChildName === 'states') {
+				$this->createStateComponents($child, $grandChildConfig);
 				continue;
 			}
-			$result = $this->getChildNameParser()->parse($key);
+			if ($grandChildName === 'components') {
+				$this->createComponents($child, $grandChildConfig);
+				continue;
+			}
+			$result = $this->getChildNameParser()->parse($grandChildName);
 			if ($result->isPrefab) {
-				$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $value);
+				$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
 				continue;
 			}
-			$this->createChild($game, $child, $result->name, $value);
+			$this->createChild($game, $child, $result->name, $grandChildConfig);
 		}
 	}
 }

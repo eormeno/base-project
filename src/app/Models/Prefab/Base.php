@@ -4,6 +4,7 @@ namespace App\Models\Prefab;
 
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 abstract class Base extends Model
 {
@@ -27,7 +28,7 @@ abstract class Base extends Model
     {
         $prefab = self::where('name', $name)->first();
         if (!$prefab) {
-            return null;
+            throw new InvalidArgumentException("Prefab $name not found");
         }
         $type = $prefab->type;
         return new $type($prefab->toArray());
