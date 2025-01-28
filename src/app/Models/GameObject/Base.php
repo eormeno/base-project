@@ -53,7 +53,7 @@ abstract class Base extends Model
 
 	public function children(): HasMany
 	{
-		return $this->hasMany(GameObject::class);
+		return $this->hasMany(GameObject::class, 'game_object_id');
 	}
 
 	public function parent(): BelongsTo
