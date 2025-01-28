@@ -130,11 +130,10 @@ abstract class BaseBuilder extends Base
 			}
 			$result = $this->getChildNameParser()->parse($grandChildName);
 			if ($result->isPrefab) {
-				$grandChild = $this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
-				$child->children()->save($grandChild);
+				$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
 				continue;
 			}
-			$grandChild = $this->createChild($game, $child, $result->name, $grandChildConfig);
+			$this->createChild($game, $child, $result->name, $grandChildConfig);
 		}
 		return $child;
 	}
@@ -161,11 +160,10 @@ abstract class BaseBuilder extends Base
 			}
 			$result = $this->getChildNameParser()->parse($grandChildName);
 			if ($result->isPrefab) {
-				$grandChild = $this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
-				$child->children()->save($grandChild);
+				$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
 				continue;
 			}
-			$grandChild = $this->createChild($game, $child, $result->name, $grandChildConfig);
+			$this->createChild($game, $child, $result->name, $grandChildConfig);
 		}
 		return $child;
 	}
