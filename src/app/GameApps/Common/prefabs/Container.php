@@ -22,6 +22,7 @@ class Container extends Prefab
 
 	public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
 	{
+		echo "Container::afterInstantiate " . $gameObject . "\n";
 		$containerComponent = $gameObject->getComponent('container');
 		// $children = [];
 		// foreach ($gameObject->children as $child) {
