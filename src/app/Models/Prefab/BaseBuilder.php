@@ -31,17 +31,24 @@ abstract class BaseBuilder extends Base
 
 	final public function buildGameObject(Game $game, bool $active = true, array $attributes = []): GameObject
 	{
-		$gameObject = DB::transaction(function () use ($game, $active, $attributes) {
-			return $this->buildGameObjectFromPrefab(
-				game: $game,
-				parent: null,
-				gameObjectName: null,
-				active: $active,
-				initParams: $attributes
-			);
-		});
-		// TODO Hay que ver si se ejecuta el awake de los componentes...
-		return $gameObject;
+		// $gameObject = DB::transaction(function () use ($game, $active, $attributes) {
+		// 	return $this->buildGameObjectFromPrefab(
+		// 		game: $game,
+		// 		parent: null,
+		// 		gameObjectName: null,
+		// 		active: $active,
+		// 		initParams: $attributes
+		// 	);
+		// });
+		// // TODO Hay que ver si se ejecuta el awake de los componentes...
+		// return $gameObject;
+		return $this->buildGameObjectFromPrefab(
+			game: $game,
+			parent: null,
+			gameObjectName: null,
+			active: $active,
+			initParams: $attributes
+		);
 	}
 
 	private function buildGameObjectFromPrefab(
@@ -62,7 +69,8 @@ abstract class BaseBuilder extends Base
 		$this->componentManager()->createStateComponents($gameObject, $this->structure()['states'] ?? []);
 		$this->componentManager()->createComponents($gameObject, $this->structure()['components'] ?? []);
 		$this->createChildren($game, $gameObject, $this->structure());
-		$this->afterInstantiate($gameObject, $initParams);
+		$this->componentManager()->awakeComponents($gameObject, $initParams);
+		//$this->afterInstantiate($gameObject, $initParams);
 		return $gameObject;
 	}
 
@@ -123,6 +131,7 @@ abstract class BaseBuilder extends Base
 			}
 			$this->createChild($game, $child, $result->name, $grandChildConfig);
 		}
+		$this->componentManager()->awakeComponents($child, $prefabAttrs);
 		return $child;
 	}
 
@@ -153,6 +162,7 @@ abstract class BaseBuilder extends Base
 			}
 			$this->createChild($game, $child, $result->name, $grandChildConfig);
 		}
+		$this->componentManager()->awakeComponents($child, $childConfig['attributes'] ?? []);
 		return $child;
 	}
 }

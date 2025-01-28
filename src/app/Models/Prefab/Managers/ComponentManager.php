@@ -6,6 +6,14 @@ use App\Models\GameObject\GameObject;
 
 class ComponentManager
 {
+
+	public function awakeComponents(GameObject $gameObject, array $initParams): void
+	{
+		$gameObject->components->each(function ($component) use ($initParams) {
+			$component->subclass()->onAwake($initParams);
+		});
+	}
+
 	public function createComponents(GameObject $gameObject, array $components): void
 	{
 		foreach ($components as $slug_type => $attributes) {

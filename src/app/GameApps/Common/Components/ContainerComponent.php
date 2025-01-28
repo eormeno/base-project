@@ -15,6 +15,13 @@ class ContainerComponent extends PersistentComponent
 		];
 	}
 
+	public function onAwake(array $initParams): void
+	{
+		$gameObject = $this->gameObject;
+		echo $gameObject . ".ContainerComponent::onAwake(" . json_encode($initParams) . ")\n";
+		$this->update($initParams);
+	}
+
 	public function view()
 	{
 		return [

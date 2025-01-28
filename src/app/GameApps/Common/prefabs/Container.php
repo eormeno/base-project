@@ -2,35 +2,27 @@
 namespace App\GameApps\Common\prefabs;
 
 use App\Models\Prefab\Prefab;
-use App\Models\GameObject\GameObject;
 
 class Container extends Prefab
 {
 	public static function structure(): array
 	{
 		return [
-			'components' => self::components(),
+			'components' => ['container' => []]
 		];
 	}
 
-	public static function components(): array
-	{
-		return [
-			'container' => []
-		];
-	}
+	// public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
+	// {
+	// 	$chidren = $gameObject->children;
 
-	public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
-	{
-		$chidren = $gameObject->children;
-
-		echo "Container::afterInstantiate " . $gameObject . " " . count($chidren) . "\n";
-		$containerComponent = $gameObject->getComponent('container');
-		// $children = [];
-		// foreach ($gameObject->children as $child) {
-		// 	$children[] = $child->id;
-		// }
-		$containerComponent->update($attributes);
-		$containerComponent->update(['children' => $gameObject->children->pluck('id')]);
-	}
+	// 	echo "Container::afterInstantiate " . $gameObject . " " . count($chidren) . "\n";
+	// 	$containerComponent = $gameObject->getComponent('container');
+	// 	// $children = [];
+	// 	// foreach ($gameObject->children as $child) {
+	// 	// 	$children[] = $child->id;
+	// 	// }
+	// 	$containerComponent->update($attributes);
+	// 	$containerComponent->update(['children' => $gameObject->children->pluck('id')]);
+	// }
 }

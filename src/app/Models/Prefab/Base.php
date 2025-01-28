@@ -20,9 +20,9 @@ abstract class Base extends Model
         return [];
     }
 
-    public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
-    {
-    }
+    // public function afterInstantiate(GameObject $gameObject, array $attributes = []): void
+    // {
+    // }
 
     public static function findPrefab(string $name): ?Prefab
     {

@@ -4,8 +4,11 @@ namespace App\Models\Components;
 
 class Component extends ComponentStateManager
 {
-	public function onAwake(): void
+	public function onAwake(array $initParams): void
 	{
+		// $gameObject = $this->gameObject;
+		// $className = class_basename($this);
+		// $this->log("$gameObject.$className::onAwake()");
 	}
 
 	public function onEnter(): void

@@ -17,10 +17,6 @@ class ComponentFinders extends ComponentBase
         ])->first()->subclass();
     }
 
-	protected function validState(string $state): bool {
-		return $this->super->gameObject->next_state_components->has($state);
-	}
-
     public function getService(string $slug_type): GameService
     {
         return $this->super->gameObject->game->getService($slug_type);

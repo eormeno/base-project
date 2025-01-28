@@ -22,7 +22,13 @@ class ComponentBase extends Model
 
 	public function gameObject(): BelongsTo
 	{
-		return $this->belongsTo(GameObject::class);
+		// if current class is Component.
+		if (get_class($this) === Component::class) {
+			return $this->belongsTo(GameObject::class);
+		}
+		// if current class is subclass of Component.
+		$super = $this->super;
+		return $super->gameObject();
 	}
 
 	public function super(): BelongsTo
@@ -49,5 +55,10 @@ class ComponentBase extends Model
 		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true]);
 		unset ($attributes['enabled'], $attributes['type']);
 		return $type::create(array_merge(['id' => $component->id], $attributes));
+	}
+
+	public function __tostring(): string
+	{
+		return class_basename($this);
 	}
 }

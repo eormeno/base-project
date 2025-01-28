@@ -14,6 +14,11 @@ class LabelComponent extends PersistentComponent
         ];
     }
 
+	public function onAwake(array $initParams): void
+	{
+		$this->update($initParams);
+	}
+
 	public function view()
 	{
 		return [
