@@ -92,14 +92,11 @@ abstract class BaseBuilder extends Base
 			}
 			$result = $this->getChildNameParser()->parse($childName);
 			if ($result->isPrefab) {
-				$grandChild = $this->createChildFromPrefab($game, $parent, $result->name, $result->prefab, $childConfig);
-				$parent->children()->save($grandChild);
+				$this->createChildFromPrefab($game, $parent, $result->name, $result->prefab, $childConfig);
 				continue;
 			}
-			$grandChild = $this->createChild($game, $parent, $result->name, $childConfig);
-			$parent->children()->save($grandChild);
+			$this->createChild($game, $parent, $result->name, $childConfig);
 		}
-		echo "children: " . json_encode($parent->children->pluck('id')) . PHP_EOL;
 	}
 
 	private function createChildFromPrefab(
@@ -138,9 +135,7 @@ abstract class BaseBuilder extends Base
 				continue;
 			}
 			$grandChild = $this->createChild($game, $child, $result->name, $grandChildConfig);
-			$child->children()->save($grandChild);
 		}
-		echo "children: " . json_encode($parent->children->pluck('id')) . PHP_EOL;
 		return $child;
 	}
 
@@ -171,9 +166,7 @@ abstract class BaseBuilder extends Base
 				continue;
 			}
 			$grandChild = $this->createChild($game, $child, $result->name, $grandChildConfig);
-			$child->children()->save($grandChild);
 		}
-		echo "children: " . json_encode($parent->children->pluck('id')) . PHP_EOL;
 		return $child;
 	}
 }
