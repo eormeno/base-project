@@ -14,6 +14,7 @@ class BouncingBallRoot extends Prefab
 			'initial_view:bba.initial-view-prefab' => [],
 			'object_1:container' => [
 				'object_1_1:container' => [
+					'attributes' => ['layout' => 'horizontal'],
 					'object_1_1_1:label' => ['attributes' => ['text' => '1.1.1', 'style' => 'normal']],
 					'object_1_1_2:label' => ['attributes' => ['text' => '1.1.2', 'style' => 'normal']],
 					'object_1_1_3:button' => ['attributes' => ['text' => 'Button 1.1.3', 'event'=>'start']],
