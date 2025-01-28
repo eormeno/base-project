@@ -16,7 +16,9 @@ class LabelComponent extends PersistentComponent
 
 	public function onAwake(array $initParams): void
 	{
-		$this->update($initParams);
+		$this->text = $initParams['text'] ?? '';
+		$this->style = $initParams['style'] ?? '';
+		$this->save();
 	}
 
 	public function view()

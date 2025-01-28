@@ -18,8 +18,10 @@ class ContainerComponent extends PersistentComponent
 	public function onAwake(array $initParams): void
 	{
 		$gameObject = $this->gameObject;
-		echo $gameObject . ".ContainerComponent::onAwake(" . json_encode($initParams) . ")\n";
-		$this->update($initParams);
+		// echo $gameObject . ".ContainerComponent::onAwake(" . json_encode($initParams) . ")\n";
+		$this->layout = $initParams['layout'] ?? 'vertical';
+		$this->children = $gameObject->children()->pluck('id')->toArray();
+		$this->save();
 	}
 
 	public function view()
