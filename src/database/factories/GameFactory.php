@@ -69,9 +69,9 @@ class GameFactory extends Factory
 	public function withGameObject(): static
 	{
 		return $this->afterCreating(function ($game) {
-			$prefab_attributes = $game->gameApp->prefab_attributes ?? [];
+			$appPrefabAttributes = $game->gameApp->prefab_attributes ?? [];
 			$prefab = Prefab::castPrefab($game->gameApp->prefab);
-			$root = $prefab->buildGameObject(game: $game, active: true, attributes: $prefab_attributes)->id;
+			$root = $prefab->buildRootGameObject($game, true, $appPrefabAttributes)->id;
 			$game->update(['game_object_id' => $root]);
 		});
 	}

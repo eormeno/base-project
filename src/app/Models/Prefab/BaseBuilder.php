@@ -29,7 +29,7 @@ abstract class BaseBuilder extends Base
 		}
 	}
 
-	final public function buildGameObject(Game $game, bool $active = true, array $attributes = []): GameObject
+	public function buildRootGameObject(Game $game, bool $active = true, array $attributes = []): GameObject
 	{
 		$gameObject = DB::transaction(function () use ($game, $active, $attributes) {
 			return $this->buildGameObjectFromPrefab(
@@ -40,7 +40,6 @@ abstract class BaseBuilder extends Base
 				initParams: $attributes
 			);
 		});
-		// TODO Hay que ver si se ejecuta el awake de los componentes...
 		return $gameObject;
 	}
 
