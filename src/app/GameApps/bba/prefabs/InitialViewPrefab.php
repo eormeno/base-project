@@ -12,7 +12,7 @@ class InitialViewPrefab extends Prefab
 			'title:label' => ['attributes' => ['text' => 'Bouncing Ball', 'style' => 'title']],
 			'rules:label' => ['attributes' => ['text' => 'Click the ball to score points', 'style' => 'paragraph']],
 			'scores:label' => ['attributes' => ['text' => 'Scores: 0', 'style' => 'paragraph']],
-			'button:label' => ['attributes' => ['text' => 'Start', 'event' => 'start']],
+			'start_button:button' => ['attributes' => ['text' => 'Start', 'event' => 'start']],
 		];
 	}
 }
