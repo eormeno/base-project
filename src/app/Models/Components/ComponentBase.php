@@ -13,10 +13,9 @@ class ComponentBase extends Model
 {
 	use DebugHelper;
 	public $timestamps = false;
-	protected $fillable = ['type', 'game_object_id', 'enabled', 'awoke', 'state', 'messages'];
+	protected $fillable = ['type', 'game_object_id', 'enabled', 'state', 'messages'];
 	protected $casts = [
 		'enabled' => 'boolean',
-		'awoke' => 'boolean',
 		'messages' => 'array',
 	];
 
@@ -29,6 +28,11 @@ class ComponentBase extends Model
 		// if current class is subclass of Component.
 		$super = $this->super;
 		return $super->gameObject();
+	}
+
+	public function parentGameObject(): GameObject | null
+	{
+		return $this->gameObject()->first()->parent()->first();
 	}
 
 	public function super(): BelongsTo

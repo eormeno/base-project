@@ -137,7 +137,6 @@ classDiagram
     class Component {
         +string type
         +bool enabled
-        +bool awoke
         +static state()
         +onAwake()
         +onStart()
@@ -261,7 +260,6 @@ erDiagram
         string type
         string state
         bool enabled
-        bool awoke
     }
 
     users {

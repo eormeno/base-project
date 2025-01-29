@@ -24,6 +24,7 @@ class LabelComponent extends PersistentComponent
 	public function view()
 	{
 		return [
+			'parent' => $this->parentGameObject()->id ?? null,
 			'type' => 'label',
 			'text' => $this->text,
 			'style' => $this->style,

@@ -23,6 +23,7 @@ class ButtonComponent extends PersistentComponent
 	public function view()
 	{
 		return [
+			'parent' => $this->parentGameObject()->id ?? null,
 			'type' => 'button',
 			'event' => $this->event,
 			'text' => $this->text,

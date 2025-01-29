@@ -58,7 +58,7 @@ abstract class Base extends Model
 
 	public function parent(): BelongsTo
 	{
-		return $this->belongsTo(GameObject::class);
+		return $this->belongsTo(GameObject::class, 'game_object_id');
 	}
 
 	protected function currentStateComponent(): ?Component
