@@ -9,10 +9,10 @@ class InitialStateComponent extends PersistentComponent
 {
 	use HasNamespacePrefix;
 
-	public function view()
-	{
-		return [
-			'type' => 'initial-state',
-		];
-	}
+	// public function view()
+	// {
+	// 	return [
+	// 		'type' => 'initial-state',
+	// 	];
+	// }
 }
