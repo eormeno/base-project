@@ -5,12 +5,12 @@
     <script src="{{ asset('js/webgl-go-renderer.js') }}"></script>
 
     <x-slot name="title">
-        {{ __("$currentGame->title") }}
+        {{ __($currentGame->title) }}
     </x-slot>
 
     <div class="left-1/2 border mx-auto max-w-min border-gray-600 rounded-md p-2 bg-slate-200">
-        <canvas id="glCanvas" width="{{ $gameApp->width }}" height="{{ $gameApp->height }}"
-            style="width: {{ $gameApp->width }}px; height: {{ $gameApp->height }}px;"></canvas>
+        <div id="glCanvas" width="{{ $gameApp->width }}" height="{{ $gameApp->height }}"
+            style="width: {{ $gameApp->width }}px; height: {{ $gameApp->height }}px;"></div>
     </div>
 </x-guess-the-number-layout>
 

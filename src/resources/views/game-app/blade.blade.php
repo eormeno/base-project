@@ -7,7 +7,7 @@
     <script src="{{ asset('js/go-renderer.js') }}"></script>
 
     <x-slot name="title">
-        {{ __("$currentGame->title") }}
+        {{ __($currentGame->title) }}
     </x-slot>
 
     <div class="left-1/2 border mx-auto border-gray-600 rounded-md p-2 max-w-md bg-slate-200">

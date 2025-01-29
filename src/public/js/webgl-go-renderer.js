@@ -39,7 +39,10 @@ function sendEvent(event, formData = {}) {
                 } else {
                     json = JSON.parse(data);
                     stringified = JSON.stringify(json, null, 2);
-                    console.log(stringified);
+                    //console.log(stringified);
+					// put the stringified JSON in the glCanvas element
+					document.getElementById('glCanvas').innerHTML = stringified;
+					eventSent = false;
                 }
             } catch (error) {
                 console.error(error);
@@ -49,16 +52,4 @@ function sendEvent(event, formData = {}) {
             console.error(error);
             eventSent = false;
         });
-}
-
-// TODO move to a helper file and optimize it
-function decodeBase64(data) {
-    const binaryString = atob(data);
-    //return binaryString;
-    const bytes = new Uint8Array(binaryString.length);
-    //console.log(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return new TextDecoder().decode(bytes);
 }

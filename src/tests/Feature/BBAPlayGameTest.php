@@ -17,7 +17,7 @@ test("The game's root gameobject is created", function () {
 	// showTable('components');
 	showTable('label_components');
 	// showTable('button_components');
-	// showTable('container_components');
+	 showTable('container_components');
 });
 
 test("Events interaction returns the active gameobject with its view", function () {

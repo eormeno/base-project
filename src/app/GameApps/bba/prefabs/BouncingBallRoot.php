@@ -11,7 +11,8 @@ class BouncingBallRoot extends Prefab
 	{
 		return [
 			'states' => self::states(),
-			'initial_view:bba.initial-view-prefab' => [],
+			'initial_view:container' => self::initialView(),
+			// 'initial_view:bba.initial-view-prefab' => [],
 
 			// 'object_1:container' => [
 			// 	'object_1_1:container' => [
@@ -33,6 +34,19 @@ class BouncingBallRoot extends Prefab
 			// 		'object_1_4_2:label' => ['attributes' => ['text' => '1.4.2', 'style' => 'heading-3']],
 			// 	],
 			// ],
+		];
+	}
+
+	private static function initialView(): array
+	{
+		return [
+			'background:container' => [
+				'attributes' => ['layout' => 'vertical'],
+				'title:label' => ['attributes' => ['text' => 'Bouncing Ball', 'style' => 'title']],
+				'rules:label' => ['attributes' => ['text' => 'Click the ball to score points', 'style' => 'paragraph']],
+				'scores:label' => ['attributes' => ['text' => 'Scores: 0', 'style' => 'paragraph']],
+				'start_button:button' => ['attributes' => ['text' => 'Start', 'event' => 'start']],
+			],
 		];
 	}
 
