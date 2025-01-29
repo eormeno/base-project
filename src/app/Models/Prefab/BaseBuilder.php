@@ -78,12 +78,6 @@ abstract class BaseBuilder extends Base
 				continue;
 			}
 			$this->buildChild($game, $parent, $childName, $childConfig);
-			// $result = $this->gameObjectNameParser()->parse($childName);
-			// if ($result->isPrefab) {
-			// 	$this->createChildFromPrefab($game, $parent, $result->name, $result->prefab, $childConfig);
-			// 	continue;
-			// }
-			// $this->createChild($game, $parent, $result->name, $childConfig);
 		}
 	}
 
@@ -127,85 +121,8 @@ abstract class BaseBuilder extends Base
 				continue;
 			}
 			$this->buildChild($game, $child, $grandChildName, $grandChildConfig);
-			// $result = $this->gameObjectNameParser()->parse($grandChildName);
-			// if ($result->isPrefab) {
-			// 	$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
-			// 	continue;
-			// }
-			// $this->createChild($game, $child, $result->name, $grandChildConfig);
 		}
 		$this->componentManager()->awakeComponents($child, $attributes);
 		return $child;
 	}
-
-	// private function createChildFromPrefab(
-	// 	Game $game,
-	// 	GameObject $parent,
-	// 	string $childName,
-	// 	string $childPrefab,
-	// 	array $childConfig
-	// ): GameObject {
-	// 	$foundChildPrefab = Prefab::findPrefab($childPrefab);
-	// 	$active = $childConfig['active'] ?? true;
-	// 	$prefabAttrs = $childConfig['attributes'] ?? [];
-	// 	$child = $foundChildPrefab->buildGameObjectFromPrefab(
-	// 		$game,
-	// 		$parent,
-	// 		$childName,
-	// 		$active,
-	// 		$prefabAttrs
-	// 	);
-	// 	foreach ($childConfig as $grandChildName => $grandChildConfig) {
-	// 		if ($grandChildName === 'active' || $grandChildName === 'attributes') {
-	// 			continue;
-	// 		}
-	// 		if ($grandChildName === 'states') {
-	// 			$this->componentManager()->createStateComponents($child, $grandChildConfig);
-	// 			continue;
-	// 		}
-	// 		if ($grandChildName === 'components') {
-	// 			$this->componentManager()->createComponents($child, $grandChildConfig);
-	// 			continue;
-	// 		}
-	// 		$result = $this->gameObjectNameParser()->parse($grandChildName);
-	// 		if ($result->isPrefab) {
-	// 			$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
-	// 			continue;
-	// 		}
-	// 		$this->createChild($game, $child, $result->name, $grandChildConfig);
-	// 	}
-	// 	$this->componentManager()->awakeComponents($child, $prefabAttrs);
-	// 	return $child;
-	// }
-
-	// private function createChild(Game $game, GameObject $parent, string $childName, array $childConfig): GameObject
-	// {
-	// 	$child = GameObject::create([
-	// 		'name' => $childName,
-	// 		'active' => $childConfig['active'] ?? true,
-	// 		'game_object_id' => $parent->id,
-	// 		'game_id' => $game->id
-	// 	]);
-	// 	foreach ($childConfig as $grandChildName => $grandChildConfig) {
-	// 		if ($grandChildName === 'active' || $grandChildName === 'attributes') {
-	// 			continue;
-	// 		}
-	// 		if ($grandChildName === 'states') {
-	// 			$this->componentManager()->createStateComponents($child, $grandChildConfig);
-	// 			continue;
-	// 		}
-	// 		if ($grandChildName === 'components') {
-	// 			$this->componentManager()->createComponents($child, $grandChildConfig);
-	// 			continue;
-	// 		}
-	// 		$result = $this->gameObjectNameParser()->parse($grandChildName);
-	// 		if ($result->isPrefab) {
-	// 			$this->createChildFromPrefab($game, $child, $result->name, $result->prefab, $grandChildConfig);
-	// 			continue;
-	// 		}
-	// 		$this->createChild($game, $child, $result->name, $grandChildConfig);
-	// 	}
-	// 	$this->componentManager()->awakeComponents($child, $childConfig['attributes'] ?? []);
-	// 	return $child;
-	// }
 }
