@@ -17,7 +17,7 @@ class GameObjectNameParser
 	{
 		$childName = trim($childName);
 		if (empty($childName)) {
-			throw new InvalidArgumentException('Child name cannot be empty.');
+			throw new InvalidArgumentException('GameObject name cannot be empty.');
 		}
 	}
 
@@ -25,10 +25,10 @@ class GameObjectNameParser
 	{
 		$parts = explode(':', $childName);
 		if (count($parts) > 2) {
-			throw new InvalidArgumentException('Child name format is invalid.');
+			throw new InvalidArgumentException('GameObject name format is invalid.');
 		}
 		if (empty($parts[0]) || (count($parts) === 2 && empty($parts[1]))) {
-			throw new InvalidArgumentException('Child name format is invalid.');
+			throw new InvalidArgumentException('GameObject name format is invalid.');
 		}
 		return $parts;
 	}
