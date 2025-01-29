@@ -29,6 +29,11 @@ abstract class Base extends Model
 		return $this->belongsTo(Game::class);
 	}
 
+	public function isRoot(): bool
+	{
+		return $this->game_object_id === null;
+	}
+
 	public function changeState(string $state): void
 	{
 		// disable the current state component

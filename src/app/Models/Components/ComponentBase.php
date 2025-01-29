@@ -32,7 +32,9 @@ class ComponentBase extends Model
 
 	public function parentGameObject(): GameObject | null
 	{
-		return $this->gameObject()->first()->parent()->first();
+		$parentGameObject= $this->gameObject()->first()->parent()->first();
+		$parentIsRoot = $parentGameObject->isRoot();
+		return $parentIsRoot ? null : $parentGameObject;
 	}
 
 	public function super(): BelongsTo
