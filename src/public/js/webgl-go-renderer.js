@@ -30,6 +30,7 @@ function sendEvent(event, formData = {}) {
         body: JSON.stringify({
             event: event,
             data: formData,
+            rendered: allIdsFromMap(),
         })
     }).then(response => response.text())
         .then(data => {
@@ -54,8 +55,14 @@ function sendEvent(event, formData = {}) {
         });
 }
 
+function allIdsFromMap() {
+    return Array.from(elementsMap.keys());
+}
+
 function createComponent(data, mainContainer) {
     Object.entries(data).forEach(([id, component]) => {
+        if (elementsMap.has(id)) return
+
         if (id === 'actives' || id == 'elapsed' || id == 'root') return;
 
         let element;
@@ -94,22 +101,15 @@ function createComponent(data, mainContainer) {
 }
 
 function handleEvent(eventType) {
-    // Lógica para manejar eventos
-    console.log(`Event triggered: ${eventType}`);
-    // Aquí puedes agregar la lógica específica para cada tipo de evento
+    sendEvent(eventType);
 }
 
 function renderComponents(responseData, mainContainerName) {
     const mainContainer = document.getElementById(mainContainerName || 'main');
-
     if (!mainContainer) {
         console.error(`No se encontró el contenedor principal con id "${mainContainerName}"`);
         return;
     }
-
-    // Limpiar solo el contenedor main
-    mainContainer.innerHTML = '';
-    elementsMap.clear();
 	setStyles();
     createComponent(responseData, mainContainer);
 }
