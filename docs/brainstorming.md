@@ -7,3 +7,7 @@
 - Se podrían definir los recursos con un path al estilo Godot. Por ejemplo: `res://images/guess-the-number.jpeg`. Esto permitiría diferenciar una simple cadena de texto de un recurso, además de poder incluir subcarpetas. Obviamente estos recursos físicamente estarían a partir de la carpeta `resources`, de la GameApp.
 
 - Crear un tipo de componente que se encargue de manejar la instanciaciación de prefabs.
+
+- Hacer que el manejo del idioma esté ubicado en cada prefix de aplicación de juego.
+
+- Hacer que los estilos/temas, sean recursos de cada aplicación de juego.

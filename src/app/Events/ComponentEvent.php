@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Component;
+use App\Models\Components\Component;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
