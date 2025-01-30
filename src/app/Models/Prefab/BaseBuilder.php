@@ -3,6 +3,7 @@
 namespace App\Models\Prefab;
 
 use App\Models\Game;
+use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use App\Models\GameObject\GameObject;
 use App\Models\Prefab\Managers\ComponentManager;
@@ -32,13 +33,7 @@ abstract class BaseBuilder extends Base
 	public function buildRootGameObject(Game $game, bool $active = true, array $attributes = []): GameObject
 	{
 		$gameObject = DB::transaction(function () use ($game, $active, $attributes) {
-			return $this->buildGameObjectFromPrefab(
-				game: $game,
-				parent: null,
-				gameObjectName: null,
-				active: $active,
-				initParams: $attributes
-			);
+			return $this->buildGameObjectFromPrefab($game, null, null, $active, $attributes);
 		});
 		return $gameObject;
 	}
@@ -50,6 +45,12 @@ abstract class BaseBuilder extends Base
 		bool $active = true,
 		array $initParams = []
 	): GameObject {
+		if ($gameObjectName === null) {
+			$gameObjectName = $this->name;
+		}
+		$activeState = $active ? 'active' : 'inactive';
+		echo "Building from prefab $gameObjectName $activeState\n";
+
 		$gameObject = GameObject::create(
 			[
 				'name' => $gameObjectName ?? $this->name,
@@ -87,19 +88,13 @@ abstract class BaseBuilder extends Base
 		string $childName,
 		array $childConfig
 	): GameObject {
-		$active = $childConfig['active'] ?? true;
+		$active = $active = $this->validateActive($childConfig, $childName);
 		$attributes = $childConfig['attributes'] ?? [];
 		$result = $this->gameObjectNameParser()->parse($childName);
 		$child = null;
 		if ($result->isPrefab) {
 			$foundChildPrefab = Prefab::findPrefab($result->prefab);
-			$child = $foundChildPrefab->buildGameObjectFromPrefab(
-				$game,
-				$parent,
-				$result->name,
-				$active,
-				$attributes
-			);
+			$child = $foundChildPrefab->buildGameObjectFromPrefab($game, $parent, $result->name, $active, $attributes);
 		} else {
 			$child = GameObject::create([
 				'name' => $result->name,
@@ -124,5 +119,17 @@ abstract class BaseBuilder extends Base
 		}
 		$this->componentManager()->awakeComponents($child, $attributes);
 		return $child;
+	}
+
+	private function validateActive(array $childConfig, string $childName): bool
+	{
+		if (array_key_exists('active', $childConfig)) {
+			$value = $childConfig['active'];
+			if (!is_bool($value)) {
+				throw new InvalidArgumentException("The 'active' key must be a boolean value for $childName.");
+			}
+			return $value;
+		}
+		return true;
 	}
 }

@@ -13,7 +13,7 @@ test("The game's root gameobject is created", function () {
 	$rootPrefab = existsRootPrefab('bba');
 	$rootGameObject = rootGameObjectIsCreated($newGame);
 	gameObjectHasComponents($rootPrefab,$rootGameObject);
-	// showTable('game_objects', ['id', 'name', 'active', 'game_id', 'game_object_id', 'state','state_components']);
+	showTable('game_objects', ['id', 'name', 'active', 'game_id', 'game_object_id', 'state','state_components']);
 	// showTable('components');
 	// showTable('label_components');
 	// showTable('button_components');
@@ -22,17 +22,18 @@ test("The game's root gameobject is created", function () {
 
 test("Events interaction returns the active gameobject with its view", function () {
 	$newGame = getUserPlayingGame('bba');
-	$game_app = $newGame->gameApp;
-	$prefab_name = $game_app->prefab_name;
 
 	// Reload the game (this must be the first event)
 	$event = createEvent('reload');
 	$response = $this->postJson(route('event', $newGame), $event);
-	if ($response->exception) {
-		throw $response->exception;
-	}
 	$response->assertStatus(200);
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+
+	// $event = createEvent('start');
+	// $response = $this->postJson(route('event', $newGame), $event);
+	// $response->assertStatus(200);
+	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+
 	/*
 	 * The expected json should have the following structure
 	 * {
