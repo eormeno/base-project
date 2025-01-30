@@ -3,6 +3,7 @@ var eventSent = false;
 var currentMillis = 0;
 var arrCachedViews = {};
 var arrClientRenderings = [];
+const elementsMap = new Map();
 
 window.onload = function () {
     sendEvent('reload', {}, true);
@@ -39,10 +40,9 @@ function sendEvent(event, formData = {}) {
                 } else {
                     json = JSON.parse(data);
                     stringified = JSON.stringify(json, null, 2);
-                    //console.log(stringified);
-					// put the stringified JSON in the glCanvas element
-					document.getElementById('glCanvas').innerHTML = stringified;
-					eventSent = false;
+                    console.log(stringified);
+                    renderComponents(json, 'glCanvas');
+                    eventSent = false;
                 }
             } catch (error) {
                 console.error(error);
@@ -52,4 +52,125 @@ function sendEvent(event, formData = {}) {
             console.error(error);
             eventSent = false;
         });
+}
+
+function createComponent(data, mainContainer) {
+    Object.entries(data).forEach(([id, component]) => {
+        if (id === 'actives' || id == 'elapsed' || id == 'root') return;
+
+        let element;
+
+        switch (component.type) {
+            case 'container':
+                element = document.createElement('div');
+				element.className = component.layout || 'vertical';
+                break;
+
+            case 'label':
+                element = document.createElement('span');
+                element.textContent = component.text;
+                if (component.style) element.className = component.style;
+                break;
+
+            case 'button':
+                element = document.createElement('button');
+                element.textContent = component.text;
+                if (component.event) {
+                    element.addEventListener('click', () => handleEvent(component.event));
+                }
+                break;
+        }
+
+        elementsMap.set(id, element);
+
+        if (component.parent) {
+            const parentElement = elementsMap.get(component.parent.toString());
+            parentElement?.appendChild(element);
+        } else {
+            // Agregar al contenedor principal
+            mainContainer.appendChild(element);
+        }
+    });
+}
+
+function handleEvent(eventType) {
+    // Lógica para manejar eventos
+    console.log(`Event triggered: ${eventType}`);
+    // Aquí puedes agregar la lógica específica para cada tipo de evento
+}
+
+function renderComponents(responseData, mainContainerName) {
+    const mainContainer = document.getElementById(mainContainerName || 'main');
+
+    if (!mainContainer) {
+        console.error(`No se encontró el contenedor principal con id "${mainContainerName}"`);
+        return;
+    }
+
+    // Limpiar solo el contenedor main
+    mainContainer.innerHTML = '';
+    elementsMap.clear();
+	setStyles();
+    createComponent(responseData, mainContainer);
+}
+
+function setStyles() {
+	addStyles({
+		"#glCanvas": {
+			"width": "100%",
+			"max-width": "800px",
+		},
+		".vertical": {
+			"display": "flex",
+			"flex-direction": "column",
+			"align-items": "center",
+			"gap": "10px",
+			"width": "100%"
+		},
+		".title": {
+			"font-size": "24px",
+			"font-weight": "bold",
+			"margin": "10px 0"
+		},
+		".paragraph": {
+			"font-size": "16px",
+			"margin": "5px 0"
+		},
+		"button": {
+			"padding": "5px 10px",
+			"background-color": "#007bff",
+			"color": "white",
+			"border": "none",
+			"border-radius": "4px",
+			"cursor": "pointer",
+			"transition": "background-color 0.3s"
+		},
+		"button:hover": {
+			"background-color": "#0056b3"
+		}
+	});
+}
+
+function addStyles(styles) {
+    let styleSheet = document.getElementById("dynamic-styles");
+
+    // Si no existe el <style>, lo creamos y lo agregamos al <head>
+    if (!styleSheet) {
+        styleSheet = document.createElement("style");
+        styleSheet.id = "dynamic-styles";
+        document.head.appendChild(styleSheet);
+    }
+
+    // Convertimos el objeto de estilos en reglas CSS y las agregamos al <style>
+    let cssText = "";
+    for (const selector in styles) {
+        if (styles.hasOwnProperty(selector)) {
+            const rules = Object.entries(styles[selector])
+                .map(([prop, value]) => `${prop}: ${value};`)
+                .join(" ");
+            cssText += `${selector} { ${rules} } `;
+        }
+    }
+
+    styleSheet.textContent += cssText;
 }
