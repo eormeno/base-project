@@ -48,9 +48,6 @@ abstract class BaseBuilder extends Base
 		if ($gameObjectName === null) {
 			$gameObjectName = $this->name;
 		}
-		$activeState = $active ? 'active' : 'inactive';
-		echo "Building from prefab $gameObjectName $activeState\n";
-
 		$gameObject = GameObject::create(
 			[
 				'name' => $gameObjectName ?? $this->name,
@@ -88,7 +85,7 @@ abstract class BaseBuilder extends Base
 		string $childName,
 		array $childConfig
 	): GameObject {
-		$active = $active = $this->validateActive($childConfig, $childName);
+		$active = $this->validateActive($childConfig, $childName);
 		$attributes = $childConfig['attributes'] ?? [];
 		$result = $this->gameObjectNameParser()->parse($childName);
 		$child = null;

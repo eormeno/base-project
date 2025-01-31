@@ -6,7 +6,6 @@ use App\Models\Game;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -16,10 +15,11 @@ abstract class Base extends Model
 
 	public $timestamps = false;
 
-	protected $fillable = ['name', 'active', 'game_object_id', 'game_id', 'state', 'state_components', 'indexed_children'];
+	protected $fillable = ['name', 'active', 'active_parents', 'game_object_id', 'game_id', 'state', 'state_components', 'indexed_children'];
 
 	protected $casts = [
 		'active' => 'boolean',
+		'active_parents' => 'boolean',
 		'state_components' => 'array',
 		'indexed_children' => 'array',
 	];
