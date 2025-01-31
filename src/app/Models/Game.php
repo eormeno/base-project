@@ -42,7 +42,7 @@ class Game extends Model
 	public function activeGameObjects(): array
 	{
 		return $this->gameObjects->filter(function ($gameObject) {
-			return $gameObject->active;
+			return $gameObject->is_active;
 		})->all();
 	}
 

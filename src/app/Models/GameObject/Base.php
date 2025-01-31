@@ -61,6 +61,20 @@ abstract class Base extends Model
 		return $this->hasMany(GameObject::class, 'game_object_id');
 	}
 
+	public function findChild(string $name): ?GameObject
+	{
+		return $this->children()->where('name', $name)->first();
+	}
+
+	public function updateActive(bool $value): void
+	{
+		if ($this->active === $value) {
+			return;
+		}
+		$this->update(['active' => $value]);
+		$this->children()->update(['active_parents' => $value]);
+	}
+
 	public function parent(): BelongsTo
 	{
 		return $this->belongsTo(GameObject::class, 'game_object_id');

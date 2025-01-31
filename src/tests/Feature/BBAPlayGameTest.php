@@ -13,7 +13,7 @@ test("The game's root gameobject is created", function () {
 	$rootPrefab = existsRootPrefab('bba');
 	$rootGameObject = rootGameObjectIsCreated($newGame);
 	gameObjectHasComponents($rootPrefab, $rootGameObject);
-	showTable('game_objects', ['id', 'name', 'is_active', 'game_id', 'game_object_id', 'state']);
+	// showTable('game_objects', ['id', 'name', 'is_active', 'game_id', 'game_object_id', 'state']);
 	// showTable('components');
 	// showTable('label_components');
 	// showTable('button_components');
@@ -29,6 +29,7 @@ test("Events interaction returns the active gameobject with its view", function 
 	// if ($response->exception)
 	// 	throw $response->exception;
 	$response->assertStatus(200);
+	showTable('game_objects', ['id', 'name', 'is_active', 'game_id', 'game_object_id', 'state']);
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
 	// $event = createEvent('start');
