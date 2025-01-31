@@ -14,7 +14,6 @@ class BouncingBallRoot extends Prefab
 			'initial_view:container' => self::initialView(),
 			'playing_view:container' => self::playingView(),
 			'game_over_view:container' => self::gameOverView(),
-			// 'initial_view:bba.initial-view-prefab' => [],
 		];
 	}
 
