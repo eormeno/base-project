@@ -27,7 +27,7 @@ test("Events interaction returns the active gameobject with its view", function 
 	$event = createEvent('reload');
 	$response = $this->postJson(route('event', $newGame), $event);
 	$response->assertStatus(200);
-	$rendered = filterResponseKeys($response);
+	$rendered = renderedIds($response);
 
 	$event = createEvent(name: 'start', rendered: $rendered);
 	$response = $this->postJson(route('event', $newGame), $event);

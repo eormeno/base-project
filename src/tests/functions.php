@@ -71,7 +71,7 @@ function createEvent(string $name, array $data = [], array $rendered = []): arra
 	return $event;
 }
 
-function filterResponseKeys($response, array $keysToRemove = ['elapsed', 'root', 'actives']): array
+function renderedIds($response, array $keysToRemove = ['elapsed', 'root', 'actives']): array
 {
 	$data = $response->getContent();
 	$dataKeys = array_keys(json_decode($data, true));
