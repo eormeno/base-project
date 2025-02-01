@@ -26,15 +26,12 @@ test("Events interaction returns the active gameobject with its view", function 
 	// Reload the game (this must be the first event)
 	$event = createEvent('reload');
 	$response = $this->postJson(route('event', $newGame), $event);
-	// showTable('game_objects', ['id', 'game_id', 'name', 'active', 'active_parents', 'game_object_id', 'state']);
-	if ($response->exception)
-		throw $response->exception;
 	$response->assertStatus(200);
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
-	// $event = createEvent('start');
-	// $response = $this->postJson(route('event', $newGame), $event);
-	// $response->assertStatus(200);
+	$event = createEvent('start');
+	$response = $this->postJson(route('event', $newGame), $event);
+	$response->assertStatus(200);
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
 	/*
