@@ -30,7 +30,7 @@ test("Events interaction returns the active gameobject with its view", function 
 	if ($response->exception)
 		throw $response->exception;
 	$response->assertStatus(200);
-	echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
 	// $event = createEvent('start');
 	// $response = $this->postJson(route('event', $newGame), $event);

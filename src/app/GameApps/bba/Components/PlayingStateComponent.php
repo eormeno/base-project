@@ -9,10 +9,21 @@ class PlayingStateComponent extends PersistentComponent
 {
 	use HasNamespacePrefix;
 
-	public function view()
+	public function onEnter(): void
 	{
-		return [
-			'type' => 'playing-state',
-		];
+		$playingView = $this->gameObject->findChild('playing_view');
+		if ($playingView) {
+			$this->log('PlayingStateComponent::onEnter() found playing_view');
+			$playingView->updateActive(true);
+		}
+	}
+
+	public function onExit(): void
+	{
+		$playingView = $this->gameObject->findChild('playing_view');
+		if ($playingView) {
+			$this->log('PlayingStateComponent::onExit() found playing_view');
+			$playingView->updateActive(false);
+		}
 	}
 }

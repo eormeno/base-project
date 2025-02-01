@@ -9,10 +9,21 @@ class GameOverStateComponent extends PersistentComponent
 {
 	use HasNamespacePrefix;
 
-	public function view()
+	public function onEnter(): void
 	{
-		return [
-			'type' => 'game-over-state',
-		];
+		$gameOverView = $this->gameObject->findChild('game_over_view');
+		if ($gameOverView) {
+			$this->log('GameOverStateComponent::onEnter() found game_over_view');
+			$gameOverView->updateActive(true);
+		}
+	}
+
+	public function onExit(): void
+	{
+		$gameOverView = $this->gameObject->findChild('game_over_view');
+		if ($gameOverView) {
+			$this->log('GameOverStateComponent::onExit() found game_over_view');
+			$gameOverView->updateActive(false);
+		}
 	}
 }
