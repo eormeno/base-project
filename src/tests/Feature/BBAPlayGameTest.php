@@ -27,56 +27,56 @@ test("Events interaction returns the active gameobject with its view", function 
 	$event = createEvent('reload');
 	$response = $this->postJson(route('event', $newGame), $event);
 	$response->assertStatus(200);
-	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+	$rendered = filterResponseKeys($response);
 
-	$event = createEvent('start');
+	$event = createEvent(name: 'start', rendered: $rendered);
 	$response = $this->postJson(route('event', $newGame), $event);
 	$response->assertStatus(200);
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
 	/*
-		* The expected json should have the following structure
-		* {
-		*     "root": 1,
-		*     "1":  // a base 64 encoded string
-		*     "actives": // an array with the active game objects, in this case "1"
-		* }
-		*-/
-	   $response->assertJsonStructure(['root', '1', 'actives',]);
-	   $this->assertIsString($response->json('1'));
-	   $this->assertIsArray($response->json('actives'));
-	   // The game should be in 'initial' state
-	   existsGameObjectsInDatabase([
-		   1 => [$prefab_name, $newGame->id, null, 'initial'],
-	   ]);
+		   * The expected json should have the following structure
+		   * {
+		   *     "root": 1,
+		   *     "1":  // a base 64 encoded string
+		   *     "actives": // an array with the active game objects, in this case "1"
+		   * }
+		   *-/
+		  $response->assertJsonStructure(['root', '1', 'actives',]);
+		  $this->assertIsString($response->json('1'));
+		  $this->assertIsArray($response->json('actives'));
+		  // The game should be in 'initial' state
+		  existsGameObjectsInDatabase([
+			  1 => [$prefab_name, $newGame->id, null, 'initial'],
+		  ]);
 
-	   // The user wants to play (a button is clicked that sends this event)
-	   $event = createEvent('want_to_play');
-	   $response = $this->postJson(route('event', $newGame), $event);
-	   $response->assertStatus(200);
-	   // The game should be in 'showing_clues' state
-	   existsGameObjectsInDatabase([
-		   1 => [$prefab_name, $newGame->id, null, 'showing_clue'],
-	   ]);
+		  // The user wants to play (a button is clicked that sends this event)
+		  $event = createEvent('want_to_play');
+		  $response = $this->postJson(route('event', $newGame), $event);
+		  $response->assertStatus(200);
+		  // The game should be in 'showing_clues' state
+		  existsGameObjectsInDatabase([
+			  1 => [$prefab_name, $newGame->id, null, 'showing_clue'],
+		  ]);
 
-	   // The user wants to play (a button is clicked that sends this event)
-	   $response = $this->postJson(route('event', $newGame), $event);
-	   $response->assertStatus(200);
-	   existsGameObjectsInDatabase([
-		   1 => [$prefab_name, $newGame->id, null, 'playing'],
-	   ]);
+		  // The user wants to play (a button is clicked that sends this event)
+		  $response = $this->postJson(route('event', $newGame), $event);
+		  $response->assertStatus(200);
+		  existsGameObjectsInDatabase([
+			  1 => [$prefab_name, $newGame->id, null, 'playing'],
+		  ]);
 
-	   // In test environment the random number is always 512
-	   $event = createEvent('guess', ['number' => 512]);
-	   $response = $this->postJson(route('event', $newGame), $event);
-	   $response->assertStatus(200);
-	   // The game should be in the 'success' state
-	   existsGameObjectsInDatabase([
-		   1 => [$prefab_name, $newGame->id, null, 'success'],
-	   ]);
-	   $this->withoutMockingConsoleOutput();
-	   showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
-	   */
+		  // In test environment the random number is always 512
+		  $event = createEvent('guess', ['number' => 512]);
+		  $response = $this->postJson(route('event', $newGame), $event);
+		  $response->assertStatus(200);
+		  // The game should be in the 'success' state
+		  existsGameObjectsInDatabase([
+			  1 => [$prefab_name, $newGame->id, null, 'success'],
+		  ]);
+		  $this->withoutMockingConsoleOutput();
+		  showTable('game_objects', ['id', 'name', 'active', 'game_object_id', 'state']);
+		  */
 });
 
 // test('Display tables', function () {
