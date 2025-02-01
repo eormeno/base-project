@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Contracts\IRenderer;
+use App\Models\GameObject\GameObject;
 
 class RendererService implements IRenderer
 {
@@ -34,14 +35,14 @@ class RendererService implements IRenderer
 		foreach ($views as $id => $view) {
 			$ret[$id] = $view;
 		}
-		$ret['actives'] = collect($game->activeGameObjects())->pluck('id')->toArray();
+		$ret['actives'] = collect(GameObject::activesOfGame($game)->get())->pluck('id')->toArray();
 		return $ret;
 	}
 
 	private function resolveActiveGameObjectsViews(Game $game, bool $jsonClient): array
 	{
 		$gameObject = $game->gameObject;
-		$gameObjects = $game->activeGameObjects();
+		$gameObjects = GameObject::activesOfGame($game)->get();
 		$views = [];
 		foreach ($gameObjects as $gameObject) {
 			$view = $gameObject->view();

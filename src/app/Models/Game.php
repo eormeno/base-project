@@ -6,6 +6,7 @@ use App\Contracts\IPersistent;
 use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -37,13 +38,6 @@ class Game extends Model
 	public function gameObjects(): HasMany
 	{
 		return $this->hasMany(GameObject::class);
-	}
-
-	public function activeGameObjects(): array
-	{
-		return $this->gameObjects->filter(function ($gameObject) {
-			return $gameObject->is_active;
-		})->all();
 	}
 
     public function players(): BelongsToMany

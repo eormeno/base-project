@@ -17,9 +17,6 @@ return new class extends Migration {
 			$table->boolean('active')->default(true);
 			// Whether the object's parents are active or not
 			$table->boolean('active_parents')->default(true);
-			// Whether the object is active and its parents are active. This is a virtual column that is calculated
-			// by the database. It only works with MySQL 5.7.5 and above, and MariaDB 10.2.1 and above and SQLite 3.25.0 and above.
-			$table->boolean('is_active')->virtualAs('active AND active_parents');
 			// The game that the object belongs to
 			$table->foreignId('game_id')->constrained('games')->onDelete('cascade');
 			// The parent object

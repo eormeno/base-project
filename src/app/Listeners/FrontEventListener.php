@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\FrontEvent;
+use App\Models\GameObject\GameObject;
 use App\Contracts\IFrontEventListener;
 
 class FrontEventListener implements IFrontEventListener
@@ -15,7 +16,7 @@ class FrontEventListener implements IFrontEventListener
         //$event->game->gameObject->handle($event);
 		// itera todos los gameObjects activos del juego
 		// y les envía el evento
-		$gameObjects = $event->game->activeGameObjects();
+		$gameObjects = GameObject::activesOfGame($event->game)->get();
 		// TODO agregar también un filtro de sólo los game objects que son menajados por eventos.
 		foreach ($gameObjects as $gameObject) {
 			$gameObject->handle($event);

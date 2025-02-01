@@ -34,21 +34,9 @@ abstract class Base extends Model
 		return $this->game_object_id === null;
 	}
 
-	public function changeState(string $state): void
+	public function isActive(): bool
 	{
-		// disable the current state component
-		$stateComponent = $this->currentStateComponent();
-		if ($stateComponent) {
-			$stateComponent->super()->update(['enabled' => false]);
-			$stateComponent->onExit();
-		}
-		$this->update(['state' => $state]);
-		// enable the new state component
-		$stateComponent = $this->currentStateComponent();
-		if ($stateComponent) {
-			$stateComponent->super()->update(['enabled' => true]);
-			$stateComponent->onEnter();
-		}
+		return $this->active && $this->active_parents;
 	}
 
 	public function components(): HasMany
@@ -75,19 +63,55 @@ abstract class Base extends Model
 		$this->children()->update(['active_parents' => $value]);
 	}
 
+	public function scopeActivesOfGame($query, Game $game): void
+	{
+		$query->where('game_id', $game->id)->where(['active' => true, 'active_parents' => true]);
+	}
+
 	public function parent(): BelongsTo
 	{
 		return $this->belongsTo(GameObject::class, 'game_object_id');
 	}
 
+	public function isStateManaged(): bool
+	{
+		return !empty($this->state_components);
+	}
+
 	protected function currentStateComponent(): ?Component
 	{
-		$state_components = $this->state_components ?? [];
-		$currentObjectState = $this->state;
-		if($stateComponentIdentifier = $state_components[$currentObjectState] ?? null) {
-			return Component::find($stateComponentIdentifier)->subclass();
+		if (!$this->isStateManaged()) {
+			return null;
 		}
-		return null;
+		$currentStateName = $this->state ?? array_key_first($this->state_components);
+		$currentStateComponentId = $this->state_components[$currentStateName] ?? null;
+		$currentStateComponent = Component::find($currentStateComponentId)->subclass();
+		if (!$this->state) {
+			$this->update(['state' => $currentStateName]);
+			$currentStateComponent->super()->update(['enabled' => true]);
+			$currentStateComponent->onEnter();
+		}
+		return $currentStateComponent;
+	}
+
+	public function changeState(string $state): void
+	{
+		if ($this->state === $state) {
+			return;
+		}
+		// disable the current state component
+		$stateComponent = $this->currentStateComponent();
+		if ($stateComponent) {
+			$stateComponent->super()->update(['enabled' => false]);
+			$stateComponent->onExit();
+		}
+		$this->update(['state' => $state]);
+		// enable the new state component
+		$stateComponent = $this->currentStateComponent();
+		if ($stateComponent) {
+			$stateComponent->super()->update(['enabled' => true]);
+			$stateComponent->onEnter();
+		}
 	}
 
 	public function componentsIterator(
