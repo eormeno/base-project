@@ -11,12 +11,14 @@ class ContainerComponent extends PersistentComponent
 	{
 		return [
 			'layout' => ['string', null],
+			'image' => ['string', null],
 		];
 	}
 
 	public function onAwake(array $initParams): void
 	{
 		$this->layout = $initParams['layout'] ?? 'vertical';
+		$this->image = $initParams['image'] ?? null;
 		$this->save();
 	}
 
@@ -26,6 +28,7 @@ class ContainerComponent extends PersistentComponent
 			'parent' => $this->parentGameObject()->id ?? null,
 			'type' => 'container',
 			'layout' => $this->layout,
+			'image' => $this->image,
 		];
 	}
 }

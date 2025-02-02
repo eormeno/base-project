@@ -21,7 +21,7 @@ class BouncingBallRoot extends Prefab
 	{
 		return [
 			'active' => false,
-			'attributes' => ['layout' => 'vertical'],
+			'attributes' => ['layout' => 'vertical', 'image' => 'background.jpeg'],
 			'title:label' => ['attributes' => ['text' => 'Bouncing Ball', 'style' => 'title']],
 			'start_button:button' => ['attributes' => ['text' => 'Start', 'event' => 'start', 'style' => 'primary']],
 		];

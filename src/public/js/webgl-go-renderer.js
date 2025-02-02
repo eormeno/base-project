@@ -71,6 +71,12 @@ function createComponent(data, mainContainer) {
 			case 'container':
 				element = document.createElement('div');
 				element.className = component.layout || 'vertical';
+				// if the component defines an image as background, set it
+				if (component.image) {
+					element.style.backgroundImage = `url(res/${component.image})`;
+					element.style.backgroundSize = 'cover';
+					element.style.backgroundPosition = 'center';
+				}
 				break;
 
 			case 'label':
