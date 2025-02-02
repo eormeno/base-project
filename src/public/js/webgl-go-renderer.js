@@ -73,10 +73,6 @@ function createComponent(data, mainContainer) {
 				element.className = component.layout || 'vertical';
 				if (component.width) element.style.width = component.width;
 				if (component.height) element.style.height = component.height;
-				// // expand container to fill the parent container, vertically and horizontally
-				// element.style.width = '100%';
-				// element.style.height = '100%';
-
 				if (component.image) {
 					element.style.backgroundImage = `url(res/${component.image})`;
 					element.style.backgroundSize = 'cover';
