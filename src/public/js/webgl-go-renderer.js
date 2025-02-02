@@ -96,11 +96,14 @@ function createComponent(data, mainContainer) {
 
 			case 'sound':
 				element = document.createElement('audio');
+				element.id = id;
 				element.src = `res/${component.sound}`;
-				element.autoplay = true;
-				element.loop = true;
-				element.volume = 1.0;
-				element.play();
+				element.autoplay = false;
+				element.loop = component.loop;
+				element.volume = component.volume;
+				// add click event listener to play/pause audio to the parent element
+				const parentElement = elementsMap.get(component.parent.toString());
+				parentElement?.addEventListener('click', () => playAudio(element));
 				break;
 		}
 
@@ -136,6 +139,18 @@ function renderComponents(responseData, mainContainerName) {
 	}
 	setStyles();
 	createComponent(responseData, mainContainer);
+}
+
+function playAudio(audio) {
+	if (audio instanceof HTMLAudioElement){
+		if (audio.paused) {
+			console.log('playing audio', audio.id);
+			audio.play();
+		} else {
+			console.log('pausing audio', audio.id);
+			audio.pause();
+		}
+	}
 }
 
 function setStyles() {
