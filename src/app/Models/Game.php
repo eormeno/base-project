@@ -40,6 +40,10 @@ class Game extends Model
 		return $this->hasMany(GameObject::class);
 	}
 
+	public function findGameObject(string $name): GameObject | null {
+		return $this->gameObjects->firstWhere('name', $name);
+	}
+
     public function players(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();

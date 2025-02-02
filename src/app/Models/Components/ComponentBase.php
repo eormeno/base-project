@@ -2,6 +2,7 @@
 
 namespace App\Models\Components;
 
+use App\Models\Game;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
@@ -28,6 +29,16 @@ class ComponentBase extends Model
 		// if current class is subclass of Component.
 		$super = $this->super;
 		return $super->gameObject();
+	}
+
+	public function game(): Game
+	{
+		return $this->gameObject()->first()->game()->first();
+	}
+
+	public function findGameObject(string $name): GameObject | null
+	{
+		return $this->game()->findGameObject($name);
 	}
 
 	public function parentGameObject(): GameObject | null

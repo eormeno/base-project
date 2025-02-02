@@ -27,8 +27,9 @@ class PlayingStateComponent extends PersistentComponent
 		}
 	}
 
-	public function onRestartEvent(): string|null
+	public function onRestartEvent()
 	{
-		return 'initial';
+		$ball = $this->findGameObject('ball');
+		$this->log('PlayingStateComponent::onRestartEvent() found ball');
 	}
 }

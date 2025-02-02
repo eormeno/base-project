@@ -52,7 +52,7 @@ class BouncingBallRoot extends Prefab
 				]
 			],
 			// 'title:label' => ['attributes' => ['text' => 'Playing', 'style' => 'title']],
-			// 'start_button:button' => ['attributes' => ['text' => 'Restart', 'event' => 'restart']],
+			'start_button:button' => ['attributes' => ['text' => 'Restart', 'event' => 'restart']],
 		];
 	}
 
