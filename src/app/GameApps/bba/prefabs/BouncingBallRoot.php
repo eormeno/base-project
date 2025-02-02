@@ -30,6 +30,7 @@ class BouncingBallRoot extends Prefab
 			'title:label' => ['attributes' => ['text' => 'Bouncing Ball', 'style' => 'title']],
 			'description:label' => ['attributes' => ['text' => 'Click the start button to begin', 'style' => 'paragraph']],
 			'start_button:button' => ['attributes' => ['text' => 'Start', 'event' => 'start', 'style' => 'primary']],
+			'title_sound:sound' => ['attributes' => ['sound' => 'title-music.wav', 'loop' => true]],
 		];
 	}
 

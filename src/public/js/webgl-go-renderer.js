@@ -93,6 +93,15 @@ function createComponent(data, mainContainer) {
 					element.addEventListener('click', () => handleEvent(component.event));
 				}
 				break;
+
+			case 'sound':
+				element = document.createElement('audio');
+				element.src = `res/${component.sound}`;
+				element.autoplay = true;
+				element.loop = true;
+				element.volume = 1.0;
+				element.play();
+				break;
 		}
 
 		elementsMap.set(id, element);
