@@ -143,13 +143,18 @@ function setStyles() {
 			"width": "100%"
 		},
 		".title": {
-			"font-size": "24px",
+			"font-size": "48px",
 			"font-weight": "bold",
+			"color": "#007bff",
+			"text-shadow": "2px 2px 2px rgba(0, 0, 0, 0.5)",
 			"margin": "10px 0"
 		},
 		".paragraph": {
-			"font-size": "16px",
-			"margin": "5px 0"
+			"font-size": "20px",
+			"font-weight": "normal",
+			"margin": "5px 0",
+			"color": "#fff",
+			"text-shadow": "2px 2px 2px rgba(0, 0, 0, 0.5)"
 		},
 		"button": {
 			"padding": "5px 10px",
