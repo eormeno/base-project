@@ -94,9 +94,22 @@ function createComponent(data, mainContainer) {
 				}
 				break;
 
+			case 'sprite':
+				element = document.createElement('img');
+				element.src = `res/${component.texture}`;
+				element.style.position = 'absolute';
+				let x = component.x - element.width * component.scale;
+				let y = component.y - element.height * component.scale;
+				// console.log('x', x, 'y', y, 'width', element.width, 'height', element.height, 'scale', component.scale);
+				element.style.left = x + 'px';
+				element.style.top = y + 'px';
+				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
+				// add a shadow to the sprite
+				element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
+				break;
+
 			case 'sound':
 				element = document.createElement('audio');
-				element.id = id;
 				element.src = `res/${component.sound}`;
 				element.autoplay = false;
 				element.loop = component.loop;
@@ -107,6 +120,7 @@ function createComponent(data, mainContainer) {
 				break;
 		}
 
+		element.id = id;
 		elementsMap.set(id, element);
 
 		if (component.parent) {
@@ -142,7 +156,7 @@ function renderComponents(responseData, mainContainerName) {
 }
 
 function playAudio(audio) {
-	if (audio instanceof HTMLAudioElement){
+	if (audio instanceof HTMLAudioElement) {
 		if (audio.paused) {
 			console.log('playing audio', audio.id);
 			audio.play();
@@ -161,6 +175,7 @@ function setStyles() {
 		},
 		".vertical": {
 			"display": "flex",
+			"position": "relative",
 			"flex-direction": "column",
 			"align-items": "center",
 			"gap": "10px",

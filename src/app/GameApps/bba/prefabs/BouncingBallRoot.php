@@ -38,9 +38,21 @@ class BouncingBallRoot extends Prefab
 	{
 		return [
 			'active' => false,
-			'attributes' => ['layout' => 'vertical'],
-			'title:label' => ['attributes' => ['text' => 'Playing', 'style' => 'title']],
-			'start_button:button' => ['attributes' => ['text' => 'Restart', 'event' => 'restart']],
+			'attributes' => [
+				'image' => 'playground.png',
+				'width' => '100%',
+				'height' => '100%'
+			],
+			'ball:sprite' => [
+				'attributes' => [
+					'texture' => 'soccer_ball.png',
+					'scale' => 0.5,
+					'x' => 400,
+					'y' => 225
+				]
+			],
+			// 'title:label' => ['attributes' => ['text' => 'Playing', 'style' => 'title']],
+			// 'start_button:button' => ['attributes' => ['text' => 'Restart', 'event' => 'restart']],
 		];
 	}
 
