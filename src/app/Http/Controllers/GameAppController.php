@@ -28,4 +28,13 @@ class GameAppController extends Controller
             $renderer->render($game, $request->eventInfo())
         );
     }
+
+	public function res(
+		GameApp $gameApp,
+		string $resourceName
+	) {
+		$path = app_path("GameApps/$gameApp->prefix/resources/$resourceName");
+		return response()->file($path);
+	}
+
 }
