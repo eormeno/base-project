@@ -26,4 +26,9 @@ class PlayingStateComponent extends PersistentComponent
 			$playingView->updateActive(false);
 		}
 	}
+
+	public function onRestartEvent(): string|null
+	{
+		return 'initial';
+	}
 }
