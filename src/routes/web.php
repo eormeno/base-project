@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         Route::get('/reset', [MythicTreasureQuestController::class, '_reset'])->name("mythic-treasure-quest.reset");
     });
 
-    Route::get('/poll-events', [EventController::class, 'pollEvents'])->name('poll-events');
+    Route::get('/pull-events', [EventController::class, 'pullEvents'])->name('pull-events');
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
 
     Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'play'])->name('play');

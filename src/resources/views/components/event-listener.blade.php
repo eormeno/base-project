@@ -1,8 +1,8 @@
-<div id="polling-result" class="animate-pulse left-1/2 mx-auto m-1 text-xs max-w-xs text-center font-mono text-gray-300 border-collapse bg-red-800 rounded-lg"></div>
+<div id="pulling-result" class="animate-pulse left-1/2 mx-auto m-1 text-xs max-w-xs text-center font-mono text-gray-300 border-collapse bg-red-800 rounded-lg"></div>
 
 <script>
     const fetchWithTimeout = async (interval) => {
-        const resultDiv = document.getElementById('polling-result');
+        const resultDiv = document.getElementById('pulling-result');
 
         const fetchData = async (reloaded = 0) => {
             try {
@@ -10,7 +10,7 @@
                     resultDiv.textContent = 'Disconnected';
                     return;
                 }
-                let response = await fetch('{{ route('poll-events') }}' + '?reloaded=' + reloaded);
+                let response = await fetch('{{ route('pull-events') }}' + '?reloaded=' + reloaded);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.length > 0) {
@@ -43,7 +43,7 @@
     //     return {
     //         async fetchEvents(reloaded = 0) {
     //             try {
-    //                 let response = await fetch('{{ route('poll-events') }}' + '?reloaded=' + reloaded);
+    //                 let response = await fetch('{{ route('pull-events') }}' + '?reloaded=' + reloaded);
     //                 if (response.ok) {
     //                     let event_data = await response.json();
     //                     if (event_data.length > 0) {
@@ -65,7 +65,7 @@
     //                 try {
     //                     this.fetchEvents();
     //                 } catch (error) {
-    //                     // finalization of polling
+    //                     // finalization of pulling
 
 
     //                 }

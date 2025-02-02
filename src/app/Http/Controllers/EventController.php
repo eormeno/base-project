@@ -19,7 +19,7 @@ class EventController extends Controller
         return response()->json();
     }
 
-    public function pollEvents(Request $request)
+    public function pullEvents(Request $request)
     {
         $reloaded = $request->input('reloaded', false);
         $session_storage = $reloaded ? 'delayed_events' : 'events';
