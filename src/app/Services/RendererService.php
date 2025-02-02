@@ -36,6 +36,7 @@ class RendererService implements IRenderer
 			$ret[$id] = $view;
 		}
 		$ret['actives'] = collect(GameObject::activesOfGame($game)->get())->pluck('id')->toArray();
+		$ret['deactives'] = $event['rendered'];
 		return $ret;
 	}
 

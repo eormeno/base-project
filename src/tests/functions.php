@@ -71,10 +71,15 @@ function createEvent(string $name, array $data = [], array $rendered = []): arra
 	return $event;
 }
 
-function renderedIds($response, array $keysToRemove = ['elapsed', 'root', 'actives']): array
+function renderedIds($response, array $keysToRemove = ['elapsed', 'root', 'actives', 'deactives']): array
 {
 	$data = $response->getContent();
 	$dataKeys = array_keys(json_decode($data, true));
-	$dataKeys = array_diff($dataKeys, $keysToRemove);
-	return array_keys($dataKeys);
+	foreach ($keysToRemove as $key) {
+		if (in_array($key, $dataKeys)) {
+			unset($dataKeys[array_search($key, $dataKeys)]);
+		}
+	}
+	$onlyKeysAsArray = array_values($dataKeys);
+	return $onlyKeysAsArray;
 }

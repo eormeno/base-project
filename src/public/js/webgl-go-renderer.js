@@ -6,112 +6,120 @@ var arrClientRenderings = [];
 const elementsMap = new Map();
 
 window.onload = function () {
-    sendEvent('reload', {}, true);
+	sendEvent('reload', {}, true);
 }
 
 function sendEvent(event, formData = {}) {
-    if (eventSent) {
-        return;
-    }
-    eventSent = true;
-    currentMillis = Date.now();
+	if (eventSent) {
+		return;
+	}
+	eventSent = true;
+	currentMillis = Date.now();
 
-    event = event || '';
-    var routeDiv = document.getElementById('routeDiv')
-    var route = routeDiv.getAttribute('route');
-    var token = routeDiv.getAttribute('token');
+	event = event || '';
+	var routeDiv = document.getElementById('routeDiv')
+	var route = routeDiv.getAttribute('route');
+	var token = routeDiv.getAttribute('token');
 
-    fetch(route, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': token
-        },
-        body: JSON.stringify({
-            event: event,
-            data: formData,
-            rendered: allIdsFromMap(),
-        })
-    }).then(response => response.text())
-        .then(data => {
-            try {
-                if (data.startsWith('<')) {
-                    document.write(data);
-                    eventSent = false;
-                } else {
-                    json = JSON.parse(data);
-                    stringified = JSON.stringify(json, null, 2);
-                    console.log(stringified);
-                    renderComponents(json, 'glCanvas');
-                    eventSent = false;
-                }
-            } catch (error) {
-                console.error(error);
-                eventSent = false;
-            }
-        }).catch(error => {
-            console.error(error);
-            eventSent = false;
-        });
+	fetch(route, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'X-CSRF-TOKEN': token
+		},
+		body: JSON.stringify({
+			event: event,
+			data: formData,
+			rendered: allIdsFromMap(),
+		})
+	}).then(response => response.text())
+		.then(data => {
+			try {
+				if (data.startsWith('<')) {
+					document.write(data);
+					eventSent = false;
+				} else {
+					json = JSON.parse(data);
+					stringified = JSON.stringify(json, null, 2);
+					console.log(stringified);
+					renderComponents(json, 'glCanvas');
+					eventSent = false;
+				}
+			} catch (error) {
+				console.error(error);
+				eventSent = false;
+			}
+		}).catch(error => {
+			console.error(error);
+			eventSent = false;
+		});
 }
 
 function allIdsFromMap() {
-    return Array.from(elementsMap.keys());
+	return Array.from(elementsMap.keys());
 }
 
 function createComponent(data, mainContainer) {
-    Object.entries(data).forEach(([id, component]) => {
-        if (elementsMap.has(id)) return
+	Object.entries(data).forEach(([id, component]) => {
+		if (elementsMap.has(id)) return
 
-        if (id === 'actives' || id == 'elapsed' || id == 'root') return;
+		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives') return;
 
-        let element;
+		let element;
 
-        switch (component.type) {
-            case 'container':
-                element = document.createElement('div');
+		switch (component.type) {
+			case 'container':
+				element = document.createElement('div');
 				element.className = component.layout || 'vertical';
-                break;
+				break;
 
-            case 'label':
-                element = document.createElement('span');
-                element.textContent = component.text;
-                if (component.style) element.className = component.style;
-                break;
+			case 'label':
+				element = document.createElement('span');
+				element.textContent = component.text;
+				if (component.style) element.className = component.style;
+				break;
 
-            case 'button':
-                element = document.createElement('button');
-                element.textContent = component.text;
-                if (component.event) {
-                    element.addEventListener('click', () => handleEvent(component.event));
-                }
-                break;
-        }
+			case 'button':
+				element = document.createElement('button');
+				element.textContent = component.text;
+				if (component.event) {
+					element.addEventListener('click', () => handleEvent(component.event));
+				}
+				break;
+		}
 
-        elementsMap.set(id, element);
+		elementsMap.set(id, element);
 
-        if (component.parent) {
-            const parentElement = elementsMap.get(component.parent.toString());
-            parentElement?.appendChild(element);
-        } else {
-            // Agregar al contenedor principal
-            mainContainer.appendChild(element);
-        }
-    });
+		if (component.parent) {
+			const parentElement = elementsMap.get(component.parent.toString());
+			parentElement?.appendChild(element);
+		} else {
+			// Agregar al contenedor principal
+			mainContainer.appendChild(element);
+		}
+	});
 }
 
 function handleEvent(eventType) {
-    sendEvent(eventType);
+	sendEvent(eventType);
 }
 
 function renderComponents(responseData, mainContainerName) {
-    const mainContainer = document.getElementById(mainContainerName || 'main');
-    if (!mainContainer) {
-        console.error(`No se encontró el contenedor principal con id "${mainContainerName}"`);
-        return;
-    }
+	const mainContainer = document.getElementById(mainContainerName || 'main');
+	if (!mainContainer) {
+		console.error(`No se encontró el contenedor principal con id "${mainContainerName}"`);
+		return;
+	}
+	let deactives = responseData.deactives;
+	if (deactives) {
+		deactives.forEach(id => {
+			const element = elementsMap.get(id);
+			element?.remove();
+			elementsMap.delete(id);
+		});
+	}
 	setStyles();
-    createComponent(responseData, mainContainer);
+	createComponent(responseData, mainContainer);
 }
 
 function setStyles() {
@@ -152,25 +160,25 @@ function setStyles() {
 }
 
 function addStyles(styles) {
-    let styleSheet = document.getElementById("dynamic-styles");
+	let styleSheet = document.getElementById("dynamic-styles");
 
-    // Si no existe el <style>, lo creamos y lo agregamos al <head>
-    if (!styleSheet) {
-        styleSheet = document.createElement("style");
-        styleSheet.id = "dynamic-styles";
-        document.head.appendChild(styleSheet);
-    }
+	// Si no existe el <style>, lo creamos y lo agregamos al <head>
+	if (!styleSheet) {
+		styleSheet = document.createElement("style");
+		styleSheet.id = "dynamic-styles";
+		document.head.appendChild(styleSheet);
+	}
 
-    // Convertimos el objeto de estilos en reglas CSS y las agregamos al <style>
-    let cssText = "";
-    for (const selector in styles) {
-        if (styles.hasOwnProperty(selector)) {
-            const rules = Object.entries(styles[selector])
-                .map(([prop, value]) => `${prop}: ${value};`)
-                .join(" ");
-            cssText += `${selector} { ${rules} } `;
-        }
-    }
+	// Convertimos el objeto de estilos en reglas CSS y las agregamos al <style>
+	let cssText = "";
+	for (const selector in styles) {
+		if (styles.hasOwnProperty(selector)) {
+			const rules = Object.entries(styles[selector])
+				.map(([prop, value]) => `${prop}: ${value};`)
+				.join(" ");
+			cssText += `${selector} { ${rules} } `;
+		}
+	}
 
-    styleSheet.textContent += cssText;
+	styleSheet.textContent += cssText;
 }

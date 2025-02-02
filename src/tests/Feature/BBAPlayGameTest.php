@@ -28,11 +28,13 @@ test("Events interaction returns the active gameobject with its view", function 
 	$response = $this->postJson(route('event', $newGame), $event);
 	$response->assertStatus(200);
 	$rendered = renderedIds($response);
+	// echo json_encode(json_encode($rendered), JSON_PRETTY_PRINT) . PHP_EOL;
+	echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
 	$event = createEvent(name: 'start', rendered: $rendered);
 	$response = $this->postJson(route('event', $newGame), $event);
 	$response->assertStatus(200);
-	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+	echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
 	/*
 		   * The expected json should have the following structure
