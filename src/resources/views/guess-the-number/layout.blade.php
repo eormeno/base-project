@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="text-center p-3 relative">
-        {{-- <x-event-listener /> --}}
+        <x-event-listener />
         {{ $slot }}
         {{-- A collapsible/expenddible debug console --}}
         <details class="absolute top-0 right-0 w-4/5">

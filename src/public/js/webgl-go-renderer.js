@@ -8,7 +8,7 @@ const elementsMap = new Map();
 
 window.onload = function () {
 	sendEvent('reload', {}, true);
-	fetchWithTimeout(1);
+	pullWithTimeout(1000);
 }
 
 function sendEvent(event, formData = {}) {
@@ -57,13 +57,67 @@ function sendEvent(event, formData = {}) {
 		});
 }
 
+async function sendEvent2(event, formData = {}) {
+	if (eventSent) {
+		return;
+	}
+	eventSent = true;
+	currentMillis = Date.now();
+
+	event = event || '';
+	var routeDiv = document.getElementById('routeDiv');
+	var route = routeDiv.getAttribute('route');
+	var token = routeDiv.getAttribute('token');
+
+	try {
+		const response = await fetch(route, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': token
+			},
+			body: JSON.stringify({
+				event: event,
+				data: formData,
+				rendered: allIdsFromMap(),
+			})
+		});
+
+		const data = await response.text();
+
+		if (data.startsWith('<')) {
+			document.write(data);
+		} else {
+			const json = JSON.parse(data);
+			// const stringified = JSON.stringify(json, null, 2);
+			// console.log(stringified);
+			renderComponents(json, 'glCanvas');
+		}
+	} catch (error) {
+		console.error(error);
+	} finally {
+		eventSent = false;
+	}
+}
+
 function allIdsFromMap() {
 	return Array.from(elementsMap.keys());
 }
 
 function createComponent(data, mainContainer) {
 	Object.entries(data).forEach(([id, component]) => {
-		if (elementsMap.has(id)) return
+		if (elementsMap.has(id)) {
+			// find the element and update it
+			const element = elementsMap.get(id);
+			if (component.type === 'sprite') {
+				let x = component.x - element.width * component.scale;
+				let y = component.y - element.height * component.scale;
+				element.style.left = x + 'px';
+				element.style.top = y + 'px';
+				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
+			}
+			return;
+		}
 
 		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives') return;
 
@@ -143,14 +197,14 @@ function renderComponents(responseData, mainContainerName) {
 		console.error(`No se encontró el contenedor principal con id "${mainContainerName}"`);
 		return;
 	}
-	let deactives = responseData.deactives;
-	if (deactives) {
-		deactives.forEach(id => {
-			const element = elementsMap.get(id);
-			element?.remove();
-			elementsMap.delete(id);
-		});
-	}
+	// let deactives = responseData.deactives;
+	// if (deactives) {
+	// 	deactives.forEach(id => {
+	// 		const element = elementsMap.get(id);
+	// 		element?.remove();
+	// 		elementsMap.delete(id);
+	// 	});
+	// }
 	setStyles();
 	createComponent(responseData, mainContainer);
 }
@@ -234,57 +288,24 @@ function addStyles(styles) {
 	styleSheet.textContent += cssText;
 }
 
-const fetchWithTimeout = async (interval) => {
-	// const resultDiv = document.getElementById('pulling-result');
-	let pingTimes = []; // Almacena las últimas 10 mediciones de ping
+const pullWithTimeout = async (interval) => {
 
 	const fetchData = async (reloaded = 0) => {
 		try {
 			if (!navigator.onLine) {
 				console.error('Disconnected');
-				// resultDiv.textContent = 'Disconnected';
 				return;
 			}
+			const startTime = Date.now();
+			await sendEvent2('update', { 'delta': previousMillis });
+			previousMillis = Date.now() - startTime;
 
-			const startTime = Date.now(); // Marca de tiempo antes de la solicitud
-			let response = await fetch(`update`);
-			const duration = Date.now() - startTime; // Calcula la duración del ping
-
-			// Agrega la duración al array y mantén solo las últimas 10 mediciones
-			pingTimes.push(duration);
-			if (pingTimes.length > 20) {
-				pingTimes.shift();
-			}
-
-			// Calcula el ping promedio
-			const averagePing = pingTimes.length > 0
-				? pingTimes.reduce((a, b) => a + b, 0) / pingTimes.length
-				: 0;
-
-			if (pingTimes.length == 20) {
-				console.log(`Ping: ${averagePing.toFixed(0)}ms`);
-			}
-
-			if (response.ok) {
-				const data = await response.json();
-				// if (data.length > 0) {
-				//  for (let event of data) {
-				//      document.dispatchEvent(new CustomEvent(event.name, {
-				//          detail: event.data
-				//      }));
-				//  }
-				// }
-			} else {
-				console.error('Error en la respuesta:', response.status);
-				// resultDiv.textContent = `Error: ${response.status} - ${response.statusText}`;
-			}
 		} catch (error) {
 			console.error('Error:', error);
-			// resultDiv.textContent = `Disconnected`;
 		} finally {
 			setTimeout(fetchData, interval);
 		}
 	};
 
-	fetchData(1); // Inicia la primera solicitud
+	fetchData(1);
 };

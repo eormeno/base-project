@@ -46,6 +46,8 @@ class BouncingBallRoot extends Prefab
 			'ball:sprite' => [
 				'attributes' => [
 					'texture' => 'soccer_ball.png',
+					'width' => 64,
+					'height' => 64,
 					'scale' => 0.5,
 					'x' => 400,
 					'y' => 225

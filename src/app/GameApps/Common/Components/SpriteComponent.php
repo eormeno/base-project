@@ -13,6 +13,8 @@ class SpriteComponent extends PersistentComponent
 			'layer' => ['integer', 0],
             'x' => ['integer', 0],
             'y' => ['integer', 0],
+			'width' => ['integer', 0],
+			'height' => ['integer', 0],
             'scale' => ['float', 1.0],
 			'pivot_x' => ['float', 0.5],
 			'pivot_y' => ['float', 0.5],
