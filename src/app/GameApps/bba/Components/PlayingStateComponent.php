@@ -14,8 +14,8 @@ class PlayingStateComponent extends PersistentComponent
 	public static function config(): array
 	{
 		return [
-			'vx' => ['float', 40],
-			'vy' => ['float', 40],
+			'vx' => ['float', 5],
+			'vy' => ['float', 5],
 		];
 	}
 
@@ -39,6 +39,9 @@ class PlayingStateComponent extends PersistentComponent
 
 	public function onUpdateEvent(float $delta = 0): void
 	{
+		if ($delta == 0) {
+			return;
+		}
 		$ball = $this->findGameObject('ball');
 		$sprite = $ball->getComponent('sprite');
 		$this->move($sprite, 1000 / $delta, 800, 450);
@@ -93,6 +96,10 @@ class PlayingStateComponent extends PersistentComponent
 	public function onRestartEvent()
 	{
 		$ball = $this->findGameObject('ball');
-		$this->log('PlayingStateComponent::onRestartEvent() found ball');
+		$sprite = $ball->getComponent('sprite');
+		$sprite->x = 400;
+		$sprite->y = 225;
+		$sprite->rotation = 0;
+		$sprite->update();
 	}
 }

@@ -3,12 +3,12 @@ var eventSent = false;
 var currentMillis = 0;
 var arrCachedViews = {};
 var arrClientRenderings = [];
-var previousMillis = 0;
+var previousMillis = 500;
 const elementsMap = new Map();
 
 window.onload = function () {
 	sendEvent('reload', {}, true);
-	pullWithTimeout(1000);
+	pullWithTimeout(10);
 }
 
 function sendEvent(event, formData = {}) {
@@ -290,7 +290,7 @@ function addStyles(styles) {
 
 const pullWithTimeout = async (interval) => {
 
-	const fetchData = async (reloaded = 0) => {
+	const fetchData = async () => {
 		try {
 			if (!navigator.onLine) {
 				console.error('Disconnected');
@@ -307,5 +307,5 @@ const pullWithTimeout = async (interval) => {
 		}
 	};
 
-	fetchData(1);
+	fetchData();
 };
