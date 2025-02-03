@@ -39,4 +39,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/game-app/{gameApp}/play', [GameAppController::class, 'play'])->name('play');
 	Route::get('/game-app/{gameApp}/res/{resourceName}', [GameAppController::class, 'res'])->name('res');
     Route::post('/game-app/{game}', [GameAppController::class, 'event'])->name('event');
+	Route::get('/game-app/{game}/update', [GameAppController::class, 'update'])->name('update');
 });

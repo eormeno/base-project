@@ -10,24 +10,24 @@ use App\Http\Requests\EventRequestFilter;
 
 class GameAppController extends Controller
 {
-    public function play(
-        GameApp $gameApp,
-        GameInstanceService $gamesService
-    ) {
-        $currentUser = auth()->user();
-        $currentGame = $gamesService->getOrCreateUserGame($currentUser, $gameApp);
-        return view("game-app.$gameApp->client", compact('gameApp', 'currentGame'));
-    }
+	public function play(
+		GameApp $gameApp,
+		GameInstanceService $gamesService
+	) {
+		$currentUser = auth()->user();
+		$currentGame = $gamesService->getOrCreateUserGame($currentUser, $gameApp);
+		return view("game-app.$gameApp->client", compact('gameApp', 'currentGame'));
+	}
 
-    public function event(
-        Game $game,
-        EventRequestFilter $request,
-        IRenderer $renderer,
-    ) {
-        return response()->json(
-            $renderer->render($game, $request->eventInfo())
-        );
-    }
+	public function event(
+		Game $game,
+		EventRequestFilter $request,
+		IRenderer $renderer,
+	) {
+		return response()->json(
+			$renderer->render($game, $request->eventInfo())
+		);
+	}
 
 	public function res(
 		GameApp $gameApp,
@@ -35,6 +35,15 @@ class GameAppController extends Controller
 	) {
 		$path = app_path("GameApps/$gameApp->prefix/resources/$resourceName");
 		return response()->file($path);
+	}
+
+	public function update(Game $game)
+	{
+		// return a 'connected' message to the client
+		return response()->json([
+			'connected' => true,
+			'game' => $game->id,
+		]);
 	}
 
 }

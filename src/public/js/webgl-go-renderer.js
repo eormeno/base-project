@@ -3,10 +3,12 @@ var eventSent = false;
 var currentMillis = 0;
 var arrCachedViews = {};
 var arrClientRenderings = [];
+var previousMillis = 0;
 const elementsMap = new Map();
 
 window.onload = function () {
 	sendEvent('reload', {}, true);
+	fetchWithTimeout(1);
 }
 
 function sendEvent(event, formData = {}) {
@@ -100,11 +102,9 @@ function createComponent(data, mainContainer) {
 				element.style.position = 'absolute';
 				let x = component.x - element.width * component.scale;
 				let y = component.y - element.height * component.scale;
-				// console.log('x', x, 'y', y, 'width', element.width, 'height', element.height, 'scale', component.scale);
 				element.style.left = x + 'px';
 				element.style.top = y + 'px';
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
-				// add a shadow to the sprite
 				element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
 				break;
 
@@ -233,3 +233,95 @@ function addStyles(styles) {
 
 	styleSheet.textContent += cssText;
 }
+
+const fetchWithTimeout = async (interval) => {
+	// const resultDiv = document.getElementById('pulling-result');
+	let pingTimes = []; // Almacena las últimas 10 mediciones de ping
+
+	const fetchData = async (reloaded = 0) => {
+		try {
+			if (!navigator.onLine) {
+				console.error('Disconnected');
+				// resultDiv.textContent = 'Disconnected';
+				return;
+			}
+
+			const startTime = Date.now(); // Marca de tiempo antes de la solicitud
+			let response = await fetch(`update`);
+			const duration = Date.now() - startTime; // Calcula la duración del ping
+
+			// Agrega la duración al array y mantén solo las últimas 10 mediciones
+			pingTimes.push(duration);
+			if (pingTimes.length > 20) {
+				pingTimes.shift();
+			}
+
+			// Calcula el ping promedio
+			const averagePing = pingTimes.length > 0
+				? pingTimes.reduce((a, b) => a + b, 0) / pingTimes.length
+				: 0;
+
+			if (pingTimes.length == 20) {
+				console.log(`Ping: ${averagePing.toFixed(0)}ms`);
+			}
+
+			if (response.ok) {
+				const data = await response.json();
+				// if (data.length > 0) {
+				//  for (let event of data) {
+				//      document.dispatchEvent(new CustomEvent(event.name, {
+				//          detail: event.data
+				//      }));
+				//  }
+				// }
+			} else {
+				console.error('Error en la respuesta:', response.status);
+				// resultDiv.textContent = `Error: ${response.status} - ${response.statusText}`;
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			// resultDiv.textContent = `Disconnected`;
+		} finally {
+			setTimeout(fetchData, interval);
+		}
+	};
+
+	fetchData(1); // Inicia la primera solicitud
+};
+
+const fetchWithTimeout2 = async (interval) => {
+	// const resultDiv = document.getElementById('pulling-result');
+
+	const fetchData = async (reloaded = 0) => {
+		try {
+			if (!navigator.onLine) {
+				console.error('Disconnected');
+				// resultDiv.textContent = 'Disconnected';
+				return;
+			}
+			let response = await fetch(`update`);
+			if (response.ok) {
+				const data = await response.json();
+				console.log(data);
+				// if (data.length > 0) {
+				// 	for (let event of data) {
+				// 		document.dispatchEvent(new CustomEvent(event.name, {
+				// 			detail: event.data
+				// 		}));
+				// 	}
+				// }
+			} else {
+				console.error('Error en la respuesta:', response.status);
+				// resultDiv.textContent = `Error: ${response.status} - ${response.statusText}`;
+			}
+		} catch (error) {
+			console.error('Error:', error);
+			// resultDiv.textContent = `Disconnected`;
+		} finally {
+			// Llama a fetchData nuevamente después del intervalo
+			setTimeout(fetchData, interval);
+		}
+	};
+
+	fetchData(1); // Inicia la primera solicitud
+};
