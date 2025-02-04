@@ -3,9 +3,10 @@
 namespace App\GameApps\bba\Components;
 
 use App\Traits\HasNamespacePrefix;
+use App\Models\Components\Component;
+use App\Models\GameObject\GameObject;
 use App\Models\Components\PersistentComponent;
 use App\GameApps\Common\Components\SpriteComponent;
-use App\Models\Components\Component;
 
 class PlayingStateComponent extends PersistentComponent
 {
@@ -43,12 +44,12 @@ class PlayingStateComponent extends PersistentComponent
 			return;
 		}
 		$ball = $this->findGameObject('ball');
-		$sprite = $ball->getComponent('sprite');
-		$this->move($sprite, 1000 / $delta, 800, 450);
+		$this->move($ball, 1000 / $delta, 800, 450);
 	}
 
-	public function move(Component $sprite, float $delta, $screenWidth, $screenHeight)
+	public function move(GameObject $ball, float $delta, $screenWidth, $screenHeight)
 	{
+		$sprite = $ball->getComponent('sprite');
 		$sprite_width = $sprite->width * $sprite->scale;
 		$sprite_height = $sprite->height * $sprite->scale;
 		// Update the ball's position based on its velocity
@@ -80,6 +81,8 @@ class PlayingStateComponent extends PersistentComponent
 			$sprite->rotation = 0;
 		}
 
+		$ball->version++; // increment the version to trigger a re-render
+		$ball->save();
 		$this->save();
 		$sprite->save();
 	}
