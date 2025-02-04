@@ -12,6 +12,9 @@ return new class extends Migration {
 	{
 		Schema::create('game_objects', function (Blueprint $table) {
 			$table->id();
+			// The version of the object
+			$table->bigInteger('version')->default(0);
+			// The name of the object
 			$table->string('name')->index();
 			// Whether the object is active or not
 			$table->boolean('active')->default(true);

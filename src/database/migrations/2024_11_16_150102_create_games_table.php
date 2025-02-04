@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('invitation_code')->nullable();
+			$table->bigInteger('elapsed')->default(0);
             $table->foreignId('game_app_id')->constrained();
             $table->foreignId('game_object_id')->nullable()->constrained();
             $table->timestamps();

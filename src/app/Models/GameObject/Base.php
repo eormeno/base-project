@@ -17,7 +17,7 @@ abstract class Base extends Model
 
 	public $timestamps = false;
 
-	protected $fillable = ['name', 'active', 'active_parents', 'game_object_id', 'game_id', 'state', 'state_components', 'indexed_children'];
+	protected $fillable = ['name', 'version', 'active', 'active_parents', 'game_object_id', 'game_id', 'state', 'state_components', 'indexed_children'];
 
 	protected $casts = [
 		'active' => 'boolean',
