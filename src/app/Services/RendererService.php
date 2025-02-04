@@ -14,12 +14,11 @@ class RendererService implements IRenderer
 
 	public function render(Game $game, array $eventInfo): array
 	{
-		$this->log('RendererService::render(' . json_encode($eventInfo) . ')');
 		$currentTimestamp = microtime(true);
 		event(new FrontEvent($game, $eventInfo));
 		$result = $this->request($game, $eventInfo);
 		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-		$result['elapsed'] = $elapsed;
+		// $result['elapsed'] = $elapsed;
 		return $result;
 	}
 
@@ -27,18 +26,23 @@ class RendererService implements IRenderer
 	{
 		$jsonClient = $game->gameApp->client == 'webgl';
 		$rootGameObject = $game->gameObject;
+		$rendered = $event['rendered'];
 		$ret = [
-			'elapsed' => 0,
-			'root' => $rootGameObject->id,
+			// 'elapsed' => 0,
+			// 'root' => $rootGameObject->id,
 		];
-		$views = $this->resolveActiveGameObjectsViews($game, $event['rendered']);
+		$views = $this->resolveActiveGameObjectsViews($game, $rendered);
 		foreach ($views as $id => $view) {
 			$ret[$id] = $view;
 		}
 		$actives = $this->resolveActiveGOIds($game);
-		$ret['actives'] = $actives;
+		// $ret['actives'] = $actives;
 		//$ret['deactives'] = $event['rendered'];
-		$ret['deactives'] = $this->resolveDeactives($event, $actives);
+		$deactives = $this->resolveDeactives($rendered, $actives);
+		if (!empty($deactives)) {
+			$ret['deactives'] = $deactives;
+		}
+		// $ret['deactives'] = $this->resolveDeactives($rendered, $actives);
 		return $ret;
 	}
 
@@ -49,11 +53,14 @@ class RendererService implements IRenderer
 		return $actives;
 	}
 
-	private function resolveDeactives(array $event, array $actives): array
+	private function resolveDeactives(array $rendered, array $actives): array
 	{
 		$deactives = [];
-		foreach ($actives as $id) {
-			if (!in_array($id, $event['rendered'])) {
+		if (empty($rendered)) {
+			return $deactives;
+		}
+		foreach ($rendered as $id) {
+			if (!in_array($id, $actives)) {
 				$deactives[] = $id;
 			}
 		}
@@ -71,7 +78,7 @@ class RendererService implements IRenderer
 				continue;
 			}
 			// if the game object is already rendered, skip it
-			if (in_array($gameObject->id, $rendered)) {
+			if (in_array($gameObject->id, $rendered) && $gameObject->id != 8) {
 				continue;
 			}
 			$views[$gameObject->id] = $view;

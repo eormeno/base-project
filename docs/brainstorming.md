@@ -11,3 +11,5 @@
 - Hacer que el manejo del idioma esté ubicado en cada prefix de aplicación de juego.
 
 - Hacer que los estilos/temas, sean recursos de cada aplicación de juego.
+
+- Para saber si un objeto cambió, agregar un campo `version` a cada objeto. Este campo se incrementa cada vez que se modifica el objeto. Esto permitiría saber si un objeto cambió desde la última vez que se consultó.

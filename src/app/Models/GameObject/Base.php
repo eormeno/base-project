@@ -3,6 +3,7 @@
 namespace App\Models\GameObject;
 
 use App\Models\Game;
+use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 abstract class Base extends Model
 {
+	use DebugHelper;
 	protected const INITIAL_STATE = 'initial';
 
 	public $timestamps = false;
@@ -61,6 +63,21 @@ abstract class Base extends Model
 		}
 		$this->update(['active' => $value]);
 		$this->children()->update(['active_parents' => $value]);
+	}
+
+	public function isChanged(): bool
+	{
+		$changed = false;
+		// this object has changed if one of its components is dirty
+		$this->componentsIterator(function ($component) use (&$changed) {
+			$this->log('Checking if Component ' . $component . ' was changed');
+			if ($component->wasChanged()) {
+				$this->log('Component ' . $component->type . ' was changed');
+				$changed = true;
+			}
+		});
+		$this->log('Result ' . ($changed ? 'changed' : 'not changed'));
+		return $changed;
 	}
 
 	public function scopeActivesOfGame($query, Game $game): void

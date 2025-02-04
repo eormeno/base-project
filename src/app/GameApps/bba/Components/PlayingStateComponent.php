@@ -75,22 +75,13 @@ class PlayingStateComponent extends PersistentComponent
 			$this->vy = -$this->vy;
 		}
 
-		$sprite->rotation += 40;
+		$sprite->rotation += 5;
 		if ($sprite->rotation >= 360) {
 			$sprite->rotation = 0;
 		}
 
-		// // Check for collision with the left or right edges of the screen
-		// if ($sprite->x <= 0 || $sprite->x + $sprite->width >= $screenWidth) {
-		//     $this->vx = -$this->vx; // Reverse the x velocity
-		// }
-
-		// // Check for collision with the top or bottom edges of the screen
-		// if ($sprite->y <= 0 || $sprite->y + $sprite->height >= $screenHeight) {
-		//     $this->vy = -$this->vy; // Reverse the y velocity
-		// }
-		$this->update();
-		$sprite->update();
+		$this->save();
+		$sprite->save();
 	}
 
 	public function onRestartEvent()
@@ -101,5 +92,8 @@ class PlayingStateComponent extends PersistentComponent
 		$sprite->y = 225;
 		$sprite->rotation = 0;
 		$sprite->update();
+		$this->vx = 5;
+		$this->vy = 5;
+		$this->save();
 	}
 }
