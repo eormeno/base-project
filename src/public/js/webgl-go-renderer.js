@@ -5,59 +5,14 @@ var arrCachedViews = {};
 var arrClientRenderings = [];
 var previousMillis = 500;
 const elementsMap = new Map();
+const eventQueue = [];
 
 window.onload = function () {
-	sendEvent('reload', {}, true);
+	pushEvent('reload', {});
 	pullWithTimeout(10);
 }
 
-function sendEvent(event, formData = {}) {
-	if (eventSent) {
-		return;
-	}
-	eventSent = true;
-	currentMillis = Date.now();
-
-	event = event || '';
-	var routeDiv = document.getElementById('routeDiv')
-	var route = routeDiv.getAttribute('route');
-	var token = routeDiv.getAttribute('token');
-
-	fetch(route, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'X-CSRF-TOKEN': token
-		},
-		body: JSON.stringify({
-			event: event,
-			data: formData,
-			rendered: allIdsFromMap(),
-		})
-	}).then(response => response.text())
-		.then(data => {
-			try {
-				if (data.startsWith('<')) {
-					document.write(data);
-					eventSent = false;
-				} else {
-					json = JSON.parse(data);
-					stringified = JSON.stringify(json, null, 2);
-					console.log(stringified);
-					renderComponents(json, 'glCanvas');
-					eventSent = false;
-				}
-			} catch (error) {
-				console.error(error);
-				eventSent = false;
-			}
-		}).catch(error => {
-			console.error(error);
-			eventSent = false;
-		});
-}
-
-async function sendEvent2(event, formData = {}) {
+async function sendEvent(event, formData = {}) {
 	if (eventSent) {
 		return;
 	}
@@ -188,7 +143,8 @@ function createComponent(data, mainContainer) {
 }
 
 function handleEvent(eventType) {
-	sendEvent(eventType);
+	//sendEvent(eventType);
+	pushEvent(eventType);
 }
 
 function renderComponents(responseData, mainContainerName) {
@@ -297,15 +253,44 @@ const pullWithTimeout = async (interval) => {
 				return;
 			}
 			const startTime = Date.now();
-			await sendEvent2('update', { 'delta': previousMillis });
+			//await sendEvent('update', { 'delta': previousMillis });
+			const { event, data } = dequeueEvent();
+			if (event) {
+				await sendEvent(event, data);
+			}
 			previousMillis = Date.now() - startTime;
 
 		} catch (error) {
 			console.error('Error:', error);
 		} finally {
+			pushEvent('update', { 'delta': previousMillis });
 			setTimeout(fetchData, interval);
 		}
 	};
 
 	fetchData();
 };
+
+let eventsAlreadyPending = [];
+
+function pushEvent(event, data) {
+	if (eventsAlreadyPending.includes(event)) {
+		return;
+	}
+	eventsAlreadyPending.push(event);
+	eventQueue.push({ event, data });
+}
+
+function dequeueEvent() {
+	if (eventQueue.length === 0) {
+		return null;
+	}
+	const { event, data } = eventQueue.shift();
+	// Remove the event from the pending list
+	const index = eventsAlreadyPending.indexOf(event);
+	if (index > -1) {
+		eventsAlreadyPending.splice(index, 1);
+	}
+	console.log('Queue: ', eventQueue.length);
+	return { event, data };
+}
