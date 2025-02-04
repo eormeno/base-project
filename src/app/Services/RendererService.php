@@ -31,16 +31,36 @@ class RendererService implements IRenderer
 			'elapsed' => 0,
 			'root' => $rootGameObject->id,
 		];
-		$views = $this->resolveActiveGameObjectsViews($game, $jsonClient);
+		$views = $this->resolveActiveGameObjectsViews($game, $event['rendered']);
 		foreach ($views as $id => $view) {
 			$ret[$id] = $view;
 		}
-		$ret['actives'] = collect(GameObject::activesOfGame($game)->get())->pluck('id')->toArray();
-		$ret['deactives'] = $event['rendered'];
+		$actives = $this->resolveActiveGOIds($game);
+		$ret['actives'] = $actives;
+		//$ret['deactives'] = $event['rendered'];
+		$ret['deactives'] = $this->resolveDeactives($event, $actives);
 		return $ret;
 	}
 
-	private function resolveActiveGameObjectsViews(Game $game, bool $jsonClient): array
+	private function resolveActiveGOIds(Game $game) {
+		$actives = collect(GameObject::activesOfGame($game)->get())->pluck('id')->toArray();
+		// remove the root game object id from the list
+		$actives = array_values(array_diff($actives, [$game->gameObject->id]));
+		return $actives;
+	}
+
+	private function resolveDeactives(array $event, array $actives): array
+	{
+		$deactives = [];
+		foreach ($actives as $id) {
+			if (!in_array($id, $event['rendered'])) {
+				$deactives[] = $id;
+			}
+		}
+		return $deactives;
+	}
+
+	private function resolveActiveGameObjectsViews(Game $game, array $rendered): array
 	{
 		$gameObject = $game->gameObject;
 		$gameObjects = GameObject::activesOfGame($game)->get();
@@ -48,6 +68,10 @@ class RendererService implements IRenderer
 		foreach ($gameObjects as $gameObject) {
 			$view = $gameObject->view();
 			if (empty($view)) {
+				continue;
+			}
+			// if the game object is already rendered, skip it
+			if (in_array($gameObject->id, $rendered)) {
 				continue;
 			}
 			$views[$gameObject->id] = $view;

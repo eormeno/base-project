@@ -44,8 +44,8 @@ async function sendEvent(event, formData = {}) {
 			document.write(data);
 		} else {
 			const json = JSON.parse(data);
-			// const stringified = JSON.stringify(json, null, 2);
-			// console.log(stringified);
+			const stringified = JSON.stringify(json, null, 2);
+			console.log(stringified);
 			renderComponents(json, 'glCanvas');
 		}
 	} catch (error) {
@@ -153,14 +153,14 @@ function renderComponents(responseData, mainContainerName) {
 		console.error(`No se encontró el contenedor principal con id "${mainContainerName}"`);
 		return;
 	}
-	// let deactives = responseData.deactives;
-	// if (deactives) {
-	// 	deactives.forEach(id => {
-	// 		const element = elementsMap.get(id);
-	// 		element?.remove();
-	// 		elementsMap.delete(id);
-	// 	});
-	// }
+	let deactives = responseData.deactives;
+	if (deactives) {
+		deactives.forEach(id => {
+			const element = elementsMap.get(id);
+			element?.remove();
+			elementsMap.delete(id);
+		});
+	}
 	setStyles();
 	createComponent(responseData, mainContainer);
 }
@@ -291,6 +291,5 @@ function dequeueEvent() {
 	if (index > -1) {
 		eventsAlreadyPending.splice(index, 1);
 	}
-	console.log('Queue: ', eventQueue.length);
 	return { event, data };
 }
