@@ -57,7 +57,7 @@ class ComponentsMigration extends Migration
 		$words = explode('_', $name);
 		// remove the last word (migrations)
 		array_pop($words);
-		$this->pascalize($words, ['common', 'components']);
+		$this->pascalize($words, ['common', 'components', 'services']);
 		// join the words with a '/'
 		$namespace = "GameApps/" . implode('/', $words);
 		$path = app_path($namespace);
