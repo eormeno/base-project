@@ -27,45 +27,45 @@ class RendererService implements IRenderer
 		$jsonClient = $game->gameApp->client == 'webgl';
 		$rootGameObject = $game->gameObject;
 		$rendered = $event['rendered'];
-		$renderedVersions = $event['renderedVersions'];
 		$ret = [
 			// 'elapsed' => 0,
 			// 'root' => $rootGameObject->id,
 		];
-		$views = $this->resolveActiveGameObjectsViews($game, $rendered, $renderedVersions);
+		$views = $this->resolveActiveGameObjectsViews($game, $rendered);
 		foreach ($views as $id => $view) {
 			$ret[$id] = $view;
 		}
 		$actives = $this->resolveActiveGOIds($game);
-		$deactives = $this->resolveDeactives($rendered, $renderedVersions, $actives);
+		$deactives = $this->resolveDeactives($rendered, $actives);
 		if (!empty($deactives)) {
 			$ret['deactives'] = $deactives;
 		}
 		return $ret;
 	}
 
-	private function resolveActiveGOIds(Game $game) {
+	private function resolveActiveGOIds(Game $game)
+	{
 		$actives = collect(GameObject::activesOfGame($game)->get())->pluck('id')->toArray();
 		// remove the root game object id from the list
 		$actives = array_values(array_diff($actives, [$game->gameObject->id]));
 		return $actives;
 	}
 
-	private function resolveDeactives(array $rendered, array $renderedVersions, array $actives): array
+	private function resolveDeactives(array $rendered, array $actives): array
 	{
 		$deactives = [];
-		if (empty($renderedVersions)) {
+		if (empty($rendered)) {
 			return $deactives;
 		}
-		foreach ($renderedVersions as $id => $version) {
+		foreach ($rendered as $id => $version) {
 			if (!in_array($id, $actives)) {
-				$deactives[] = (string)$id;
+				$deactives[] = (string) $id;
 			}
 		}
 		return $deactives;
 	}
 
-	private function resolveActiveGameObjectsViews(Game $game, array $rendered, array $renderedVersions): array
+	private function resolveActiveGameObjectsViews(Game $game, array $rendered): array
 	{
 		$gameObject = $game->gameObject;
 		$gameObjects = GameObject::activesOfGame($game)->get();
@@ -76,7 +76,7 @@ class RendererService implements IRenderer
 				continue;
 			}
 			// if the game object is already rendered in renderedVersions, and its version is the same, skip it
-			if (isset($renderedVersions[$gameObject->id]) && $renderedVersions[$gameObject->id] == $gameObject->version) {
+			if (isset($rendered[$gameObject->id]) && $rendered[$gameObject->id] == $gameObject->version) {
 				continue;
 			}
 			$views[$gameObject->id] = $view;

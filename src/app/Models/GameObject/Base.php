@@ -65,21 +65,6 @@ abstract class Base extends Model
 		$this->children()->update(['active_parents' => $value]);
 	}
 
-	public function isChanged(): bool
-	{
-		$changed = false;
-		// this object has changed if one of its components is dirty
-		$this->componentsIterator(function ($component) use (&$changed) {
-			$this->log('Checking if Component ' . $component . ' was changed');
-			if ($component->wasChanged()) {
-				$this->log('Component ' . $component->type . ' was changed');
-				$changed = true;
-			}
-		});
-		$this->log('Result ' . ($changed ? 'changed' : 'not changed'));
-		return $changed;
-	}
-
 	public function scopeActivesOfGame($query, Game $game): void
 	{
 		$query->where('game_id', $game->id)->where(['active' => true, 'active_parents' => true]);

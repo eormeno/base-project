@@ -34,8 +34,7 @@ async function sendEvent(event, formData = {}) {
 			body: JSON.stringify({
 				event: event,
 				data: formData,
-				rendered: allIdsFromMap(),
-				renderedVersions: allIdsFromMapAndVersions(),
+				rendered: allIdsFromMapAndVersions(),
 			})
 		});
 
@@ -54,10 +53,6 @@ async function sendEvent(event, formData = {}) {
 	} finally {
 		eventSent = false;
 	}
-}
-
-function allIdsFromMap() {
-	return Array.from(elementsMap.keys());
 }
 
 function allIdsFromMapAndVersions() {
@@ -83,7 +78,7 @@ function createComponent(data, mainContainer) {
 			return;
 		}
 
-		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives' || id == 'renderedVersions' || id=='rendered' || id=='deactives2') return;
+		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives') return;
 
 		let element;
 
@@ -178,10 +173,8 @@ function renderComponents(responseData, mainContainerName) {
 function playAudio(audio) {
 	if (audio instanceof HTMLAudioElement) {
 		if (audio.paused) {
-			console.log('playing audio', audio.id);
 			audio.play();
 		} else {
-			console.log('pausing audio', audio.id);
 			audio.pause();
 		}
 	}
