@@ -83,7 +83,7 @@ function createComponent(data, mainContainer) {
 			return;
 		}
 
-		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives' || id == 'renderedVersions') return;
+		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives' || id == 'renderedVersions' || id=='rendered' || id=='deactives2') return;
 
 		let element;
 

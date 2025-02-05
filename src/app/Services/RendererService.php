@@ -29,7 +29,6 @@ class RendererService implements IRenderer
 		$rendered = $event['rendered'];
 		$renderedVersions = $event['renderedVersions'];
 		$ret = [
-			'renderedVersions' => $renderedVersions,
 			// 'elapsed' => 0,
 			// 'root' => $rootGameObject->id,
 		];
@@ -38,13 +37,10 @@ class RendererService implements IRenderer
 			$ret[$id] = $view;
 		}
 		$actives = $this->resolveActiveGOIds($game);
-		// $ret['actives'] = $actives;
-		//$ret['deactives'] = $event['rendered'];
 		$deactives = $this->resolveDeactives($rendered, $renderedVersions, $actives);
 		if (!empty($deactives)) {
 			$ret['deactives'] = $deactives;
 		}
-		// $ret['deactives'] = $this->resolveDeactives($rendered, $actives);
 		return $ret;
 	}
 
@@ -58,12 +54,12 @@ class RendererService implements IRenderer
 	private function resolveDeactives(array $rendered, array $renderedVersions, array $actives): array
 	{
 		$deactives = [];
-		if (empty($rendered)) {
+		if (empty($renderedVersions)) {
 			return $deactives;
 		}
-		foreach ($rendered as $id) {
+		foreach ($renderedVersions as $id => $version) {
 			if (!in_array($id, $actives)) {
-				$deactives[] = $id;
+				$deactives[] = (string)$id;
 			}
 		}
 		return $deactives;
@@ -79,8 +75,8 @@ class RendererService implements IRenderer
 			if (empty($view)) {
 				continue;
 			}
-			// if the game object is already rendered, skip it
-			if (in_array($gameObject->id, $rendered) && $gameObject->id != 8) {
+			// if the game object is already rendered in renderedVersions, and its version is the same, skip it
+			if (isset($renderedVersions[$gameObject->id]) && $renderedVersions[$gameObject->id] == $gameObject->version) {
 				continue;
 			}
 			$views[$gameObject->id] = $view;
