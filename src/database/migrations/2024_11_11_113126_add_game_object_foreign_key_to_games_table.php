@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('games', function (Blueprint $table) {
-            $table->id();
-            $table->string('invitation_code')->nullable();
-			$table->bigInteger('elapsed')->default(0);
-            $table->foreignId('game_app_id')->constrained();
-            $table->timestamps();
+        Schema::table('games', function (Blueprint $table) {
+            $table->foreignId('game_object_id')->nullable()->constrained('game_objects')->onDelete('cascade');
         });
     }
 
@@ -25,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('games');
+        Schema::table('games', function (Blueprint $table) {
+            $table->dropForeign(['game_object_id']);
+			$table->dropColumn('game_object_id');
+        });
     }
 };
