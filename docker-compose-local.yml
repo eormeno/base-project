@@ -5,21 +5,20 @@ networks:
 
 volumes:
   mysql_data:
+  redis_data:
 
 services:
   app:
     build:
       context: ./dockerfiles
-      dockerfile: nginx.prod.dockerfile
+      dockerfile: nginx.dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
     ports:
-      - "443:443"
+      - "80:80"
     volumes:
       - ./src:/var/www/html:delegated
-      - /etc/letsencrypt/ssl/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-      - /etc/letsencrypt/ssl/privkey.pem:/etc/nginx/ssl/privkey.pem
     depends_on:
       - php
       # - redis
@@ -57,8 +56,6 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
-    ports:
-      - "9000:9000"
     volumes:
       - ./src:/var/www/html:delegated
     networks:
@@ -67,25 +64,10 @@ services:
   # redis:
   #   image: redis:alpine
   #   restart: unless-stopped
-  #   ports:
-  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
   #   networks:
   #     - laravel
-
-  composer:
-    build:
-      context: ./dockerfiles
-      dockerfile: php.root.dockerfile
-      args:
-        - UID=${UID:-1000}
-        - GID=${GID:-1000}
-    volumes:
-      - ./src:/var/www/html
-    depends_on:
-      - php
-    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
-    networks:
-      - laravel
 
   npm:
     image: node:current-alpine
@@ -97,6 +79,8 @@ services:
       - "5173:5173"
     working_dir: /var/www/html
     entrypoint: [ 'npm' ]
+    depends_on:
+      - app
     networks:
       - laravel
 
@@ -110,7 +94,8 @@ services:
     volumes:
       - ./src:/var/www/html:delegated
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     entrypoint: [ 'php', '/var/www/html/artisan' ]
     networks:
       - laravel
@@ -120,5 +105,20 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+    networks:
+      - laravel
+
+  composer:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.root.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - php
+    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
     networks:
       - laravel
