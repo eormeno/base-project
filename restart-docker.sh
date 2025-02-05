@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Stop containers
 sudo docker stop $(docker ps -a -q) &>/dev/null
 echo "\e[32mAll containers have been stopped.\e[0m"
