@@ -70,8 +70,8 @@ class ComponentsMigration extends Migration
 	private function pascalize(array &$words, array $toPascalize = []): void
 	{
 		foreach ($words as &$word) {
-			$word = ucfirst($word);
-			if (in_array($word, $toPascalize)) {
+			$lower = strtolower($word);
+			if (in_array($lower, $toPascalize)) {
 				$word = ucfirst($word);
 			}
 		}
