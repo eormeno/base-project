@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+// TODO Unificar implementación con ComponentsMigration.php
 return new class extends Migration {
 
     public function up(): void
@@ -45,8 +46,19 @@ return new class extends Migration {
         $words = explode('_', $name);
         // remove the last word
         array_pop($words);
+		$this->pascalize($words, ['common', 'components', 'services']);
         // join the words with a '/'
         $namespace = implode('/', $words);
         return "GameApps/$namespace";
     }
+
+	private function pascalize(array &$words, array $toPascalize = []): void
+	{
+		foreach ($words as &$word) {
+			$lower = strtolower($word);
+			if (in_array($lower, $toPascalize)) {
+				$word = ucfirst($word);
+			}
+		}
+	}
 };
