@@ -57,6 +57,7 @@ class ComponentsMigration extends Migration
 		$words = explode('_', $name);
 		// remove the last word (migrations)
 		array_pop($words);
+		$this->pascalize($words, ['components']);
 		// join the words with a '/'
 		$namespace = "GameApps/" . implode('/', $words);
 		$path = app_path($namespace);
@@ -65,5 +66,16 @@ class ComponentsMigration extends Migration
 		}
 		return $namespace;
 	}
+
+	private function pascalize(array &$words, array $exceptions = []): void
+	{
+		foreach ($words as &$word) {
+			$word = ucfirst($word);
+			if (in_array($word, $exceptions)) {
+				$word = ucfirst($word);
+			}
+		}
+	}
+
+
 }
-;
