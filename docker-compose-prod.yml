@@ -19,15 +19,16 @@ services:
       - /etc/letsencrypt/ssl/privkey.pem:/etc/nginx/ssl/privkey.pem
     depends_on:
       - php
-      - redis
+      # - redis
       - mysql
       - mailhog
     networks:
       - laravel
 
   mysql:
-    image: mysql:8.0
-    restart: unless-stopped
+    image: mysql:8
+    container_name: mysql-container
+    restart: always
     tty: true
     ports:
       - "3306:3306"
@@ -36,8 +37,13 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - laravel
 
@@ -55,13 +61,13 @@ services:
     networks:
       - laravel
 
-  redis:
-    image: redis:alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    networks:
-      - laravel
+  # redis:
+  #   image: redis:alpine
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - laravel
 
   composer:
     build:
