@@ -59,8 +59,9 @@ class ComponentsMigration extends Migration
 		array_pop($words);
 		// join the words with a '/'
 		$namespace = "GameApps/" . implode('/', $words);
-		if (!is_dir(app_path($namespace))) {
-			throw new Exception("Folder $namespace does not exist");
+		$path = app_path($namespace);
+		if (!is_dir($path)) {
+			throw new Exception("Folder $path does not exist");
 		}
 		return $namespace;
 	}
