@@ -3,6 +3,9 @@ version: '3.8'
 networks:
   laravel:
 
+volumes:
+  mysql_data:
+
 services:
   app:
     build:
