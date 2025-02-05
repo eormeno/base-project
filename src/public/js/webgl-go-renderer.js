@@ -35,6 +35,7 @@ async function sendEvent(event, formData = {}) {
 				event: event,
 				data: formData,
 				rendered: allIdsFromMap(),
+				renderedVersions: allIdsFromMapAndVersions(),
 			})
 		});
 
@@ -59,6 +60,14 @@ function allIdsFromMap() {
 	return Array.from(elementsMap.keys());
 }
 
+function allIdsFromMapAndVersions() {
+	// return pairs of id and version { 1: 0, 2: 1, 3: 0 }
+	return Array.from(elementsMap.entries()).reduce((acc, [id, element]) => {
+		acc[id] = element.version;
+		return acc;
+	}, {});
+}
+
 function createComponent(data, mainContainer) {
 	Object.entries(data).forEach(([id, component]) => {
 		if (elementsMap.has(id)) {
@@ -74,7 +83,7 @@ function createComponent(data, mainContainer) {
 			return;
 		}
 
-		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives') return;
+		if (id === 'actives' || id == 'elapsed' || id == 'root' || id == 'deactives' || id == 'renderedVersions') return;
 
 		let element;
 
@@ -130,6 +139,7 @@ function createComponent(data, mainContainer) {
 		}
 
 		element.id = id;
+		element.version = component.version;
 		elementsMap.set(id, element);
 
 		if (component.parent) {

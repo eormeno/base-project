@@ -27,18 +27,20 @@ class RendererService implements IRenderer
 		$jsonClient = $game->gameApp->client == 'webgl';
 		$rootGameObject = $game->gameObject;
 		$rendered = $event['rendered'];
+		$renderedVersions = $event['renderedVersions'];
 		$ret = [
+			'renderedVersions' => $renderedVersions,
 			// 'elapsed' => 0,
 			// 'root' => $rootGameObject->id,
 		];
-		$views = $this->resolveActiveGameObjectsViews($game, $rendered);
+		$views = $this->resolveActiveGameObjectsViews($game, $rendered, $renderedVersions);
 		foreach ($views as $id => $view) {
 			$ret[$id] = $view;
 		}
 		$actives = $this->resolveActiveGOIds($game);
 		// $ret['actives'] = $actives;
 		//$ret['deactives'] = $event['rendered'];
-		$deactives = $this->resolveDeactives($rendered, $actives);
+		$deactives = $this->resolveDeactives($rendered, $renderedVersions, $actives);
 		if (!empty($deactives)) {
 			$ret['deactives'] = $deactives;
 		}
@@ -53,7 +55,7 @@ class RendererService implements IRenderer
 		return $actives;
 	}
 
-	private function resolveDeactives(array $rendered, array $actives): array
+	private function resolveDeactives(array $rendered, array $renderedVersions, array $actives): array
 	{
 		$deactives = [];
 		if (empty($rendered)) {
@@ -67,7 +69,7 @@ class RendererService implements IRenderer
 		return $deactives;
 	}
 
-	private function resolveActiveGameObjectsViews(Game $game, array $rendered): array
+	private function resolveActiveGameObjectsViews(Game $game, array $rendered, array $renderedVersions): array
 	{
 		$gameObject = $game->gameObject;
 		$gameObjects = GameObject::activesOfGame($game)->get();

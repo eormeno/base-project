@@ -11,6 +11,7 @@ abstract class ViewStateContextBase extends StateContextBase
 			$view = $component->view();
 			if ($view !== null) {
 				if (is_array($view)) {
+					$view['version'] = $component->gameObject->version;
 					$mergedViews = array_merge($mergedViews, $view);
 				} else {
 					// TODO This is a very naive approach, it should be improved
