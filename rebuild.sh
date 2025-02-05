@@ -27,13 +27,14 @@ case $1 in
 esac
 
 sudo docker compose -f $docker_compose_file up -d --build app
-sudo docker compose run --rm composer update
+sudo docker compose run --rm composer install
 sudo docker compose run --rm artisan migrate
 sudo docker compose run --rm artisan db:seed
 sudo docker compose run --rm artisan key:generate
+sudo docker compose run --rm artisan storage:link
+sudo docker compose run --rm artisan games
 sudo docker compose run --rm npm install
 sudo docker compose run --rm npm run build
-# sudo docker compose run --rm artisan users
 
 # Check the api/ping endpoint returns a 200 status code
 #if [[ $(curl -s -o /dev/null -w "%{http_code}" http://localhost/api/ping) -eq 200 ]]; then
