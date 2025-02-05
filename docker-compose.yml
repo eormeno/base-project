@@ -21,7 +21,7 @@ services:
       - ./src:/var/www/html:delegated
     depends_on:
       - php
-      - redis
+      # - redis
       - mysql
       - mailhog
     networks:
@@ -57,13 +57,13 @@ services:
     networks:
       - laravel
 
-  redis:
-    image: redis:alpine
-    restart: unless-stopped
-    volumes:
-      - redis_data:/data
-    networks:
-      - laravel
+  # redis:
+  #   image: redis:alpine
+  #   restart: unless-stopped
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - laravel
 
   npm:
     image: node:current-alpine
