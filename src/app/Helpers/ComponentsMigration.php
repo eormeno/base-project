@@ -67,11 +67,11 @@ class ComponentsMigration extends Migration
 		return $namespace;
 	}
 
-	private function pascalize(array &$words, array $exceptions = []): void
+	private function pascalize(array &$words, array $toPascalize = []): void
 	{
 		foreach ($words as &$word) {
 			$word = ucfirst($word);
-			if (in_array($word, $exceptions)) {
+			if (in_array($word, $toPascalize)) {
 				$word = ucfirst($word);
 			}
 		}
