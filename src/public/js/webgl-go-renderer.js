@@ -89,6 +89,7 @@ function createComponent(data, mainContainer) {
 				if (component.width) element.style.width = component.width;
 				if (component.height) element.style.height = component.height;
 				if (component.image) {
+					console.log(`url(res/${component.image})`);
 					element.style.backgroundImage = `url(res/${component.image})`;
 					element.style.backgroundSize = 'cover';
 					element.style.backgroundPosition = 'center';
