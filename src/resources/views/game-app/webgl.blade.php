@@ -11,15 +11,15 @@
 	<div class="absolute top-5 left-5 p2 flex flex-col justify-center bg-gray-800 text-xs">
 		<div class="flex flex-row items-center">
 			<div class="text-right text-white w-10">Ping:</div>
-			<div id="pingAvg" class="text-center text-white w-16">0</div>
+			<div id="pingAvg" class="text-right text-white w-14 mr-2">0</div>
 		</div>
 		<div class="flex flex-row items-center">
 			<div class="text-right text-white w-10">Min:</div>
-			<div id="pingMin" class="text-center text-white w-16">0</div>
+			<div id="pingMin" class="text-right text-white w-14 mr-2">0</div>
 		</div>
 		<div class="flex flex-row items-center">
 			<div class="text-right text-white w-10">Max:</div>
-			<div id="pingMax" class="text-center text-white w-16">0</div>
+			<div id="pingMax" class="text-right text-white w-14 mr-2">0</div>
 		</div>
 	</div>
 

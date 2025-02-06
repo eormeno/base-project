@@ -283,10 +283,10 @@ const pullWithTimeout = async (interval) => {
 				pings.shift();
 			}
 			if (pings.length === 10) {
-				const average = pings.reduce((acc, curr) => acc + curr, 0) / pings.length;
-				pingAvgElement.textContent = `${average}ms`;
-				pingMinElement.textContent = `${lowPing}ms`;
-				pingMaxElement.textContent = `${highPing}ms`;
+				const average = Math.round(pings.reduce((acc, curr) => acc + curr, 0) / pings.length);
+				pingAvgElement.textContent = `${average} ms`;
+				pingMinElement.textContent = `${lowPing} ms`;
+				pingMaxElement.textContent = `${highPing} ms`;
 			}
 		} catch (error) {
 			console.error('Error:', error);
