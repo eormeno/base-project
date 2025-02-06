@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('type');
             $table->boolean('enabled')->default(true);
             $table->json('messages')->nullable();
+			$table->index('type');
         });
     }
 

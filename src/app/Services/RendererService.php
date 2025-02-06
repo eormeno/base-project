@@ -31,7 +31,7 @@ class RendererService implements IRenderer
 			'elapsed' => 0,
 		];
 		if (!$jsonClient) {
-			$ret['root']	= $rootGameObject->id;
+			$ret['root'] = $rootGameObject->id;
 		}
 		$views = $this->resolveActiveGameObjectsViews($game, $rendered);
 		foreach ($views as $id => $view) {

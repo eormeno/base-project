@@ -3,6 +3,7 @@
 namespace App\GameApps\bba\Components;
 
 use App\Traits\HasNamespacePrefix;
+use Illuminate\Support\Facades\DB;
 use App\Models\Components\Component;
 use App\Models\GameObject\GameObject;
 use App\Models\Components\PersistentComponent;
@@ -52,39 +53,77 @@ class PlayingStateComponent extends PersistentComponent
 		$sprite = $ball->getComponent('sprite');
 		$sprite_width = $sprite->width * $sprite->scale;
 		$sprite_height = $sprite->height * $sprite->scale;
+		$x = $sprite->x;
+		$y = $sprite->y;
+
+		// Actualizar posición
+		$x += $this->vx * $delta;
+		$y += $this->vy * $delta;
+
+		// Detección de colisiones
+		if ($x <= $sprite_width || $x + $sprite_width >= $screenWidth) {
+			$this->vx = -$this->vx;
+			$x = max($sprite_width, min($x, $screenWidth - $sprite_width));
+		}
+		if ($y <= $sprite_height || $y + $sprite_height >= $screenHeight) {
+			$this->vy = -$this->vy;
+			$y = max($sprite_height, min($y, $screenHeight - $sprite_height));
+		}
+
+		// Rotación
+		$newRotation = ($sprite->rotation + 5) % 360;
+
+		// Determinar si es necesario guardar
+		$needsSave = false;
+		if ($x !== $sprite->x || $y !== $sprite->y || $newRotation !== $sprite->rotation) {
+			$sprite->x = $x;
+			$sprite->y = $y;
+			$sprite->rotation = $newRotation;
+			$needsSave = true;
+		}
+
+		// Guardar cambios solo si es necesario
+		if ($needsSave || $ball->isDirty() || $sprite->isDirty()) {
+			DB::transaction(function () use ($ball, $sprite) {
+				$ball->version++;
+				$ball->save();
+				$sprite->save();
+				$this->save();
+			});
+		}
+	}
+
+	public function move3(GameObject $ball, float $delta, $screenWidth, $screenHeight)
+	{
+		$sprite = $ball->getComponent('sprite');
+		$sprite_width = $sprite->width * $sprite->scale;
+		$sprite_height = $sprite->height * $sprite->scale;
+
 		// Update the ball's position based on its velocity
 		$sprite->x += $this->vx * $delta;
 		$sprite->y += $this->vy * $delta;
 
-		if ($sprite->x <= $sprite_width) {
-			$sprite->x = $sprite_width;
+		// Check for collisions with screen boundaries and adjust velocity
+		if ($sprite->x <= $sprite_width || $sprite->x + $sprite_width >= $screenWidth) {
 			$this->vx = -$this->vx;
+			$sprite->x = max($sprite_width, min($sprite->x, $screenWidth - $sprite_width));
 		}
 
-		if ($sprite->x + $sprite_width >= $screenWidth) {
-			$sprite->x = $screenWidth - $sprite_width;
-			$this->vx = -$this->vx;
-		}
-
-		if ($sprite->y <= $sprite_height) {
-			$sprite->y = $sprite_height;
+		if ($sprite->y <= $sprite_height || $sprite->y + $sprite_height >= $screenHeight) {
 			$this->vy = -$this->vy;
+			$sprite->y = max($sprite_height, min($sprite->y, $screenHeight - $sprite_height));
 		}
 
-		if ($sprite->y + $sprite_height >= $screenHeight) {
-			$sprite->y = $screenHeight - $sprite_height;
-			$this->vy = -$this->vy;
-		}
+		// Update rotation and reset if necessary
+		$sprite->rotation = ($sprite->rotation + 5) % 360;
 
-		$sprite->rotation += 5;
-		if ($sprite->rotation >= 360) {
-			$sprite->rotation = 0;
+		// Save changes only if necessary
+		if ($ball->isDirty() || $sprite->isDirty()) {
+			$ball->version++; // increment the version to trigger a re-render
+			$ball->save();
+			$sprite->save();
 		}
-
-		$ball->version++; // increment the version to trigger a re-render
-		$ball->save();
 		$this->save();
-		$sprite->save();
 	}
 
 	public function onRestartEvent()
