@@ -195,7 +195,7 @@ class ReflectionUtils
 		return $relations;
 	}
 
-	public static function componentClass2(string $componentType): string
+	public static function componentClass(string $componentType): string
 	{
 		// Intentar obtener el valor del caché
 		$cacheKey = "component_class_{$componentType}";
@@ -212,16 +212,16 @@ class ReflectionUtils
 		return $componentClass;
 	}
 
-	protected static function resolveDynamicComponentClass(string $componentType): string
-	{
-		$parts = explode('.', $componentType);
-		$onlyType = array_pop($parts); // Última parte del slug
-		$path = !empty($parts) ? implode('\\', array_map('ucfirst', $parts)) . '\\' : 'Common\\';
-		$studly = Str::studly($onlyType);
-		return "App\\GameApps\\{$path}Components\\{$studly}Component";
-	}
+	// protected static function resolveDynamicComponentClass(string $componentType): string
+	// {
+	// 	$parts = explode('.', $componentType);
+	// 	$onlyType = array_pop($parts); // Última parte del slug
+	// 	$path = !empty($parts) ? implode('\\', array_map('ucfirst', $parts)) . '\\' : 'Common\\';
+	// 	$studly = Str::studly($onlyType);
+	// 	return "App\\GameApps\\{$path}Components\\{$studly}Component";
+	// }
 
-	public static function componentClass(string $componentType): string
+	protected static function resolveDynamicComponentClass(string $componentType): string
 	{
 		$onlyType = $componentType;
 		$path = 'Common\\'; // Default path for common components
