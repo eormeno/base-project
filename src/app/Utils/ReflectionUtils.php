@@ -212,15 +212,6 @@ class ReflectionUtils
 		return $componentClass;
 	}
 
-	// protected static function resolveDynamicComponentClass(string $componentType): string
-	// {
-	// 	$parts = explode('.', $componentType);
-	// 	$onlyType = array_pop($parts); // Última parte del slug
-	// 	$path = !empty($parts) ? implode('\\', array_map('ucfirst', $parts)) . '\\' : 'Common\\';
-	// 	$studly = Str::studly($onlyType);
-	// 	return "App\\GameApps\\{$path}Components\\{$studly}Component";
-	// }
-
 	protected static function resolveDynamicComponentClass(string $componentType): string
 	{
 		$onlyType = $componentType;
