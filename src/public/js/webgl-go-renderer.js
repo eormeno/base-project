@@ -248,6 +248,10 @@ function addStyles(styles) {
 	styleSheet.textContent += cssText;
 }
 
+const pings = [];
+let lowPing = 100;
+let highPing = 500;
+
 const pullWithTimeout = async (interval) => {
 
 	const fetchData = async () => {
@@ -257,15 +261,26 @@ const pullWithTimeout = async (interval) => {
 				return;
 			}
 			const startTime = Date.now();
-			//await sendEvent('update', { 'delta': previousMillis });
 			const { event, data } = dequeueEvent();
 			if (event) {
 				await sendEvent(event, data);
 			}
 			const endTime = Date.now();
 			const elapsed = endTime - startTime;
-			console.log(`ping: ${elapsed}ms`);
-
+			if (elapsed < lowPing) {
+				lowPing = elapsed;
+			}
+			if (elapsed > highPing) {
+				highPing = elapsed;
+			}
+			pings.push(elapsed);
+			if (pings.length > 10) {
+				pings.shift();
+			}
+			if (pings.length === 10) {
+				const average = pings.reduce((acc, curr) => acc + curr, 0) / pings.length;
+				console.log(`Average ping: ${average}ms | Lower: ${lowPing}ms | Higher: ${highPing}ms`);
+			}
 		} catch (error) {
 			console.error('Error:', error);
 		} finally {
