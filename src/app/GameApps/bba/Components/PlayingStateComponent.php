@@ -4,10 +4,8 @@ namespace App\GameApps\bba\Components;
 
 use App\Traits\HasNamespacePrefix;
 use Illuminate\Support\Facades\DB;
-use App\Models\Components\Component;
 use App\Models\GameObject\GameObject;
 use App\Models\Components\PersistentComponent;
-use App\GameApps\Common\Components\SpriteComponent;
 
 class PlayingStateComponent extends PersistentComponent
 {
@@ -91,39 +89,6 @@ class PlayingStateComponent extends PersistentComponent
 				$this->save();
 			});
 		}
-	}
-
-	public function move3(GameObject $ball, float $delta, $screenWidth, $screenHeight)
-	{
-		$sprite = $ball->getComponent('sprite');
-		$sprite_width = $sprite->width * $sprite->scale;
-		$sprite_height = $sprite->height * $sprite->scale;
-
-		// Update the ball's position based on its velocity
-		$sprite->x += $this->vx * $delta;
-		$sprite->y += $this->vy * $delta;
-
-		// Check for collisions with screen boundaries and adjust velocity
-		if ($sprite->x <= $sprite_width || $sprite->x + $sprite_width >= $screenWidth) {
-			$this->vx = -$this->vx;
-			$sprite->x = max($sprite_width, min($sprite->x, $screenWidth - $sprite_width));
-		}
-
-		if ($sprite->y <= $sprite_height || $sprite->y + $sprite_height >= $screenHeight) {
-			$this->vy = -$this->vy;
-			$sprite->y = max($sprite_height, min($sprite->y, $screenHeight - $sprite_height));
-		}
-
-		// Update rotation and reset if necessary
-		$sprite->rotation = ($sprite->rotation + 5) % 360;
-
-		// Save changes only if necessary
-		if ($ball->isDirty() || $sprite->isDirty()) {
-			$ball->version++; // increment the version to trigger a re-render
-			$ball->save();
-			$sprite->save();
-		}
-		$this->save();
 	}
 
 	public function onRestartEvent()
