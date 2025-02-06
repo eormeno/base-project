@@ -25,6 +25,10 @@ abstract class StateContextBase extends Base implements IStateContext, IFrontEve
     {
         do {
             $stateComponent = $this->currentStateComponent();
+			if (!$stateComponent) {
+				// TODO quitar este return
+				return;
+			}
 			$stateName = $this->state;
             $stateComponent->onStart();
             $nextState = $stateComponent->handleStateEvent($event);
