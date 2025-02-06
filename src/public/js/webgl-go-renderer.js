@@ -89,7 +89,6 @@ function createComponent(data, mainContainer) {
 				if (component.width) element.style.width = component.width;
 				if (component.height) element.style.height = component.height;
 				if (component.image) {
-					console.log(`url(res/${component.image})`);
 					element.style.backgroundImage = `url(res/${component.image})`;
 					element.style.backgroundSize = 'cover';
 					element.style.backgroundPosition = 'center';
@@ -249,7 +248,7 @@ function addStyles(styles) {
 }
 
 const pings = [];
-let lowPing = 100;
+let lowPing = 1000;
 let highPing = 500;
 
 const pullWithTimeout = async (interval) => {
@@ -279,7 +278,7 @@ const pullWithTimeout = async (interval) => {
 			}
 			if (pings.length === 10) {
 				const average = pings.reduce((acc, curr) => acc + curr, 0) / pings.length;
-				console.log(`Average ping: ${average}ms | Lower: ${lowPing}ms | Higher: ${highPing}ms`);
+				console.log(`Ping Avg: ${average}ms | Lower: ${lowPing}ms | Higher: ${highPing}ms`);
 			}
 		} catch (error) {
 			console.error('Error:', error);
