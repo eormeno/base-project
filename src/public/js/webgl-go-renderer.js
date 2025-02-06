@@ -44,8 +44,8 @@ async function sendEvent(event, formData = {}) {
 			document.write(data);
 		} else {
 			const json = JSON.parse(data);
-			const stringified = JSON.stringify(json, null, 2);
-			console.log(stringified);
+			// const stringified = JSON.stringify(json, null, 2);
+			// console.log(stringified);
 			renderComponents(json, 'glCanvas');
 		}
 	} catch (error) {
@@ -262,7 +262,9 @@ const pullWithTimeout = async (interval) => {
 			if (event) {
 				await sendEvent(event, data);
 			}
-			previousMillis = Date.now() - startTime;
+			const endTime = Date.now();
+			const elapsed = endTime - startTime;
+			console.log(`ping: ${elapsed}ms`);
 
 		} catch (error) {
 			console.error('Error:', error);
