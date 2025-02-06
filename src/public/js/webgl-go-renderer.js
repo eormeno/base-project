@@ -73,16 +73,12 @@ async function sendEvent(event, formData = {}) {
 				backendMs.push(json.elapsed);
 				if (backendMs.length > 10) {
 					backendMs.shift();
-				// }
-				// if (backendMs.length === 10) {
 					const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
 					pingBackendElement.textContent = `${average} ms`;
 					backendMinElement.textContent = `${backendMin} ms`;
 					backendMaxElement.textContent = `${backendMax} ms`;
 				}
 			}
-			// const stringified = JSON.stringify(json, null, 2);
-			// console.log(stringified);
 			renderComponents(json, 'glCanvas');
 		}
 	} catch (error) {
@@ -308,8 +304,6 @@ const pullWithTimeout = async (interval) => {
 			pings.push(elapsed);
 			if (pings.length > 10) {
 				pings.shift();
-			}
-			if (pings.length === 10) {
 				const average = Math.round(pings.reduce((acc, curr) => acc + curr, 0) / pings.length);
 				pingAvgElement.textContent = `${average} ms`;
 				pingMinElement.textContent = `${lowPing} ms`;
