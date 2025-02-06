@@ -18,7 +18,7 @@ class RendererService implements IRenderer
 		event(new FrontEvent($game, $eventInfo));
 		$result = $this->request($game, $eventInfo);
 		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-		// $result['elapsed'] = $elapsed;
+		$result['elapsed'] = $elapsed;
 		return $result;
 	}
 
@@ -28,9 +28,11 @@ class RendererService implements IRenderer
 		$rootGameObject = $game->gameObject;
 		$rendered = $event['rendered'];
 		$ret = [
-			// 'elapsed' => 0,
-			// 'root' => $rootGameObject->id,
+			'elapsed' => 0,
 		];
+		if (!$jsonClient) {
+			$ret['root']	= $rootGameObject->id;
+		}
 		$views = $this->resolveActiveGameObjectsViews($game, $rendered);
 		foreach ($views as $id => $view) {
 			$ret[$id] = $view;

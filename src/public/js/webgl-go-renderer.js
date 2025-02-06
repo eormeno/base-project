@@ -4,10 +4,16 @@ var currentMillis = 0;
 var arrCachedViews = {};
 var arrClientRenderings = [];
 var previousMillis = 500;
+let pingAvgElement;
+let pingMinElement;
+let pingMaxElement;
 const elementsMap = new Map();
 const eventQueue = [];
 
 window.onload = function () {
+	pingAvgElement = document.getElementById('pingAvg');
+	pingMinElement = document.getElementById('pingMin');
+	pingMaxElement = document.getElementById('pingMax');
 	pushEvent('reload', {});
 	pullWithTimeout(1);
 }
@@ -249,7 +255,7 @@ function addStyles(styles) {
 
 const pings = [];
 let lowPing = 1000;
-let highPing = 500;
+let highPing = 50;
 
 const pullWithTimeout = async (interval) => {
 
@@ -278,7 +284,9 @@ const pullWithTimeout = async (interval) => {
 			}
 			if (pings.length === 10) {
 				const average = pings.reduce((acc, curr) => acc + curr, 0) / pings.length;
-				console.log(`Ping Avg: ${average}ms | Lower: ${lowPing}ms | Higher: ${highPing}ms`);
+				pingAvgElement.textContent = `${average}ms`;
+				pingMinElement.textContent = `${lowPing}ms`;
+				pingMaxElement.textContent = `${highPing}ms`;
 			}
 		} catch (error) {
 			console.error('Error:', error);
