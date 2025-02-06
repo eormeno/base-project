@@ -7,13 +7,26 @@ var previousMillis = 500;
 let pingAvgElement;
 let pingMinElement;
 let pingMaxElement;
+let pingBackendElement;
+let backendMaxElement;
+let backendMinElement;
+let lowPing = 1000;
+let highPing = 0;
+let backendMin = 1000;
+let backendMax = 0;
 const elementsMap = new Map();
 const eventQueue = [];
+const pings = [];
+const backendMs = [];
+let eventsAlreadyPending = [];
 
 window.onload = function () {
 	pingAvgElement = document.getElementById('pingAvg');
 	pingMinElement = document.getElementById('pingMin');
 	pingMaxElement = document.getElementById('pingMax');
+	pingBackendElement = document.getElementById('backendAvg');
+	backendMinElement = document.getElementById('backendMin');
+	backendMaxElement = document.getElementById('backendMax');
 	pushEvent('reload', {});
 	pullWithTimeout(1);
 }
@@ -50,6 +63,24 @@ async function sendEvent(event, formData = {}) {
 			document.write(data);
 		} else {
 			const json = JSON.parse(data);
+			if (json.elapsed) {
+				if (json.elapsed < backendMin) {
+					backendMin = json.elapsed;
+				}
+				if (json.elapsed > backendMax) {
+					backendMax = json.elapsed;
+				}
+				backendMs.push(json.elapsed);
+				if (backendMs.length > 10) {
+					backendMs.shift();
+				// }
+				// if (backendMs.length === 10) {
+					const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
+					pingBackendElement.textContent = `${average} ms`;
+					backendMinElement.textContent = `${backendMin} ms`;
+					backendMaxElement.textContent = `${backendMax} ms`;
+				}
+			}
 			// const stringified = JSON.stringify(json, null, 2);
 			// console.log(stringified);
 			renderComponents(json, 'glCanvas');
@@ -253,10 +284,6 @@ function addStyles(styles) {
 	styleSheet.textContent += cssText;
 }
 
-const pings = [];
-let lowPing = 1000;
-let highPing = 50;
-
 const pullWithTimeout = async (interval) => {
 
 	const fetchData = async () => {
@@ -298,8 +325,6 @@ const pullWithTimeout = async (interval) => {
 
 	fetchData();
 };
-
-let eventsAlreadyPending = [];
 
 function pushEvent(event, data) {
 	if (eventsAlreadyPending.includes(event)) {
