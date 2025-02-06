@@ -9,7 +9,7 @@ const eventQueue = [];
 
 window.onload = function () {
 	pushEvent('reload', {});
-	pullWithTimeout(100);
+	pullWithTimeout(1);
 }
 
 async function sendEvent(event, formData = {}) {

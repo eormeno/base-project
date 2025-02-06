@@ -86,7 +86,6 @@ abstract class Base extends Model
 			return null;
 		}
 		$currentStateName = $this->state ?? $this->state_components['__initial__'];
-		echo "Current state name: $currentStateName\n";
 		$currentStateComponentId = $this->state_components[$currentStateName] ?? null;
 		$currentStateComponent = Component::find($currentStateComponentId)->subclass();
 		if (!$this->state) {
