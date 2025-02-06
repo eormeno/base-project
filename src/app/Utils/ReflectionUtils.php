@@ -195,7 +195,7 @@ class ReflectionUtils
 		return $relations;
 	}
 
-	public static function componentClass(string $componentType): string
+	public static function componentClass2(string $componentType): string
 	{
 		// Intentar obtener el valor del caché
 		$cacheKey = "component_class_{$componentType}";
@@ -221,7 +221,7 @@ class ReflectionUtils
 		return "App\\GameApps\\{$path}Components\\{$studly}Component";
 	}
 
-	public static function componentClass2(string $componentType): string
+	public static function componentClass(string $componentType): string
 	{
 		$onlyType = $componentType;
 		$path = 'Common\\'; // Default path for common components
