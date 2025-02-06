@@ -24,7 +24,11 @@ class ComponentManager
 	public function createStateComponents(GameObject $gameObject, array $states): void
 	{
 		$stateComponents = [];
-		// $defaultState = array_key_first($states) ?? null;
+		if (empty($states)) {
+			return;
+		}
+		$defaultState = array_key_first($states) ?? null;
+		$stateComponents['__initial__'] = $defaultState;
 		foreach ($states as $state => $componentSettings) {
 			// $enabled = $state === $defaultState;
 			$componentKey = array_key_first($componentSettings);

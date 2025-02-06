@@ -85,7 +85,8 @@ abstract class Base extends Model
 		if (!$this->isStateManaged()) {
 			return null;
 		}
-		$currentStateName = $this->state ?? array_key_first($this->state_components);
+		$currentStateName = $this->state ?? $this->state_components['__initial__'];
+		echo "Current state name: $currentStateName\n";
 		$currentStateComponentId = $this->state_components[$currentStateName] ?? null;
 		$currentStateComponent = Component::find($currentStateComponentId)->subclass();
 		if (!$this->state) {
