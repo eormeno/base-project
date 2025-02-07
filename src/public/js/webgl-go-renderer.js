@@ -19,6 +19,7 @@ const eventQueue = [];
 const pings = [];
 const backendMs = [];
 let eventsAlreadyPending = [];
+let resourceUrl = '';
 
 window.onload = function () {
 	pingAvgElement = document.getElementById('pingAvg');
@@ -27,6 +28,7 @@ window.onload = function () {
 	pingBackendElement = document.getElementById('backendAvg');
 	backendMinElement = document.getElementById('backendMin');
 	backendMaxElement = document.getElementById('backendMax');
+	resourceUrl = document.getElementById('routeDiv').getAttribute('resourceUrl');
 	pushEvent('reload', {});
 	pullWithTimeout(1);
 }
@@ -122,7 +124,7 @@ function createComponent(data, mainContainer) {
 				if (component.width) element.style.width = component.width;
 				if (component.height) element.style.height = component.height;
 				if (component.image) {
-					element.style.backgroundImage = `url(res/${component.image})`;
+					element.style.backgroundImage = `url(${resourceUrl}/${component.image})`;
 					element.style.backgroundSize = 'cover';
 					element.style.backgroundPosition = 'center';
 				}

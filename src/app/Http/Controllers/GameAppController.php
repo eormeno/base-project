@@ -31,19 +31,9 @@ class GameAppController extends Controller
 
 	public function res(
 		GameApp $gameApp,
-		string $resourceName
+		string|null $resourceName
 	) {
 		$path = app_path("GameApps/$gameApp->prefix/resources/$resourceName");
 		return response()->file($path);
 	}
-
-	public function update(Game $game)
-	{
-		// return a 'connected' message to the client
-		return response()->json([
-			'connected' => true,
-			'game' => $game->id,
-		]);
-	}
-
 }
