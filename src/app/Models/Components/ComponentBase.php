@@ -55,7 +55,10 @@ class ComponentBase extends Model
 
 	public function subclass(): Component
 	{
-		return $this->type::find($this->id);
+		if (ReflectionUtils::isSubclassOf($this->type, PersistentComponent::class)) {
+			return $this->type::find($this->id);
+		}
+		return new $this->type($this->attributes);
 	}
 
 	public function view()
@@ -71,7 +74,13 @@ class ComponentBase extends Model
 		$type = ReflectionUtils::componentClass($slug_type);
 		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true]);
 		unset ($attributes['enabled'], $attributes['type']);
-		return $type::create(array_merge(['id' => $component->id], $attributes));
+
+		if (ReflectionUtils::isSubclassOf($type, PersistentComponent::class)) {
+			return $type::create(array_merge(['id' => $component->id], $attributes));
+		}
+
+		return new $type(array_merge(['id' => $component->id], $attributes));
+		// return $type::create(array_merge(['id' => $component->id], $attributes));
 	}
 
 	public function __tostring(): string

@@ -10,7 +10,11 @@ class Tile extends Prefab
 	public static function structure(): array
 	{
 		return [
-			'image:button' => ['attributes' => ['text' => 'Tile', 'event' => 'tile_1', 'style' => 'primary']],
+			'states' => [
+				'hidden' => ['mtq.tile-hidden-state' => []],
+				'revealed' => ['mtq.tile-revealed-state' => []],
+			],
+			'components' => ['mtq.tile' => []]
 		];
 	}
 }
