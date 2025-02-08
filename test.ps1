@@ -13,6 +13,7 @@ if ($filter -eq $null) {
 $testClasses = @{
     'gtn' = 'GTNPlayGameTest';
     'bba' = 'BBAPlayGameTest';
+    'mtq' = 'MTQPlayGameTest';
 }
 
 # Find the filter in prefix and get the test class name

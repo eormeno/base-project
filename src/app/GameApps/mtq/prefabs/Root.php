@@ -45,6 +45,16 @@ class Root extends Prefab
 				'height' => '100%'
 			],
 			'start_button:button' => ['attributes' => ['text' => 'Back', 'event' => 'start', 'style' => 'primary']],
+			'tile0:mtq.tile' => ['attributes' => ['x' => 0, 'y' => 0]],
+			'tile_1:sprite' => [
+				'attributes' => [
+					'texture' => 'tile_hidden.png',
+					'width' => 32,
+					'height' => 32,
+					'x' => 0,
+					'y' => 0
+				]
+			],
 		];
 	}
 
