@@ -12,6 +12,7 @@ class Root extends Prefab
 		return [
 			'states' => self::states(),
 			'initial_view:container' => self::initialView(),
+			'playing_view:container' => self::playingView(),
 		];
 	}
 
@@ -21,9 +22,9 @@ class Root extends Prefab
 			'active' => false,
 			'attributes' => [
 				'layout' => 'vertical',
-				'image' => 'inicial_600x700.png',
-				'width' => '100%',	// Expands horizontally to fill the parent container
-				'height' => '100%'	// Expands vertically to fill the parent container
+				'image' => 'initial_background.png',
+				'width' => '100%',
+				'height' => '100%'
 			],
 			'title:label' => ['attributes' => ['text' => 'Mythic Treasure Quest', 'style' => 'title']],
 			'description:label' => ['attributes' => ['text' => 'Un juego donde exploras templos antiguos y encuentras tesoros y posiones usando las mecánicas de buscaminas. Pero ten cuidado! También hay trampas, monstruos y maldiciones.', 'style' => 'paragraph']],
@@ -33,10 +34,25 @@ class Root extends Prefab
 		];
 	}
 
+	private static function playingView():array
+	{
+		return [
+			'active' => false,
+			'attributes' => [
+				'layout' => 'vertical',
+				'image' => 'playing_background.png',
+				'width' => '100%',
+				'height' => '100%'
+			],
+			'start_button:button' => ['attributes' => ['text' => 'Back', 'event' => 'start', 'style' => 'primary']],
+		];
+	}
+
 	private static function states(): array
 	{
 		return [
-			'initial' => ['bba.initial-state' => []],
+			'initial' => ['mtq.initial-state' => []],
+			'playing' => ['mtq.playing-state' => []],
 		];
 	}
 }

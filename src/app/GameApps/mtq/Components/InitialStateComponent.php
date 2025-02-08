@@ -13,7 +13,6 @@ class InitialStateComponent extends PersistentComponent
 	{
 		$initialView = $this->gameObject->findChild('initial_view');
 		if ($initialView) {
-			$this->log('InitialStateComponent::onEnter() found initial_view');
 			$initialView->updateActive(true);
 		}
 	}
@@ -22,15 +21,13 @@ class InitialStateComponent extends PersistentComponent
 	{
 		$initialView = $this->gameObject->findChild('initial_view');
 		if ($initialView) {
-			$this->log('InitialStateComponent::onExit() found initial_view');
 			$initialView->updateActive(false);
 		}
 	}
 
 	public function onStartEvent(): string|null
 	{
-		// return 'playing';
-		return null;
+		return 'playing';
 	}
 
 }
