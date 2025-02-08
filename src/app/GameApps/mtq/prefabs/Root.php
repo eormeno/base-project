@@ -21,7 +21,8 @@ class Root extends Prefab
 			'active' => false,
 			'attributes' => [
 				'layout' => 'vertical',
-				'image' => 'mythic-treasure-quest.jpeg',
+				// 'image' => 'mythic-treasure-quest.jpeg',
+				'image' => 'inicial_600x700.png',
 				'width' => '100%',	// Expands horizontally to fill the parent container
 				'height' => '100%'	// Expands vertically to fill the parent container
 			],
