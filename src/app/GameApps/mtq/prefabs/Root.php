@@ -72,7 +72,7 @@ class Root extends Prefab
 		$vgap = 4;
 		$matrix = [];
 		$matrix['active'] = true;
-		$matrix['attributes'] = ['x' => 40, 'y' => 40, 'image' => 'tileset_background.png', 'width' => '540px', 'height' => '540px'];
+		$matrix['attributes'] = ['x' => 30, 'y' => 80, 'image' => 'tileset_background.png', 'width' => '540px', 'height' => '540px'];
 		for ($i = 0; $i < $rows; $i++) {
 			for ($j = 0; $j < $cols; $j++) {
 				$x = $i * $size + $i * $hgap;

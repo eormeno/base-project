@@ -10,8 +10,8 @@ class ContainerComponent extends PersistentComponent
 	public static function config(): array
 	{
 		return [
-			'x' => ['string', null],
-			'y' => ['string', null],
+			'x' => ['integer', null],
+			'y' => ['integer', null],
 			'layout' => ['string', 'vertical'],
 			'width' => ['string','100%'],
 			'height' => ['string', '100%'],

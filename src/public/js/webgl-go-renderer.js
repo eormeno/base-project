@@ -128,18 +128,17 @@ function createComponent(data, mainContainer) {
 			case 'container':
 				element = document.createElement('div');
 				element.className = component.layout || 'vertical';
-				if (component.x || component.y) {
-					element.style.position = 'absolute';
-					if (component.x) element.style.left = component.x * 2;
-					if (component.y) element.style.top = component.y * 2;
-					console.log('x:', component.x, 'y:', component.y);
-				}
 				if (component.width) element.style.width = component.width;
 				if (component.height) element.style.height = component.height;
 				if (component.image) {
 					element.style.backgroundImage = `url(${resourceUrl}/${component.image})`;
 					element.style.backgroundSize = 'cover';
 					element.style.backgroundPosition = 'center';
+				}
+				if (component.x || component.y) {
+					element.style.position = 'absolute';
+					element.style.left = component.x + 'px';
+					element.style.top = component.y*4 + 'px';
 				}
 				break;
 
@@ -239,7 +238,7 @@ function setStyles() {
 			"position": "relative",
 			"flex-direction": "column",
 			"align-items": "center",
-			"gap": "10px",
+			// "gap": "10px",
 			"width": "100%"
 		},
 		".title": {
