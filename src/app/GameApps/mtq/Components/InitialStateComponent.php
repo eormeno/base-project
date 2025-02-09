@@ -27,7 +27,7 @@ class InitialStateComponent extends PersistentComponent
 
 	public function onStartEvent(): string|null
 	{
-		return 'playing';
+		return 'menu';
 	}
 
 }

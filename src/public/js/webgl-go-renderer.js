@@ -65,6 +65,8 @@ async function sendEvent(event, formData = {}) {
 			document.write(data);
 		} else {
 			const json = JSON.parse(data);
+			let stringified = JSON.stringify(json);
+			console.log(stringified);
 			if (json.elapsed) {
 				if (json.elapsed < backendMin) {
 					backendMin = json.elapsed;
@@ -145,14 +147,13 @@ function createComponent(data, mainContainer) {
 				break;
 
 			case 'sprite':
-				console.log(component);
 				element = document.createElement('img');
 				element.src = `res/${component.texture}`;
 				element.style.position = 'absolute';
 				let x = component.x - element.width * component.scale;
 				let y = component.y - element.height * component.scale;
-				element.style.left = x + 'px';
-				element.style.top = y + 'px';
+				element.style.left = component.x + 'px';
+				element.style.top = component.y + 'px';
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
 				element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
 				break;
@@ -163,9 +164,10 @@ function createComponent(data, mainContainer) {
 				element.autoplay = false;
 				element.loop = component.loop;
 				element.volume = component.volume;
-				// add click event listener to play/pause audio to the parent element
-				const parentElement = elementsMap.get(component.parent.toString());
-				parentElement?.addEventListener('click', () => playAudio(element));
+				playAudio(element);
+				// // add click event listener to play/pause audio to the parent element
+				// const parentElement = elementsMap.get(component.parent.toString());
+				// parentElement?.addEventListener('click', () => playAudio(element));
 				break;
 		}
 
@@ -176,7 +178,6 @@ function createComponent(data, mainContainer) {
 		if (component.parent) {
 			const parentElement = elementsMap.get(component.parent.toString());
 			parentElement?.appendChild(element);
-			parentElement.click();
 		} else {
 			// Agregar al contenedor principal
 			mainContainer.appendChild(element);
@@ -209,11 +210,10 @@ function renderComponents(responseData, mainContainerName) {
 
 function playAudio(audio) {
 	if (audio instanceof HTMLAudioElement) {
-		if (audio.paused) {
+		audio.play().catch(error => {
+			// Simulate user interaction to play audio
 			audio.play();
-		} else {
-			audio.pause();
-		}
+		});
 	}
 }
 

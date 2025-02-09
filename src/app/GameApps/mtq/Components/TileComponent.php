@@ -14,6 +14,7 @@ class TileComponent extends PersistentComponent
         return [
             'x' => ['integer', 0],
             'y' => ['integer', 0],
+			'state' => ['string', 'hidden'],
         ];
     }
 
@@ -21,6 +22,7 @@ class TileComponent extends PersistentComponent
 	{
 		$this->x = $initParams['x'] ?? 0;
 		$this->y = $initParams['y'] ?? 0;
+		$this->state = $initParams['state'] ?? 'hidden';
 		$this->save();
 	}
 
@@ -29,8 +31,15 @@ class TileComponent extends PersistentComponent
 		return [
 			'parent' => $this->parentGameObject()->id ?? null,
 			'type' => 'sprite',
+			'texture' => "tile_{$this->state}.png",
 			'x' => $this->x,
 			'y' => $this->y,
+			'layer' => 1,
+			'pivot_x' => 0.5,
+			'pivot_y' => 0.5,
+			'width' => 32,
+			'height' => 32,
+			'rotation' => 0,
 		];
 	}
 }
