@@ -41,6 +41,8 @@ class TileComponent extends PersistentComponent
 			'height' => 32,
 			'rotation' => 0,
 			'scale' => 2,
+			'click_destination' => $this->gameObject->id,
+			'event' => 'click',
 		];
 	}
 }

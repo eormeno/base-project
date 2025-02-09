@@ -15,6 +15,8 @@ class RendererService implements IRenderer
 	public function render(Game $game, array $eventInfo): array
 	{
 		$currentTimestamp = microtime(true);
+		if ($eventInfo['event'] == 'click')
+			$this->log(json_encode($eventInfo, JSON_PRETTY_PRINT));
 		event(new FrontEvent($game, $eventInfo));
 		$result = $this->request($game, $eventInfo);
 		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
@@ -49,14 +51,14 @@ class RendererService implements IRenderer
 		return $ret;
 	}
 
-    private function resolveActiveGOIds($activeGameObjects, $rootId): array
-    {
-        return collect($activeGameObjects)
-            ->pluck('id')
-            ->reject(fn ($id) => $id === $rootId)
-            ->values()
-            ->toArray();
-    }
+	private function resolveActiveGOIds($activeGameObjects, $rootId): array
+	{
+		return collect($activeGameObjects)
+			->pluck('id')
+			->reject(fn($id) => $id === $rootId)
+			->values()
+			->toArray();
+	}
 
 	private function resolveDeactives(array $rendered, array $actives): array
 	{

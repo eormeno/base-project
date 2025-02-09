@@ -33,7 +33,7 @@ window.onload = function () {
 	pullWithTimeout(1000);
 }
 
-async function sendEvent(event, formData = {}) {
+async function sendEvent(event, formData = {}, destination = null) {
 	if (eventSent) {
 		return;
 	}
@@ -46,17 +46,21 @@ async function sendEvent(event, formData = {}) {
 	var token = routeDiv.getAttribute('token');
 
 	try {
+		eventInfo = {
+			event: event,
+			data: formData,
+			rendered: allIdsFromMapAndVersions(),
+		};
+		if (destination) {
+			eventInfo.destination = destination;
+		}
 		const response = await fetch(route, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				'X-CSRF-TOKEN': token
 			},
-			body: JSON.stringify({
-				event: event,
-				data: formData,
-				rendered: allIdsFromMapAndVersions(),
-			})
+			body: JSON.stringify(eventInfo)
 		});
 
 		const data = await response.text();
@@ -167,16 +171,18 @@ function createComponent(data, mainContainer) {
 				element.style.left = x + 'px';
 				element.style.top = y + 'px';
 				element.style.transform = `rotate(${component.rotation}deg)`;
-				// add a hover effect to the sprite
 				element.addEventListener('mouseenter', () => {
-					//element.style.filter = `drop-shadow(2px 2px 2px rgba(0,0,0,0.5))`;
-					// brightness(1.5) contrast(1.5) saturate(1.5) hue-rotate(10deg)
-					element.style.filter = `brightness(1.5) contrast(1.5) saturate(1.5) hue-rotate(10deg)`;
+					element.style.filter = `brightness(1.2)`;
 				});
 				element.addEventListener('mouseleave', () => {
 					element.style.filter = 'none';
 				});
-				// element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
+				// on click event
+				if (component.event) {
+					element.addEventListener('click', () => handleEvent
+						(component.event, {}, component.click_destination));
+				}
+
 				break;
 
 			case 'sound':
@@ -206,9 +212,8 @@ function createComponent(data, mainContainer) {
 	});
 }
 
-function handleEvent(eventType) {
-	//sendEvent(eventType);
-	pushEvent(eventType);
+function handleEvent(eventType, data, destination) {
+	pushEvent(eventType, data, destination);
 }
 
 function renderComponents(responseData, mainContainerName) {
@@ -249,7 +254,6 @@ function setStyles() {
 			"position": "relative",
 			"flex-direction": "column",
 			"align-items": "center",
-			// "gap": "10px",
 			"width": "100%"
 		},
 		".title": {
@@ -314,9 +318,9 @@ const pullWithTimeout = async (interval) => {
 				return;
 			}
 			const startTime = Date.now();
-			const { event, data } = dequeueEvent();
+			const { event, data, destination } = dequeueEvent();
 			if (event) {
-				await sendEvent(event, data);
+				await sendEvent(event, data, destination);
 			}
 			const endTime = Date.now();
 			const elapsed = endTime - startTime;
@@ -337,7 +341,7 @@ const pullWithTimeout = async (interval) => {
 		} catch (error) {
 			console.error('Error:', error);
 		} finally {
-			pushEvent('update', { 'delta': previousMillis });
+			pushEvent('update', {});
 			setTimeout(fetchData, interval);
 		}
 	};
@@ -345,23 +349,24 @@ const pullWithTimeout = async (interval) => {
 	fetchData();
 };
 
-function pushEvent(event, data) {
+function pushEvent(event, data, destination = null) {
 	if (eventsAlreadyPending.includes(event)) {
 		return;
 	}
 	eventsAlreadyPending.push(event);
-	eventQueue.push({ event, data });
+	eventQueue.push({ event, data, destination });
+	console.log('Event pushed:', event, data, destination);
 }
 
 function dequeueEvent() {
 	if (eventQueue.length === 0) {
 		return null;
 	}
-	const { event, data } = eventQueue.shift();
+	const { event, data, destination } = eventQueue.shift();
 	// Remove the event from the pending list
 	const index = eventsAlreadyPending.indexOf(event);
 	if (index > -1) {
 		eventsAlreadyPending.splice(index, 1);
 	}
-	return { event, data };
+	return { event, data, destination };
 }
