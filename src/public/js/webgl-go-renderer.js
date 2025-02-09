@@ -176,6 +176,7 @@ function createComponent(data, mainContainer) {
 		if (component.parent) {
 			const parentElement = elementsMap.get(component.parent.toString());
 			parentElement?.appendChild(element);
+			parentElement.click();
 		} else {
 			// Agregar al contenedor principal
 			mainContainer.appendChild(element);
