@@ -62,21 +62,6 @@ class Root extends Prefab
 			],
 			// 'back_button:button' => ['attributes' => ['text' => 'Back', 'event' => 'start', 'style' => 'primary']],
 			'tileset:container' => self::tileMatrix(8, 8),
-			// [
-			// 	'attributes' => [
-			// 		'layout' => 'vertical',
-			// 		'width' => '100%',
-			// 		'height' => '100%'
-			// 	],
-			// 	'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
-			// 	'tile01:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 	'tile02:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 	'tile03:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 	'tile04:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 	'tile05:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 	'tile06:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 	'tile07:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// ],
 		];
 	}
 
@@ -87,7 +72,7 @@ class Root extends Prefab
 		$vgap = 4;
 		$matrix = [];
 		$matrix['active'] = true;
-		$matrix['attributes'] = ['layout' => 'vertical', 'width' => '100%', 'height' => '100%'];
+		$matrix['attributes'] = ['x' => 40, 'y' => 40, 'image' => 'tileset_background.png', 'width' => '540px', 'height' => '540px'];
 		for ($i = 0; $i < $rows; $i++) {
 			for ($j = 0; $j < $cols; $j++) {
 				$x = $i * $size + $i * $hgap;

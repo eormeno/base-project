@@ -10,25 +10,29 @@ class ContainerComponent extends PersistentComponent
 	public static function config(): array
 	{
 		return [
-			'layout' => ['string', null],
-			'width' => ['string', null],
-			'height' => ['string', null],
+			'x' => ['string', null],
+			'y' => ['string', null],
+			'layout' => ['string', 'vertical'],
+			'width' => ['string','100%'],
+			'height' => ['string', '100%'],
 			'image' => ['string', null],
 		];
 	}
 
 	public function onAwake(array $initParams): void
 	{
+		$this->x = $initParams['x'] ?? null;
+		$this->y = $initParams['y'] ?? null;
 		$this->layout = $initParams['layout'] ?? 'vertical';
-		$this->width = $initParams['width'] ?? null;
-		$this->height = $initParams['height'] ?? null;
+		$this->width = $initParams['width'] ?? '100%';
+		$this->height = $initParams['height'] ?? '100%';
 		$this->image = $initParams['image'] ?? null;
 		$this->save();
 	}
 
 	public function view()
 	{
-		return [
+		$ret = [
 			'parent' => $this->parentGameObject()->id ?? null,
 			'type' => 'container',
 			'layout' => $this->layout,
@@ -36,5 +40,12 @@ class ContainerComponent extends PersistentComponent
 			'height' => $this->height,
 			'image' => $this->image,
 		];
+		if ($this->x !== null) {
+			$ret['x'] = $this->x;
+		}
+		if ($this->y !== null) {
+			$ret['y'] = $this->y;
+		}
+		return $ret;
 	}
 }

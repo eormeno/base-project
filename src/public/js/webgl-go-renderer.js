@@ -128,6 +128,12 @@ function createComponent(data, mainContainer) {
 			case 'container':
 				element = document.createElement('div');
 				element.className = component.layout || 'vertical';
+				if (component.x || component.y) {
+					element.style.position = 'absolute';
+					if (component.x) element.style.left = component.x * 2;
+					if (component.y) element.style.top = component.y * 2;
+					console.log('x:', component.x, 'y:', component.y);
+				}
 				if (component.width) element.style.width = component.width;
 				if (component.height) element.style.height = component.height;
 				if (component.image) {
