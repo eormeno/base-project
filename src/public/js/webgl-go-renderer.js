@@ -30,7 +30,7 @@ window.onload = function () {
 	backendMaxElement = document.getElementById('backendMax');
 	resourceUrl = document.getElementById('routeDiv').getAttribute('resourceUrl');
 	pushEvent('reload', {});
-	pullWithTimeout(1);
+	pullWithTimeout(1000);
 }
 
 async function sendEvent(event, formData = {}) {
@@ -145,6 +145,7 @@ function createComponent(data, mainContainer) {
 				break;
 
 			case 'sprite':
+				console.log(component);
 				element = document.createElement('img');
 				element.src = `res/${component.texture}`;
 				element.style.position = 'absolute';
