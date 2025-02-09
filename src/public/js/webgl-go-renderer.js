@@ -160,7 +160,7 @@ function createComponent(data, mainContainer) {
 				element.style.left = x + 'px';
 				element.style.top = y + 'px';
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
-				element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
+				// element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
 				break;
 
 			case 'sound':

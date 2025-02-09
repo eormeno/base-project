@@ -52,9 +52,6 @@ class Root extends Prefab
 
 	private static function playingView(): array
 	{
-		$x = 0;
-		$y = 0;
-		$size = 64;
 		return [
 			'active' => false,
 			'attributes' => [
@@ -63,39 +60,38 @@ class Root extends Prefab
 				'width' => '100%',
 				'height' => '100%'
 			],
-			// 'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
-			// 'tile01:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 'tile02:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 'tile03:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 'tile04:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 'tile05:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 'tile06:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			// 'tile07:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
 			// 'back_button:button' => ['attributes' => ['text' => 'Back', 'event' => 'start', 'style' => 'primary']],
-			'tileset:container' => [
-				'attributes' => [
-					'layout' => 'vertical',
-					'width' => '100%',
-					'height' => '100%'
-				],
-				'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
-				'tile01:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-				'tile02:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
-			],
-			// 	'tile00:mtq.tile' => ['attributes' => ['x' => 0, 'y' => 0]],
+			'tileset:container' => self::tileMatrix(8, 8),
+			// [
+			// 	'attributes' => [
+			// 		'layout' => 'vertical',
+			// 		'width' => '100%',
+			// 		'height' => '100%'
+			// 	],
+			// 	'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
+			// 	'tile01:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 	'tile02:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 	'tile03:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 	'tile04:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 	'tile05:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 	'tile06:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 	'tile07:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
 			// ],
 		];
 	}
 
 	private static function tileMatrix(int $rows, int $cols): array
 	{
+		$size = 64;
+		$hgap = 4;
+		$vgap = 4;
 		$matrix = [];
 		$matrix['active'] = true;
 		$matrix['attributes'] = ['layout' => 'vertical', 'width' => '100%', 'height' => '100%'];
 		for ($i = 0; $i < $rows; $i++) {
 			for ($j = 0; $j < $cols; $j++) {
-				$x = $i * 32;
-				$y = $j * 32;
+				$x = $i * $size + $i * $hgap;
+				$y = $j * $size + $j * $vgap;
 				$matrix["tile{$i}{$j}:mtq.tile"] = ['attributes' => ['x' => $x, 'y' => $y]];
 			}
 		}
