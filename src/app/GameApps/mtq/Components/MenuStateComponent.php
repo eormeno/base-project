@@ -13,7 +13,7 @@ class MenuStateComponent extends PersistentComponent
 	{
 		$menuView = $this->gameObject->findChild('menu_view');
 		if ($menuView) {
-			$menuView->updateActive(true);
+			$menuView->activate();
 		}
 	}
 
@@ -21,7 +21,7 @@ class MenuStateComponent extends PersistentComponent
 	{
 		$menuView = $this->gameObject->findChild('menu_view');
 		if ($menuView) {
-			$menuView->updateActive(false);
+			$menuView->deactivate();
 		}
 	}
 

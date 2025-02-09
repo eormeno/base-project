@@ -35,11 +35,12 @@ class TileComponent extends PersistentComponent
 			'x' => $this->x,
 			'y' => $this->y,
 			'layer' => 1,
-			'pivot_x' => 0.5,
-			'pivot_y' => 0.5,
+			'pivot_x' => 0,
+			'pivot_y' => 0,
 			'width' => 32,
 			'height' => 32,
 			'rotation' => 0,
+			'scale' => 2,
 		];
 	}
 }

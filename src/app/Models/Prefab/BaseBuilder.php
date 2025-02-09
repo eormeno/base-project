@@ -53,7 +53,7 @@ abstract class BaseBuilder extends Base
 				'name' => $gameObjectName ?? $this->name,
 				'active' => $active,
 				'game_object_id' => $parent?->id,
-				'active_parents' => $parent ? $parent->active : true,
+				'active_parents' => $parent ? $parent->active && $parent->active_parents : true,
 				'game_id' => $game->id
 			]
 		);

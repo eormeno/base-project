@@ -13,7 +13,7 @@ class InitialStateComponent extends PersistentComponent
 	{
 		$initialView = $this->gameObject->findChild('initial_view');
 		if ($initialView) {
-			$initialView->updateActive(true);
+			$initialView->activate();
 		}
 	}
 
@@ -21,7 +21,7 @@ class InitialStateComponent extends PersistentComponent
 	{
 		$initialView = $this->gameObject->findChild('initial_view');
 		if ($initialView) {
-			$initialView->updateActive(false);
+			$initialView->deactivate();
 		}
 	}
 

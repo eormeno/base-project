@@ -65,8 +65,6 @@ async function sendEvent(event, formData = {}) {
 			document.write(data);
 		} else {
 			const json = JSON.parse(data);
-			let stringified = JSON.stringify(json);
-			console.log(stringified);
 			if (json.elapsed) {
 				if (json.elapsed < backendMin) {
 					backendMin = json.elapsed;
@@ -82,8 +80,15 @@ async function sendEvent(event, formData = {}) {
 					backendMinElement.textContent = `${backendMin} ms`;
 					backendMaxElement.textContent = `${backendMax} ms`;
 				}
+				// remove the elapsed time from the json
+				delete json.elapsed;
 			}
-			renderComponents(json, 'glCanvas');
+			// if json is not empty, render the components
+			if (Object.keys(json).length > 0) {
+				let stringified = JSON.stringify(json, null, 2);
+				console.log(stringified);
+				renderComponents(json, 'glCanvas');
+			}
 		}
 	} catch (error) {
 		console.error(error);
@@ -150,10 +155,10 @@ function createComponent(data, mainContainer) {
 				element = document.createElement('img');
 				element.src = `res/${component.texture}`;
 				element.style.position = 'absolute';
-				let x = component.x - element.width * component.scale;
-				let y = component.y - element.height * component.scale;
-				element.style.left = component.x + 'px';
-				element.style.top = component.y + 'px';
+				let x = component.x - (element.width * component.scale * component.pivot_x);
+				let y = component.y - (element.height * component.scale * component.pivot_y);
+				element.style.left = x + 'px';
+				element.style.top = y + 'px';
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
 				element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
 				break;

@@ -54,6 +54,7 @@ class Root extends Prefab
 	{
 		$x = 0;
 		$y = 0;
+		$size = 64;
 		return [
 			'active' => false,
 			'attributes' => [
@@ -62,24 +63,25 @@ class Root extends Prefab
 				'width' => '100%',
 				'height' => '100%'
 			],
-			'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
-			'tile01:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-			'tile02:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-			'tile03:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-			'tile04:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-			'tile05:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-			'tile06:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-			'tile07:mtq.tile' => ['attributes' => ['x' => $x += 32, 'y' => $y]],
-
-
-
-			// 'start_button:button' => ['attributes' => ['text' => 'Back', 'event' => 'start', 'style' => 'primary']],
-			// 'tileset:container' => [
-			// 	'attributes' => [
-			// 		'vertical' => 'vertical',
-			// 		'width' => '100%',
-			// 		'height' => '100%'
-			// 	],
+			// 'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
+			// 'tile01:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'tile02:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'tile03:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'tile04:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'tile05:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'tile06:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'tile07:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			// 'back_button:button' => ['attributes' => ['text' => 'Back', 'event' => 'start', 'style' => 'primary']],
+			'tileset:container' => [
+				'attributes' => [
+					'layout' => 'vertical',
+					'width' => '100%',
+					'height' => '100%'
+				],
+				'tile00:mtq.tile' => ['attributes' => ['x' => $x, 'y' => $y]],
+				'tile01:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+				'tile02:mtq.tile' => ['attributes' => ['x' => $x += $size, 'y' => $y]],
+			],
 			// 	'tile00:mtq.tile' => ['attributes' => ['x' => 0, 'y' => 0]],
 			// ],
 		];

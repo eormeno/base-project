@@ -23,8 +23,7 @@ class PlayingStateComponent extends PersistentComponent
 	{
 		$playingView = $this->gameObject->findChild('playing_view');
 		if ($playingView) {
-			$this->log('PlayingStateComponent::onEnter() found playing_view');
-			$playingView->updateActive(true);
+			$playingView->activate();
 		}
 	}
 
@@ -33,7 +32,7 @@ class PlayingStateComponent extends PersistentComponent
 		$playingView = $this->gameObject->findChild('playing_view');
 		if ($playingView) {
 			$this->log('PlayingStateComponent::onExit() found playing_view');
-			$playingView->updateActive(false);
+			$playingView->deactivate();
 		}
 	}
 

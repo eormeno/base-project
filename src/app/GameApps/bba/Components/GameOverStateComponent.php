@@ -13,8 +13,7 @@ class GameOverStateComponent extends PersistentComponent
 	{
 		$gameOverView = $this->gameObject->findChild('game_over_view');
 		if ($gameOverView) {
-			$this->log('GameOverStateComponent::onEnter() found game_over_view');
-			$gameOverView->updateActive(true);
+			$gameOverView->activate();
 		}
 	}
 
@@ -23,7 +22,7 @@ class GameOverStateComponent extends PersistentComponent
 		$gameOverView = $this->gameObject->findChild('game_over_view');
 		if ($gameOverView) {
 			$this->log('GameOverStateComponent::onExit() found game_over_view');
-			$gameOverView->updateActive(false);
+			$gameOverView->deactivate();
 		}
 	}
 }

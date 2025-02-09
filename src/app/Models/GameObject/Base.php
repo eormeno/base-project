@@ -56,13 +56,31 @@ abstract class Base extends Model
 		return $this->children()->where('name', $name)->first();
 	}
 
-	public function updateActive(bool $value): void
+	public function activate(): void
 	{
-		if ($this->active === $value) {
+		if ($this->active) {
 			return;
 		}
-		$this->update(['active' => $value]);
-		$this->children()->update(['active_parents' => $value]);
+		$this->update(['active' => true]);
+		$this->updateActive(true);
+	}
+
+	public function deactivate(): void
+	{
+		if (!$this->active) {
+			return;
+		}
+		$this->update(['active' => false]);
+		$this->updateActive(false);
+	}
+
+	private function updateActive(bool $value): void
+	{
+		$children = $this->children()->get();
+		foreach ($children as $child) {
+			$child->update(['active_parents' => $value]);
+			$child->updateActive($value);
+		}
 	}
 
 	public function scopeActivesOfGame($query, Game $game): void
