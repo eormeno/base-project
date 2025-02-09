@@ -68,8 +68,8 @@ class Root extends Prefab
 	private static function tileMatrix(int $rows, int $cols): array
 	{
 		$size = 64;
-		$hgap = 4;
-		$vgap = 4;
+		$hgap = 0;
+		$vgap = 0;
 		$matrix = [];
 		$matrix['active'] = true;
 		$matrix['attributes'] = ['x' => 30, 'y' => 80, 'image' => 'tileset_background.png', 'width' => '540px', 'height' => '540px'];
@@ -80,6 +80,12 @@ class Root extends Prefab
 				$matrix["tile{$i}{$j}:mtq.tile"] = ['attributes' => ['x' => $x, 'y' => $y]];
 			}
 		}
+		$hsize = $cols * $size + ($cols - 1) * $hgap;
+		$vsize = $rows * $size + ($rows - 1) * $vgap;
+		$matrix['attributes']['x'] = (600 - $hsize) / 2;
+		$matrix['attributes']['y'] = (700 - $vsize) / 2;
+		$matrix['attributes']['width'] = "{$hsize}px";
+		$matrix['attributes']['height'] = "{$vsize}px";
 		return $matrix;
 	}
 

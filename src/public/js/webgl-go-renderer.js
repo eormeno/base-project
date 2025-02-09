@@ -138,7 +138,7 @@ function createComponent(data, mainContainer) {
 				if (component.x || component.y) {
 					element.style.position = 'absolute';
 					element.style.left = component.x + 'px';
-					element.style.top = component.y*4 + 'px';
+					element.style.top = component.y + 'px';
 				}
 				break;
 
@@ -160,11 +160,22 @@ function createComponent(data, mainContainer) {
 				element = document.createElement('img');
 				element.src = `res/${component.texture}`;
 				element.style.position = 'absolute';
+				element.style.width = component.width * component.scale + 'px';
+				element.style.height = component.height * component.scale + 'px';
 				let x = component.x - (element.width * component.scale * component.pivot_x);
 				let y = component.y - (element.height * component.scale * component.pivot_y);
 				element.style.left = x + 'px';
 				element.style.top = y + 'px';
-				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
+				element.style.transform = `rotate(${component.rotation}deg)`;
+				// add a hover effect to the sprite
+				element.addEventListener('mouseenter', () => {
+					//element.style.filter = `drop-shadow(2px 2px 2px rgba(0,0,0,0.5))`;
+					// brightness(1.5) contrast(1.5) saturate(1.5) hue-rotate(10deg)
+					element.style.filter = `brightness(1.5) contrast(1.5) saturate(1.5) hue-rotate(10deg)`;
+				});
+				element.addEventListener('mouseleave', () => {
+					element.style.filter = 'none';
+				});
 				// element.style.filter = `drop-shadow(5px 5px 5px rgba(0,0,0,0.5))`;
 				break;
 
