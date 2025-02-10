@@ -14,10 +14,20 @@ class RendererService implements IRenderer
 
 	public function render(Game $game, array $eventInfo): array
 	{
+		// if 'destination' key is set
+		if (isset($eventInfo['destination'])) {
+			$destination = $eventInfo['destination'];
+			GameObject::find($destination)->handle($eventInfo);
+			$this->log("Destination: $destination");
+		} else {
+			$gameObjects = GameObject::activesOfGame($game)->get();
+			foreach ($gameObjects as $gameObject) {
+				$gameObject->handle($eventInfo);
+			}
+		}
+
 		$currentTimestamp = microtime(true);
-		if ($eventInfo['event'] == 'click')
-			$this->log(json_encode($eventInfo, JSON_PRETTY_PRINT));
-		event(new FrontEvent($game, $eventInfo));
+		// event(new FrontEvent($game, $eventInfo));
 		$result = $this->request($game, $eventInfo);
 		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
 		$result['elapsed'] = $elapsed;

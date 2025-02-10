@@ -10,30 +10,37 @@ use App\Contracts\IFrontEventListener;
 /**
  * Handles the front incoming event managing the GO's state following the State-Design-Pattern.
  */
-abstract class StateContextBase extends Base implements IStateContext, IFrontEventListener
+abstract class StateContextBase extends Base implements IStateContext//, IFrontEventListener
 {
+	// public function handle(FrontEvent $event): void
+	// {
+	// 	if (!$this->isActive() || !$this->isStateManaged()) {
+	// 		return;
+	// 	}
+	// 	$this->request($event->event);
+	// }
 
-	public function handle(FrontEvent $event): void
+	public function handle(array $eventInfo): void
 	{
 		if (!$this->isActive() || !$this->isStateManaged()) {
 			return;
 		}
-		$this->request($event->event);
+		$this->request($eventInfo);
 	}
 
 	public function request(array $event)
-    {
-        do {
-            $stateComponent = $this->currentStateComponent();
+	{
+		do {
+			$stateComponent = $this->currentStateComponent();
 			if (!$stateComponent) {
 				// TODO quitar este return
 				return;
 			}
 			$stateName = $this->state;
-            $stateComponent->onStart();
-            $nextState = $stateComponent->handleStateEvent($event);
+			$stateComponent->onStart();
+			$nextState = $stateComponent->handleStateEvent($event);
 			$this->changeState($nextState);
-            $event = Constants::EMPTY_EVENT;
-        } while ($nextState !== $stateName);
-    }
+			$event = Constants::EMPTY_EVENT;
+		} while ($nextState !== $stateName);
+	}
 }

@@ -355,7 +355,7 @@ function pushEvent(event, data, destination = null) {
 	}
 	eventsAlreadyPending.push(event);
 	eventQueue.push({ event, data, destination });
-	console.log('Event pushed:', event, data, destination);
+	// console.log('Event pushed:', event, data, destination);
 }
 
 function dequeueEvent() {

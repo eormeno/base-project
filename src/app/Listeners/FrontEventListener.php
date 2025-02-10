@@ -19,7 +19,7 @@ class FrontEventListener implements IFrontEventListener
 		$gameObjects = GameObject::activesOfGame($event->game)->get();
 		// TODO agregar también un filtro de sólo los game objects que son menajados por eventos.
 		foreach ($gameObjects as $gameObject) {
-			$gameObject->handle($event);
+			// $gameObject->handle($event);
 		}
     }
 }
