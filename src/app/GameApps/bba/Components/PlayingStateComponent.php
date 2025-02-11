@@ -14,8 +14,8 @@ class PlayingStateComponent extends PersistentComponent
 	public static function config(): array
 	{
 		return [
-			'vx' => ['float', 5],
-			'vy' => ['float', 5],
+			'vx' => ['float', 20],
+			'vy' => ['float', 20],
 		];
 	}
 
@@ -36,16 +36,13 @@ class PlayingStateComponent extends PersistentComponent
 		}
 	}
 
-	public function onUpdateEvent(float $delta = 0): void
+	public function onUpdateEvent(): void
 	{
-		if ($delta == 0) {
-			return;
-		}
 		$ball = $this->findGameObject('ball');
-		$this->move($ball, 1000 / $delta, 800, 450);
+		$this->move($ball, 800, 450);
 	}
 
-	public function move(GameObject $ball, float $delta, $screenWidth, $screenHeight)
+	public function move(GameObject $ball, $screenWidth, $screenHeight)
 	{
 		$sprite = $ball->getComponent('sprite');
 		$sprite_width = $sprite->width * $sprite->scale;
@@ -54,8 +51,8 @@ class PlayingStateComponent extends PersistentComponent
 		$y = $sprite->y;
 
 		// Actualizar posición
-		$x += $this->vx * $delta;
-		$y += $this->vy * $delta;
+		$x += $this->vx;
+		$y += $this->vy;
 
 		// Detección de colisiones
 		if ($x <= $sprite_width || $x + $sprite_width >= $screenWidth) {

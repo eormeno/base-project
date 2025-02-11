@@ -20,16 +20,6 @@ class Game extends Model
 	use HasFactory, DebugHelper;
 	protected $fillable = ['invitation_code', 'game_app_id', 'game_object_id', 'elapsed'];
 
-	// public function handle(FrontEvent $event)
-	// {
-	// 	$this->log("Game $this->invitation_code handling event '{$event->event['event']}'");
-	// }
-
-	// public function handle(array $eventInfo): void
-	// {
-	// 	$this->log("Game $this->invitation_code handling event '{$eventInfo['event']}'");
-	// }
-
 	public function gameApp(): BelongsTo
 	{
 		return $this->belongsTo(GameApp::class);

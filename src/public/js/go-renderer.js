@@ -77,7 +77,7 @@ function sendEvent(event, formData = {}, signal = false) {
             event: event,
             is_signal: signal,
             source: source,
-            destination: destination,
+            // destination: destination,
             data: formData,
             rendered: arrClientRenderings
         })

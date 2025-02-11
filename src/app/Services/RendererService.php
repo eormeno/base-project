@@ -7,6 +7,7 @@ use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Contracts\IRenderer;
 use App\Models\GameObject\GameObject;
+use Illuminate\Database\Eloquent\Collection;
 
 class RendererService implements IRenderer
 {
@@ -14,24 +15,26 @@ class RendererService implements IRenderer
 
 	public function render(Game $game, array $eventInfo): array
 	{
-		// if 'destination' key is set
-		if (isset($eventInfo['destination'])) {
-			$destination = $eventInfo['destination'];
-			GameObject::find($destination)->handle($eventInfo);
-			$this->log("Destination: $destination");
-		} else {
-			$gameObjects = GameObject::activesOfGame($game)->get();
-			foreach ($gameObjects as $gameObject) {
-				$gameObject->handle($eventInfo);
-			}
+		$currentTimestamp = microtime(true);
+		$targetedGameObjects = $this->getTargetedGameObjects($game, $eventInfo);
+
+		foreach ($targetedGameObjects as $gameObject) {
+			$gameObject->handle($eventInfo);
 		}
 
-		$currentTimestamp = microtime(true);
-		// event(new FrontEvent($game, $eventInfo));
 		$result = $this->request($game, $eventInfo);
 		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
 		$result['elapsed'] = $elapsed;
 		return $result;
+	}
+
+	private function getTargetedGameObjects(Game $game, array $eventInfo): Collection
+	{
+		$target = $eventInfo['destination'] ?? null;
+		if ($target) {
+			return new Collection([GameObject::find($target)]);
+		}
+		return GameObject::activesOfGame($game)->get();
 	}
 
 	private function request(Game $game, array $event): array
