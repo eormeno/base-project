@@ -35,7 +35,7 @@ class RendererService implements IRenderer
 	{
 		$target = $eventInfo['destination'] ?? null;
 		if ($target) {
-			$this->log("Targeted game object: {$eventInfo['event']} $target");
+			$this->log("Target game object: {$eventInfo['event']} $target");
 			return new Collection([GameObject::find($target)]);
 		}
 		return GameObject::activesOfGame($game)->get();
