@@ -144,7 +144,7 @@ function createComponent(data, mainContainer) {
 				element = document.createElement('button');
 				element.textContent = component.text;
 				if (component.event) {
-					element.addEventListener('click', () => handleEvent(component.event));
+					element.addEventListener('click', () => pushEvent(component.event, {}, id));
 				}
 				break;
 
@@ -167,8 +167,7 @@ function createComponent(data, mainContainer) {
 				});
 				// on click event
 				if (component.event) {
-					element.addEventListener('click', () => handleEvent
-						(component.event, {}, component.click_destination));
+					element.addEventListener('click', () => pushEvent(component.event, {}, id));
 				}
 
 				break;
@@ -184,7 +183,7 @@ function createComponent(data, mainContainer) {
 		}
 
 		if (component.updatable) {
-			pushEvent('update', {});
+			pushEvent('update', {}, id);
 		}
 
 		if (!element) {
@@ -206,9 +205,9 @@ function createComponent(data, mainContainer) {
 	});
 }
 
-function handleEvent(eventType, data, destination) {
-	pushEvent(eventType, data, destination);
-}
+// function handleEvent(eventType, data, destination) {
+// 	pushEvent(eventType, data, destination);
+// }
 
 function renderComponents(responseData, mainContainerName) {
 	const mainContainer = document.getElementById(mainContainerName || 'main');

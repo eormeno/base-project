@@ -36,43 +36,7 @@
         fetchData(1); // Inicia la primera solicitud
     };
 
-    // Llamada al servicio cada 5 segundos
     fetchWithTimeout(500);
-
-    // function eventListener() {
-    //     return {
-    //         async fetchEvents(reloaded = 0) {
-    //             try {
-    //                 let response = await fetch('{{ route('pull-events') }}' + '?reloaded=' + reloaded);
-    //                 if (response.ok) {
-    //                     let event_data = await response.json();
-    //                     if (event_data.length > 0) {
-    //                         for (let event of event_data) {
-    //                             displayLogEvent(event);
-    //                             document.dispatchEvent(new CustomEvent(event.name, {
-    //                                 detail: event.data
-    //                             }));
-    //                         }
-    //                     }
-    //                 }
-    //             } catch (error) {
-    //             }
-    //         },
-
-    //         startPolling() {
-    //             this.fetchEvents(1);
-    //             setInterval(() => {
-    //                 try {
-    //                     this.fetchEvents();
-    //                 } catch (error) {
-    //                     // finalization of pulling
-
-
-    //                 }
-    //             }, 1000);
-    //         }
-    //     }
-    // }
 
     function displayLogEvent(event) {
         if (event.name === 'log') {
@@ -82,6 +46,10 @@
             info_color = 'text-gray-200';
             time_color = 'text-gray-400';
             switch (type) {
+				case 'log':
+					info_color = 'text-gray-200';
+					console.log(message);
+					break;
                 case 'info':
                     info_color = 'text-blue-300';
                     console.log('info:', message);
