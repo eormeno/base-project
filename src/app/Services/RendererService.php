@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Game;
-use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Contracts\IRenderer;
 use App\Models\GameObject\GameObject;
@@ -22,7 +21,7 @@ class RendererService implements IRenderer
 			$gameObject->handle($eventInfo);
 		}
 
-		$result = $this->request($game, $eventInfo);
+		$result = $this->viewsBuilding($game, $eventInfo);
 		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
 		$result['elapsed'] = $elapsed;
 		return $result;
@@ -37,7 +36,7 @@ class RendererService implements IRenderer
 		return GameObject::activesOfGame($game)->get();
 	}
 
-	private function request(Game $game, array $event): array
+	private function viewsBuilding(Game $game, array $event): array
 	{
 		$jsonClient = $game->gameApp->client == 'webgl';
 		$rootGameObject = $game->gameObject;
@@ -49,7 +48,6 @@ class RendererService implements IRenderer
 			$ret['root'] = $rootGameObject->id;
 		}
 
-		// Obtener los objetos activos una sola vez
 		$activeGameObjects = GameObject::activesOfGame($game)->get();
 
 		$views = $this->resolveActiveGameObjectsViews($activeGameObjects, $game, $rendered);
