@@ -43,7 +43,7 @@ class Root extends Prefab
 				'height' => '100%'
 			],
 			'title:label' => ['attributes' => ['text' => 'Mythic Treasure Quest', 'style' => 'title']],
-			'description:label' => ['attributes' => ['text' => 'Un juego donde exploras templos antiguos y encuentras tesoros y posiones usando las mecánicas de buscaminas. Pero ten cuidado! También hay trampas, monstruos y maldiciones.', 'style' => 'paragraph']],
+			'description:label' => ['attributes' => ['text' => 'Un juego en donde exploras templos, palacios y criptas antiguas y encuentras tesoros y posiones usando las mecánicas del clásico juego buscaminas. ¡Pero ten cuidado! También hay trampas, monstruos y maldiciones.', 'style' => 'paragraph']],
 			'accept_text:label' => ['attributes' => ['text' => 'Si aceptas el desafío, presiona el botón para comenzar', 'style' => 'paragraph']],
 			'start_button:button' => ['attributes' => ['text' => 'Start', 'event' => 'start', 'style' => 'primary']],
 			'title_sound:sound' => ['attributes' => ['sound' => 'title-music.wav', 'loop' => true, 'volume' => 0.25]],

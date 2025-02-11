@@ -144,7 +144,7 @@ function createComponent(data, mainContainer) {
 				element = document.createElement('button');
 				element.textContent = component.text;
 				if (component.event) {
-					element.addEventListener('click', () => pushEvent(component.event, {}, id));
+					element.addEventListener('click', () => pushEvent('click', {}, id));
 				}
 				break;
 
@@ -167,7 +167,7 @@ function createComponent(data, mainContainer) {
 				});
 				// on click event
 				if (component.event) {
-					element.addEventListener('click', () => pushEvent(component.event, {}, id));
+					element.addEventListener('click', () => pushEvent('click', {}, id));
 				}
 
 				break;
@@ -327,7 +327,7 @@ const pullWithTimeout = async (interval) => {
 	fetchData(10);
 };
 
-function pushEvent(event, data, destination = null) {
+function pushEvent(event, data = {}, destination = null) {
 	if (eventsAlreadyPending.includes(event)) {
 		return;
 	}
