@@ -25,9 +25,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.829812"
-     inkscape:cx="590.22457"
-     inkscape:cy="1028.2477"
+     inkscape:zoom="7.319248"
+     inkscape:cx="126.92561"
+     inkscape:cy="900.02416"
      inkscape:window-width="2560"
      inkscape:window-height="1361"
      inkscape:window-x="-9"
@@ -201,6 +201,17 @@
        inkscape:export-filename="rect788.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#949494;stroke-width:0.132292;stroke-dasharray:none;stroke-opacity:0.694524"
+       id="rect872"
+       width="10"
+       height="10"
+       x="21.978579"
+       y="228.17235"
+       ry="1.1929163"
+       inkscape:export-filename="tile_revealed.png"
+       inkscape:export-xdpi="80.218765"
+       inkscape:export-ydpi="80.218765" />
   </g>
   <script
      id="mesh_polyfill"

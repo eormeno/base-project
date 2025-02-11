@@ -89,7 +89,7 @@ async function sendEvent(event, formData = {}, destination = null) {
 function allIdsFromMapAndVersions() {
 	// return pairs of id and version { 1: 0, 2: 1, 3: 0 }
 	return Array.from(elementsMap.entries()).reduce((acc, [id, element]) => {
-		acc[id] = element.version;
+		acc[id] = element.version || 0;
 		return acc;
 	}, {});
 }
@@ -192,7 +192,7 @@ function createComponent(data, mainContainer) {
 		}
 
 		element.id = id;
-		element.version = component.version;
+		element.version = component.version || 0;
 		elementsMap.set(id, element);
 
 		if (component.parent) {
