@@ -7,7 +7,7 @@ use App\Utils\ReflectionUtils;
 
 abstract class ComponentStateManager extends ComponentMessages
 {
-	public function handleStateEvent(array $event): string|null
+	public function handleEvent(array $event): string|null
 	{
 		$eventName = $event['event'];
 		$eventData = $event['data'];

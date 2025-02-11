@@ -31,7 +31,6 @@ class EventRequestFilter extends FormRequest
 			'data' => $validated['data'],
 			'destination' => $validated['destination'] ?? null,
 			'rendered' => $validated['rendered'] ?? [],
-			'renderedVersions' => $validated['renderedVersions'] ?? [],
 		];
 		return $event;
 	}

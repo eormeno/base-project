@@ -144,7 +144,7 @@ function createComponent(data, mainContainer) {
 				element = document.createElement('button');
 				element.textContent = component.text;
 				if (component.event) {
-					element.addEventListener('click', () => pushEvent('click', {}, id));
+					element.addEventListener('click', () => pushEvent(component.event, {}));
 				}
 				break;
 
