@@ -106,6 +106,9 @@ function createComponent(data, mainContainer) {
 				element.style.top = y + 'px';
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
 			}
+			if (component.updatable) {
+				pushEvent('update', {});
+			}
 			return;
 		}
 
@@ -193,6 +196,10 @@ function createComponent(data, mainContainer) {
 		} else {
 			// Agregar al contenedor principal
 			mainContainer.appendChild(element);
+		}
+
+		if (component.updatable) {
+			pushEvent('update', {});
 		}
 	});
 }
@@ -297,52 +304,37 @@ function addStyles(styles) {
 const pullWithTimeout = async (interval) => {
 
 	const fetchData = async () => {
+		const startTime = Date.now();
 		try {
 			if (!navigator.onLine) {
 				console.error('Disconnected');
 				return;
 			}
-			const startTime = Date.now();
 			const { event, data, destination } = dequeueEvent();
 			if (event) {
 				backendElapsed = await sendEvent(event, data, destination);
-				if (backendElapsed > 0) {
-					if (backendElapsed < backendMin) {
-						backendMin = backendElapsed;
-					}
-					if (backendElapsed > backendMax) {
-						backendMax = backendElapsed;
-					}
-					backendMs.push(backendElapsed);
-					if (backendMs.length > 10) {
-						backendMs.shift();
-						const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
-						pingBackendElement.textContent = `${average} ms`;
-						backendMinElement.textContent = `${backendMin} ms`;
-						backendMaxElement.textContent = `${backendMax} ms`;
-					}
-				}
+				updateBackendMetrics(backendElapsed);
 			}
+		} catch (error) {
+			console.error('Error:', error);
+		} finally {
+			// pushEvent('update', {});
 			const endTime = Date.now();
 			const elapsed = endTime - startTime;
 			if (elapsed < lowPing) {
 				lowPing = elapsed;
+				pingMinElement.textContent = `${lowPing} ms`;
 			}
 			if (elapsed > highPing) {
 				highPing = elapsed;
+				pingMaxElement.textContent = `${highPing} ms`;
 			}
 			pings.push(elapsed);
 			if (pings.length > 10) {
 				pings.shift();
 				const average = Math.round(pings.reduce((acc, curr) => acc + curr, 0) / pings.length);
 				pingAvgElement.textContent = `${average} ms`;
-				pingMinElement.textContent = `${lowPing} ms`;
-				pingMaxElement.textContent = `${highPing} ms`;
 			}
-		} catch (error) {
-			console.error('Error:', error);
-		} finally {
-			pushEvent('update', {});
 			setTimeout(fetchData, interval);
 		}
 	};
@@ -369,4 +361,23 @@ function dequeueEvent() {
 		eventsAlreadyPending.splice(index, 1);
 	}
 	return { event, data, destination };
+}
+
+function updateBackendMetrics(backendElapsed) {
+	if (backendElapsed > 0) {
+		if (backendElapsed < backendMin) {
+			backendMin = backendElapsed;
+			backendMinElement.textContent = `${backendMin} ms`;
+		}
+		if (backendElapsed > backendMax) {
+			backendMax = backendElapsed;
+			backendMaxElement.textContent = `${backendMax} ms`;
+		}
+		backendMs.push(backendElapsed);
+		if (backendMs.length > 10) {
+			backendMs.shift();
+			const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
+			pingBackendElement.textContent = `${average} ms`;
+		}
+	}
 }

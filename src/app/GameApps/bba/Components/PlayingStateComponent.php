@@ -31,7 +31,6 @@ class PlayingStateComponent extends PersistentComponent
 	{
 		$playingView = $this->gameObject->findChild('playing_view');
 		if ($playingView) {
-			$this->log('PlayingStateComponent::onExit() found playing_view');
 			$playingView->deactivate();
 		}
 	}
