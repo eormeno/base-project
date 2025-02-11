@@ -17,14 +17,18 @@ class RendererService implements IRenderer
 		$currentTimestamp = microtime(true);
 		$targetedGameObjects = $this->getTargetedGameObjects($game, $eventInfo);
 
+		$this->handleTargetedGameObjects($targetedGameObjects, $eventInfo);
+
+		$result = $this->buildViews($game, $eventInfo);
+		$result['elapsed'] = $this->calculateElapsed($currentTimestamp);
+		return $result;
+	}
+
+	private function handleTargetedGameObjects(Collection $targetedGameObjects, array $eventInfo): void
+	{
 		foreach ($targetedGameObjects as $gameObject) {
 			$gameObject->handle($eventInfo);
 		}
-
-		$result = $this->viewsBuilding($game, $eventInfo);
-		$elapsed = ceil((microtime(true) - $currentTimestamp) * 1000);
-		$result['elapsed'] = $elapsed;
-		return $result;
 	}
 
 	private function getTargetedGameObjects(Game $game, array $eventInfo): Collection
@@ -36,30 +40,34 @@ class RendererService implements IRenderer
 		return GameObject::activesOfGame($game)->get();
 	}
 
-	private function viewsBuilding(Game $game, array $event): array
+	private function buildViews(Game $game, array $event): array
 	{
-		$jsonClient = $game->gameApp->client == 'webgl';
+		$isJsonClient = $game->gameApp->client == 'webgl';
 		$rootGameObject = $game->gameObject;
 		$rendered = $event['rendered'];
-		$ret = [
+		$response = [
 			'elapsed' => 0,
 		];
-		if (!$jsonClient) {
-			$ret['root'] = $rootGameObject->id;
+
+		if (!$isJsonClient) {
+			$response['root'] = $rootGameObject->id;
 		}
 
 		$activeGameObjects = GameObject::activesOfGame($game)->get();
-
 		$views = $this->resolveActiveGameObjectsViews($activeGameObjects, $game, $rendered);
+
 		foreach ($views as $id => $view) {
-			$ret[$id] = $view;
+			$response[$id] = $view;
 		}
-		$actives = $this->resolveActiveGOIds($activeGameObjects, $game);
-		$deactives = $this->resolveDeactives($rendered, $actives);
-		if (!empty($deactives)) {
-			$ret['deactives'] = $deactives;
+
+		$activeIds = $this->resolveActiveGOIds($activeGameObjects, $rootGameObject->id);
+		$deactiveIds = $this->resolveDeactives($rendered, $activeIds);
+
+		if (!empty($deactiveIds)) {
+			$response['deactives'] = $deactiveIds;
 		}
-		return $ret;
+
+		return $response;
 	}
 
 	private function resolveActiveGOIds($activeGameObjects, $rootId): array
@@ -87,21 +95,26 @@ class RendererService implements IRenderer
 
 	private function resolveActiveGameObjectsViews($activeGameObjects, Game $game, array $rendered): array
 	{
-		$gameObject = $game->gameObject;
-		// $gameObjects = GameObject::activesOfGame($game)->get();
 		$views = [];
 		foreach ($activeGameObjects as $gameObject) {
 			$view = $gameObject->view();
-			if (empty($view)) {
-				continue;
-			}
-			// if the game object is already rendered in renderedVersions, and its version is the same, skip it
-			if (isset($rendered[$gameObject->id]) && $rendered[$gameObject->id] == $gameObject->version) {
+			if ($this->shouldSkipRendering($gameObject, $rendered)) {
 				continue;
 			}
 			$views[$gameObject->id] = $view;
 		}
 		return $views;
+	}
+
+	private function shouldSkipRendering(GameObject $gameObject, array $rendered): bool
+	{
+		return empty($gameObject->view()) ||
+			(isset($rendered[$gameObject->id]) && $rendered[$gameObject->id] == $gameObject->version);
+	}
+
+	private function calculateElapsed($start): int
+	{
+		return ceil((microtime(true) - $start) * 1000);
 	}
 
 }
