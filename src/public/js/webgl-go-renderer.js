@@ -107,7 +107,7 @@ function createComponent(data, mainContainer) {
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
 			}
 			if (component.updatable) {
-				pushEvent('update', {});
+				pushEvent('update', {}, id);
 			}
 			return;
 		}
@@ -180,10 +180,15 @@ function createComponent(data, mainContainer) {
 				element.loop = component.loop;
 				element.volume = component.volume;
 				playAudio(element);
-				// // add click event listener to play/pause audio to the parent element
-				// const parentElement = elementsMap.get(component.parent.toString());
-				// parentElement?.addEventListener('click', () => playAudio(element));
 				break;
+		}
+
+		if (component.updatable) {
+			pushEvent('update', {});
+		}
+
+		if (!element) {
+			return;
 		}
 
 		element.id = id;
@@ -198,9 +203,6 @@ function createComponent(data, mainContainer) {
 			mainContainer.appendChild(element);
 		}
 
-		if (component.updatable) {
-			pushEvent('update', {});
-		}
 	});
 }
 
@@ -318,23 +320,7 @@ const pullWithTimeout = async (interval) => {
 		} catch (error) {
 			console.error('Error:', error);
 		} finally {
-			// pushEvent('update', {});
-			const endTime = Date.now();
-			const elapsed = endTime - startTime;
-			if (elapsed < lowPing) {
-				lowPing = elapsed;
-				pingMinElement.textContent = `${lowPing} ms`;
-			}
-			if (elapsed > highPing) {
-				highPing = elapsed;
-				pingMaxElement.textContent = `${highPing} ms`;
-			}
-			pings.push(elapsed);
-			if (pings.length > 10) {
-				pings.shift();
-				const average = Math.round(pings.reduce((acc, curr) => acc + curr, 0) / pings.length);
-				pingAvgElement.textContent = `${average} ms`;
-			}
+			updatePingMetrics(startTime);
 			setTimeout(fetchData, interval);
 		}
 	};
@@ -379,5 +365,24 @@ function updateBackendMetrics(backendElapsed) {
 			const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
 			pingBackendElement.textContent = `${average} ms`;
 		}
+	}
+}
+
+function updatePingMetrics(startTime) {
+	const endTime = Date.now();
+	const elapsed = endTime - startTime;
+	if (elapsed < lowPing) {
+		lowPing = elapsed;
+		pingMinElement.textContent = `${lowPing} ms`;
+	}
+	if (elapsed > highPing) {
+		highPing = elapsed;
+		pingMaxElement.textContent = `${highPing} ms`;
+	}
+	pings.push(elapsed);
+	if (pings.length > 10) {
+		pings.shift();
+		const average = Math.round(pings.reduce((acc, curr) => acc + curr, 0) / pings.length);
+		pingAvgElement.textContent = `${average} ms`;
 	}
 }

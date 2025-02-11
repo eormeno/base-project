@@ -20,7 +20,6 @@ class SpriteComponent extends PersistentComponent
 			'pivot_y' => ['float', 0.5],
 			'rotation' => ['float', 0],
 			'visible' => ['boolean', true],
-			'updatable' => ['boolean', true],
         ];
     }
 
@@ -35,7 +34,6 @@ class SpriteComponent extends PersistentComponent
 		$this->pivot_y = $initParams['pivot_y'] ?? 0.5;
 		$this->rotation = $initParams['rotation'] ?? 0;
 		$this->visible = $initParams['visible'] ?? true;
-		$this->updatable = $initParams['updatable'] ?? true;
 		$this->save();
 	}
 
@@ -53,7 +51,6 @@ class SpriteComponent extends PersistentComponent
 			'pivot_y' => $this->pivot_y,
 			'rotation' => $this->rotation,
 			'visible' => $this->visible,
-			'updatable' => $this->updatable,
 		];
 	}
 }

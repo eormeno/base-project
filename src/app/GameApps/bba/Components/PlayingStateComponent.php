@@ -98,4 +98,12 @@ class PlayingStateComponent extends PersistentComponent
 		$this->vy = 20;
 		$this->save();
 	}
+
+	public function view()
+	{
+		// TODO Revisar esto! Se ve muy raro
+		return [
+			'updatable' => true,
+		];
+	}
 }
