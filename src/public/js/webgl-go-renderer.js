@@ -30,15 +30,16 @@ window.onload = function () {
 	backendMaxElement = document.getElementById('backendMax');
 	resourceUrl = document.getElementById('routeDiv').getAttribute('resourceUrl');
 	pushEvent('reload', {});
-	pullWithTimeout(1000);
+	pullWithTimeout(10);
 }
 
 async function sendEvent(event, formData = {}, destination = null) {
 	if (eventSent) {
-		return;
+		return -1;
 	}
 	eventSent = true;
 	currentMillis = Date.now();
+	backendElapsed = -1;
 
 	event = event || '';
 	var routeDiv = document.getElementById('routeDiv');
@@ -69,25 +70,8 @@ async function sendEvent(event, formData = {}, destination = null) {
 			document.write(data);
 		} else {
 			const json = JSON.parse(data);
-			if (json.elapsed) {
-				if (json.elapsed < backendMin) {
-					backendMin = json.elapsed;
-				}
-				if (json.elapsed > backendMax) {
-					backendMax = json.elapsed;
-				}
-				backendMs.push(json.elapsed);
-				if (backendMs.length > 10) {
-					backendMs.shift();
-					const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
-					pingBackendElement.textContent = `${average} ms`;
-					backendMinElement.textContent = `${backendMin} ms`;
-					backendMaxElement.textContent = `${backendMax} ms`;
-				}
-				// remove the elapsed time from the json
-				delete json.elapsed;
-			}
-			// if json is not empty, render the components
+			backendElapsed = json.elapsed || -1;
+			delete json.elapsed;
 			if (Object.keys(json).length > 0) {
 				let stringified = JSON.stringify(json, null, 2);
 				console.log(stringified);
@@ -99,6 +83,7 @@ async function sendEvent(event, formData = {}, destination = null) {
 	} finally {
 		eventSent = false;
 	}
+	return backendElapsed;
 }
 
 function allIdsFromMapAndVersions() {
@@ -320,7 +305,23 @@ const pullWithTimeout = async (interval) => {
 			const startTime = Date.now();
 			const { event, data, destination } = dequeueEvent();
 			if (event) {
-				await sendEvent(event, data, destination);
+				backendElapsed = await sendEvent(event, data, destination);
+				if (backendElapsed > 0) {
+					if (backendElapsed < backendMin) {
+						backendMin = backendElapsed;
+					}
+					if (backendElapsed > backendMax) {
+						backendMax = backendElapsed;
+					}
+					backendMs.push(backendElapsed);
+					if (backendMs.length > 10) {
+						backendMs.shift();
+						const average = Math.round(backendMs.reduce((acc, curr) => acc + curr, 0) / backendMs.length);
+						pingBackendElement.textContent = `${average} ms`;
+						backendMinElement.textContent = `${backendMin} ms`;
+						backendMaxElement.textContent = `${backendMax} ms`;
+					}
+				}
 			}
 			const endTime = Date.now();
 			const elapsed = endTime - startTime;
@@ -346,7 +347,7 @@ const pullWithTimeout = async (interval) => {
 		}
 	};
 
-	fetchData();
+	fetchData(10);
 };
 
 function pushEvent(event, data, destination = null) {
@@ -355,12 +356,11 @@ function pushEvent(event, data, destination = null) {
 	}
 	eventsAlreadyPending.push(event);
 	eventQueue.push({ event, data, destination });
-	// console.log('Event pushed:', event, data, destination);
 }
 
 function dequeueEvent() {
 	if (eventQueue.length === 0) {
-		return null;
+		return { event: null, data: null, destination: null };
 	}
 	const { event, data, destination } = eventQueue.shift();
 	// Remove the event from the pending list

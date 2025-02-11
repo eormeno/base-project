@@ -95,8 +95,8 @@ class PlayingStateComponent extends PersistentComponent
 		$sprite->y = 225;
 		$sprite->rotation = 0;
 		$sprite->update();
-		$this->vx = 5;
-		$this->vy = 5;
+		$this->vx = 20;
+		$this->vy = 20;
 		$this->save();
 	}
 }
