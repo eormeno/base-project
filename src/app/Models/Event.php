@@ -10,11 +10,6 @@ class Event extends Model
 {
 	protected $fillable = ['name', 'description'];
 
-	/**
-     * Mutator para convertir el valor del nombre en un slug.
-     *
-     * @param string $value
-     */
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = Str::slug($value, '_');
