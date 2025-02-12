@@ -10,7 +10,7 @@ class ComponentFinders extends ComponentBase
 
     protected function findComponent(string $slug_type): Component
     {
-        $type = ReflectionUtils::componentClass($slug_type);
+        $type = ReflectionUtils::componentClassFromSlug($slug_type);
         $game_object = $this->super->gameObject;
         return $game_object->components()->first([
             'type' => $type,

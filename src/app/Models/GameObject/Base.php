@@ -158,14 +158,14 @@ abstract class Base extends Model
 
 	public function getComponent(string $slug_type): ?Component
 	{
-		$type = ReflectionUtils::componentClass($slug_type);
+		$type = ReflectionUtils::componentClassFromSlug($slug_type);
 		$component = $this->components()->where('type', $type)->first();
 		return $component ? $type::find($component->id) : null;
 	}
 
 	public function removeComponent(string $slug_type): bool
 	{
-		$type = ReflectionUtils::componentClass($slug_type);
+		$type = ReflectionUtils::componentClassFromSlug($slug_type);
 		$component = $this->components()->where('type', $type)->first();
 		if ($component) {
 			return $component->delete(); // Esto elimina tanto el componente base como el específico por la relación

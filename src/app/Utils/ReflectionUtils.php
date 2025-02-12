@@ -195,30 +195,27 @@ class ReflectionUtils
 		return $relations;
 	}
 
-	public static function componentClass(string $componentType): string
+	public static function componentClassFromSlug(string $componentSlugName): string
 	{
-		// Intentar obtener el valor del caché
-		$cacheKey = "component_class_{$componentType}";
+		$cacheKey = "component_class_{$componentSlugName}";
 		if (Cache::has($cacheKey)) {
 			return Cache::get($cacheKey);
 		}
 
-		// Si no está en caché, calcularlo dinámicamente
-		$componentClass = self::resolveDynamicComponentClass($componentType);
+		$componentClass = self::resolveComponentClassFromSlug($componentSlugName);
 
-		// Almacenar en caché por un tiempo determinado (ejemplo: 1 día)
 		Cache::put($cacheKey, $componentClass, now()->addDay());
 
 		return $componentClass;
 	}
 
-	protected static function resolveDynamicComponentClass(string $componentType): string
+	protected static function resolveComponentClassFromSlug(string $componentSlugName): string
 	{
-		$onlyType = $componentType;
+		$onlyType = $componentSlugName;
 		$path = 'Common\\'; // Default path for common components
-		if (Str::contains($componentType, '.')) {
-			$onlyType = Str::afterLast($componentType, '.');
-			$path = self::dotsToPath(Str::beforeLast($componentType, '.')) . '\\';
+		if (Str::contains($componentSlugName, '.')) {
+			$onlyType = Str::afterLast($componentSlugName, '.');
+			$path = self::dotsToPath(Str::beforeLast($componentSlugName, '.')) . '\\';
 		}
 		$studly = Str::studly($onlyType);
 		$componentModel = "App\\GameApps\\{$path}Components\\{$studly}Component";

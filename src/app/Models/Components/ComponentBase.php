@@ -77,7 +77,7 @@ class ComponentBase extends Model
 		string $slug_type,
 		array $attributes
 	): Component {
-		$type = ReflectionUtils::componentClass($slug_type);
+		$type = ReflectionUtils::componentClassFromSlug($slug_type);
 		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true]);
 		unset ($attributes['enabled'], $attributes['type']);
 
