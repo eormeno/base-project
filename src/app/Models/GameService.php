@@ -25,6 +25,11 @@ class GameService extends Model
         return $this->type::find($this->id);
     }
 
+    public function events()
+    {
+        return $this->morphToMany(Event::class, 'listenerable', 'event_listeners');
+    }
+
     public function getService(string $slug): GameService
     {
         $parent = $this->super;

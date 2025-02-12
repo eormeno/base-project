@@ -3,6 +3,7 @@
 namespace App\Models\Components;
 
 use App\Models\Game;
+use App\Models\Event;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
@@ -35,6 +36,11 @@ class ComponentBase extends Model
 	{
 		return $this->gameObject()->first()->game()->first();
 	}
+
+    public function events()
+    {
+        return $this->morphToMany(Event::class, 'listenerable', 'event_listeners');
+    }
 
 	public function findGameObject(string $name): GameObject | null
 	{
