@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Game;
+use App\Events\FrontEvent;
 use App\Traits\DebugHelper;
 use App\Contracts\IRenderer;
 use App\Models\GameObject\GameObject;
@@ -14,6 +15,8 @@ class RendererService implements IRenderer
 
 	public function render(Game $game, array $eventInfo): array
 	{
+		event(new FrontEvent($game, $eventInfo));
+
 		$currentTimestamp = microtime(true);
 		$targetedGameObjects = $this->getTargetedGameObjects($game, $eventInfo);
 

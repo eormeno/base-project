@@ -3,10 +3,10 @@
 namespace App\Models\Components;
 
 use App\Models\Game;
-use App\Models\Event;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
+use App\Models\Events\GameEvent;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,19 +37,19 @@ class ComponentBase extends Model
 		return $this->gameObject()->first()->game()->first();
 	}
 
-    public function events()
-    {
-        return $this->morphToMany(Event::class, 'listenerable', 'event_listeners');
-    }
+	public function events()
+	{
+		return $this->morphToMany(GameEvent::class, 'listenerable', 'event_listeners');
+	}
 
-	public function findGameObject(string $name): GameObject | null
+	public function findGameObject(string $name): GameObject|null
 	{
 		return $this->game()->findGameObject($name);
 	}
 
-	public function parentGameObject(): GameObject | null
+	public function parentGameObject(): GameObject|null
 	{
-		$parentGameObject= $this->gameObject()->first()->parent()->first();
+		$parentGameObject = $this->gameObject()->first()->parent()->first();
 		$parentIsRoot = $parentGameObject->isRoot();
 		return $parentIsRoot ? null : $parentGameObject;
 	}
@@ -78,11 +78,16 @@ class ComponentBase extends Model
 		array $attributes
 	): Component {
 		$type = ReflectionUtils::componentClassFromSlug($slug_type);
+
 		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true]);
-		unset ($attributes['enabled'], $attributes['type']);
+		unset($attributes['enabled'], $attributes['type']);
+
 
 		if (ReflectionUtils::isSubclassOf($type, PersistentComponent::class)) {
-			return $type::create(array_merge(['id' => $component->id], $attributes));
+			$newComponent = $type::create(array_merge(['id' => $component->id], $attributes));
+			$eventMethods = ReflectionUtils::retrieveEventMethods($type);
+			GameEvent::addListener($gameObject->game, $eventMethods, $newComponent);
+			return $newComponent;
 		}
 
 		return new $type(array_merge(['id' => $component->id], $attributes));

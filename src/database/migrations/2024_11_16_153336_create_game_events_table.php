@@ -8,15 +8,14 @@ return new class extends Migration {
 
 	public function up()
 	{
-		Schema::create('events', function (Blueprint $table) {
+		Schema::create('game_events', function (Blueprint $table) {
 			$table->id();
-			$table->string('name')->unique();
-			$table->text('description')->nullable();
+            $table->foreignId('game_app_event_id')->constrained();
 		});
 	}
 
 	public function down()
 	{
-		Schema::dropIfExists('events');
+		Schema::dropIfExists('game_events');
 	}
 };

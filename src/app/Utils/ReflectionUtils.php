@@ -195,6 +195,19 @@ class ReflectionUtils
 		return $relations;
 	}
 
+	public static function retrieveEventMethods($class)
+	{
+		$methods = self::getMethods($class);
+		$eventMethods = [];
+		$eventNamePattern = '/^on.*Event$/';
+		foreach ($methods as $method) {
+			if (preg_match($eventNamePattern, $method->name)) {
+				$eventMethods[] = Str::snake(Str::before(Str::after($method->name, 'on'), 'Event'));
+			}
+		}
+		return $eventMethods;
+	}
+
 	public static function componentClassFromSlug(string $componentSlugName): string
 	{
 		$cacheKey = "component_class_{$componentSlugName}";

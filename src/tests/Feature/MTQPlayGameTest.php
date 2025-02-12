@@ -13,7 +13,10 @@ test("The game's root gameobject is created", function () {
 	$rootPrefab = existsRootPrefab('mtq');
 	$rootGameObject = rootGameObjectIsCreated($newGame);
 	gameObjectHasComponents($rootPrefab, $rootGameObject);
-	showTable('game_objects', ['id', 'name', 'active', 'active_parents', 'game_id', 'game_object_id', 'state']);
+	showTable('game_app_events');
+	showTable('game_events');
+	showTable('event_listeners');
+	// showTable('game_objects', ['id', 'name', 'active', 'active_parents', 'game_id', 'game_object_id', 'state']);
 	// showTable('components');
 	// showTable('label_components');
 	// showTable('button_components');

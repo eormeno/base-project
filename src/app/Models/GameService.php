@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Events\GameEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -27,7 +28,7 @@ class GameService extends Model
 
     public function events()
     {
-        return $this->morphToMany(Event::class, 'listenerable', 'event_listeners');
+        return $this->morphToMany(GameEvent::class, 'listenerable', 'event_listeners');
     }
 
     public function getService(string $slug): GameService
