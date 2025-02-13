@@ -151,9 +151,9 @@ abstract class Base extends Model
 		}
 	}
 
-	public function addComponent(string $slug_type, array $attributes = []): Component
+	public function addComponent(string $slug_type, array $attributes = [], string|null $forState = null): Component
 	{
-		return Component::createFromSlug($this, $slug_type, $attributes);
+		return Component::createFromSlug($this, $slug_type, $attributes, $forState);
 	}
 
 	public function getComponent(string $slug_type): ?Component

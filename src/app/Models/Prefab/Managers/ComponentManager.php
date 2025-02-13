@@ -30,15 +30,12 @@ class ComponentManager
 		$defaultState = array_key_first($states) ?? null;
 		$stateComponents['__initial__'] = $defaultState;
 		foreach ($states as $state => $componentSettings) {
-			// $enabled = $state === $defaultState;
 			$componentKey = array_key_first($componentSettings);
 			$componentAttributes = $componentSettings[$componentKey];
-			// $componentAttributes['enabled'] = $enabled;
 			$componentAttributes['enabled'] = false;
-			$component = $gameObject->addComponent($componentKey, $componentAttributes);
+			$component = $gameObject->addComponent($componentKey, $componentAttributes, $state);
 			$stateComponents[$state] = $component->id;
 		}
-		// $gameObject->update(['state' => $initial_state, 'state_components' => $state_components]);
 		$gameObject->update(['state_components' => $stateComponents]);
 	}
 }

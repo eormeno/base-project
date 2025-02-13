@@ -88,11 +88,12 @@ class ComponentBase extends Model
 	protected static function createFromSlug(
 		Base $gameObject,
 		string $slug_type,
-		array $attributes
+		array $attributes,
+		string|null $forState = null
 	): Component {
 		$type = ReflectionUtils::componentClassFromSlug($slug_type);
 
-		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true]);
+		$component = $gameObject->components()->create(['type' => $type, 'enabled' => $attributes['enabled'] ?? true, 'state' => $forState]);
 		unset($attributes['enabled'], $attributes['type']);
 
 
