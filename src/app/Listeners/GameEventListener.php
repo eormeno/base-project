@@ -11,8 +11,6 @@ use App\Models\Events\GameEventListenerManager;
 
 class GameEventListener implements IGameEventListener
 {
-	use \App\Traits\DebugHelper;
-
 	public function handle(GameEvent $frontEvent): void
 	{
 		$listeners = GameEventListenerManager::componentListenersOf($frontEvent);
@@ -23,20 +21,20 @@ class GameEventListener implements IGameEventListener
 		// $this->handleTargetedGameObjects($targetedGameObjects, $frontEvent->event);
 	}
 
-	private function handleTargetedGameObjects(Collection $targetedGameObjects, array $eventInfo): void
-	{
-		foreach ($targetedGameObjects as $gameObject) {
-			$gameObject->handle($eventInfo);
-		}
-	}
+	// private function handleTargetedGameObjects(Collection $targetedGameObjects, array $eventInfo): void
+	// {
+	// 	foreach ($targetedGameObjects as $gameObject) {
+	// 		$gameObject->handle($eventInfo);
+	// 	}
+	// }
 
-	private function getTargetedGameObjects(Game $game, array $eventInfo): Collection
-	{
-		$target = $eventInfo['destination'] ?? null;
-		if ($target) {
-			return new Collection([GameObject::find($target)]);
-		}
-		return GameObject::activesOfGame($game)->get();
-	}
+	// private function getTargetedGameObjects(Game $game, array $eventInfo): Collection
+	// {
+	// 	$target = $eventInfo['destination'] ?? null;
+	// 	if ($target) {
+	// 		return new Collection([GameObject::find($target)]);
+	// 	}
+	// 	return GameObject::activesOfGame($game)->get();
+	// }
 
 }
