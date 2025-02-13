@@ -5,36 +5,25 @@ namespace App\Models\GameObject;
 use App\Utils\Constants;
 use App\Events\GameEvent;
 use App\Contracts\IStateContext;
-use App\Models\Components\Component;
+use App\Contracts\IGameEventListener;
 
-/**
- * Handles the front incoming event managing the GO's state following the State-Design-Pattern.
- */
-abstract class StateContextBase extends Base implements IStateContext//, IFrontEventListener
+abstract class StateContextBase extends Base implements IStateContext, IGameEventListener
 {
-	public function handle(array $eventInfo): void
+	public function handle(GameEvent $gameEvent): void
 	{
 		if (!$this->isActive()) {
 			return;
 		}
-		// $this->log('StateContextBase::handle ' . json_encode($eventInfo));
-		if (!$this->isStateManaged()) {
-			return;
-		}
-		$this->request($eventInfo);
+		$this->request($gameEvent->event);
 	}
 
 	public function request(array $event)
 	{
 		do {
 			$stateComponent = $this->currentStateComponent();
-			if (!$stateComponent) {
-				// TODO quitar este return
-				return;
-			}
 			$stateName = $this->state;
 			$stateComponent->onStart();
-			$nextState = $stateComponent->handleEvent($event);
+			$nextState = $stateComponent->handleStateEvent($event);
 			$this->changeState($nextState);
 			$event = Constants::EMPTY_EVENT;
 		} while ($nextState !== $stateName);

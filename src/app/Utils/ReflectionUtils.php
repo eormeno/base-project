@@ -5,10 +5,12 @@ namespace App\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use App\Models\GameService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Components\ComponentBase;
 use Illuminate\Database\Eloquent\Collection;
 
 class ReflectionUtils
@@ -99,11 +101,20 @@ class ReflectionUtils
 		return $parametersValues;
 	}
 
-	public static function invokeMethod($state_instance, $method, $data)
+	public static function invokeEventMethod(ComponentBase|GameService $instance, array $event)
 	{
-		$reflection = new ReflectionClass($state_instance);
-		$parametersValues = self::getMethodParametersValues($state_instance, $method, $data);
-		return $reflection->getMethod($method)->invokeArgs($state_instance, $parametersValues);
+		$method = 'on' . CaseConverters::snakeToPascal($event['event']) . 'Event';
+		if (!method_exists($instance, $method)) {
+			return;
+		}
+		return self::invokeMethod($instance, $method, $event);
+	}
+
+	public static function invokeMethod($instance, $method, $data)
+	{
+		$reflection = new ReflectionClass($instance);
+		$parametersValues = self::getMethodParametersValues($instance, $method, $data);
+		return $reflection->getMethod($method)->invokeArgs($instance, $parametersValues);
 	}
 
 	public static function getModelAttributeNames(Model $object)

@@ -39,7 +39,10 @@ test("Events interaction returns the active gameobject with its view", function 
 	$response->assertStatus(200);
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
-	showTable('game_objects', ['id', 'name', 'active', 'active_parents', 'game_id', 'game_object_id', 'state']);
+	// showTable('game_objects', ['id', 'name', 'active', 'active_parents', 'game_id', 'game_object_id', 'state']);
+	showTable('game_app_events', ['id', 'name']);
+	showTable('game_event_listener_managers');
+	showTable('event_listeners');
 
 	/*
 		   * The expected json should have the following structure

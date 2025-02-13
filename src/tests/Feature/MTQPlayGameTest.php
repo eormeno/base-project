@@ -35,9 +35,12 @@ test("Events interaction returns the active gameobject with its view", function 
 	$response = $this->postJson(route('event', $newGame), createEvent('start'));
 	$response->assertStatus(200);
 
+	// showTable('components');
+
 	// showTable('game_app_events');
 	// showTable('game_event_listener_managers');
 	// showTable('event_listeners');
+
 	// echo json_encode(json_encode($rendered), JSON_PRETTY_PRINT) . PHP_EOL;
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 

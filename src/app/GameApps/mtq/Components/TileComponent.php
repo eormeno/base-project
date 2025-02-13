@@ -26,11 +26,16 @@ class TileComponent extends PersistentComponent
 		$this->save();
 	}
 
-	public function onClickEvent(): void
+	public function onClickEvent($destination): void
 	{
-		$this->log('Tile clicked ' . $this->gameObject->id);
+		if ($destination != $this->gameObject->id) {
+			return;
+		}
+		// $this->log('Tile clicked ' . $this->gameObject->id);
 		$this->state = 'revealed';
 		$this->save();
+		$this->gameObject->version++;
+		$this->gameObject->save();
 	}
 
 	public function view()

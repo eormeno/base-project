@@ -15,7 +15,7 @@ class GameEventListenerManager extends Model
 
 	public $timestamps = false;
 
-	public static function addListener(Game $game, array|string $eventNames, $listener)
+	public static function addListener(Game $game, array|string $eventNames, Component|GameService $listener)
 	{
 		$gameAppId = $game->gameApp()->first()->id;
 		$eventNames = is_array($eventNames) ? $eventNames : [$eventNames];
@@ -23,22 +23,22 @@ class GameEventListenerManager extends Model
 			$gameAppEvent = GameAppEvent::firstOrCreate(['game_app_id' => $gameAppId, 'name' => $name]);
 			$event = static::firstOrCreate(['game_app_event_id' => $gameAppEvent->id]);
 			if (is_a($listener, Component::class)) {
-				$event->components()->attach($listener);
-				continue;
-			}
-			if (is_a($listener, GameObject::class)) {
-				$event->gameObjects()->attach($listener);
+				if ($listener->super->state) {
+					$event->gameObjects()->syncWithoutDetaching($listener->gameObject);
+					continue;
+				}
+				$event->components()->syncWithoutDetaching($listener);
 				continue;
 			}
 			if (is_a($listener, GameService::class)) {
-				$event->gameServices()->attach($listener);
+				$event->gameServices()->syncWithoutDetaching($listener);
 				continue;
 			}
-			throw new \Exception("Listener must be a Component, GameObject or GameService");
+			throw new \Exception("Listener must be a Component or GameService");
 		}
 	}
 
-	public static function componentListenersOf(GameEvent $gameEvent)
+	public static function listenersOf(GameEvent $gameEvent)
 	{
 		$eventName = $gameEvent->event['event'];
 		$gameAppId = $gameEvent->game->gameApp()->first()->id;
@@ -47,7 +47,15 @@ class GameEventListenerManager extends Model
 			return [];
 		}
 		$event = static::where(['game_app_event_id' => $gameAppEvent->id])->first();
-		return $event->components;
+		return $event->allListeners();
+	}
+
+	public function allListeners()
+	{
+		$gameObjects = $this->gameObjects()->get();
+		$components = $this->components()->get();
+		$gameServices = $this->gameServices()->get();
+		return $gameObjects->concat($components)->concat($gameServices);
 	}
 
 	public function gameObjects()

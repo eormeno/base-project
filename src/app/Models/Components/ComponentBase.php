@@ -5,14 +5,16 @@ namespace App\Models\Components;
 use App\Models\Game;
 use App\Events\GameEvent;
 use App\Traits\DebugHelper;
+use App\Utils\CaseConverters;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
+use App\Contracts\IGameEventListener;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Events\GameEventListenerManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ComponentBase extends Model
+class ComponentBase extends Model implements IGameEventListener
 {
 	use DebugHelper;
 	public $timestamps = false;
@@ -38,19 +40,20 @@ class ComponentBase extends Model
 		return $this->gameObject()->first()->game()->first();
 	}
 
-	public function handleGameEvent(GameEvent $event): void
+	public function handle(GameEvent $event): void
 	{
-		// if (!$this->enabled) {
-		// 	return;
-		// }
+		if (!$this->enabled) {
+			return;
+		}
 		$gameObject = $this->gameObject()->first();
 		if (!$gameObject->isActive()) {
 			return;
 		}
-		if ($this->state) {
-			$this->log('ComponentBase::handleGameEvent ' . $this->type . ' ' . $this->state);
-			$gameObject->handle($event->event);
-		}
+		ReflectionUtils::invokeEventMethod($this->subclass(), $event->event);
+	}
+
+	public function onReloadEvent($eventData): void
+	{
 	}
 
 	public function events()
