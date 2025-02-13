@@ -3,6 +3,7 @@
 namespace App\Models\Components;
 
 use App\Models\Game;
+use App\Events\GameEvent;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
@@ -35,6 +36,18 @@ class ComponentBase extends Model
 	public function game(): Game
 	{
 		return $this->gameObject()->first()->game()->first();
+	}
+
+	public function handleGameEvent(GameEvent $event): void
+	{
+		if (!$this->enabled) {
+			return;
+		}
+		$gameObject = $this->gameObject()->first();
+		if (!$gameObject->isActive()) {
+			return;
+		}
+		$gameObject->handleEventOfComponent($event, $this->subclass());
 	}
 
 	public function events()

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\Events\GameEventListenerManager;
 use App\Models\Game;
 use App\Events\GameEvent;
 use App\Traits\DebugHelper;
@@ -16,6 +17,10 @@ class GameEventListener implements IGameEventListener
 
 	public function handle(GameEvent $frontEvent): void
 	{
+		$listeners = GameEventListenerManager::componentListenersOf($frontEvent);
+		foreach ($listeners as $component) {
+			$component->handleGameEvent($frontEvent);
+		}
 		$targetedGameObjects = $this->getTargetedGameObjects($frontEvent->game, $frontEvent->event);
 		$this->handleTargetedGameObjects($targetedGameObjects, $frontEvent->event);
 		// $this->log("GameEventListener::handle " . $frontEvent);

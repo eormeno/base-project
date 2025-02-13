@@ -13,9 +13,9 @@ test("The game's root gameobject is created", function () {
 	$rootPrefab = existsRootPrefab('mtq');
 	$rootGameObject = rootGameObjectIsCreated($newGame);
 	gameObjectHasComponents($rootPrefab, $rootGameObject);
-	showTable('game_app_events');
-	showTable('game_event_listener_managers');
-	showTable('event_listeners');
+	// showTable('game_app_events');
+	// showTable('game_event_listener_managers');
+	// showTable('event_listeners');
 	// showTable('game_objects', ['id', 'name', 'active', 'active_parents', 'game_id', 'game_object_id', 'state']);
 	// showTable('components');
 	// showTable('label_components');
@@ -24,17 +24,24 @@ test("The game's root gameobject is created", function () {
 });
 
 test("Events interaction returns the active gameobject with its view", function () {
-	$this->markTestSkipped('Only for debugging');
-	$newGame = getUserPlayingGame('bba');
+	// $this->markTestSkipped('Only for debugging');
+	$newGame = getUserPlayingGame('mtq');
 
 	// Reload the game (this must be the first event)
-	$event = createEvent('reload');
-	$response = $this->postJson(route('event', $newGame), $event);
+	$response = $this->postJson(route('event', $newGame), createEvent('reload'));
 	$response->assertStatus(200);
 	$rendered = renderedIds($response);
+
+	$response = $this->postJson(route('event', $newGame), createEvent('start'));
+	$response->assertStatus(200);
+
+	// showTable('game_app_events');
+	// showTable('game_event_listener_managers');
+	// showTable('event_listeners');
 	// echo json_encode(json_encode($rendered), JSON_PRETTY_PRINT) . PHP_EOL;
 	// echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
 
+	/*
 	$event = createEvent(name: 'start', rendered: $rendered);
 	$response = $this->postJson(route('event', $newGame), $event);
 	if ($response->exception) {

@@ -3,7 +3,9 @@
 namespace App\Models\GameObject;
 
 use App\Utils\Constants;
+use App\Events\GameEvent;
 use App\Contracts\IStateContext;
+use App\Models\Components\Component;
 
 /**
  * Handles the front incoming event managing the GO's state following the State-Design-Pattern.
@@ -20,6 +22,11 @@ abstract class StateContextBase extends Base implements IStateContext//, IFrontE
 			return;
 		}
 		$this->request($eventInfo);
+	}
+
+	public function handleEventOfComponent(GameEvent $event, Component $component)
+	{
+		$this->log('handle event "' . $event->event['event'] . '" of component "' . $component . '"');
 	}
 
 	public function request(array $event)
