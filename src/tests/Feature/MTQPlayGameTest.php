@@ -14,7 +14,7 @@ test("The game's root gameobject is created", function () {
 	$rootGameObject = rootGameObjectIsCreated($newGame);
 	gameObjectHasComponents($rootPrefab, $rootGameObject);
 	showTable('game_app_events');
-	showTable('game_events');
+	showTable('game_event_listener_managers');
 	showTable('event_listeners');
 	// showTable('game_objects', ['id', 'name', 'active', 'active_parents', 'game_id', 'game_object_id', 'state']);
 	// showTable('components');

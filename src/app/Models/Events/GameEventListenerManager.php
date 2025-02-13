@@ -7,7 +7,7 @@ use App\Models\GameService;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 
-class GameEvent extends Model
+class GameEventListenerManager extends Model
 {
 	protected $fillable = ['game_app_event_id'];
 

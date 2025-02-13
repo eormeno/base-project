@@ -6,9 +6,9 @@ use App\Models\Game;
 use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\GameObject\Base;
-use App\Models\Events\GameEvent;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Events\GameEventListenerManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ComponentBase extends Model
@@ -39,7 +39,7 @@ class ComponentBase extends Model
 
 	public function events()
 	{
-		return $this->morphToMany(GameEvent::class, 'listenerable', 'event_listeners');
+		return $this->morphToMany(GameEventListenerManager::class, 'listenerable', 'event_listeners');
 	}
 
 	public function findGameObject(string $name): GameObject|null
@@ -86,7 +86,7 @@ class ComponentBase extends Model
 		if (ReflectionUtils::isSubclassOf($type, PersistentComponent::class)) {
 			$newComponent = $type::create(array_merge(['id' => $component->id], $attributes));
 			$eventMethods = ReflectionUtils::retrieveEventMethods($type);
-			GameEvent::addListener($gameObject->game, $eventMethods, $newComponent);
+			GameEventListenerManager::addListener($gameObject->game, $eventMethods, $newComponent);
 			return $newComponent;
 		}
 

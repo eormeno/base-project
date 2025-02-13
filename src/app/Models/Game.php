@@ -2,22 +2,19 @@
 
 namespace App\Models;
 
+use ReflectionClass;
 use App\Contracts\IPersistent;
-use App\Events\GameEvent;
-use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use ReflectionClass;
 
 class Game extends Model
 {
-	use HasFactory, DebugHelper;
+	use HasFactory;
 	protected $fillable = ['invitation_code', 'game_app_id', 'game_object_id', 'elapsed'];
 
 	public function gameApp(): BelongsTo

@@ -23,8 +23,8 @@ class GameAppEvent extends Model
 		return $this->belongsTo(GameApp::class);
 	}
 
-	public function gameEvents()
+	public function gameEventListenerManagers()
 	{
-		return $this->hasMany(GameEvent::class);
+		return $this->hasMany(GameEventListenerManager::class);
 	}
 }

@@ -10,10 +10,10 @@ return new class extends Migration {
 	{
 		Schema::create('event_listeners', function (Blueprint $table) {
 			$table->id();
-			$table->unsignedBigInteger('game_event_id');
+			$table->unsignedBigInteger('game_event_listener_manager_id');
 			$table->unsignedBigInteger('listenerable_id');
 			$table->string('listenerable_type');
-			$table->foreign('game_event_id')->references('id')->on('game_events')->onDelete('cascade');
+			$table->foreign('game_event_listener_manager_id')->references('id')->on('game_event_listener_managers')->onDelete('cascade');
 		});
 	}
 
