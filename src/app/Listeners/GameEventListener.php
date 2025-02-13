@@ -3,22 +3,22 @@
 namespace App\Listeners;
 
 use App\Models\Game;
-use App\Events\FrontEvent;
+use App\Events\GameEvent;
 use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
-use App\Contracts\IFrontEventListener;
+use App\Contracts\IGameEventListener;
 use Illuminate\Database\Eloquent\Collection;
 
-class FrontEventListener implements IFrontEventListener
+class GameEventListener implements IGameEventListener
 {
 
 	use DebugHelper;
 
-	public function handle(FrontEvent $frontEvent): void
+	public function handle(GameEvent $frontEvent): void
 	{
 		$targetedGameObjects = $this->getTargetedGameObjects($frontEvent->game, $frontEvent->event);
 		$this->handleTargetedGameObjects($targetedGameObjects, $frontEvent->event);
-		// $this->log("FrontEventListener::handle " . $frontEvent);
+		// $this->log("GameEventListener::handle " . $frontEvent);
 		// $event->game->handle($event);
 		// TODO Acá debería enviar el evento a todos los GameObjects del juego en forma recursiva.
 		//$event->game->gameObject->handle($event);

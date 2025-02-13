@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Game;
-use App\Events\FrontEvent;
+use App\Events\GameEvent;
 use App\Contracts\IRenderer;
 use App\Models\GameObject\GameObject;
 
@@ -13,7 +13,7 @@ class RendererService implements IRenderer
 	public function render(Game $game, array $eventInfo): array
 	{
 		$currentTimestamp = microtime(true);
-		event(new FrontEvent($game, $eventInfo));
+		event(new GameEvent($game, $eventInfo));
 		$result = $this->buildViews($game, $eventInfo);
 		$result['elapsed'] = $this->calculateElapsed($currentTimestamp);
 		return $result;

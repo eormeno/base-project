@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\IPersistent;
-use App\Events\FrontEvent;
+use App\Events\GameEvent;
 use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Collection;
