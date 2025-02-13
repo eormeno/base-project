@@ -4,43 +4,19 @@ namespace App\Services;
 
 use App\Models\Game;
 use App\Events\FrontEvent;
-use App\Traits\DebugHelper;
 use App\Contracts\IRenderer;
 use App\Models\GameObject\GameObject;
-use Illuminate\Database\Eloquent\Collection;
 
 class RendererService implements IRenderer
 {
-	use DebugHelper;
 
 	public function render(Game $game, array $eventInfo): array
 	{
-		event(new FrontEvent($game, $eventInfo));
-
 		$currentTimestamp = microtime(true);
-		$targetedGameObjects = $this->getTargetedGameObjects($game, $eventInfo);
-
-		$this->handleTargetedGameObjects($targetedGameObjects, $eventInfo);
-
+		event(new FrontEvent($game, $eventInfo));
 		$result = $this->buildViews($game, $eventInfo);
 		$result['elapsed'] = $this->calculateElapsed($currentTimestamp);
 		return $result;
-	}
-
-	private function handleTargetedGameObjects(Collection $targetedGameObjects, array $eventInfo): void
-	{
-		foreach ($targetedGameObjects as $gameObject) {
-			$gameObject->handle($eventInfo);
-		}
-	}
-
-	private function getTargetedGameObjects(Game $game, array $eventInfo): Collection
-	{
-		$target = $eventInfo['destination'] ?? null;
-		if ($target) {
-			return new Collection([GameObject::find($target)]);
-		}
-		return GameObject::activesOfGame($game)->get();
 	}
 
 	private function buildViews(Game $game, array $event): array
