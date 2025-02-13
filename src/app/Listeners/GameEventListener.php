@@ -2,19 +2,15 @@
 
 namespace App\Listeners;
 
-use App\Models\Events\GameEventListenerManager;
 use App\Models\Game;
 use App\Events\GameEvent;
-use App\Traits\DebugHelper;
 use App\Models\GameObject\GameObject;
 use App\Contracts\IGameEventListener;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\Events\GameEventListenerManager;
 
 class GameEventListener implements IGameEventListener
 {
-
-	use DebugHelper;
-
 	public function handle(GameEvent $frontEvent): void
 	{
 		$listeners = GameEventListenerManager::componentListenersOf($frontEvent);
@@ -23,17 +19,6 @@ class GameEventListener implements IGameEventListener
 		}
 		$targetedGameObjects = $this->getTargetedGameObjects($frontEvent->game, $frontEvent->event);
 		$this->handleTargetedGameObjects($targetedGameObjects, $frontEvent->event);
-		// $this->log("GameEventListener::handle " . $frontEvent);
-		// $event->game->handle($event);
-		// TODO Acá debería enviar el evento a todos los GameObjects del juego en forma recursiva.
-		//$event->game->gameObject->handle($event);
-		// itera todos los gameObjects activos del juego
-		// y les envía el evento
-		// $gameObjects = GameObject::activesOfGame($event->game)->get();
-		// // TODO agregar también un filtro de sólo los game objects que son menajados por eventos.
-		// foreach ($gameObjects as $gameObject) {
-		// 	// $gameObject->handle($event);
-		// }
 	}
 
 	private function handleTargetedGameObjects(Collection $targetedGameObjects, array $eventInfo): void
