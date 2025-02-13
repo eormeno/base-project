@@ -7,6 +7,7 @@ use App\Traits\DebugHelper;
 use App\Utils\ReflectionUtils;
 use App\Models\Components\Component;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Events\GameEventListenerManager;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -49,6 +50,11 @@ abstract class Base extends Model
 	public function children(): HasMany
 	{
 		return $this->hasMany(GameObject::class, 'game_object_id');
+	}
+
+	public function events()
+	{
+		return $this->morphToMany(GameEventListenerManager::class, 'listenerable', 'event_listeners');
 	}
 
 	public function findChild(string $name): ?GameObject

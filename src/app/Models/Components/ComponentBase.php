@@ -40,14 +40,17 @@ class ComponentBase extends Model
 
 	public function handleGameEvent(GameEvent $event): void
 	{
-		if (!$this->enabled) {
-			return;
-		}
+		// if (!$this->enabled) {
+		// 	return;
+		// }
 		$gameObject = $this->gameObject()->first();
 		if (!$gameObject->isActive()) {
 			return;
 		}
-		$gameObject->handleEventOfComponent($event, $this->subclass());
+		if ($this->state) {
+			$this->log('ComponentBase::handleGameEvent ' . $this->type . ' ' . $this->state);
+			$gameObject->handle($event->event);
+		}
 	}
 
 	public function events()

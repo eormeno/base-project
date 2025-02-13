@@ -11,14 +11,16 @@ use App\Models\Events\GameEventListenerManager;
 
 class GameEventListener implements IGameEventListener
 {
+	use \App\Traits\DebugHelper;
+
 	public function handle(GameEvent $frontEvent): void
 	{
 		$listeners = GameEventListenerManager::componentListenersOf($frontEvent);
 		foreach ($listeners as $component) {
 			$component->handleGameEvent($frontEvent);
 		}
-		$targetedGameObjects = $this->getTargetedGameObjects($frontEvent->game, $frontEvent->event);
-		$this->handleTargetedGameObjects($targetedGameObjects, $frontEvent->event);
+		// $targetedGameObjects = $this->getTargetedGameObjects($frontEvent->game, $frontEvent->event);
+		// $this->handleTargetedGameObjects($targetedGameObjects, $frontEvent->event);
 	}
 
 	private function handleTargetedGameObjects(Collection $targetedGameObjects, array $eventInfo): void

@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Events\GameEvent;
 use App\Models\GameService;
 use App\Models\Components\Component;
+use App\Models\GameObject\GameObject;
 use Illuminate\Database\Eloquent\Model;
 
 class GameEventListenerManager extends Model
@@ -21,7 +22,19 @@ class GameEventListenerManager extends Model
 		foreach ($eventNames as $name) {
 			$gameAppEvent = GameAppEvent::firstOrCreate(['game_app_id' => $gameAppId, 'name' => $name]);
 			$event = static::firstOrCreate(['game_app_event_id' => $gameAppEvent->id]);
-			$event->components()->attach($listener);
+			if (is_a($listener, Component::class)) {
+				$event->components()->attach($listener);
+				continue;
+			}
+			if (is_a($listener, GameObject::class)) {
+				$event->gameObjects()->attach($listener);
+				continue;
+			}
+			if (is_a($listener, GameService::class)) {
+				$event->gameServices()->attach($listener);
+				continue;
+			}
+			throw new \Exception("Listener must be a Component, GameObject or GameService");
 		}
 	}
 
@@ -37,6 +50,10 @@ class GameEventListenerManager extends Model
 		return $event->components;
 	}
 
+	public function gameObjects()
+	{
+		return $this->morphedByMany(GameObject::class, 'listenerable', 'event_listeners');
+	}
 
 	public function components()
 	{

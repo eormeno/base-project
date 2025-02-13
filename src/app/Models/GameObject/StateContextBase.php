@@ -24,11 +24,6 @@ abstract class StateContextBase extends Base implements IStateContext//, IFrontE
 		$this->request($eventInfo);
 	}
 
-	public function handleEventOfComponent(GameEvent $event, Component $component)
-	{
-		$this->log('handle event "' . $event->event['event'] . '" of component "' . $component . '"');
-	}
-
 	public function request(array $event)
 	{
 		do {
