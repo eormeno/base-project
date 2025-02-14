@@ -96,9 +96,25 @@ class ReflectionUtils
 		$parameters = self::getMethodParameters($class, $method);
 		$parametersValues = [];
 		foreach ($parameters as $parameter) {
-			$parametersValues[$parameter] = $data[$parameter] ?? null;
+			$parametersValues[$parameter] = self::searchKeyRecursive($data, $parameter); //$data[$parameter] ?? null;
 		}
 		return $parametersValues;
+	}
+
+	private static function searchKeyRecursive($array, $key)
+	{
+		foreach ($array as $k => $v) {
+			if ($k === $key) {
+				return $v;
+			}
+			if (is_array($v)) {
+				$result = self::searchKeyRecursive($v, $key);
+				if ($result !== null) {
+					return $result;
+				}
+			}
+		}
+		return null;
 	}
 
 	public static function invokeEventMethod(ComponentBase|GameService $instance, array $event)
