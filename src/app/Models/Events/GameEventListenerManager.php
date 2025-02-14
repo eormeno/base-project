@@ -7,6 +7,7 @@ use App\Events\GameEvent;
 use App\Models\GameService;
 use App\Models\Components\Component;
 use App\Models\GameObject\GameObject;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 
 class GameEventListenerManager extends Model
@@ -21,33 +22,59 @@ class GameEventListenerManager extends Model
 		$eventNames = is_array($eventNames) ? $eventNames : [$eventNames];
 		foreach ($eventNames as $name) {
 			$gameAppEvent = GameAppEvent::firstOrCreate(['game_app_id' => $gameAppId, 'name' => $name]);
-			$event = static::firstOrCreate(['game_app_event_id' => $gameAppEvent->id]);
+			$cacheKey = "game_app_event_{$gameAppEvent->id}_listeners";
+			Cache::forget($cacheKey);
+			$eventListenerManager = static::firstOrCreate(['game_app_event_id' => $gameAppEvent->id]);
 			if (is_a($listener, Component::class)) {
 				if ($listener->super->state) {
-					$event->gameObjects()->syncWithoutDetaching($listener->gameObject);
+					$eventListenerManager->gameObjects()->syncWithoutDetaching($listener->gameObject);
 					continue;
 				}
-				$event->components()->syncWithoutDetaching($listener);
+				$eventListenerManager->components()->syncWithoutDetaching($listener);
 				continue;
 			}
 			if (is_a($listener, GameService::class)) {
-				$event->gameServices()->syncWithoutDetaching($listener);
+				$eventListenerManager->gameServices()->syncWithoutDetaching($listener);
 				continue;
 			}
 			throw new \Exception("Listener must be a Component or GameService");
 		}
 	}
 
+	// public static function listenersOf(GameEvent $gameEvent)
+	// {
+	// 	$eventName = $gameEvent->event['event'];
+	// 	$gameAppId = $gameEvent->game->gameApp()->first()->id;
+	// 	$gameAppEvent = GameAppEvent::where(['game_app_id' => $gameAppId, 'name' => $eventName])->first();
+	// 	if (!$gameAppEvent) {
+	// 		return [];
+	// 	}
+	// 	$event = static::where(['game_app_event_id' => $gameAppEvent->id])->first();
+	// 	return $event->allListeners();
+	// }
+
 	public static function listenersOf(GameEvent $gameEvent)
 	{
 		$eventName = $gameEvent->event['event'];
 		$gameAppId = $gameEvent->game->gameApp()->first()->id;
-		$gameAppEvent = GameAppEvent::where(['game_app_id' => $gameAppId, 'name' => $eventName])->first();
+		$gameAppEvent = GameAppEvent::findGameAppEventByName($gameAppId, $eventName);
+		// $gameAppEvent = GameAppEvent::where([
+		// 	'game_app_id' => $gameAppId,
+		// 	'name' => $eventName
+		// ])->first();
+
 		if (!$gameAppEvent) {
 			return [];
 		}
-		$event = static::where(['game_app_event_id' => $gameAppEvent->id])->first();
-		return $event->allListeners();
+
+		// Generamos una clave única para el cache basada en el id del GameAppEvent.
+		$cacheKey = "game_app_event_{$gameAppEvent->id}_listeners";
+
+		// Se almacena el resultado en cache durante 10 minutos.
+		return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($gameAppEvent) {
+			$eventListenerManager = static::where('game_app_event_id', $gameAppEvent->id)->first();
+			return $eventListenerManager ? $eventListenerManager->allListeners() : [];
+		});
 	}
 
 	public function allListeners()
