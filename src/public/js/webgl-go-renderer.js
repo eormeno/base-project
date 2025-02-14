@@ -73,8 +73,8 @@ async function sendEvent(event, formData = {}, destination = null) {
 			backendElapsed = json.elapsed || -1;
 			delete json.elapsed;
 			if (Object.keys(json).length > 0) {
-				// let stringified = JSON.stringify(json, null, 2);
-				// console.log(stringified);
+				let stringified = JSON.stringify(json, null, 2);
+				console.log(stringified);
 				renderComponents(json, 'glCanvas');
 			}
 		}
@@ -100,10 +100,22 @@ function createComponent(data, mainContainer) {
 			// find the element and update it
 			const element = elementsMap.get(id);
 			if (component.type === 'sprite') {
-				let x = component.x - element.width * component.scale;
-				let y = component.y - element.height * component.scale;
+				if (element.src !== `res/${component.texture}`) {
+					element.src = `res/${component.texture}`;
+				}
+				element.style.position = 'absolute';
+				element.style.width = component.width * component.scale + 'px';
+				element.style.height = component.height * component.scale + 'px';
+				let x = component.x - (element.width * component.scale * component.pivot_x);
+				let y = component.y - (element.height * component.scale * component.pivot_y);
 				element.style.left = x + 'px';
 				element.style.top = y + 'px';
+				// element.style.transform = `rotate(${component.rotation}deg)`;
+				// let x = component.x - element.width * component.scale;
+				// let y = component.y - element.height * component.scale;
+				// element.src = `res/${component.texture}`;
+				// element.style.left = x + 'px';
+				// element.style.top = y + 'px';
 				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
 			}
 			if (component.updatable) {

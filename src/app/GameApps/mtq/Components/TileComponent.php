@@ -31,7 +31,9 @@ class TileComponent extends PersistentComponent
 		if ($destination != $this->gameObject->id) {
 			return;
 		}
-		// $this->log('Tile clicked ' . $this->gameObject->id);
+		if ($this->state == 'revealed') {
+			return;
+		}
 		$this->state = 'revealed';
 		$this->save();
 		$this->gameObject->version++;
