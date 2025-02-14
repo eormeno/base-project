@@ -110,13 +110,13 @@ function createComponent(data, mainContainer) {
 				let y = component.y - (element.height * component.scale * component.pivot_y);
 				element.style.left = x + 'px';
 				element.style.top = y + 'px';
-				// element.style.transform = `rotate(${component.rotation}deg)`;
+				element.style.transform = `rotate(${component.rotation}deg)`;
 				// let x = component.x - element.width * component.scale;
 				// let y = component.y - element.height * component.scale;
 				// element.src = `res/${component.texture}`;
 				// element.style.left = x + 'px';
 				// element.style.top = y + 'px';
-				element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
+				// element.style.transform = `scale(${component.scale}) rotate(${component.rotation}deg)`;
 			}
 			if (component.updatable) {
 				pushEvent('update', {}, id);
