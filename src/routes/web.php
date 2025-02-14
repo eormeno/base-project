@@ -21,17 +21,17 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         return view('dashboard', compact('gameApps'));
     })->name('dashboard');
 
-    Route::prefix('guess-the-number')->group(function () {
-        Route::get('/', [GuessTheNumberController::class, 'index'])->name('guess-the-number');
-        Route::post('/', [GuessTheNumberController::class, 'event'])->name('guess-the-number');
-        Route::get('/reset', [GuessTheNumberController::class, '_reset'])->name("guess-the-number.reset");
-    });
+    // Route::prefix('guess-the-number')->group(function () {
+    //     Route::get('/', [GuessTheNumberController::class, 'index'])->name('guess-the-number');
+    //     Route::post('/', [GuessTheNumberController::class, 'event'])->name('guess-the-number');
+    //     Route::get('/reset', [GuessTheNumberController::class, '_reset'])->name("guess-the-number.reset");
+    // });
 
-    Route::prefix('mythic-treasure-quest')->group(function () {
-        Route::get('/', [MythicTreasureQuestController::class, 'index'])->name('mythic-treasure-quest');
-        Route::post('/', [MythicTreasureQuestController::class, 'event'])->name('mythic-treasure-quest');
-        Route::get('/reset', [MythicTreasureQuestController::class, '_reset'])->name("mythic-treasure-quest.reset");
-    });
+    // Route::prefix('mythic-treasure-quest')->group(function () {
+    //     Route::get('/', [MythicTreasureQuestController::class, 'index'])->name('mythic-treasure-quest');
+    //     Route::post('/', [MythicTreasureQuestController::class, 'event'])->name('mythic-treasure-quest');
+    //     Route::get('/reset', [MythicTreasureQuestController::class, '_reset'])->name("mythic-treasure-quest.reset");
+    // });
 
     Route::get('/pull-events', [EventController::class, 'pullEvents'])->name('pull-events');
     Route::get('/event-test', [EventController::class, 'triggerEvent'])->name('trigger-event-test');
