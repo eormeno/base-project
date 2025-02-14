@@ -143,17 +143,17 @@ abstract class Base extends Model
 		}
 	}
 
-	public function componentsIterator(
-		callable $callback,
-		bool $enabled = true
-	): void {
-		$components = $this->components()->get();
+	public function componentsIterator(callable $callback, bool $includeDisabled = false): void {
+		$query = $this->components();
+
+		if (!$includeDisabled) {
+			$query->where('enabled', true);
+		}
+
+		$components = $query->get();
+
 		foreach ($components as $component) {
-			if ($component->enabled !== $enabled) {
-				continue;
-			}
-			$subclass = $component->subclass();
-			$callback($subclass);
+			$callback($component->subclass());
 		}
 	}
 
